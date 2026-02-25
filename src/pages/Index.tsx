@@ -1,14 +1,18 @@
 import { useTrip } from '@/context/TripContext';
 import { getGlobalBudget } from '@/lib/calculations';
 import { Link } from 'react-router-dom';
-import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, ChevronRight, ListTodo, Compass, Download } from 'lucide-react';
+import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, ChevronRight, ListTodo, Compass, Download, Plane, ArrowLeftRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Dashboard() {
-  const { data, exportJSON } = useTrip();
-  const { trip, cities, hotels, selectedHotels, pendingItems, activities } = data;
+  const { data, orderedCities, exportJSON, toggleRouteDirection } = useTrip();
+  const { trip, cities, hotels, selectedHotels, pendingItems, activities, flights } = data;
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
   const openPending = pendingItems.filter(p => p.status === 'open');
+  const outbound = flights.filter(f => f.direction === 'outbound');
+  const returnFlights = flights.filter(f => f.direction === 'return');
+  const firstCity = orderedCities[0];
+  const lastCity = orderedCities[orderedCities.length - 1];
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -24,16 +28,49 @@ export default function Dashboard() {
       </div>
 
       <div className="px-4 -mt-4 space-y-4">
-        {/* Route card */}
+        {/* Flights summary */}
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in">
           <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-            <Compass className="h-3.5 w-3.5" /> Ruta
+            <Plane className="h-3.5 w-3.5" /> Vuelos
+          </div>
+          <div className="space-y-2 text-sm">
+            {outbound.length > 0 && (
+              <div className="flex items-center gap-2 text-foreground">
+                <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded font-medium">IDA</span>
+                {outbound[0].fromAirport} → {outbound[outbound.length - 1].toAirport}
+                <span className="text-xs text-muted-foreground ml-auto">{outbound[0].departureDateTime.split('T')[0]}</span>
+              </div>
+            )}
+            {returnFlights.length > 0 && (
+              <div className="flex items-center gap-2 text-foreground">
+                <span className="text-xs bg-secondary/20 text-secondary-foreground px-2 py-0.5 rounded font-medium">VUELTA</span>
+                {returnFlights[0].fromAirport} → {returnFlights[returnFlights.length - 1].toAirport}
+                <span className="text-xs text-muted-foreground ml-auto">{returnFlights[0].departureDateTime.split('T')[0]}</span>
+              </div>
+            )}
+          </div>
+          <Link to="/vuelos" className="text-xs text-primary font-medium mt-2 inline-block">Ver detalle →</Link>
+        </div>
+
+        {/* Route card with direction toggle */}
+        <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.03s' }}>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              <Compass className="h-3.5 w-3.5" /> Ruta
+            </div>
+            <button
+              onClick={toggleRouteDirection}
+              className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full transition-all hover:bg-primary/20"
+            >
+              <ArrowLeftRight className="h-3 w-3" />
+              {trip.routeDirection === 'forward' ? `${firstCity?.cityName.split(' (')[0]} → ${lastCity?.cityName.split(' (')[0]}` : `${firstCity?.cityName.split(' (')[0]} → ${lastCity?.cityName.split(' (')[0]}`}
+            </button>
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
-            {cities.map((c, i) => (
+            {orderedCities.map((c, i) => (
               <span key={c.id} className="flex items-center gap-1.5">
                 <span className="text-sm font-medium text-foreground">{c.cityName.split(' (')[0]}</span>
-                {i < cities.length - 1 && <ChevronRight className="h-3 w-3 text-muted-foreground" />}
+                {i < orderedCities.length - 1 && <ChevronRight className="h-3 w-3 text-muted-foreground" />}
               </span>
             ))}
           </div>
@@ -90,6 +127,7 @@ export default function Dashboard() {
         {/* Quick links */}
         <div className="grid grid-cols-2 gap-3 animate-fade-in" style={{ animationDelay: '0.15s' }}>
           <QuickLink to="/itinerario" icon={<CalendarDays className="h-5 w-5" />} label="Itinerario" />
+          <QuickLink to="/vuelos" icon={<Plane className="h-5 w-5" />} label="Vuelos" />
           <QuickLink to="/actividades" icon={<Compass className="h-5 w-5" />} label={`Actividades (${activities.length})`} />
           <QuickLink to="/pendientes" icon={<ListTodo className="h-5 w-5" />} label={`Pendientes (${openPending.length})`} />
           <button

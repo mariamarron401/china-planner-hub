@@ -4,6 +4,35 @@ export interface Trip {
   dateRangeText: string;
   totalNights: number;
   primaryCurrency: string;
+  routeDirection: 'forward' | 'reverse';
+}
+
+export interface FlightLeg {
+  id: string;
+  direction: 'outbound' | 'return';
+  airline: string;
+  flightNumber: string;
+  fromAirport: string;
+  toAirport: string;
+  departureDateTime: string;
+  arrivalDateTime: string;
+  durationMinutes: number;
+  layoverMinutes: number | null;
+  cabinClass: string;
+  baggage: string;
+}
+
+export interface CityGalleryImage {
+  id: string;
+  cityId: string;
+  imageUrl: string;
+  source: string;
+}
+
+export interface HotelGalleryImage {
+  id: string;
+  hotelOptionId: string;
+  imageUrl: string;
 }
 
 export interface CityStop {
@@ -91,4 +120,7 @@ export interface TripData {
   activities: Activity[];
   pendingItems: PendingItem[];
   versions: TripVersion[];
+  flights: FlightLeg[];
+  cityGallery: CityGalleryImage[];
+  hotelGallery: HotelGalleryImage[];
 }

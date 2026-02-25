@@ -1,29 +1,59 @@
+import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
 import { getHotelCalcs } from '@/lib/calculations';
-import { MapPin, Moon, Building2, Train, Compass, AlertTriangle } from 'lucide-react';
+import { MapPin, Moon, Building2, Train, Compass, AlertTriangle, Plane, ArrowLeftRight, Camera } from 'lucide-react';
+import GalleryViewer from '@/components/GalleryViewer';
 
 export default function Itinerary() {
-  const { data } = useTrip();
-  const { cities, hotels, selectedHotels, transportLegs, activities } = data;
+  const { data, orderedCities, orderedTransportLegs, toggleRouteDirection } = useTrip();
+  const { hotels, selectedHotels, activities, flights, cityGallery } = data;
+  const [expandedGallery, setExpandedGallery] = useState<string | null>(null);
 
-  const getCityName = (id: string) => cities.find(c => c.id === id)?.cityName || id;
+  const getCityName = (id: string) => data.cities.find(c => c.id === id)?.cityName || id;
+  const firstFlight = flights.find(f => f.direction === 'outbound');
+  const lastFlight = [...flights].reverse().find(f => f.direction === 'return');
 
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className="px-4 pt-12 pb-4">
-        <h1 className="text-2xl font-bold text-foreground">Itinerario</h1>
-        <p className="text-sm text-muted-foreground mt-1">10 ciudades · 22 noches</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Itinerario</h1>
+            <p className="text-sm text-muted-foreground mt-1">10 ciudades · 22 noches</p>
+          </div>
+          <button
+            onClick={toggleRouteDirection}
+            className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-full transition-all hover:bg-primary/20"
+          >
+            <ArrowLeftRight className="h-3 w-3" />
+            🔁 {data.trip.routeDirection === 'forward' ? 'Normal' : 'Invertido'}
+          </button>
+        </div>
       </div>
 
       <div className="px-4 space-y-3">
-        {cities.map((city, idx) => {
+        {/* Outbound flight card */}
+        {firstFlight && (
+          <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground mb-2">
+              <Plane className="h-3.5 w-3.5 text-primary" /> VUELO DE IDA
+            </div>
+            <div className="text-sm text-foreground">
+              ✈️ {firstFlight.fromAirport} → {flights.filter(f => f.direction === 'outbound').pop()?.toAirport} · {firstFlight.departureDateTime.split('T')[0]}
+            </div>
+          </div>
+        )}
+
+        {orderedCities.map((city, idx) => {
           const cityHotels = hotels.filter(h => h.cityId === city.id);
           const selectedId = selectedHotels[city.id];
           const selectedHotel = selectedId ? cityHotels.find(h => h.id === selectedId) : null;
-          const arrivalLeg = transportLegs.find(t => t.toCityId === city.id);
-          const departureLeg = transportLegs.find(t => t.fromCityId === city.id);
+          const arrivalLeg = orderedTransportLegs.find(t => t.toCityId === city.id);
+          const departureLeg = orderedTransportLegs.find(t => t.fromCityId === city.id);
           const cityActivities = activities.filter(a => a.cityId === city.id);
           const hasFlags = city.flags.length > 0;
+          const cityImages = cityGallery.filter(g => g.cityId === city.id);
+          const showGallery = expandedGallery === city.id;
 
           return (
             <div key={city.id} className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: `${idx * 0.03}s` }}>
@@ -38,17 +68,15 @@ export default function Itinerary() {
                     <span className="flex items-center gap-1"><Moon className="h-3 w-3" />{city.nights} {city.nights === 1 ? 'noche' : 'noches'}</span>
                   </div>
                 </div>
-                {hasFlags && (
-                  <div className="flex gap-1">
-                    {city.flags.map(f => (
-                      <span key={f} className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
-                        f === 'duda' ? 'bg-travel-pending-bg text-travel-pending' : 'bg-travel-important-bg text-travel-important'
-                      }`}>
-                        {f === 'duda' ? '⚠ Duda' : '★ Importante'}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className="flex gap-1">
+                  {hasFlags && city.flags.map(f => (
+                    <span key={f} className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
+                      f === 'duda' ? 'bg-travel-pending-bg text-travel-pending' : 'bg-travel-important-bg text-travel-important'
+                    }`}>
+                      {f === 'duda' ? '⚠ Duda' : '★ Importante'}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               {/* Hotel */}
@@ -122,9 +150,39 @@ export default function Itinerary() {
                   ))}
                 </div>
               )}
+
+              {/* Gallery toggle */}
+              {cityImages.length > 0 && (
+                <div className="mt-2 pt-2 border-t border-border">
+                  <button
+                    onClick={() => setExpandedGallery(showGallery ? null : city.id)}
+                    className="flex items-center gap-1.5 text-xs font-medium text-primary"
+                  >
+                    <Camera className="h-3 w-3" />
+                    {showGallery ? 'Ocultar galería' : `📸 Ver galería (${cityImages.length})`}
+                  </button>
+                  {showGallery && (
+                    <div className="mt-2 animate-fade-in">
+                      <GalleryViewer images={cityImages} />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}
+
+        {/* Return flight card */}
+        {lastFlight && (
+          <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground mb-2">
+              <Plane className="h-3.5 w-3.5 text-primary" /> VUELO DE VUELTA
+            </div>
+            <div className="text-sm text-foreground">
+              ✈️ {flights.filter(f => f.direction === 'return')[0]?.fromAirport} → {lastFlight.toAirport} · {lastFlight.departureDateTime.split('T')[0]}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
