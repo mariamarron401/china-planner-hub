@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, PendingItem } from '@/types/trip';
+import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, PendingItem, PlaceItem } from '@/types/trip';
 import { initialTripData } from '@/data/initialData';
 
 interface TripContextType {
@@ -17,6 +17,9 @@ interface TripContextType {
   toggleRouteDirection: () => void;
   exportJSON: () => void;
   resetData: () => void;
+  addPlace: (place: PlaceItem) => void;
+  updatePlace: (id: string, updates: Partial<PlaceItem>) => void;
+  deletePlace: (id: string) => void;
 }
 
 const TripContext = createContext<TripContextType | null>(null);
@@ -33,6 +36,7 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         if (!parsed.flights) parsed.flights = initialTripData.flights;
         if (!parsed.cityGallery) parsed.cityGallery = initialTripData.cityGallery;
         if (!parsed.hotelGallery) parsed.hotelGallery = initialTripData.hotelGallery;
+        if (!parsed.places) parsed.places = initialTripData.places;
         if (!parsed.trip.routeDirection) parsed.trip.routeDirection = 'forward';
         return parsed;
       }
@@ -139,12 +143,28 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
+  const addPlace = useCallback((place: PlaceItem) => {
+    setData(prev => ({ ...prev, places: [...prev.places, place] }));
+  }, []);
+
+  const updatePlace = useCallback((id: string, updates: Partial<PlaceItem>) => {
+    setData(prev => ({
+      ...prev,
+      places: prev.places.map(p => p.id === id ? { ...p, ...updates } : p),
+    }));
+  }, []);
+
+  const deletePlace = useCallback((id: string) => {
+    setData(prev => ({ ...prev, places: prev.places.filter(p => p.id !== id) }));
+  }, []);
+
   return (
     <TripContext.Provider value={{
       data, orderedCities, orderedTransportLegs,
       selectHotel, deselectHotel, updateHotelPrice,
       updateTransportLeg, updateLocalTransport, updateActivity,
       updatePending, resolvePending, toggleRouteDirection, exportJSON, resetData,
+      addPlace, updatePlace, deletePlace,
     }}>
       {children}
     </TripContext.Provider>

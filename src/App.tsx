@@ -13,6 +13,8 @@ import Budget from "./pages/Budget";
 import Activities from "./pages/Activities";
 import PendingItems from "./pages/PendingItems";
 import Flights from "./pages/Flights";
+import WhatToDo from "./pages/WhatToDo";
+import CityWhatToDo from "./pages/CityWhatToDo";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +36,8 @@ const App = () => (
               <Route path="/actividades" element={<Activities />} />
               <Route path="/pendientes" element={<PendingItems />} />
               <Route path="/vuelos" element={<Flights />} />
+              <Route path="/que-hacer" element={<WhatToDo />} />
+              <Route path="/que-hacer/:cityId" element={<CityWhatToDo />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

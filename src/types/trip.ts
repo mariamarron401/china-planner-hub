@@ -110,6 +110,34 @@ export interface TripVersion {
   snapshot: string;
 }
 
+export type PlaceCategory =
+  | 'cafes'
+  | 'restaurants'
+  | 'shops'
+  | 'excursions'
+  | 'photo_spots'
+  | 'temples'
+  | 'pandas'
+  | 'bakeries'
+  | 'curiosities'
+  | 'places_to_visit';
+
+export interface PlaceItem {
+  id: string;
+  cityId: string;
+  category: PlaceCategory;
+  name: string;
+  altName?: string;
+  address?: string;
+  url?: string;
+  notes?: string;
+  tags: string[];
+  status: 'saved' | 'must' | 'visited';
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface TripData {
   trip: Trip;
   cities: CityStop[];
@@ -123,4 +151,5 @@ export interface TripData {
   flights: FlightLeg[];
   cityGallery: CityGalleryImage[];
   hotelGallery: HotelGalleryImage[];
+  places: PlaceItem[];
 }
