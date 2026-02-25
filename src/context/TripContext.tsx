@@ -1,9 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, PendingItem } from '@/types/trip';
 import { initialTripData } from '@/data/initialData';
 
 interface TripContextType {
   data: TripData;
+  orderedCities: TripData['cities'];
+  orderedTransportLegs: TripData['transportLegs'];
   selectHotel: (cityId: string, hotelId: string) => void;
   deselectHotel: (cityId: string) => void;
   updateHotelPrice: (hotelId: string, price: number) => void;
@@ -12,6 +14,7 @@ interface TripContextType {
   updateActivity: (id: string, updates: Partial<Activity>) => void;
   updatePending: (id: string, updates: Partial<PendingItem>) => void;
   resolvePending: (id: string) => void;
+  toggleRouteDirection: () => void;
   exportJSON: () => void;
   resetData: () => void;
 }
@@ -24,7 +27,16 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<TripData>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : initialTripData;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Migrate old data missing new fields
+        if (!parsed.flights) parsed.flights = initialTripData.flights;
+        if (!parsed.cityGallery) parsed.cityGallery = initialTripData.cityGallery;
+        if (!parsed.hotelGallery) parsed.hotelGallery = initialTripData.hotelGallery;
+        if (!parsed.trip.routeDirection) parsed.trip.routeDirection = 'forward';
+        return parsed;
+      }
+      return initialTripData;
     } catch {
       return initialTripData;
     }
@@ -33,6 +45,20 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data]);
+
+  const orderedCities = useMemo(() => {
+    const sorted = [...data.cities].sort((a, b) => a.order - b.order);
+    return data.trip.routeDirection === 'reverse' ? [...sorted].reverse() : sorted;
+  }, [data.cities, data.trip.routeDirection]);
+
+  const orderedTransportLegs = useMemo(() => {
+    if (data.trip.routeDirection === 'forward') return data.transportLegs;
+    return data.transportLegs.map(t => ({
+      ...t,
+      fromCityId: t.toCityId,
+      toCityId: t.fromCityId,
+    }));
+  }, [data.transportLegs, data.trip.routeDirection]);
 
   const selectHotel = useCallback((cityId: string, hotelId: string) => {
     setData(prev => ({ ...prev, selectedHotels: { ...prev.selectedHotels, [cityId]: hotelId } }));
@@ -88,6 +114,16 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
+  const toggleRouteDirection = useCallback(() => {
+    setData(prev => ({
+      ...prev,
+      trip: {
+        ...prev.trip,
+        routeDirection: prev.trip.routeDirection === 'forward' ? 'reverse' : 'forward',
+      },
+    }));
+  }, []);
+
   const exportJSON = useCallback(() => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -105,9 +141,10 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <TripContext.Provider value={{
-      data, selectHotel, deselectHotel, updateHotelPrice,
+      data, orderedCities, orderedTransportLegs,
+      selectHotel, deselectHotel, updateHotelPrice,
       updateTransportLeg, updateLocalTransport, updateActivity,
-      updatePending, resolvePending, exportJSON, resetData,
+      updatePending, resolvePending, toggleRouteDirection, exportJSON, resetData,
     }}>
       {children}
     </TripContext.Provider>

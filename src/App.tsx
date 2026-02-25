@@ -12,6 +12,7 @@ import Transports from "./pages/Transports";
 import Budget from "./pages/Budget";
 import Activities from "./pages/Activities";
 import PendingItems from "./pages/PendingItems";
+import Flights from "./pages/Flights";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/presupuesto" element={<Budget />} />
               <Route path="/actividades" element={<Activities />} />
               <Route path="/pendientes" element={<PendingItems />} />
+              <Route path="/vuelos" element={<Flights />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

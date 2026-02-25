@@ -7,6 +7,7 @@ export const initialTripData: TripData = {
     dateRangeText: '10 OCT – 1 NOV 2025',
     totalNights: 22,
     primaryCurrency: 'EUR',
+    routeDirection: 'forward',
   },
   cities: [
     { id: 'beijing', cityName: 'Beijing', startDateText: '10 oct', endDateText: '13 oct', nights: 3, notes: [], flags: [], order: 1 },
@@ -21,43 +22,33 @@ export const initialTripData: TripData = {
     { id: 'shanghai', cityName: 'Shanghai', startDateText: '27 oct', endDateText: '1 nov', nights: 5, notes: [], flags: [], order: 10 },
   ],
   hotels: [
-    // Beijing
     { id: 'h-bj-1', cityId: 'beijing', provider: 'Trip.com', totalPrice: 216, currency: 'EUR', link: 'https://es.trip.com/hotels/Pek%C3%ADn-hotel-detail-821303/Livefortuna-Hotel/', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-bj-2', cityId: 'beijing', provider: 'Trip.com', totalPrice: 171, currency: 'EUR', link: 'https://www.trip.com/w/7FGtCdoNYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-bj-3', cityId: 'beijing', provider: 'Trip.com', totalPrice: 221, currency: 'EUR', link: 'https://www.trip.com/w/xkA9fIyNYT2', breakfastIncluded: true, priceStatus: 'known' },
-    // Xi'an
     { id: 'h-xa-1', cityId: 'xian', provider: 'Booking', totalPrice: 161, currency: 'EUR', link: 'https://www.trip.com/w/E5tH7hzNYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-xa-2', cityId: 'xian', provider: 'Trip.com', totalPrice: 104, currency: 'EUR', link: 'https://www.trip.com/w/OphxhKCOYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-xa-3', cityId: 'xian', provider: 'Trip.com', totalPrice: 178, currency: 'EUR', link: 'https://www.trip.com/w/ewFa9IEOYT2', breakfastIncluded: true, priceStatus: 'known' },
-    // Chengdu
     { id: 'h-cd-1', cityId: 'chengdu', provider: 'Trip.com', totalPrice: 151, currency: 'EUR', link: 'https://www.trip.com/w/w5p0zWKOYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-cd-1b', cityId: 'chengdu', provider: 'Booking', totalPrice: 142, currency: 'EUR', link: 'https://www.booking.com/Share-ys6MNzA', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-cd-2', cityId: 'chengdu', provider: 'Trip.com', totalPrice: 104, currency: 'EUR', link: 'https://www.trip.com/w/J10KRbTOYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-cd-3', cityId: 'chengdu', provider: 'Trip.com', totalPrice: 86, currency: 'EUR', link: 'https://www.trip.com/w/BJlEsLVOYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-cd-4', cityId: 'chengdu', provider: 'Trip.com', totalPrice: 135, currency: 'EUR', link: 'https://www.trip.com/w/TQzllDaOYT2', breakfastIncluded: true, priceStatus: 'known' },
-    // Chongqing
     { id: 'h-cq-1', cityId: 'chongqing', provider: 'Trip.com', totalPrice: 117, currency: 'EUR', link: 'https://www.trip.com/w/5h1tvibOYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-cq-2', cityId: 'chongqing', provider: 'Trip.com', totalPrice: 122, currency: 'EUR', link: 'https://www.trip.com/w/h61P9vlOYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-cq-3', cityId: 'chongqing', provider: 'Trip.com', totalPrice: 80, currency: 'EUR', link: 'https://www.trip.com/w/BLNyQGnOYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-cq-4', cityId: 'chongqing', provider: 'Trip.com', totalPrice: 126, currency: 'EUR', link: 'https://www.trip.com/w/i740APpOYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-cq-5', cityId: 'chongqing', provider: 'Trip.com', totalPrice: 66, currency: 'EUR', link: 'https://www.trip.com/w/m7bYP9rOYT2', breakfastIncluded: true, priceStatus: 'known' },
-    // Fenghuang
     { id: 'h-fh-1', cityId: 'fenghuang', provider: 'Trip.com', totalPrice: 24, currency: 'EUR', link: 'https://hotelsapp.onelink.me/fSyN/jmzfiqmj', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-fh-2', cityId: 'fenghuang', provider: 'Trip.com', totalPrice: 73, currency: 'EUR', link: 'https://www.trip.com/w/IvZnNt5PYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-fh-3', cityId: 'fenghuang', provider: 'Trip.com', totalPrice: 21, currency: 'EUR', link: 'https://www.trip.com/w/3flXoF8PYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-fh-4', cityId: 'fenghuang', provider: 'Trip.com', totalPrice: 53, currency: 'EUR', link: 'https://www.trip.com/w/08v358BPYT2', breakfastIncluded: true, priceStatus: 'known' },
-    // Furong
     { id: 'h-fr-1', cityId: 'furong', provider: 'Trip.com', totalPrice: 62, currency: 'EUR', link: 'https://www.trip.com/w/1fCLOFIPYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-fr-2', cityId: 'furong', provider: 'Trip.com', totalPrice: 40, currency: 'EUR', link: 'https://www.trip.com/w/lqqRdDPPYT2', breakfastIncluded: true, priceStatus: 'known' },
-    // Zhangjiajie
     { id: 'h-zj-1', cityId: 'zhangjiajie', provider: 'Trip.com', totalPrice: 21, currency: 'EUR', link: 'https://www.trip.com/w/vPzza0jPYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-zj-2', cityId: 'zhangjiajie', provider: 'Trip.com', totalPrice: 46, currency: 'EUR', link: 'https://www.trip.com/w/yBJsyOkPYT2', breakfastIncluded: true, priceStatus: 'known' },
-    // Wulingyuan
     { id: 'h-wl-1', cityId: 'wulingyuan', provider: 'Trip.com', totalPrice: 73, currency: 'EUR', link: 'https://www.trip.com/w/AgqY9N8BeT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-wl-2', cityId: 'wulingyuan', provider: 'Trip.com', totalPrice: null, currency: 'EUR', link: 'https://www.trip.com/w/MiVqXEZBeT2', breakfastIncluded: true, priceStatus: 'pending' },
-    // Shangrao
     { id: 'h-sr-1', cityId: 'shangrao', provider: 'Trip.com', totalPrice: 99, currency: 'EUR', link: 'https://www.trip.com/w/FQ9hm1kAeT2', breakfastIncluded: true, priceStatus: 'known' },
-    // Shanghai
     { id: 'h-sh-1', cityId: 'shanghai', provider: 'Trip.com', totalPrice: 338, currency: 'EUR', link: 'https://www.trip.com/w/PdYbda5QYT2', breakfastIncluded: true, priceStatus: 'known' },
     { id: 'h-sh-2', cityId: 'shanghai', provider: 'Trip.com', totalPrice: 339, currency: 'EUR', link: 'https://www.trip.com/w/sJlQdO8QYT2', breakfastIncluded: true, priceStatus: 'known' },
   ],
@@ -92,4 +83,85 @@ export const initialTripData: TripData = {
     { id: 'pi-5', title: 'Precio y duración traslados Didi', description: 'Estimar precios y duración de los traslados locales en Didi/taxi', relatedType: 'transport', relatedId: '', priority: 'medium', status: 'open' },
   ],
   versions: [],
+  flights: [
+    // IDA – 9 OCT 2026
+    { id: 'fl-1', direction: 'outbound', airline: 'Brussels Airlines', flightNumber: 'SN3732', fromAirport: 'MAD', toAirport: 'BRU', departureDateTime: '2026-10-09T06:20', arrivalDateTime: '2026-10-09T08:35', durationMinutes: 135, layoverMinutes: 265, cabinClass: 'Economy', baggage: '2 piezas' },
+    { id: 'fl-2', direction: 'outbound', airline: 'Air China', flightNumber: 'CA964', fromAirport: 'BRU', toAirport: 'PEK', departureDateTime: '2026-10-09T13:00', arrivalDateTime: '2026-10-10T04:45', durationMinutes: 585, layoverMinutes: null, cabinClass: 'Economy', baggage: '2 piezas' },
+    // VUELTA – 1 NOV 2026
+    { id: 'fl-3', direction: 'return', airline: 'Air China', flightNumber: 'CA1590', fromAirport: 'SHA', toAirport: 'PEK', departureDateTime: '2026-11-01T08:55', arrivalDateTime: '2026-11-01T10:55', durationMinutes: 120, layoverMinutes: 245, cabinClass: 'Economy', baggage: '2 piezas' },
+    { id: 'fl-4', direction: 'return', airline: 'Air China', flightNumber: 'CA897', fromAirport: 'PEK', toAirport: 'MAD', departureDateTime: '2026-11-01T15:00', arrivalDateTime: '2026-11-01T20:10', durationMinutes: 730, layoverMinutes: null, cabinClass: 'Economy', baggage: '2 piezas' },
+  ],
+  cityGallery: [
+    // Beijing
+    { id: 'cg-bj-1', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-bj-2', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-bj-3', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1599571234909-29ed5d1321d6?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-bj-4', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1584646098378-0874589d76b1?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-bj-5', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1537410856029-1e8e1d567b38?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-bj-6', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1529921879218-f99546d03a26?w=600&q=80', source: 'Unsplash' },
+    // Xi'an
+    { id: 'cg-xa-1', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-xa-2', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1624881244453-a55c2f651697?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-xa-3', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1591017403286-fd8493524e1e?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-xa-4', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-xa-5', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1517497728100-53b48c7c1cc0?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-xa-6', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1568700942090-19dc36fab0c4?w=600&q=80', source: 'Unsplash' },
+    // Chengdu
+    { id: 'cg-cd-1', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1573737268516-6d1c98af5e05?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cd-2', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1580391564590-aeca65c5e2d3?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cd-3', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1564577160324-112d603f750f?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cd-4', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1610972947633-28e10547cedb?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cd-5', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1590846083693-f23fdede3a7e?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cd-6', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1527838832700-5059252407fa?w=600&q=80', source: 'Unsplash' },
+    // Chongqing
+    { id: 'cg-cq-1', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1607497600752-1ae81e8fbc83?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cq-2', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cq-3', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1529551739587-e242c564f727?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cq-4', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1474181628771-2289abfa8016?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cq-5', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1598886221385-d7c3b4ca7b0e?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cq-6', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1508009603885-50cf7c8a1ee8?w=600&q=80', source: 'Unsplash' },
+    // Fenghuang
+    { id: 'cg-fh-1', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1537531383496-b tried?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-2', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1528795259021-d8c86e14354c?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-3', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-4', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-5', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1470004914212-05527e49370b?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-6', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1533552475041-9776e42dfe8f?w=600&q=80', source: 'Unsplash' },
+    // Furong
+    { id: 'cg-fr-1', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1537531383496-b5e0f0b3c137?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fr-2', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fr-3', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fr-4', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fr-5', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fr-6', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=600&q=80', source: 'Unsplash' },
+    // Zhangjiajie
+    { id: 'cg-zj-1', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-2', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-3', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-4', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-5', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-6', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&q=80', source: 'Unsplash' },
+    // Wulingyuan
+    { id: 'cg-wl-1', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-wl-2', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-wl-3', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-wl-4', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-wl-5', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-wl-6', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80', source: 'Unsplash' },
+    // Shangrao / Wangxian Valley
+    { id: 'cg-sr-1', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1537531383496-b5e0f0b3c137?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sr-2', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sr-3', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sr-4', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sr-5', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sr-6', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=600&q=80', source: 'Unsplash' },
+    // Shanghai
+    { id: 'cg-sh-1', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1537519646099-2b0e40624ad9?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sh-2', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1474181628771-2289abfa8016?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sh-3', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sh-4', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1538428494232-9c0d8a3ab403?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sh-5', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1517309230475-4417f2e85530?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-sh-6', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1462007895615-c8c073bebada?w=600&q=80', source: 'Unsplash' },
+  ],
+  hotelGallery: [],
 };
