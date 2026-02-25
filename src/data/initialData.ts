@@ -164,4 +164,5 @@ export const initialTripData: TripData = {
     { id: 'cg-sh-6', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1462007895615-c8c073bebada?w=600&q=80', source: 'Unsplash' },
   ],
   hotelGallery: [],
+  places: [],
 };
