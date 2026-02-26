@@ -15,6 +15,7 @@ import PendingItems from "./pages/PendingItems";
 import Flights from "./pages/Flights";
 import WhatToDo from "./pages/WhatToDo";
 import CityWhatToDo from "./pages/CityWhatToDo";
+import CategoryPlaces from "./pages/CategoryPlaces";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/vuelos" element={<Flights />} />
               <Route path="/que-hacer" element={<WhatToDo />} />
               <Route path="/que-hacer/:cityId" element={<CityWhatToDo />} />
+              <Route path="/que-hacer/:cityId/:category" element={<CategoryPlaces />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

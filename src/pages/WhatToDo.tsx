@@ -1,9 +1,8 @@
 import { useTrip } from '@/context/TripContext';
+import { usePlaces } from '@/hooks/usePlaces';
 import { Link } from 'react-router-dom';
-import { MapPin, Plus, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { MapPin, ChevronRight } from 'lucide-react';
 import { PlaceCategory } from '@/types/trip';
-import AddPlaceModal from '@/components/AddPlaceModal';
 
 const CATEGORY_LABELS: Record<PlaceCategory, string> = {
   cafes: 'Cafeterías',
@@ -20,8 +19,8 @@ const CATEGORY_LABELS: Record<PlaceCategory, string> = {
 
 export default function WhatToDo() {
   const { data, orderedCities } = useTrip();
-  const { places, cityGallery } = data;
-  const [showAdd, setShowAdd] = useState(false);
+  const { places } = usePlaces();
+  const { cityGallery } = data;
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -35,7 +34,6 @@ export default function WhatToDo() {
           const cityPlaces = places.filter(p => p.cityId === city.id);
           const coverImg = cityGallery.find(g => g.cityId === city.id)?.imageUrl;
 
-          // Count per category
           const catCounts: Partial<Record<PlaceCategory, number>> = {};
           cityPlaces.forEach(p => {
             catCounts[p.category] = (catCounts[p.category] || 0) + 1;
@@ -47,43 +45,28 @@ export default function WhatToDo() {
               to={`/que-hacer/${city.id}`}
               className="block bg-card rounded-xl border border-border shadow-sm overflow-hidden animate-fade-in"
             >
-              {/* Hero image */}
               <div className="h-32 w-full bg-muted relative overflow-hidden">
                 {coverImg ? (
-                  <img
-                    src={coverImg}
-                    alt={city.cityName}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
+                  <img src={coverImg} alt={city.cityName} className="w-full h-full object-cover" loading="lazy" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                     <MapPin className="h-8 w-8" />
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <h2 className="absolute bottom-3 left-4 text-lg font-bold text-white">
-                  {city.cityName}
-                </h2>
+                <h2 className="absolute bottom-3 left-4 text-lg font-bold text-white">{city.cityName}</h2>
               </div>
-
-              {/* Summary */}
               <div className="p-3">
                 {cityPlaces.length === 0 ? (
                   <p className="text-sm text-muted-foreground">Sin sitios guardados aún</p>
                 ) : (
                   <div className="flex flex-wrap gap-1.5">
                     {Object.entries(catCounts).map(([cat, count]) => (
-                      <span
-                        key={cat}
-                        className="text-[10px] font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full"
-                      >
+                      <span key={cat} className="text-[10px] font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
                         {count} {CATEGORY_LABELS[cat as PlaceCategory]}
                       </span>
                     ))}
-                    <span className="text-[10px] font-medium text-muted-foreground ml-auto">
-                      {cityPlaces.length} total
-                    </span>
+                    <span className="text-[10px] font-medium text-muted-foreground ml-auto">{cityPlaces.length} total</span>
                   </div>
                 )}
                 <div className="flex items-center justify-end mt-2 text-xs text-primary font-medium">
@@ -94,16 +77,6 @@ export default function WhatToDo() {
           );
         })}
       </div>
-
-      {/* FAB */}
-      <button
-        onClick={() => setShowAdd(true)}
-        className="fixed bottom-20 right-4 z-40 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:bg-primary/90 transition-colors"
-      >
-        <Plus className="h-6 w-6" />
-      </button>
-
-      <AddPlaceModal open={showAdd} onClose={() => setShowAdd(false)} />
     </div>
   );
 }
