@@ -1,15 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useTrip } from '@/context/TripContext';
+import { useState, useEffect } from 'react';
+import { usePlaces } from '@/hooks/usePlaces';
 import { PlaceCategory, PlaceItem } from '@/types/trip';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-
-const ALL_CATEGORIES: PlaceCategory[] = [
-  'cafes', 'restaurants', 'shops', 'excursions', 'photo_spots',
-  'temples', 'pandas', 'bakeries', 'curiosities', 'places_to_visit',
-];
 
 const CATEGORY_LABELS: Record<PlaceCategory, string> = {
   cafes: 'Cafeterías',
@@ -24,17 +19,22 @@ const CATEGORY_LABELS: Record<PlaceCategory, string> = {
   places_to_visit: 'Lugares a visitar',
 };
 
+const CITY_NAMES: Record<string, string> = {
+  beijing: 'Beijing', xian: "Xi'an", chengdu: 'Chengdu', chongqing: 'Chongqing',
+  fenghuang: 'Fenghuang', furong: 'Furong', zhangjiajie: 'Zhangjiajie',
+  wulingyuan: 'Wulingyuan', shangrao: 'Wangxian Valley', shanghai: 'Shanghai',
+};
+
 interface Props {
   open: boolean;
   onClose: () => void;
-  defaultCityId?: string;
+  fixedCityId: string;
+  fixedCategory: PlaceCategory;
   editPlace?: PlaceItem;
 }
 
-export default function AddPlaceModal({ open, onClose, defaultCityId, editPlace }: Props) {
-  const { data, addPlace, updatePlace } = useTrip();
-  const [cityId, setCityId] = useState(defaultCityId || data.cities[0]?.id || '');
-  const [category, setCategory] = useState<PlaceCategory>('restaurants');
+export default function AddPlaceModal({ open, onClose, fixedCityId, fixedCategory, editPlace }: Props) {
+  const { addPlace, updatePlace } = usePlaces();
   const [name, setName] = useState('');
   const [altName, setAltName] = useState('');
   const [address, setAddress] = useState('');
@@ -46,8 +46,6 @@ export default function AddPlaceModal({ open, onClose, defaultCityId, editPlace 
 
   useEffect(() => {
     if (editPlace) {
-      setCityId(editPlace.cityId);
-      setCategory(editPlace.category);
       setName(editPlace.name);
       setAltName(editPlace.altName || '');
       setAddress(editPlace.address || '');
@@ -57,34 +55,14 @@ export default function AddPlaceModal({ open, onClose, defaultCityId, editPlace 
       setImageUrl(editPlace.imageUrl || '');
       setTagsText(editPlace.tags.join(', '));
     } else {
-      if (defaultCityId) setCityId(defaultCityId);
-      setCategory('restaurants');
       setName(''); setAltName(''); setAddress(''); setUrl(''); setNotes('');
       setStatus('saved'); setImageUrl(''); setTagsText('');
     }
-  }, [editPlace, defaultCityId, open]);
+  }, [editPlace, open]);
 
-  const enabledCategories = useMemo(() => {
-    return ALL_CATEGORIES.filter(cat => {
-      if (cat === 'pandas' && cityId !== 'chengdu') return false;
-      return true;
-    });
-  }, [cityId]);
-
-  // If category is pandas and city changes away from chengdu, reset
-  useEffect(() => {
-    if (category === 'pandas' && cityId !== 'chengdu') {
-      setCategory('restaurants');
-    }
-  }, [cityId, category]);
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!name.trim()) {
       toast({ title: 'El nombre es obligatorio', variant: 'destructive' });
-      return;
-    }
-    if (category === 'pandas' && cityId !== 'chengdu') {
-      toast({ title: 'La lista de Pandas está asociada a Chengdu', variant: 'destructive' });
       return;
     }
 
@@ -92,17 +70,18 @@ export default function AddPlaceModal({ open, onClose, defaultCityId, editPlace 
     const now = new Date().toISOString();
 
     if (editPlace) {
-      updatePlace(editPlace.id, {
-        cityId, category, name: name.trim(), altName: altName.trim() || undefined,
+      await updatePlace(editPlace.id, {
+        name: name.trim(), altName: altName.trim() || undefined,
         address: address.trim() || undefined, url: url.trim() || undefined,
         notes: notes.trim() || undefined, tags, status,
-        imageUrl: imageUrl.trim() || undefined, updatedAt: now,
+        imageUrl: imageUrl.trim() || undefined,
       });
       toast({ title: 'Sitio actualizado ✅' });
     } else {
-      addPlace({
+      await addPlace({
         id: `place-${Date.now()}`,
-        cityId, category, name: name.trim(), altName: altName.trim() || undefined,
+        cityId: fixedCityId, category: fixedCategory,
+        name: name.trim(), altName: altName.trim() || undefined,
         address: address.trim() || undefined, url: url.trim() || undefined,
         notes: notes.trim() || undefined, tags, status,
         imageUrl: imageUrl.trim() || undefined, createdAt: now, updatedAt: now,
@@ -119,66 +98,32 @@ export default function AddPlaceModal({ open, onClose, defaultCityId, editPlace 
           <DialogTitle>{editPlace ? 'Editar sitio' : 'Añadir sitio'}</DialogTitle>
         </DialogHeader>
 
+        {/* Fixed context */}
+        <div className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-2 text-sm font-medium text-primary">
+          Añadiendo en: {CITY_NAMES[fixedCityId] || fixedCityId} → {CATEGORY_LABELS[fixedCategory]}
+        </div>
+
         <div className="space-y-3">
-          {/* City */}
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">Ciudad</label>
-            <select
-              value={cityId}
-              onChange={e => setCityId(e.target.value)}
-              className="w-full mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              {data.cities.map(c => (
-                <option key={c.id} value={c.id}>{c.cityName}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Category */}
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">Categoría</label>
-            <select
-              value={category}
-              onChange={e => setCategory(e.target.value as PlaceCategory)}
-              className="w-full mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              {enabledCategories.map(cat => (
-                <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Name */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">Nombre del sitio *</label>
             <Input value={name} onChange={e => setName(e.target.value)} placeholder="可以是中文" className="mt-1" />
           </div>
-
-          {/* Alt name */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">Nombre alternativo</label>
             <Input value={altName} onChange={e => setAltName(e.target.value)} placeholder="En español/inglés" className="mt-1" />
           </div>
-
-          {/* Address */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">Dirección</label>
             <Input value={address} onChange={e => setAddress(e.target.value)} placeholder="Opcional" className="mt-1" />
           </div>
-
-          {/* URL */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">URL / Link</label>
             <Input value={url} onChange={e => setUrl(e.target.value)} placeholder="Maps, Amap, web..." className="mt-1" />
           </div>
-
-          {/* Image URL */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">URL de imagen</label>
             <Input value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="https://..." className="mt-1" />
           </div>
-
-          {/* Status */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">Estado</label>
             <div className="flex gap-2 mt-1">
@@ -195,14 +140,10 @@ export default function AddPlaceModal({ open, onClose, defaultCityId, editPlace 
               ))}
             </div>
           </div>
-
-          {/* Tags */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">Etiquetas (separadas por coma)</label>
             <Input value={tagsText} onChange={e => setTagsText(e.target.value)} placeholder="desayuno, vistas, barato" className="mt-1" />
           </div>
-
-          {/* Notes */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">Notas</label>
             <textarea
@@ -212,7 +153,6 @@ export default function AddPlaceModal({ open, onClose, defaultCityId, editPlace 
               placeholder="Opcional"
             />
           </div>
-
           <Button onClick={handleSubmit} className="w-full">
             {editPlace ? 'Guardar cambios' : 'Añadir sitio'}
           </Button>

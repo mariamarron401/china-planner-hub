@@ -7,6 +7,14 @@ export interface Trip {
   routeDirection: 'forward' | 'reverse';
 }
 
+export interface BudgetExtras {
+  flightsInsurance: number;
+  transportExtra: number;
+  activitiesExtra: number;
+  insurance: number;
+  others: number;
+}
+
 export interface FlightLeg {
   id: string;
   direction: 'outbound' | 'return';
@@ -99,8 +107,10 @@ export interface PendingItem {
   description: string;
   relatedType: string;
   relatedId: string;
+  relatedCityId?: string;
   priority: 'high' | 'medium' | 'low';
   status: 'open' | 'done';
+  deadline?: string;
 }
 
 export interface TripVersion {
@@ -146,10 +156,9 @@ export interface TripData {
   transportLegs: TransportLeg[];
   localTransports: LocalTransport[];
   activities: Activity[];
-  pendingItems: PendingItem[];
   versions: TripVersion[];
   flights: FlightLeg[];
   cityGallery: CityGalleryImage[];
   hotelGallery: HotelGalleryImage[];
-  places: PlaceItem[];
+  budgetExtras: BudgetExtras;
 }

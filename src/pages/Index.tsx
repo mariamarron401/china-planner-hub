@@ -1,12 +1,13 @@
 import { useTrip } from '@/context/TripContext';
+import { usePendingItems } from '@/hooks/usePendingItems';
 import { getGlobalBudget } from '@/lib/calculations';
 import { Link } from 'react-router-dom';
-import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, ChevronRight, ListTodo, Compass, Download, Plane, ArrowLeftRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, ChevronRight, ListTodo, Compass, Plane, ArrowLeftRight } from 'lucide-react';
 
 export default function Dashboard() {
-  const { data, orderedCities, exportJSON, toggleRouteDirection } = useTrip();
-  const { trip, cities, hotels, selectedHotels, pendingItems, activities, flights } = data;
+  const { data, orderedCities, toggleRouteDirection } = useTrip();
+  const { items: pendingItems } = usePendingItems();
+  const { trip, cities, hotels, selectedHotels, activities, flights } = data;
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
   const openPending = pendingItems.filter(p => p.status === 'open');
   const outbound = flights.filter(f => f.direction === 'outbound');
@@ -16,7 +17,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      {/* Hero Header */}
       <div className="gradient-hero px-5 pt-12 pb-8 rounded-b-3xl">
         <h1 className="text-2xl font-bold text-primary-foreground">{trip.title}</h1>
         <p className="text-primary-foreground/80 text-sm mt-1">{trip.dateRangeText}</p>
@@ -52,18 +52,16 @@ export default function Dashboard() {
           <Link to="/vuelos" className="text-xs text-primary font-medium mt-2 inline-block">Ver detalle →</Link>
         </div>
 
-        {/* Route card with direction toggle */}
+        {/* Route card */}
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.03s' }}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
               <Compass className="h-3.5 w-3.5" /> Ruta
             </div>
-            <button
-              onClick={toggleRouteDirection}
-              className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full transition-all hover:bg-primary/20"
-            >
+            <button onClick={toggleRouteDirection}
+              className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full transition-all hover:bg-primary/20">
               <ArrowLeftRight className="h-3 w-3" />
-              {trip.routeDirection === 'forward' ? `${firstCity?.cityName.split(' (')[0]} → ${lastCity?.cityName.split(' (')[0]}` : `${firstCity?.cityName.split(' (')[0]} → ${lastCity?.cityName.split(' (')[0]}`}
+              {firstCity?.cityName.split(' (')[0]} → {lastCity?.cityName.split(' (')[0]}
             </button>
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
@@ -105,9 +103,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
               <AlertCircle className="h-3.5 w-3.5" /> Pendientes
             </div>
-            <span className="bg-travel-pending-bg text-travel-pending text-xs font-bold px-2 py-0.5 rounded-full">
-              {openPending.length}
-            </span>
+            <span className="bg-travel-pending-bg text-travel-pending text-xs font-bold px-2 py-0.5 rounded-full">{openPending.length}</span>
           </div>
           <div className="space-y-2">
             {openPending.slice(0, 3).map(p => (
@@ -117,9 +113,7 @@ export default function Dashboard() {
               </div>
             ))}
             {openPending.length > 3 && (
-              <Link to="/pendientes" className="text-xs text-primary font-medium">
-                Ver {openPending.length - 3} más →
-              </Link>
+              <Link to="/pendientes" className="text-xs text-primary font-medium">Ver {openPending.length - 3} más →</Link>
             )}
           </div>
         </div>
@@ -130,13 +124,6 @@ export default function Dashboard() {
           <QuickLink to="/vuelos" icon={<Plane className="h-5 w-5" />} label="Vuelos" />
           <QuickLink to="/actividades" icon={<Compass className="h-5 w-5" />} label={`Actividades (${activities.length})`} />
           <QuickLink to="/pendientes" icon={<ListTodo className="h-5 w-5" />} label={`Pendientes (${openPending.length})`} />
-          <button
-            onClick={exportJSON}
-            className="flex items-center gap-3 bg-card rounded-xl border border-border p-4 shadow-sm text-left"
-          >
-            <Download className="h-5 w-5 text-muted-foreground" />
-            <span className="text-sm font-medium text-foreground">Exportar JSON</span>
-          </button>
         </div>
       </div>
     </div>

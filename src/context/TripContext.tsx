@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, PendingItem, PlaceItem } from '@/types/trip';
+import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, BudgetExtras } from '@/types/trip';
 import { initialTripData } from '@/data/initialData';
 
 interface TripContextType {
@@ -12,14 +12,9 @@ interface TripContextType {
   updateTransportLeg: (id: string, updates: Partial<TransportLeg>) => void;
   updateLocalTransport: (id: string, updates: Partial<LocalTransport>) => void;
   updateActivity: (id: string, updates: Partial<Activity>) => void;
-  updatePending: (id: string, updates: Partial<PendingItem>) => void;
-  resolvePending: (id: string) => void;
   toggleRouteDirection: () => void;
-  exportJSON: () => void;
   resetData: () => void;
-  addPlace: (place: PlaceItem) => void;
-  updatePlace: (id: string, updates: Partial<PlaceItem>) => void;
-  deletePlace: (id: string) => void;
+  updateBudgetExtras: (extras: Partial<BudgetExtras>) => void;
 }
 
 const TripContext = createContext<TripContextType | null>(null);
@@ -32,12 +27,14 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Migrate old data missing new fields
         if (!parsed.flights) parsed.flights = initialTripData.flights;
         if (!parsed.cityGallery) parsed.cityGallery = initialTripData.cityGallery;
         if (!parsed.hotelGallery) parsed.hotelGallery = initialTripData.hotelGallery;
-        if (!parsed.places) parsed.places = initialTripData.places;
         if (!parsed.trip.routeDirection) parsed.trip.routeDirection = 'forward';
+        if (!parsed.budgetExtras) parsed.budgetExtras = initialTripData.budgetExtras;
+        // Remove legacy fields that moved to Supabase
+        delete parsed.places;
+        delete parsed.pendingItems;
         return parsed;
       }
       return initialTripData;
@@ -104,20 +101,6 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
-  const updatePending = useCallback((id: string, updates: Partial<PendingItem>) => {
-    setData(prev => ({
-      ...prev,
-      pendingItems: prev.pendingItems.map(p => p.id === id ? { ...p, ...updates } : p),
-    }));
-  }, []);
-
-  const resolvePending = useCallback((id: string) => {
-    setData(prev => ({
-      ...prev,
-      pendingItems: prev.pendingItems.map(p => p.id === id ? { ...p, status: 'done' as const } : p),
-    }));
-  }, []);
-
   const toggleRouteDirection = useCallback(() => {
     setData(prev => ({
       ...prev,
@@ -128,34 +111,16 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
-  const exportJSON = useCallback(() => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'viaje-china.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [data]);
-
   const resetData = useCallback(() => {
     setData(initialTripData);
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
-  const addPlace = useCallback((place: PlaceItem) => {
-    setData(prev => ({ ...prev, places: [...prev.places, place] }));
-  }, []);
-
-  const updatePlace = useCallback((id: string, updates: Partial<PlaceItem>) => {
+  const updateBudgetExtras = useCallback((extras: Partial<BudgetExtras>) => {
     setData(prev => ({
       ...prev,
-      places: prev.places.map(p => p.id === id ? { ...p, ...updates } : p),
+      budgetExtras: { ...prev.budgetExtras, ...extras },
     }));
-  }, []);
-
-  const deletePlace = useCallback((id: string) => {
-    setData(prev => ({ ...prev, places: prev.places.filter(p => p.id !== id) }));
   }, []);
 
   return (
@@ -163,8 +128,7 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
       data, orderedCities, orderedTransportLegs,
       selectHotel, deselectHotel, updateHotelPrice,
       updateTransportLeg, updateLocalTransport, updateActivity,
-      updatePending, resolvePending, toggleRouteDirection, exportJSON, resetData,
-      addPlace, updatePlace, deletePlace,
+      toggleRouteDirection, resetData, updateBudgetExtras,
     }}>
       {children}
     </TripContext.Provider>

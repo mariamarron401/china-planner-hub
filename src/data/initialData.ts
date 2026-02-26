@@ -75,73 +75,64 @@ export const initialTripData: TripData = {
     { id: 'act-3', cityId: 'chengdu', title: 'Buda Gigante de Leshan', type: 'Excursión', duration: null, price: null, currency: 'EUR', status: 'Por reservar', notes: 'Excursión de un día desde Chengdu' },
     { id: 'act-4', cityId: 'shanghai', title: 'Shanghai Disneyland', type: 'Día completo', duration: null, price: null, currency: 'EUR', status: 'Por reservar', notes: '' },
   ],
-  pendingItems: [
-    { id: 'pi-1', title: 'Precio pendiente hotel Wulingyuan (opción 2)', description: 'Falta el precio del segundo hotel en Wulingyuan', relatedType: 'hotel', relatedId: 'h-wl-2', priority: 'high', status: 'open' },
-    { id: 'pi-2', title: 'Confirmar alojamiento dentro de Wangxian Valley', description: 'Confirmar si alojarse dentro evita entrada y permite acceso nocturno', relatedType: 'note', relatedId: 'shangrao', priority: 'high', status: 'open' },
-    { id: 'pi-3', title: 'Duda: ¿3 noches en Chengdu es lo ideal?', description: 'Revisar viabilidad y logística de 3 noches en Chengdu', relatedType: 'note', relatedId: 'chengdu', priority: 'medium', status: 'open' },
-    { id: 'pi-4', title: 'Duración y precio de todos los tramos en tren', description: 'Buscar precios y duración de los 8 trayectos en tren bala', relatedType: 'transport', relatedId: '', priority: 'high', status: 'open' },
-    { id: 'pi-5', title: 'Precio y duración traslados Didi', description: 'Estimar precios y duración de los traslados locales en Didi/taxi', relatedType: 'transport', relatedId: '', priority: 'medium', status: 'open' },
-  ],
   versions: [],
   flights: [
-    // IDA – 9 OCT 2026
     { id: 'fl-1', direction: 'outbound', airline: 'Brussels Airlines', flightNumber: 'SN3732', fromAirport: 'MAD', toAirport: 'BRU', departureDateTime: '2026-10-09T06:20', arrivalDateTime: '2026-10-09T08:35', durationMinutes: 135, layoverMinutes: 265, cabinClass: 'Economy', baggage: '2 piezas' },
     { id: 'fl-2', direction: 'outbound', airline: 'Air China', flightNumber: 'CA964', fromAirport: 'BRU', toAirport: 'PEK', departureDateTime: '2026-10-09T13:00', arrivalDateTime: '2026-10-10T04:45', durationMinutes: 585, layoverMinutes: null, cabinClass: 'Economy', baggage: '2 piezas' },
-    // VUELTA – 1 NOV 2026
     { id: 'fl-3', direction: 'return', airline: 'Air China', flightNumber: 'CA1590', fromAirport: 'SHA', toAirport: 'PEK', departureDateTime: '2026-11-01T08:55', arrivalDateTime: '2026-11-01T10:55', durationMinutes: 120, layoverMinutes: 245, cabinClass: 'Economy', baggage: '2 piezas' },
     { id: 'fl-4', direction: 'return', airline: 'Air China', flightNumber: 'CA897', fromAirport: 'PEK', toAirport: 'MAD', departureDateTime: '2026-11-01T15:00', arrivalDateTime: '2026-11-01T20:10', durationMinutes: 730, layoverMinutes: null, cabinClass: 'Economy', baggage: '2 piezas' },
   ],
   cityGallery: [
-    // Beijing
+    // Beijing - Great Wall, Forbidden City, Temple of Heaven
     { id: 'cg-bj-1', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-bj-2', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-bj-3', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1599571234909-29ed5d1321d6?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-bj-4', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1584646098378-0874589d76b1?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-bj-5', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1537410856029-1e8e1d567b38?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-bj-6', cityId: 'beijing', imageUrl: 'https://images.unsplash.com/photo-1529921879218-f99546d03a26?w=600&q=80', source: 'Unsplash' },
-    // Xi'an
+    // Xi'an - City Wall, Terracotta Warriors
     { id: 'cg-xa-1', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-xa-2', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1624881244453-a55c2f651697?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-xa-3', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1591017403286-fd8493524e1e?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-xa-4', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-xa-5', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1517497728100-53b48c7c1cc0?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-xa-6', cityId: 'xian', imageUrl: 'https://images.unsplash.com/photo-1568700942090-19dc36fab0c4?w=600&q=80', source: 'Unsplash' },
-    // Chengdu
-    { id: 'cg-cd-1', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1573737268516-6d1c98af5e05?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-cd-2', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1580391564590-aeca65c5e2d3?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-cd-3', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1564577160324-112d603f750f?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-cd-4', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1610972947633-28e10547cedb?w=600&q=80', source: 'Unsplash' },
+    // Chengdu - Pandas, temples
+    { id: 'cg-cd-1', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cd-2', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1527838832700-5059252407fa?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cd-3', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1573737268516-6d1c98af5e05?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cd-4', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1580391564590-aeca65c5e2d3?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-cd-5', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1590846083693-f23fdede3a7e?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-cd-6', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1527838832700-5059252407fa?w=600&q=80', source: 'Unsplash' },
-    // Chongqing
+    { id: 'cg-cd-6', cityId: 'chengdu', imageUrl: 'https://images.unsplash.com/photo-1610972947633-28e10547cedb?w=600&q=80', source: 'Unsplash' },
+    // Chongqing - Skyline, Hongya Cave
     { id: 'cg-cq-1', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1607497600752-1ae81e8fbc83?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-cq-2', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-cq-3', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1529551739587-e242c564f727?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-cq-4', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1474181628771-2289abfa8016?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-cq-5', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1598886221385-d7c3b4ca7b0e?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-cq-6', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1508009603885-50cf7c8a1ee8?w=600&q=80', source: 'Unsplash' },
-    // Fenghuang
-    { id: 'cg-fh-1', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1537531383496-b tried?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fh-2', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1528795259021-d8c86e14354c?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fh-3', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fh-4', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fh-5', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1470004914212-05527e49370b?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fh-6', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1533552475041-9776e42dfe8f?w=600&q=80', source: 'Unsplash' },
-    // Furong
-    { id: 'cg-fr-1', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1537531383496-b5e0f0b3c137?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cq-4', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1598886221385-d7c3b4ca7b0e?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cq-5', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1508009603885-50cf7c8a1ee8?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-cq-6', cityId: 'chongqing', imageUrl: 'https://images.unsplash.com/photo-1474181628771-2289abfa8016?w=600&q=80', source: 'Unsplash' },
+    // Fenghuang - Ancient Town
+    { id: 'cg-fh-1', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1528795259021-d8c86e14354c?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-2', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-3', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-4', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1470004914212-05527e49370b?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-5', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1533552475041-9776e42dfe8f?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fh-6', cityId: 'fenghuang', imageUrl: 'https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=600&q=80', source: 'Unsplash' },
+    // Furong - Waterfall village
+    { id: 'cg-fr-1', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-fr-2', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fr-3', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fr-4', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fr-5', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-fr-6', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=600&q=80', source: 'Unsplash' },
-    // Zhangjiajie
-    { id: 'cg-zj-1', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-zj-2', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-zj-3', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-zj-4', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-zj-5', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80', source: 'Unsplash' },
-    { id: 'cg-zj-6', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&q=80', source: 'Unsplash' },
-    // Wulingyuan
+    { id: 'cg-fr-3', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fr-4', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fr-5', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1537531383496-b5e0f0b3c137?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-fr-6', cityId: 'furong', imageUrl: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80', source: 'Unsplash' },
+    // Zhangjiajie - Avatar Mountains
+    { id: 'cg-zj-1', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-2', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-3', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-4', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-5', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&q=80', source: 'Unsplash' },
+    { id: 'cg-zj-6', cityId: 'zhangjiajie', imageUrl: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?w=600&q=80', source: 'Unsplash' },
+    // Wulingyuan - National Park
     { id: 'cg-wl-1', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-wl-2', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-wl-3', cityId: 'wulingyuan', imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80', source: 'Unsplash' },
@@ -155,7 +146,7 @@ export const initialTripData: TripData = {
     { id: 'cg-sr-4', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-sr-5', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-sr-6', cityId: 'shangrao', imageUrl: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=600&q=80', source: 'Unsplash' },
-    // Shanghai
+    // Shanghai - Pudong Skyline
     { id: 'cg-sh-1', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1537519646099-2b0e40624ad9?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-sh-2', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1474181628771-2289abfa8016?w=600&q=80', source: 'Unsplash' },
     { id: 'cg-sh-3', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=600&q=80', source: 'Unsplash' },
@@ -164,5 +155,11 @@ export const initialTripData: TripData = {
     { id: 'cg-sh-6', cityId: 'shanghai', imageUrl: 'https://images.unsplash.com/photo-1462007895615-c8c073bebada?w=600&q=80', source: 'Unsplash' },
   ],
   hotelGallery: [],
-  places: [],
+  budgetExtras: {
+    flightsInsurance: 2022,
+    transportExtra: 0,
+    activitiesExtra: 0,
+    insurance: 0,
+    others: 0,
+  },
 };
