@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
-import { Train, Car, ArrowRight } from 'lucide-react';
+import { Train, Car, ArrowRight, MapPin, CalendarClock, Luggage } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -57,13 +57,16 @@ export default function Transports() {
       </div>
 
       <div className="px-4 space-y-3">
-        {tab === 'inter' && transportLegs.map(leg => (
+        {tab === 'inter' && transportLegs.map((leg, idx) => (
           <div key={leg.id} className="bg-card rounded-xl border border-border p-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-2">
-              <Train className="h-4 w-4 text-primary" />
-              <span className="font-medium text-sm text-foreground">{getCityName(leg.fromCityId)}</span>
-              <ArrowRight className="h-3 w-3 text-muted-foreground" />
-              <span className="font-medium text-sm text-foreground">{getCityName(leg.toCityId)}</span>
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-2">
+                <Train className="h-4 w-4 text-primary" />
+                <span className="font-medium text-sm text-foreground">{getCityName(leg.fromCityId)}</span>
+                <ArrowRight className="h-3 w-3 text-muted-foreground" />
+                <span className="font-medium text-sm text-foreground">{getCityName(leg.toCityId)}</span>
+              </div>
+              <span className="text-[10px] text-muted-foreground font-mono">Tramo {idx + 1}/8</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
               <span className="bg-muted px-1.5 py-0.5 rounded">{leg.mode}</span>
@@ -72,6 +75,41 @@ export default function Transports() {
               <span>Precio: {leg.price != null ? `${leg.price}€` : <PendingBadge />}</span>
               <span>Duración: {leg.durationMinutes != null ? `${leg.durationMinutes} min` : <PendingBadge />}</span>
             </div>
+            {leg.notes && <div className="text-[11px] text-muted-foreground mt-1">{leg.notes}</div>}
+
+            {(leg.fromStation || leg.toStation) && (
+              <div className="mt-2.5 pt-2.5 border-t border-border/60 flex items-start gap-1.5">
+                <MapPin className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="text-[11px] leading-snug text-foreground">
+                  <div><span className="text-muted-foreground">Escribe en Trip.com — Origen:</span> <span className="font-medium">{leg.fromStation}</span></div>
+                  <div><span className="text-muted-foreground">Destino:</span> <span className="font-medium">{leg.toStation}</span></div>
+                </div>
+              </div>
+            )}
+
+            {(leg.preBookingFrom || leg.saleOpensOn) && (
+              <div className="mt-2 flex items-start gap-1.5">
+                <CalendarClock className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="text-[11px] leading-snug text-foreground">
+                  <span className="text-muted-foreground">Activar reserva anticipada desde</span> <span className="font-medium">{leg.preBookingFrom}</span>
+                  {' · '}
+                  <span className="text-muted-foreground">venta real desde</span> <span className="font-medium">{leg.saleOpensOn}</span>
+                </div>
+              </div>
+            )}
+
+            {leg.recommendedWindow && (
+              <div className="mt-2 flex items-start gap-1.5">
+                <Luggage className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
+                <p className="text-[11px] leading-snug text-muted-foreground">{leg.recommendedWindow}</p>
+              </div>
+            )}
+
+            {leg.alertNote && (
+              <div className="mt-2.5 bg-travel-important-bg text-travel-important text-[11px] leading-snug font-medium px-2.5 py-1.5 rounded-lg">
+                {leg.alertNote}
+              </div>
+            )}
 
             {editingId === leg.id ? (
               <div className="mt-3 flex gap-2 items-center">

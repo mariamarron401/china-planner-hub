@@ -119,6 +119,13 @@ export default function Hotels() {
                           {hotel.paymentNote && (
                             <p className="text-[11px] text-muted-foreground mt-0.5">{hotel.paymentNote}</p>
                           )}
+                          {(hotel.checkInTime || hotel.checkOutTime) && (
+                            <p className="text-[11px] text-muted-foreground mt-0.5">
+                              Check-in: <span className="font-medium text-foreground">{hotel.checkInTime}</span>
+                              {' · '}
+                              Check-out: <span className="font-medium text-foreground">{hotel.checkOutTime}</span>
+                            </p>
+                          )}
 
                           {isPending ? (
                             <div className="mt-2">

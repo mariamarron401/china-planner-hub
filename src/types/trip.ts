@@ -66,6 +66,8 @@ export interface HotelOption {
   name?: string;
   checkInText?: string;
   checkOutText?: string;
+  checkInTime?: string;
+  checkOutTime?: string;
   paymentNote?: string;
   booked?: boolean;
   imageUrl?: string;
@@ -81,6 +83,12 @@ export interface TransportLeg {
   currency: string;
   status: 'known' | 'pending';
   notes: string;
+  fromStation?: string;
+  toStation?: string;
+  preBookingFrom?: string;
+  saleOpensOn?: string;
+  recommendedWindow?: string;
+  alertNote?: string;
 }
 
 export interface LocalTransport {
