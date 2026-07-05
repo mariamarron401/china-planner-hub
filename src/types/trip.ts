@@ -68,6 +68,7 @@ export interface HotelOption {
   checkOutText?: string;
   paymentNote?: string;
   booked?: boolean;
+  imageUrl?: string;
 }
 
 export interface TransportLeg {

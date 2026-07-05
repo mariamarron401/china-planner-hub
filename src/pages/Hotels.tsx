@@ -87,11 +87,19 @@ export default function Hotels() {
                   return (
                     <div
                       key={hotel.id}
-                      className={`bg-card rounded-xl border-2 p-3 shadow-sm transition-all ${
+                      className={`bg-card rounded-xl border-2 overflow-hidden shadow-sm transition-all ${
                         isSelected ? 'border-travel-confirmed shadow-md' : 'border-border'
                       }`}
                     >
-                      <div className="flex items-start justify-between">
+                      {hotel.imageUrl && (
+                        <img
+                          src={hotel.imageUrl}
+                          alt={hotel.name ?? `Hotel en ${city.cityName}`}
+                          loading="lazy"
+                          className="w-full h-32 object-cover"
+                        />
+                      )}
+                      <div className="flex items-start justify-between p-3">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-xs text-muted-foreground">Opción {idx + 1}</span>
