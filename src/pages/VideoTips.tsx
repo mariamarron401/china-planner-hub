@@ -66,8 +66,8 @@ export default function VideoTips() {
     } catch (err: any) {
       toast({
         title: 'No se pudo analizar el vídeo',
-        description: err.message?.includes('fetch')
-          ? 'No se puede conectar con el servidor local de análisis. ¿Está arrancado con "node execution/video-tips-server.mjs"?'
+        description: err instanceof TypeError
+          ? 'No se ha podido conectar con el servidor local de análisis. Solo funciona abriendo esta web en el Mac y con "node execution/video-tips-server.mjs" arrancado en una terminal. Desde el móvil, manda el enlace por chat en su lugar.'
           : err.message,
         variant: 'destructive',
       });
@@ -117,7 +117,7 @@ export default function VideoTips() {
             <h2 className="text-sm font-medium text-foreground">Analizar vídeo automáticamente</h2>
           </div>
           <p className="text-xs text-muted-foreground mb-3">
-            Pega el enlace de un vídeo público de TikTok/Instagram/YouTube y se descarga y transcribe solo. Requiere tener arrancado en este ordenador <code className="bg-muted px-1 rounded">node execution/video-tips-server.mjs</code>. Puede tardar 1-3 minutos.
+            Solo funciona abriendo esta web <strong>en el Mac</strong>, con <code className="bg-muted px-1 rounded">node execution/video-tips-server.mjs</code> arrancado en una terminal. Pega el enlace y se descarga y transcribe solo (1-3 min). <strong>Desde el móvil no funcionará</strong> — en ese caso, manda el enlace por chat y añade el tip a mano con el botón "+".
           </p>
           <div className="flex gap-2">
             <Input
