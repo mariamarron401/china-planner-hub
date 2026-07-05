@@ -102,7 +102,7 @@ export default function Hotels() {
                       <div className="flex items-start justify-between p-3">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-xs text-muted-foreground">Opción {idx + 1}</span>
+                            {sortedHotels.length > 1 && <span className="text-xs text-muted-foreground">Opción {idx + 1}</span>}
                             <span className="text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded">{hotel.provider}</span>
                             <span className="text-[10px] bg-travel-confirmed-bg text-travel-confirmed px-1.5 py-0.5 rounded flex items-center gap-0.5">
                               <Coffee className="h-2.5 w-2.5" /> Desayuno
