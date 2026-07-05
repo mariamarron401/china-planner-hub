@@ -10,6 +10,9 @@ function rowToVideoTip(row: any): VideoTip {
     title: row.title,
     tips: row.tips || [],
     cityId: row.city_id || undefined,
+    transcript: row.transcript || undefined,
+    caption: row.caption || undefined,
+    status: (row.status as VideoTip['status']) || 'reviewed',
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -44,6 +47,9 @@ export function useVideoTips() {
       title: tip.title,
       tips: tip.tips,
       city_id: tip.cityId || null,
+      transcript: tip.transcript || null,
+      caption: tip.caption || null,
+      status: tip.status,
     });
   }, []);
 
@@ -54,6 +60,9 @@ export function useVideoTips() {
     if (updates.title !== undefined) mapped.title = updates.title;
     if (updates.tips !== undefined) mapped.tips = updates.tips;
     if (updates.cityId !== undefined) mapped.city_id = updates.cityId || null;
+    if (updates.transcript !== undefined) mapped.transcript = updates.transcript || null;
+    if (updates.caption !== undefined) mapped.caption = updates.caption || null;
+    if (updates.status !== undefined) mapped.status = updates.status;
     await supabase.from('video_tips').update(mapped).eq('id', id);
   }, []);
 

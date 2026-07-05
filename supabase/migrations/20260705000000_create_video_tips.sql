@@ -7,6 +7,9 @@ CREATE TABLE public.video_tips (
   title TEXT NOT NULL DEFAULT '',
   tips TEXT[] NOT NULL DEFAULT '{}',
   city_id TEXT,
+  transcript TEXT,
+  caption TEXT,
+  status TEXT NOT NULL DEFAULT 'reviewed',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
