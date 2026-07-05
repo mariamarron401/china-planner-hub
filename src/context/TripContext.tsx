@@ -21,6 +21,23 @@ const TripContext = createContext<TripContextType | null>(null);
 
 const STORAGE_KEY = 'china-trip-data';
 
+// Reconstruye una lista a partir de los datos "de fábrica" (initialData.ts), conservando
+// solo los campos editables por la usuaria desde localStorage. Así, cuando el código se
+// actualiza con información nueva (estaciones, fechas, notas...), esa info siempre llega
+// aunque la usuaria ya tuviera datos antiguos guardados en el navegador.
+function reconcileById<T extends { id: string }>(fresh: T[], saved: T[] | undefined, preserveKeys: (keyof T)[]): T[] {
+  const savedMap = new Map((saved || []).map(item => [item.id, item]));
+  return fresh.map(freshItem => {
+    const savedItem = savedMap.get(freshItem.id);
+    if (!savedItem) return freshItem;
+    const merged = { ...freshItem };
+    preserveKeys.forEach(key => {
+      if (savedItem[key] !== null && savedItem[key] !== undefined) merged[key] = savedItem[key];
+    });
+    return merged;
+  });
+}
+
 export function TripProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<TripData>(() => {
     try {
@@ -35,6 +52,11 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         // Remove legacy fields that moved to Supabase
         delete parsed.places;
         delete parsed.pendingItems;
+        // Refrescar contenido informativo desde initialData.ts sin perder ediciones manuales
+        parsed.hotels = reconcileById(initialTripData.hotels, parsed.hotels, ['totalPrice', 'priceStatus', 'booked']);
+        parsed.transportLegs = reconcileById(initialTripData.transportLegs, parsed.transportLegs, ['price', 'durationMinutes', 'status']);
+        parsed.localTransports = reconcileById(initialTripData.localTransports, parsed.localTransports, ['price', 'durationMinutes']);
+        parsed.activities = reconcileById(initialTripData.activities, parsed.activities, ['price', 'duration', 'status']);
         return parsed;
       }
       return initialTripData;

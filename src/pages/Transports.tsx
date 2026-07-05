@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
-import { Train, Car, ArrowRight, MapPin, CalendarClock, Luggage } from 'lucide-react';
+import { Train, Car, ArrowRight, MapPin, CalendarClock, Calendar, Clock, Luggage } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -56,6 +56,25 @@ export default function Transports() {
         </button>
       </div>
 
+      {tab === 'inter' && (
+        <div className="px-4 mb-4">
+          <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+            <h2 className="text-sm font-bold text-foreground mb-2">📅 Calendario de agosto — cuándo entrar en Trip.com</h2>
+            <p className="text-[11px] text-muted-foreground mb-3">Los 8 tramos, en el orden en que os van a tocar. Cada día, entra en Trip.com y activa la reserva anticipada de ese tramo (estaciones exactas en la tarjeta de abajo).</p>
+            <div className="space-y-1.5">
+              {transportLegs.map((leg, idx) => (
+                <div key={leg.id} className="flex items-center gap-2 text-xs">
+                  <span className="font-mono font-bold text-primary w-20 flex-shrink-0">{leg.preBookingFrom}</span>
+                  <span className="text-muted-foreground">→</span>
+                  <span className="text-foreground">{getCityName(leg.fromCityId)} → {getCityName(leg.toCityId)}</span>
+                  <span className="text-muted-foreground text-[10px] ml-auto flex-shrink-0">(viaje {leg.travelDate?.split(' (')[0]})</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="px-4 space-y-3">
         {tab === 'inter' && transportLegs.map((leg, idx) => (
           <div key={leg.id} className="bg-card rounded-xl border border-border p-4 shadow-sm">
@@ -68,10 +87,38 @@ export default function Transports() {
               </div>
               <span className="text-[10px] text-muted-foreground font-mono">Tramo {idx + 1}/8</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
               <span className="bg-muted px-1.5 py-0.5 rounded">{leg.mode}</span>
             </div>
-            <div className="flex gap-4 text-xs">
+
+            {leg.preBookingFrom && (
+              <div className="mb-2 bg-primary text-primary-foreground rounded-lg px-3 py-2 flex items-center gap-2">
+                <CalendarClock className="h-4 w-4 flex-shrink-0" />
+                <div className="text-xs leading-tight">
+                  <div className="opacity-80">Entra tú en Trip.com este día:</div>
+                  <div className="text-sm font-bold">{leg.preBookingFrom}</div>
+                </div>
+              </div>
+            )}
+
+            {leg.travelDate && (
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <Calendar className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                <span className="text-xs font-semibold text-foreground">Viaje: {leg.travelDate}</span>
+              </div>
+            )}
+
+            {(leg.suggestedDeparture || leg.estimatedArrival) && (
+              <div className="flex items-start gap-1.5 mb-1">
+                <Clock className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="text-[11px] leading-snug text-foreground">
+                  <div><span className="text-muted-foreground">Salida:</span> <span className="font-medium">{leg.suggestedDeparture}</span></div>
+                  <div><span className="text-muted-foreground">Llegada:</span> <span className="font-medium">{leg.estimatedArrival}</span></div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-4 text-xs mt-1">
               <span>Precio: {leg.price != null ? `${leg.price}€` : <PendingBadge />}</span>
               <span>Duración: {leg.durationMinutes != null ? `${leg.durationMinutes} min` : <PendingBadge />}</span>
             </div>
@@ -87,21 +134,23 @@ export default function Transports() {
               </div>
             )}
 
-            {(leg.preBookingFrom || leg.saleOpensOn) && (
+            {(leg.transferBefore || leg.transferAfter || leg.stationBuffer) && (
               <div className="mt-2 flex items-start gap-1.5">
-                <CalendarClock className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
-                <div className="text-[11px] leading-snug text-foreground">
-                  <span className="text-muted-foreground">Activar reserva anticipada desde</span> <span className="font-medium">{leg.preBookingFrom}</span>
-                  {' · '}
-                  <span className="text-muted-foreground">venta real desde</span> <span className="font-medium">{leg.saleOpensOn}</span>
+                <Luggage className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="text-[11px] leading-snug text-muted-foreground space-y-0.5">
+                  {leg.transferBefore && <p><span className="text-foreground font-medium">Antes del tren:</span> {leg.transferBefore}</p>}
+                  {leg.stationBuffer && <p><span className="text-foreground font-medium">Margen en la estación:</span> {leg.stationBuffer}</p>}
+                  {leg.transferAfter && <p><span className="text-foreground font-medium">Después del tren:</span> {leg.transferAfter}</p>}
                 </div>
               </div>
             )}
 
-            {leg.recommendedWindow && (
+            {leg.saleOpensOn && (
               <div className="mt-2 flex items-start gap-1.5">
-                <Luggage className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
-                <p className="text-[11px] leading-snug text-muted-foreground">{leg.recommendedWindow}</p>
+                <CalendarClock className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
+                <p className="text-[11px] leading-snug text-muted-foreground">
+                  Si haces la pre-reserva en la fecha de arriba, Trip.com la compra sola en cuanto China abra la venta real (será a partir del <span className="font-medium text-foreground">{leg.saleOpensOn}</span>). Si no la hiciste a tiempo, entra tú ese día a comprarla a mano.
+                </p>
               </div>
             )}
 
@@ -142,6 +191,20 @@ export default function Transports() {
               <span className="bg-muted px-1.5 py-0.5 rounded">{lt.mode}</span>
               <span className="bg-muted px-1.5 py-0.5 rounded">{getCityName(lt.cityId)}</span>
             </div>
+
+            {lt.date && (
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <Calendar className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                <span className="text-xs font-semibold text-foreground">{lt.date}</span>
+              </div>
+            )}
+            {lt.suggestedTime && (
+              <div className="flex items-start gap-1.5 mb-1">
+                <Clock className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
+                <p className="text-[11px] leading-snug text-foreground">{lt.suggestedTime}</p>
+              </div>
+            )}
+
             <div className="flex gap-4 text-xs">
               <span>Precio: {lt.price != null ? `${lt.price}€` : <PendingBadge />}</span>
               <span>Duración: {lt.durationMinutes != null ? `${lt.durationMinutes} min` : <PendingBadge />}</span>

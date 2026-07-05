@@ -87,8 +87,13 @@ export interface TransportLeg {
   toStation?: string;
   preBookingFrom?: string;
   saleOpensOn?: string;
-  recommendedWindow?: string;
   alertNote?: string;
+  travelDate?: string;
+  suggestedDeparture?: string;
+  estimatedArrival?: string;
+  transferBefore?: string;
+  transferAfter?: string;
+  stationBuffer?: string;
 }
 
 export interface LocalTransport {
@@ -101,6 +106,8 @@ export interface LocalTransport {
   price: number | null;
   currency: string;
   notes: string;
+  date?: string;
+  suggestedTime?: string;
 }
 
 export interface Activity {
