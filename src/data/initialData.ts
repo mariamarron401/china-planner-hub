@@ -4,7 +4,7 @@ export const initialTripData: TripData = {
   trip: {
     title: 'Viaje a China 🇨🇳',
     travelers: 2,
-    dateRangeText: '10 OCT – 1 NOV 2026',
+    dateRangeText: '9 OCT – 1 NOV 2026',
     totalNights: 22,
     primaryCurrency: 'EUR',
     routeDirection: 'forward',

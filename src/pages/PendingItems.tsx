@@ -23,12 +23,14 @@ export default function PendingItems() {
   const [newRelatedCityId, setNewRelatedCityId] = useState('');
   const [newDeadline, setNewDeadline] = useState('');
 
-  const filtered = items.filter(p => {
-    if (viewFilter === 'open' && p.status !== 'open') return false;
-    if (viewFilter === 'done' && p.status !== 'done') return false;
-    if (priorityFilter !== 'all' && p.priority !== priorityFilter) return false;
-    return true;
-  });
+  const filtered = items
+    .filter(p => {
+      if (viewFilter === 'open' && p.status !== 'open') return false;
+      if (viewFilter === 'done' && p.status !== 'done') return false;
+      if (priorityFilter !== 'all' && p.priority !== priorityFilter) return false;
+      return true;
+    })
+    .sort((a, b) => (a.status === 'done' ? 1 : 0) - (b.status === 'done' ? 1 : 0));
 
   const open = items.filter(p => p.status === 'open');
   const done = items.filter(p => p.status === 'done');
