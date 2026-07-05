@@ -161,6 +161,9 @@ export interface VideoTip {
   title: string;
   tips: string[];
   cityId?: string;
+  transcript?: string;
+  caption?: string;
+  status: 'pending_review' | 'reviewed';
   createdAt: string;
   updatedAt: string;
 }
