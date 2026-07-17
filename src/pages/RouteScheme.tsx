@@ -1,5 +1,8 @@
 import { useTrip } from '@/context/TripContext';
-import { Building2, Car, TrainFront, MapPin, LogOut, LogIn, AlertTriangle, Clock } from 'lucide-react';
+import { Building2, Car, TrainFront, MapPin, LogOut, LogIn, AlertTriangle, Clock, Copy, ExternalLink } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
+
+const TRIP_TRAINS_URL = 'https://www.trip.com/trains/china/list';
 
 function formatDuration(min: number) {
   if (min < 60) return `${min} min`;
@@ -38,6 +41,20 @@ export default function RouteScheme() {
 
   const cityName = (id: string) => cities.find(c => c.id === id)?.cityName?.split(' (')[0] || id;
   const hotelFor = (cityId: string) => hotels.find(h => h.id === selectedHotels[cityId]);
+
+  const copyRouteInfo = async (leg: (typeof transportLegs)[number]) => {
+    const text = [
+      `${leg.fromStation ?? cityName(leg.fromCityId)} → ${leg.toStation ?? cityName(leg.toCityId)}`,
+      leg.travelDate,
+      leg.suggestedDeparture ? `Salida deseada: ${leg.suggestedDeparture}` : null,
+    ].filter(Boolean).join(' · ');
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({ title: 'Datos del trayecto copiados ✅', description: text });
+    } catch {
+      toast({ title: 'No se ha podido copiar', variant: 'destructive' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -135,6 +152,26 @@ export default function RouteScheme() {
                 <span className="text-xs font-semibold text-foreground">Total del tramo <span className="text-muted-foreground font-normal">(tren 2 pers. + Didi)</span></span>
                 <span className="text-sm font-bold text-primary">~{legTotal}€</span>
               </div>
+
+              <div className="mt-2 flex gap-2">
+                <a
+                  href={TRIP_TRAINS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold px-3 py-2 active:opacity-80 transition-opacity"
+                >
+                  Buscar en Trip.com <ExternalLink className="h-3 w-3 opacity-80" />
+                </a>
+                <button
+                  onClick={() => copyRouteInfo(leg)}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-muted text-foreground text-xs font-semibold px-3 py-2 hover:bg-muted/70 transition-colors"
+                >
+                  <Copy className="h-3.5 w-3.5" /> Copiar datos
+                </button>
+              </div>
+              <p className="mt-1.5 text-[10px] text-muted-foreground leading-snug">
+                Trip.com no permite enlazar la búsqueda ya rellena — este botón abre el buscador de trenes de China y "Copiar datos" pone origen, destino y fecha en el portapapeles para pegarlos ahí. Los billetes suelen abrirse a la venta pocas semanas antes del viaje.
+              </p>
 
               {leg.alertNote && (
                 <div className="mt-3 bg-travel-important-bg text-travel-important text-[11px] leading-snug font-medium px-2.5 py-1.5 rounded-lg flex items-start gap-1.5">
