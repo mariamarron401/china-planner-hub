@@ -7,7 +7,9 @@ import { VideoTip } from '@/types/trip';
 // notes=JSON con {caption, transcript, status}. Así se comparten en tiempo real entre
 // dispositivos sin necesitar crear una tabla nueva (los usuarios no tienen cuenta propia
 // en Supabase/Lovable para hacer esa gestión). Ver .agent/knowledge/07-app-lovable.md.
+// city_id es NOT NULL en la tabla, así que los tips sin ciudad usan el sentinel 'none'.
 const CATEGORY = 'video_tip';
+const NO_CITY = 'none';
 
 function rowToVideoTip(row: any): VideoTip {
   let extra: { caption?: string; transcript?: string; status?: VideoTip['status'] } = {};
@@ -22,7 +24,7 @@ function rowToVideoTip(row: any): VideoTip {
     platform: (row.alt_name as VideoTip['platform']) || 'other',
     title: row.name,
     tips: row.tags || [],
-    cityId: row.city_id || undefined,
+    cityId: (row.city_id && row.city_id !== NO_CITY) ? row.city_id : undefined,
     caption: extra.caption || undefined,
     transcript: extra.transcript || undefined,
     status: extra.status || 'reviewed',
@@ -60,7 +62,7 @@ export function useVideoTips() {
     await supabase.from('places').insert({
       id: tip.id,
       category: CATEGORY,
-      city_id: tip.cityId || null,
+      city_id: tip.cityId || NO_CITY,
       name: tip.title,
       alt_name: tip.platform,
       url: tip.url,
@@ -76,7 +78,7 @@ export function useVideoTips() {
     if (updates.title !== undefined) mapped.name = updates.title;
     if (updates.platform !== undefined) mapped.alt_name = updates.platform;
     if (updates.url !== undefined) mapped.url = updates.url;
-    if (updates.cityId !== undefined) mapped.city_id = updates.cityId || null;
+    if (updates.cityId !== undefined) mapped.city_id = updates.cityId || NO_CITY;
     if (updates.tips !== undefined) mapped.tags = updates.tips;
     if (current && (updates.caption !== undefined || updates.transcript !== undefined || updates.status !== undefined)) {
       mapped.notes = JSON.stringify({
