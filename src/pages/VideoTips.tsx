@@ -60,8 +60,19 @@ export default function VideoTips() {
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className="px-4 pt-12 pb-4">
-        <h1 className="text-2xl font-bold text-foreground">Tips de vídeos</h1>
-        <p className="text-sm text-muted-foreground mt-1">{videoTips.length} vídeos analizados</p>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Tips de vídeos</h1>
+            <p className="text-sm text-muted-foreground mt-1">{videoTips.length} vídeos analizados</p>
+          </div>
+          <button
+            onClick={() => { resetModalState(); setShowAdd(true); }}
+            aria-label="Añadir tip de vídeo"
+            className="flex-shrink-0 h-10 w-10 rounded-full bg-primary text-primary-foreground shadow-sm flex items-center justify-center hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="h-5 w-5" />
+          </button>
+        </div>
         <p className="text-xs text-muted-foreground mt-2">
           Manda el enlace del vídeo público de TikTok/Instagram por chat al agente: él lo transcribe y lo deja guardado aquí. El botón "+" es solo para añadirlo a mano si lo prefieres.
         </p>

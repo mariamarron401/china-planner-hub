@@ -71,9 +71,18 @@ export default function CategoryPlaces() {
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className="gradient-hero px-5 pt-10 pb-5 rounded-b-3xl">
-        <button onClick={() => navigate(`/que-hacer/${cityId}`)} className="flex items-center gap-1 text-primary-foreground/80 text-sm mb-2">
-          <ArrowLeft className="h-4 w-4" /> Volver
-        </button>
+        <div className="flex items-start justify-between gap-2">
+          <button onClick={() => navigate(`/que-hacer/${cityId}`)} className="flex items-center gap-1 text-primary-foreground/80 text-sm mb-2">
+            <ArrowLeft className="h-4 w-4" /> Volver
+          </button>
+          <button
+            onClick={() => setShowAdd(true)}
+            aria-label="Añadir sitio"
+            className="flex-shrink-0 h-9 w-9 rounded-full bg-primary-foreground/15 text-primary-foreground flex items-center justify-center hover:bg-primary-foreground/25 transition-colors"
+          >
+            <Plus className="h-5 w-5" />
+          </button>
+        </div>
         <h1 className="text-xl font-bold text-primary-foreground">{city.cityName}</h1>
         <p className="text-primary-foreground/70 text-xs mt-0.5">{CATEGORY_LABELS[cat]} · {filteredPlaces.length} sitios</p>
       </div>
@@ -178,14 +187,6 @@ export default function CategoryPlaces() {
           </div>
         ))}
       </div>
-
-      {/* FAB */}
-      <button
-        onClick={() => setShowAdd(true)}
-        className="fixed bottom-20 right-4 z-40 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:bg-primary/90 transition-colors"
-      >
-        <Plus className="h-6 w-6" />
-      </button>
 
       <AddPlaceModal
         open={showAdd || !!editingPlace}

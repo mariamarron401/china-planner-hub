@@ -67,8 +67,19 @@ export default function PendingItems() {
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className="px-4 pt-12 pb-4">
-        <h1 className="text-2xl font-bold text-foreground">Pendientes</h1>
-        <p className="text-sm text-muted-foreground mt-1">{open.length} pendientes · {done.length} resueltos</p>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Pendientes</h1>
+            <p className="text-sm text-muted-foreground mt-1">{open.length} pendientes · {done.length} resueltos</p>
+          </div>
+          <button
+            onClick={() => setShowAdd(true)}
+            aria-label="Añadir pendiente"
+            className="flex-shrink-0 h-10 w-10 rounded-full bg-primary text-primary-foreground shadow-sm flex items-center justify-center hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -127,14 +138,6 @@ export default function PendingItems() {
           </div>
         ))}
       </div>
-
-      {/* FAB */}
-      <button
-        onClick={() => setShowAdd(true)}
-        className="fixed bottom-20 right-4 z-40 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:bg-primary/90 transition-colors"
-      >
-        <Plus className="h-6 w-6" />
-      </button>
 
       {/* Add modal */}
       <Dialog open={showAdd} onOpenChange={v => !v && setShowAdd(false)}>
