@@ -92,11 +92,11 @@ export default function Activities() {
                   href={act.bookingUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full rounded-xl bg-primary text-primary-foreground text-sm font-semibold py-2.5 active:opacity-80 transition-opacity"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 active:opacity-80 transition-opacity"
                 >
-                  <ShoppingCart className="h-4 w-4" />
+                  <ShoppingCart className="h-3.5 w-3.5" />
                   Comprar entrada
-                  <ExternalLink className="h-3.5 w-3.5 opacity-80" />
+                  <ExternalLink className="h-3 w-3 opacity-80" />
                 </a>
               </div>
             )}
