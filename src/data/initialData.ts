@@ -290,5 +290,4 @@ export const initialTripData: TripData = {
     insurance: 0,
     others: 0,
   },
-  videoTips: [],
 };

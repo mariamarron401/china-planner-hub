@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
+import { useVideoTips } from '@/hooks/useVideoTips';
 import { Plus, ExternalLink, Trash2, Video, ChevronDown, ChevronUp } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -15,8 +16,8 @@ const platformLabels: Record<VideoTip['platform'], string> = {
 };
 
 export default function VideoTips() {
-  const { data, addVideoTip, deleteVideoTip } = useTrip();
-  const videoTips = data.videoTips;
+  const { data } = useTrip();
+  const { videoTips, addVideoTip, deleteVideoTip } = useVideoTips();
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -31,14 +32,14 @@ export default function VideoTips() {
     setNewUrl(''); setNewPlatform('tiktok'); setNewTitle(''); setNewTips(''); setNewCityId('');
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!newUrl.trim() || !newTitle.trim()) {
       toast({ title: 'URL y título son obligatorios', variant: 'destructive' });
       return;
     }
     const tipsList = newTips.split('\n').map(t => t.trim()).filter(Boolean);
     const now = new Date().toISOString();
-    addVideoTip({
+    await addVideoTip({
       id: `vt-${Date.now()}`,
       url: newUrl.trim(),
       platform: newPlatform,

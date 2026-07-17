@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, BudgetExtras, VideoTip } from '@/types/trip';
+import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, BudgetExtras } from '@/types/trip';
 import { initialTripData } from '@/data/initialData';
 
 interface TripContextType {
@@ -15,9 +15,6 @@ interface TripContextType {
   toggleRouteDirection: () => void;
   resetData: () => void;
   updateBudgetExtras: (extras: Partial<BudgetExtras>) => void;
-  addVideoTip: (tip: VideoTip) => void;
-  updateVideoTip: (id: string, updates: Partial<VideoTip>) => void;
-  deleteVideoTip: (id: string) => void;
 }
 
 const TripContext = createContext<TripContextType | null>(null);
@@ -55,11 +52,7 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         // Remove legacy fields that moved to Supabase
         delete parsed.places;
         delete parsed.pendingItems;
-        // videoTips: los que trae initialData.ts (curados por el agente) siempre ganan;
-        // se conservan además los que la usuaria haya añadido a mano desde la app (ids que no están en initialData.ts)
-        const freshVideoTipIds = new Set(initialTripData.videoTips.map(v => v.id));
-        const userAddedVideoTips = (parsed.videoTips || []).filter((v: { id: string }) => !freshVideoTipIds.has(v.id));
-        parsed.videoTips = [...initialTripData.videoTips, ...userAddedVideoTips];
+        delete parsed.videoTips; // ahora vive en Supabase (tabla places, category='video_tip'), no en localStorage
         // Refrescar contenido informativo desde initialData.ts sin perder ediciones manuales
         parsed.hotels = reconcileById(initialTripData.hotels, parsed.hotels, ['totalPrice', 'priceStatus', 'booked']);
         parsed.transportLegs = reconcileById(initialTripData.transportLegs, parsed.transportLegs, ['price', 'durationMinutes', 'status']);
@@ -153,28 +146,12 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
-  const addVideoTip = useCallback((tip: VideoTip) => {
-    setData(prev => ({ ...prev, videoTips: [tip, ...prev.videoTips] }));
-  }, []);
-
-  const updateVideoTip = useCallback((id: string, updates: Partial<VideoTip>) => {
-    setData(prev => ({
-      ...prev,
-      videoTips: prev.videoTips.map(v => v.id === id ? { ...v, ...updates } : v),
-    }));
-  }, []);
-
-  const deleteVideoTip = useCallback((id: string) => {
-    setData(prev => ({ ...prev, videoTips: prev.videoTips.filter(v => v.id !== id) }));
-  }, []);
-
   return (
     <TripContext.Provider value={{
       data, orderedCities, orderedTransportLegs,
       selectHotel, deselectHotel, updateHotelPrice,
       updateTransportLeg, updateLocalTransport, updateActivity,
       toggleRouteDirection, resetData, updateBudgetExtras,
-      addVideoTip, updateVideoTip, deleteVideoTip,
     }}>
       {children}
     </TripContext.Provider>
