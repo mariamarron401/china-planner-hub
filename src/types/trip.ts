@@ -196,4 +196,5 @@ export interface TripData {
   cityGallery: CityGalleryImage[];
   hotelGallery: HotelGalleryImage[];
   budgetExtras: BudgetExtras;
+  videoTips: VideoTip[];
 }

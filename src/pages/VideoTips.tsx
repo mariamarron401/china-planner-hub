@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useVideoTips } from '@/hooks/useVideoTips';
 import { useTrip } from '@/context/TripContext';
 import { Plus, ExternalLink, Trash2, Video, ChevronDown, ChevronUp } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -16,8 +15,8 @@ const platformLabels: Record<VideoTip['platform'], string> = {
 };
 
 export default function VideoTips() {
-  const { videoTips, addVideoTip, deleteVideoTip } = useVideoTips();
-  const { data } = useTrip();
+  const { data, addVideoTip, deleteVideoTip } = useTrip();
+  const videoTips = data.videoTips;
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -32,13 +31,14 @@ export default function VideoTips() {
     setNewUrl(''); setNewPlatform('tiktok'); setNewTitle(''); setNewTips(''); setNewCityId('');
   };
 
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (!newUrl.trim() || !newTitle.trim()) {
       toast({ title: 'URL y título son obligatorios', variant: 'destructive' });
       return;
     }
     const tipsList = newTips.split('\n').map(t => t.trim()).filter(Boolean);
-    await addVideoTip({
+    const now = new Date().toISOString();
+    addVideoTip({
       id: `vt-${Date.now()}`,
       url: newUrl.trim(),
       platform: newPlatform,
@@ -46,8 +46,8 @@ export default function VideoTips() {
       tips: tipsList,
       cityId: newCityId || undefined,
       status: tipsList.length > 0 ? 'reviewed' : 'pending_review',
-      createdAt: '',
-      updatedAt: '',
+      createdAt: now,
+      updatedAt: now,
     });
     toast({ title: 'Tip de vídeo añadido ✅' });
     setShowAdd(false);
