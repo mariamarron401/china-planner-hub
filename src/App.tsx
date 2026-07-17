@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { TripProvider } from "@/context/TripContext";
 import BottomNav from "@/components/BottomNav";
+import TripChat from "@/components/TripChat";
 import Index from "./pages/Index";
 import Itinerary from "./pages/Itinerary";
 import Hotels from "./pages/Hotels";
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="/tips-videos" element={<VideoTips />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <TripChat />
             <BottomNav />
           </div>
         </HashRouter>
