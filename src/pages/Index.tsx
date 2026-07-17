@@ -2,24 +2,44 @@ import { useTrip } from '@/context/TripContext';
 import { usePendingItems } from '@/hooks/usePendingItems';
 import { getGlobalBudget } from '@/lib/calculations';
 import { Link } from 'react-router-dom';
-import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, ChevronRight, ListTodo, Compass, Plane, ArrowLeftRight } from 'lucide-react';
+import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, ChevronRight, ListTodo, Compass, Plane, ArrowLeftRight, TrainFront, Hourglass } from 'lucide-react';
 
 export default function Dashboard() {
   const { data, orderedCities, toggleRouteDirection } = useTrip();
   const { items: pendingItems } = usePendingItems();
-  const { trip, cities, hotels, selectedHotels, activities, flights } = data;
+  const { trip, cities, hotels, selectedHotels, activities, flights, transportLegs } = data;
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
   const openPending = pendingItems.filter(p => p.status === 'open');
   const outbound = flights.filter(f => f.direction === 'outbound');
   const returnFlights = flights.filter(f => f.direction === 'return');
   const firstCity = orderedCities[0];
   const lastCity = orderedCities[orderedCities.length - 1];
+  const cityName = (id: string) => cities.find(c => c.id === id)?.cityName?.split(' (')[0] || id;
+
+  // Cuenta atrás hasta la salida del vuelo de ida.
+  const departureDate = outbound[0]?.departureDateTime;
+  let daysToGo: number | null = null;
+  if (departureDate) {
+    const dep = new Date(departureDate);
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    daysToGo = Math.round((dep.getTime() - startOfToday.getTime()) / 86400000);
+  }
 
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className="gradient-hero px-5 pt-12 pb-8 rounded-b-3xl">
         <h1 className="text-2xl font-bold text-primary-foreground">{trip.title}</h1>
         <p className="text-primary-foreground/80 text-sm mt-1">{trip.dateRangeText}</p>
+
+        {daysToGo !== null && daysToGo >= 0 && (
+          <div className="mt-4 flex items-baseline gap-2 bg-primary-foreground/15 rounded-2xl px-4 py-3">
+            <Hourglass className="h-5 w-5 text-primary-foreground/80 self-center" />
+            <span className="text-3xl font-extrabold text-primary-foreground leading-none">{daysToGo}</span>
+            <span className="text-primary-foreground/80 text-sm">{daysToGo === 1 ? 'día para el viaje' : 'días para el viaje'}</span>
+          </div>
+        )}
+
         <div className="flex gap-4 mt-5">
           <StatPill icon={<Moon className="h-4 w-4" />} value={trip.totalNights} label="noches" />
           <StatPill icon={<MapPin className="h-4 w-4" />} value={cities.length} label="ciudades" />
@@ -73,6 +93,34 @@ export default function Dashboard() {
             ))}
           </div>
         </div>
+
+        {/* Trenes internos / trayectos */}
+        {transportLegs.length > 0 && (
+          <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.04s' }}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                <TrainFront className="h-3.5 w-3.5" /> Trenes internos
+              </div>
+              <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">{transportLegs.length} tramos</span>
+            </div>
+            <div className="space-y-2.5">
+              {transportLegs.slice(0, 3).map(leg => (
+                <div key={leg.id} className="text-sm">
+                  <div className="flex items-center gap-1.5 text-foreground font-medium">
+                    <span>{cityName(leg.fromCityId)}</span>
+                    <TrainFront className="h-3 w-3 text-primary flex-shrink-0" />
+                    <span>{cityName(leg.toCityId)}</span>
+                    {leg.travelDate && <span className="text-[11px] text-muted-foreground ml-auto">{leg.travelDate.replace(/\s*\(.*\)/, '')}</span>}
+                  </div>
+                  {leg.suggestedDeparture && (
+                    <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">{leg.suggestedDeparture.replace(/^⭐\s*/, 'Salida ')}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+            <Link to="/trayectos" className="text-xs text-primary font-medium mt-3 inline-block">Ver los {transportLegs.length} tramos puerta a puerta →</Link>
+          </div>
+        )}
 
         {/* Budget preview */}
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.05s' }}>
