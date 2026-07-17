@@ -120,6 +120,16 @@ export interface Activity {
   currency: string;
   status: 'Planificada' | 'Por reservar' | 'Hecha';
   notes: string;
+  /** Día recomendado para hacer la actividad según el planning, ej. "Domingo 11 oct" */
+  recommendedDate?: string;
+  /** Cuándo hay que comprar la entrada, ej. "~1-2 oct (ventana ~10 días)" */
+  whenToBuy?: string;
+  /** Plataforma recomendada para comprar, ej. "Trip.com" */
+  platform?: string;
+  /** Precio en texto legible, ej. "~25 €/persona" */
+  priceText?: string;
+  /** URL para comprar la entrada */
+  bookingUrl?: string;
 }
 
 export interface PendingItem {
