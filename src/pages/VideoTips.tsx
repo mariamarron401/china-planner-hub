@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useVideoTips } from '@/hooks/useVideoTips';
 import { useTrip } from '@/context/TripContext';
-import { Plus, ExternalLink, Trash2, Video, Sparkles, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, ExternalLink, Trash2, Video, ChevronDown, ChevronUp } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,14 +15,10 @@ const platformLabels: Record<VideoTip['platform'], string> = {
   other: 'Otro',
 };
 
-const ANALYSIS_SERVER_URL = import.meta.env.VITE_VIDEO_ANALYSIS_SERVER_URL || 'http://localhost:8787';
-
 export default function VideoTips() {
   const { videoTips, addVideoTip, deleteVideoTip } = useVideoTips();
   const { data } = useTrip();
 
-  const [analyzeUrl, setAnalyzeUrl] = useState('');
-  const [analyzing, setAnalyzing] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const [showAdd, setShowAdd] = useState(false);
@@ -31,49 +27,9 @@ export default function VideoTips() {
   const [newTitle, setNewTitle] = useState('');
   const [newTips, setNewTips] = useState('');
   const [newCityId, setNewCityId] = useState('');
-  const [draftTranscript, setDraftTranscript] = useState('');
-  const [draftCaption, setDraftCaption] = useState('');
 
   const resetModalState = () => {
     setNewUrl(''); setNewPlatform('tiktok'); setNewTitle(''); setNewTips(''); setNewCityId('');
-    setDraftTranscript(''); setDraftCaption('');
-  };
-
-  const handleAnalyze = async () => {
-    if (!analyzeUrl.trim()) {
-      toast({ title: 'Pega primero la URL del vídeo', variant: 'destructive' });
-      return;
-    }
-    setAnalyzing(true);
-    try {
-      const res = await fetch(`${ANALYSIS_SERVER_URL}/analyze`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: analyzeUrl.trim() }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || data.error || 'Error desconocido');
-
-      setNewUrl(analyzeUrl.trim());
-      setNewPlatform(data.platform || 'other');
-      setNewTitle(data.title || '');
-      setNewTips('');
-      setDraftTranscript(data.transcript || '');
-      setDraftCaption(data.caption || '');
-      setShowAdd(true);
-      setAnalyzeUrl('');
-      toast({ title: 'Vídeo transcrito ✅', description: 'Revisa la transcripción y anota los tips antes de guardar.' });
-    } catch (err: any) {
-      toast({
-        title: 'No se pudo analizar el vídeo',
-        description: err instanceof TypeError
-          ? 'No se ha podido conectar con el servidor local de análisis. Solo funciona abriendo esta web en el Mac y con "node execution/video-tips-server.mjs" arrancado en una terminal. Desde el móvil, manda el enlace por chat en su lugar.'
-          : err.message,
-        variant: 'destructive',
-      });
-    } finally {
-      setAnalyzing(false);
-    }
   };
 
   const handleAdd = async () => {
@@ -89,8 +45,6 @@ export default function VideoTips() {
       title: newTitle.trim(),
       tips: tipsList,
       cityId: newCityId || undefined,
-      transcript: draftTranscript || undefined,
-      caption: draftCaption || undefined,
       status: tipsList.length > 0 ? 'reviewed' : 'pending_review',
       createdAt: '',
       updatedAt: '',
@@ -107,37 +61,15 @@ export default function VideoTips() {
       <div className="px-4 pt-12 pb-4">
         <h1 className="text-2xl font-bold text-foreground">Tips de vídeos</h1>
         <p className="text-sm text-muted-foreground mt-1">{videoTips.length} vídeos analizados</p>
-      </div>
-
-      {/* Analizar automáticamente */}
-      <div className="px-4 mb-4">
-        <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <h2 className="text-sm font-medium text-foreground">Analizar vídeo automáticamente</h2>
-          </div>
-          <p className="text-xs text-muted-foreground mb-3">
-            Solo funciona abriendo esta web <strong>en el Mac</strong>, con <code className="bg-muted px-1 rounded">node execution/video-tips-server.mjs</code> arrancado en una terminal. Pega el enlace y se descarga y transcribe solo (1-3 min). <strong>Desde el móvil no funcionará</strong> — en ese caso, manda el enlace por chat y añade el tip a mano con el botón "+".
-          </p>
-          <div className="flex gap-2">
-            <Input
-              value={analyzeUrl}
-              onChange={e => setAnalyzeUrl(e.target.value)}
-              placeholder="https://www.tiktok.com/..."
-              disabled={analyzing}
-              className="flex-1"
-            />
-            <Button onClick={handleAnalyze} disabled={analyzing}>
-              {analyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Analizar'}
-            </Button>
-          </div>
-        </div>
+        <p className="text-xs text-muted-foreground mt-2">
+          Manda el enlace del vídeo público de TikTok/Instagram por chat al agente: él lo transcribe y lo deja guardado aquí. El botón "+" es solo para añadirlo a mano si lo prefieres.
+        </p>
       </div>
 
       <div className="px-4 space-y-2">
         {videoTips.length === 0 && (
           <div className="text-center text-sm text-muted-foreground py-10">
-            Aún no hay tips guardados. Manda un enlace de un vídeo público de TikTok/Instagram sobre China y se transcribe y resume aquí.
+            Aún no hay tips guardados. Manda un enlace de un vídeo público de TikTok/Instagram sobre China al agente y aparecerá aquí.
           </div>
         )}
         {videoTips.map(v => (
@@ -234,15 +166,6 @@ export default function VideoTips() {
               <label className="text-xs font-medium text-muted-foreground">Título / resumen corto *</label>
               <Input value={newTitle} onChange={e => setNewTitle(e.target.value)} className="mt-1" />
             </div>
-            {(draftCaption || draftTranscript) && (
-              <div>
-                <label className="text-xs font-medium text-muted-foreground">Transcripción / caption (referencia, para sacar los tips)</label>
-                <div className="mt-1 max-h-40 overflow-y-auto rounded-md border border-input bg-muted p-2 text-xs text-muted-foreground whitespace-pre-wrap">
-                  {draftCaption && <p className="mb-2">{draftCaption}</p>}
-                  {draftTranscript && <p>{draftTranscript}</p>}
-                </div>
-              </div>
-            )}
             <div>
               <label className="text-xs font-medium text-muted-foreground">Tips (uno por línea)</label>
               <textarea value={newTips} onChange={e => setNewTips(e.target.value)}
