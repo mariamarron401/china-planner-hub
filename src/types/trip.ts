@@ -93,6 +93,8 @@ export interface TransportLeg {
   estimatedArrival?: string;
   transferBefore?: string;
   transferAfter?: string;
+  transferBeforeEur?: number;
+  transferAfterEur?: number;
   stationBuffer?: string;
 }
 

@@ -61,6 +61,7 @@ export default function RouteScheme() {
         {transportLegs.map((leg, idx) => {
           const originHotel = hotelFor(leg.fromCityId);
           const destHotel = hotelFor(leg.toCityId);
+          const legTotal = (leg.price ?? 0) + (leg.transferBeforeEur ?? 0) + (leg.transferAfterEur ?? 0);
           return (
             <div key={leg.id} className="bg-card rounded-2xl border border-border p-4 shadow-sm">
               <div className="flex items-center justify-between mb-1.5">
