@@ -82,7 +82,7 @@ export default function TripChat() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Abrir asistente del viaje"
-          className="fixed bottom-20 right-4 z-50 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center transition-transform hover:scale-105 active:scale-95 animate-fade-in"
+          className="fixed bottom-20 left-4 z-50 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center transition-transform hover:scale-105 active:scale-95 animate-fade-in"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
