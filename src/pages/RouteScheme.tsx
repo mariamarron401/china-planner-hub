@@ -103,6 +103,9 @@ export default function RouteScheme() {
                     <p className="text-xs font-bold text-primary mb-0.5">{leg.mode}{leg.durationMinutes != null ? ` · ~${formatDuration(leg.durationMinutes)}` : ''}</p>
                     <p className="text-[11px] text-foreground leading-snug"><span className="text-muted-foreground">Salida:</span> <span className="font-medium">{leg.suggestedDeparture}</span></p>
                     <p className="text-[11px] text-foreground leading-snug"><span className="text-muted-foreground">Llegada:</span> <span className="font-medium">{leg.estimatedArrival}</span></p>
+                    {leg.price != null && (
+                      <p className="text-[11px] text-foreground leading-snug"><span className="text-muted-foreground">Billete:</span> <span className="font-medium">~{leg.price}€ (2ª clase, 2 pers.)</span></p>
+                    )}
                   </Step>
 
                   {/* Estación de destino */}
@@ -137,10 +140,25 @@ export default function RouteScheme() {
           );
         })}
 
+        <div className="bg-primary/5 rounded-xl border border-primary/30 p-3.5 shadow-sm">
+          <p className="text-sm font-bold text-foreground mb-2">💰 Coste aproximado del transporte interno</p>
+          <div className="space-y-1 text-[11px] text-foreground">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">8 trenes bala (2ª clase, 2 personas)</span>
+              <span className="font-semibold">~{transportLegs.reduce((s, l) => s + (l.price ?? 0), 0)}€</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Didi/taxi a estaciones</span>
+              <span className="font-semibold">~3-20€ por trayecto</span>
+            </div>
+          </div>
+          <p className="text-[10px] text-muted-foreground mt-2 leading-snug">Precios de tren = tarifa oficial de 2ª clase por persona × 2. Los Didi son por coche (las 2 personas juntas) y varían por tráfico/hora; en Fenghuang y Furong suele ser tarifa fija negociada.</p>
+        </div>
+
         <div className="bg-card rounded-xl border border-border p-3 shadow-sm flex items-start gap-2">
           <Clock className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
           <p className="text-[11px] text-muted-foreground leading-snug">
-            Horarios de tren tomados del calendario visible hasta el <span className="font-medium text-foreground">14 de septiembre</span> (el máximo disponible ahora), usado como referencia de octubre. Reconfirmad número y hora exactos cuando 12306/Trip.com abran las fechas de octubre. Los km hotel↔estación son aproximados.
+            Horarios de tren tomados del calendario visible hasta el <span className="font-medium text-foreground">14 de septiembre</span> (el máximo disponible ahora), usado como referencia de octubre. Reconfirmad número y hora exactos cuando 12306/Trip.com abran las fechas de octubre. Los precios (tren y Didi) y los km hotel↔estación son aproximados.
           </p>
         </div>
       </div>
