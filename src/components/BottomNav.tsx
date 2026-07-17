@@ -1,4 +1,4 @@
-import { Home, CalendarDays, Building2, Wallet, MapPinned, MoreHorizontal, Train, Plane, ListTodo, Compass, Video } from 'lucide-react';
+import { Home, CalendarDays, Building2, Wallet, MapPinned, MoreHorizontal, Train, Plane, ListTodo, Compass, Video, Waypoints } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -12,6 +12,7 @@ const mainTabs = [
 ];
 
 const moreTabs = [
+  { path: '/trayectos', label: 'Trayectos', icon: Waypoints },
   { path: '/transportes', label: 'Transportes', icon: Train },
   { path: '/presupuesto', label: 'Presupuesto', icon: Wallet },
   { path: '/vuelos', label: 'Vuelos', icon: Plane },

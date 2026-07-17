@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
-import { Train, Car, ArrowRight, MapPin, CalendarClock, Calendar, Clock, Luggage } from 'lucide-react';
+import { Train, Car, ArrowRight, MapPin, CalendarClock, Calendar, Clock, Luggage, Waypoints } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -35,6 +36,17 @@ export default function Transports() {
     <div className="min-h-screen bg-background pb-24">
       <div className="px-4 pt-12 pb-3">
         <h1 className="text-2xl font-bold text-foreground">Transportes</h1>
+      </div>
+
+      <div className="px-4 mb-4">
+        <Link to="/trayectos" className="flex items-center gap-2.5 bg-primary/10 border border-primary/30 rounded-xl px-3.5 py-3 text-primary">
+          <Waypoints className="h-5 w-5 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold leading-tight">Ver esquema puerta a puerta</div>
+            <div className="text-[11px] opacity-80 leading-tight">Hotel → Didi → estación → tren → estación → Didi → hotel, con horas y distancias</div>
+          </div>
+          <ArrowRight className="h-4 w-4 flex-shrink-0" />
+        </Link>
       </div>
 
       <div className="px-4 flex gap-2 mb-4">

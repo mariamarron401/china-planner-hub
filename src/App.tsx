@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Itinerary from "./pages/Itinerary";
 import Hotels from "./pages/Hotels";
 import Transports from "./pages/Transports";
+import RouteScheme from "./pages/RouteScheme";
 import Budget from "./pages/Budget";
 import Activities from "./pages/Activities";
 import PendingItems from "./pages/PendingItems";
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/itinerario" element={<Itinerary />} />
               <Route path="/hoteles" element={<Hotels />} />
               <Route path="/transportes" element={<Transports />} />
+              <Route path="/trayectos" element={<RouteScheme />} />
               <Route path="/presupuesto" element={<Budget />} />
               <Route path="/actividades" element={<Activities />} />
               <Route path="/pendientes" element={<PendingItems />} />
