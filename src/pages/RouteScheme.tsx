@@ -131,6 +131,11 @@ export default function RouteScheme() {
                 </div>
               </div>
 
+              <div className="mt-3 flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg px-3 py-2">
+                <span className="text-xs font-semibold text-foreground">Total del tramo <span className="text-muted-foreground font-normal">(tren 2 pers. + Didi)</span></span>
+                <span className="text-sm font-bold text-primary">~{legTotal}€</span>
+              </div>
+
               {leg.alertNote && (
                 <div className="mt-3 bg-travel-important-bg text-travel-important text-[11px] leading-snug font-medium px-2.5 py-1.5 rounded-lg flex items-start gap-1.5">
                   <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
@@ -141,20 +146,30 @@ export default function RouteScheme() {
           );
         })}
 
-        <div className="bg-primary/5 rounded-xl border border-primary/30 p-3.5 shadow-sm">
-          <p className="text-sm font-bold text-foreground mb-2">💰 Coste aproximado del transporte interno</p>
-          <div className="space-y-1 text-[11px] text-foreground">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">8 trenes bala (2ª clase, 2 personas)</span>
-              <span className="font-semibold">~{transportLegs.reduce((s, l) => s + (l.price ?? 0), 0)}€</span>
+        {(() => {
+          const totalTrenes = transportLegs.reduce((s, l) => s + (l.price ?? 0), 0);
+          const totalDidi = transportLegs.reduce((s, l) => s + (l.transferBeforeEur ?? 0) + (l.transferAfterEur ?? 0), 0);
+          return (
+            <div className="bg-primary/5 rounded-xl border border-primary/30 p-3.5 shadow-sm">
+              <p className="text-sm font-bold text-foreground mb-2">💰 Coste total del transporte interno</p>
+              <div className="space-y-1 text-[11px] text-foreground">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">8 trenes bala (2ª clase, 2 personas)</span>
+                  <span className="font-semibold">~{totalTrenes}€</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Didi/taxi a estaciones (16 trayectos)</span>
+                  <span className="font-semibold">~{totalDidi}€</span>
+                </div>
+                <div className="flex justify-between pt-1.5 mt-1 border-t border-primary/20">
+                  <span className="font-bold text-foreground">TOTAL los dos</span>
+                  <span className="font-bold text-primary text-sm">~{totalTrenes + totalDidi}€</span>
+                </div>
+              </div>
+              <p className="text-[10px] text-muted-foreground mt-2 leading-snug">Precios de tren = tarifa oficial de 2ª clase por persona × 2. Los Didi son por coche (las 2 personas juntas) y varían por tráfico/hora; en Fenghuang y Furong suele ser tarifa fija negociada. Si usáis metro en las ciudades grandes, sale bastante más barato.</p>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Didi/taxi a estaciones</span>
-              <span className="font-semibold">~3-20€ por trayecto</span>
-            </div>
-          </div>
-          <p className="text-[10px] text-muted-foreground mt-2 leading-snug">Precios de tren = tarifa oficial de 2ª clase por persona × 2. Los Didi son por coche (las 2 personas juntas) y varían por tráfico/hora; en Fenghuang y Furong suele ser tarifa fija negociada.</p>
-        </div>
+          );
+        })()}
 
         <div className="bg-card rounded-xl border border-border p-3 shadow-sm flex items-start gap-2">
           <Clock className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
