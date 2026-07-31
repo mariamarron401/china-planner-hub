@@ -37,7 +37,7 @@ export default function Calendar() {
       <div className="px-4 pt-12 pb-3">
         <h1 className="text-2xl font-bold text-foreground">Calendario</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Del 8 oct al 1 nov · día a día, con hotel, excursiones y traslados
+          Del 8 oct al 2 nov · día a día, con hotel, excursiones y traslados
         </p>
       </div>
 
@@ -144,9 +144,14 @@ function DayRow({ d, open, onToggle }: { d: CalendarDay; open: boolean; onToggle
 
           {/* Iconos-resumen de lo que pasa ese día */}
           <div className="flex items-center gap-2 mt-1 flex-wrap">
-            {d.airportTransfers.length > 0 && (
-              <Tag icon={<Plane className="h-2.5 w-2.5" />} text="vuelo" tone="primary" />
-            )}
+            {d.airportTransfers.map(t => (
+              <Tag
+                key={t.id}
+                icon={<Plane className="h-2.5 w-2.5" />}
+                text={t.direction === 'to_airport' ? 'al aeropuerto' : 'del aeropuerto'}
+                tone="primary"
+              />
+            ))}
             {d.transportLegs.map(l => (
               <Tag key={l.id} icon={<Train className="h-2.5 w-2.5" />} text={l.mode.toLowerCase()} tone="primary" />
             ))}

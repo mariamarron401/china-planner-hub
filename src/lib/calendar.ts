@@ -20,8 +20,8 @@ import {
  * "1 nov 2026 (domingo) — noche"), así que se normalizan extrayendo día + mes.
  */
 
-const FIRST_DAY = { day: 8, month: 10 }; // 8 oct 2026: AVE a Madrid + noche allí
-const LAST_DAY = { day: 1, month: 11 }; // 1 nov 2026: vuelta a Madrid
+const FIRST_DAY = { day: 8, month: 10 }; // 8 oct 2026: bus nocturno Zaragoza → Madrid
+const LAST_DAY = { day: 2, month: 11 }; // 2 nov 2026: llegada a Zaragoza de madrugada
 const YEAR = 2026;
 
 /** Día en que España pasa a horario de invierno (último domingo de octubre de 2026). */
@@ -84,13 +84,18 @@ export interface CalendarDay {
 /** Notas de días que no salen de ninguna otra colección. */
 const MANUAL_NOTES: Record<string, string[]> = {
   '2026-10-08': [
-    'AVE a Madrid + noche en Madrid. ⚠️ Todavía sin reservar: conviene hotel en la zona del aeropuerto con lanzadera 24 h.',
+    'Bus nocturno Zaragoza → Madrid. No hace falta hotel: dormís en el bus. Coged uno que llegue a Barajas antes de las 03:00.',
   ],
   '2026-10-09': ['Día entero de viaje. No dormís en cama: la noche la pasáis en el avión.'],
   '2026-10-25': [
     'En España se atrasan los relojes (horario de invierno). Vosotros no notáis nada, pero a partir de hoy la diferencia con casa es de 7 h en vez de 6 h.',
   ],
-  '2026-11-01': ['Vuelta a casa. 18 h 15 min de viaje real, aunque el reloj solo marque 11 h 15 min.'],
+  '2026-11-01': [
+    'Vuelta a casa: 18 h 15 min de viaje real, aunque el reloj solo marque 11 h 15 min. Al aterrizar, bus nocturno del T4 a Zaragoza.',
+  ],
+  '2026-11-02': [
+    'Llegáis a Zaragoza-Delicias de madrugada (sobre las 02:30-03:00). ✅ Es festivo en Aragón, así que tenéis el día para dormir.',
+  ],
 };
 
 export function buildCalendar(data: TripData): CalendarDay[] {
@@ -127,7 +132,9 @@ export function buildCalendar(data: TripData): CalendarDay[] {
 
     const dayLegs = transportLegs.filter(l => sameDay(l.travelDate, day, month));
     const dayLocals = localTransports.filter(l => sameDay(l.date, day, month));
-    const dayAirport = airportTransfers.filter(t => sameDay(t.date, day, month));
+    // Los traslados se anclan por `calendarIso`, no leyendo su texto: los nocturnos
+    // cruzan dos días y hay que colocarlos en el día en que toca actuar.
+    const dayAirport = airportTransfers.filter(t => t.calendarIso === iso);
 
     days.push({
       iso,

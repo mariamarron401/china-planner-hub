@@ -108,13 +108,17 @@ Coberturas clave: asistencia médica hasta 500.000 €, repatriación ilimitada,
 
 Los números de póliza y certificado no están en la app por seguridad — los tienes en el correo de la agencia (Zafiro Tours Zaragoza, 976 302 157).`;
 
-const SPAIN_INFO = `🚄 **Transporte España ↔ Madrid** (a organizar por vuestra cuenta):
+const SPAIN_INFO = `🚌 **Zaragoza ↔ Madrid en bus nocturno** (decidido el 31/07/2026, en vez de AVE + hotel):
 
-**IDA:** el vuelo sale de Madrid el **9 oct a las 06:20** (muy temprano) → hay que estar en Madrid la **noche anterior (8 oct)**. Necesitáis AVE a Madrid el 8 oct + 1 noche de hotel cerca de Barajas o del centro.
+**IDA — noche del jueves 8 al viernes 9 oct.** Bus nocturno de ALSA desde Zaragoza-Delicias. El vuelo sale a las **06:20 del T2** y el mostrador cierra a las **05:35**, así que hay que coger un bus que llegue a Madrid **antes de las 03:00** y esperar dentro de la terminal. ⚠️ El bus directo al aeropuerto llega al **T4**, no al T2: el cambio se hace con el **Bus Tránsito** (gratis, 24 h, cada 20 min de noche, 15-20 min).
 
-**VUELTA:** llegáis a Madrid el **1 nov a las 20:10**. A esa hora quizá no llegáis a un AVE de vuelta a casa el mismo día → valorad si hacéis noche en Madrid y volvéis el 2 nov.
+**VUELTA — noche del domingo 1 al lunes 2 nov.** Aterrizáis a las 20:10 en el **T1** y salís sobre las 21:00. Bus Tránsito al **T4** y de ahí un ALSA nocturno de las **23:00-23:30** (no el de las 22:30: si el vuelo de Pekín se retrasa, lo perdéis). Llegada a Zaragoza sobre las 02:30-03:00 del lunes.
 
-👉 Consejo: reservad el AVE con antelación (Renfe abre venta ~2-3 meses antes) para mejor precio, y elegid asientos juntos.`;
+✅ **No hace falta hotel en Madrid** ninguna de las dos noches: se duerme en el bus.
+✅ El **lunes 2 de noviembre es festivo en Aragón**, así que tenéis el día para recuperar.
+🔴 El billete de vuelta es el más urgente de comprar: el domingo 1 nov es final de puente largo y la noche del domingo es la de más demanda.
+
+👉 El detalle completo, con horarios y alternativas, está en **Transportes → Aeropuertos**.`;
 
 const GENERAL_TIPS = `💡 **Consejos generales para China:**
 
@@ -477,7 +481,7 @@ export function answerQuestion(rawQuestion: string, data: TripData): string {
   }
 
   // AVE / Madrid / España
-  if (has(q, ['ave', 'renfe', 'madrid', 'barajas', 'noche en madrid', 'desde casa', 'a casa'])) {
+  if (has(q, ['ave', 'renfe', 'madrid', 'barajas', 'noche en madrid', 'desde casa', 'a casa', 'zaragoza', 'alsa', 'autobus', 'bus nocturno', 'delicias'])) {
     return SPAIN_INFO;
   }
 

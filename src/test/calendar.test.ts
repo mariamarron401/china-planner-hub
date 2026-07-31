@@ -6,12 +6,19 @@ const days = buildCalendar(initialTripData);
 const at = (iso: string) => days.find(d => d.iso === iso)!;
 
 describe('calendario día a día', () => {
-  it('cubre del 8 oct al 1 nov sin huecos', () => {
-    expect(days).toHaveLength(25); // 24 días de octubre (8-31) + 1 nov
+  it('cubre del 8 oct al 2 nov sin huecos', () => {
+    expect(days).toHaveLength(26); // 24 días de octubre (8-31) + 1 y 2 de nov
     expect(days[0].iso).toBe('2026-10-08');
-    expect(days[days.length - 1].iso).toBe('2026-11-01');
+    expect(days[days.length - 1].iso).toBe('2026-11-02');
     // no se repite ni se salta ningún día
-    expect(new Set(days.map(d => d.iso)).size).toBe(25);
+    expect(new Set(days.map(d => d.iso)).size).toBe(26);
+  });
+
+  it('el 2 de nov cierra el viaje sin hotel y con la nota de festivo', () => {
+    const d = at('2026-11-02');
+    expect(d.hotel).toBeNull();
+    expect(d.weekday).toBe('lunes');
+    expect(d.notes.join()).toContain('festivo');
   });
 
   it('acierta los días de la semana', () => {
@@ -50,9 +57,19 @@ describe('calendario día a día', () => {
 
   it('coloca los trenes y los traslados de aeropuerto en su día', () => {
     expect(at('2026-10-13').transportLegs).toHaveLength(1);
-    expect(at('2026-10-09').airportTransfers).toHaveLength(1); // Madrid → Barajas
     expect(at('2026-10-10').airportTransfers).toHaveLength(1); // PEK → hotel
-    expect(at('2026-11-01').airportTransfers).toHaveLength(2); // Shanghái y Madrid
+    expect(at('2026-11-01').airportTransfers).toHaveLength(2); // Shanghái y bus a Zaragoza
+  });
+
+  it('ancla los traslados nocturnos al día en que hay que actuar, no al que dice el texto', () => {
+    // "noche del jue 8 al vie 9 oct": el bus se coge el 8, aunque el texto acabe en "9 oct"
+    const ida = at('2026-10-08').airportTransfers;
+    expect(ida).toHaveLength(1);
+    expect(ida[0].fromText).toContain('Zaragoza');
+    expect(at('2026-10-09').airportTransfers).toHaveLength(0);
+    // "noche del dom 1 al lun 2 nov": el bus se coge el 1, no el 2
+    expect(at('2026-11-02').airportTransfers).toHaveLength(0);
+    expect(at('2026-11-01').airportTransfers.some(t => t.toText.includes('Zaragoza'))).toBe(true);
   });
 
   it('marca el cambio de hora del 25 oct', () => {

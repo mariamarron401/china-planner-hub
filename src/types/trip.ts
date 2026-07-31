@@ -176,6 +176,12 @@ export interface AirportTransfer {
   direction: 'to_airport' | 'from_airport';
   /** Fecha legible, ej. "9 oct 2026 (viernes)" */
   date: string;
+  /**
+   * Día al que se ancla en el calendario, en ISO. Obligatorio porque los traslados
+   * nocturnos cruzan dos días ("noche del dom 1 al lun 2 nov") y leer la fecha del
+   * texto los colocaría en el día equivocado: se ancla al día en que hay que ACTUAR.
+   */
+  calendarIso: string;
   /** Vuelo al que sirve, ej. "SN3732 · Madrid → Bruselas · 06:20" */
   flightRef: string;
   fromText: string;
