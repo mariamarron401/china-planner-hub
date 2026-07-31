@@ -79,18 +79,28 @@ export default function RouteScheme() {
           const originHotel = hotelFor(leg.fromCityId);
           const destHotel = hotelFor(leg.toCityId);
           const legTotal = (leg.price ?? 0) + (leg.transferBeforeEur ?? 0) + (leg.transferAfterEur ?? 0);
+          // Algunos tramos son solo cambio de hotel en coche (sin estación ni tren): se dibujan
+          // hotel → Didi → hotel, sin los pasos de estación y sin botones de Trip.com.
+          const isTrain = Boolean(leg.fromStation || leg.toStation);
+          const HeaderIcon = isTrain ? TrainFront : Car;
           return (
             <div key={leg.id} className="bg-card rounded-2xl border border-border p-4 shadow-sm">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">Tramo {idx + 1}/8</span>
+                <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">Tramo {idx + 1}/{transportLegs.length}</span>
                 {leg.travelDate && <span className="text-[10px] text-muted-foreground">{leg.travelDate}</span>}
               </div>
 
               <div className="flex items-center gap-2 mb-3.5">
                 <span className="text-base font-bold text-foreground">{cityName(leg.fromCityId)}</span>
-                <TrainFront className="h-4 w-4 text-primary flex-shrink-0" />
+                <HeaderIcon className={`h-4 w-4 flex-shrink-0 ${isTrain ? 'text-primary' : 'text-amber-600'}`} />
                 <span className="text-base font-bold text-foreground">{cityName(leg.toCityId)}</span>
               </div>
+
+              {!isTrain && (
+                <p className="text-[11px] leading-snug text-amber-700 dark:text-amber-500 bg-amber-500/10 rounded-lg px-2.5 py-1.5 mb-3">
+                  Este tramo <span className="font-semibold">no lleva tren</span>: es solo el cambio de hotel en Didi/taxi, el mismo día.
+                </p>
+              )}
 
               <div className="relative">
                 <div className="absolute left-[11px] top-3 bottom-3 w-px bg-border" />
@@ -101,6 +111,11 @@ export default function RouteScheme() {
                     <p className="text-[11px] text-muted-foreground flex items-center gap-1">
                       <LogOut className="h-3 w-3" /> Check-out {originHotel?.checkOutTime ?? '—'}
                     </p>
+                    {leg.hotelDepartureNote && (
+                      <p className="text-[11px] leading-snug font-medium text-travel-important bg-travel-important-bg rounded-md px-2 py-1 mt-1">
+                        {leg.hotelDepartureNote}
+                      </p>
+                    )}
                   </Step>
 
                   {/* Didi a la estación de origen */}
@@ -111,25 +126,32 @@ export default function RouteScheme() {
                   )}
 
                   {/* Estación de origen */}
-                  <Step icon={MapPin} iconColor="text-primary">
-                    <p className="text-xs font-semibold text-foreground leading-snug">{leg.fromStation}</p>
-                    {leg.stationBuffer && <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">{leg.stationBuffer}</p>}
-                  </Step>
+                  {isTrain && (
+                    <Step icon={MapPin} iconColor="text-primary">
+                      <p className="text-xs font-semibold text-foreground leading-snug">{leg.fromStation}</p>
+                      {leg.stationBuffer && <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">{leg.stationBuffer}</p>}
+                    </Step>
+                  )}
 
-                  {/* Tren bala */}
-                  <Step icon={TrainFront} iconColor="text-primary" highlight>
-                    <p className="text-xs font-bold text-primary mb-0.5">{leg.mode}{leg.durationMinutes != null ? ` · ~${formatDuration(leg.durationMinutes)}` : ''}</p>
+                  {/* Tren bala, o el trayecto en coche si el tramo no lleva tren */}
+                  <Step icon={isTrain ? TrainFront : Car} iconColor={isTrain ? 'text-primary' : 'text-amber-600'} highlight>
+                    <p className={`text-xs font-bold mb-0.5 ${isTrain ? 'text-primary' : 'text-amber-700 dark:text-amber-500'}`}>{leg.mode}{leg.durationMinutes != null ? ` · ~${formatDuration(leg.durationMinutes)}` : ''}</p>
                     <p className="text-[11px] text-foreground leading-snug"><span className="text-muted-foreground">Salida:</span> <span className="font-medium">{leg.suggestedDeparture}</span></p>
                     <p className="text-[11px] text-foreground leading-snug"><span className="text-muted-foreground">Llegada:</span> <span className="font-medium">{leg.estimatedArrival}</span></p>
                     {leg.price != null && (
-                      <p className="text-[11px] text-foreground leading-snug"><span className="text-muted-foreground">Billete:</span> <span className="font-medium">~{leg.price}€ (2ª clase, 2 pers.)</span></p>
+                      <p className="text-[11px] text-foreground leading-snug">
+                        <span className="text-muted-foreground">{isTrain ? 'Billete:' : 'Coche:'}</span>{' '}
+                        <span className="font-medium">~{leg.price}€ {isTrain ? '(2ª clase, 2 pers.)' : '(el coche, los dos juntos)'}</span>
+                      </p>
                     )}
                   </Step>
 
                   {/* Estación de destino */}
-                  <Step icon={MapPin} iconColor="text-primary">
-                    <p className="text-xs font-semibold text-foreground leading-snug">{leg.toStation}</p>
-                  </Step>
+                  {isTrain && (
+                    <Step icon={MapPin} iconColor="text-primary">
+                      <p className="text-xs font-semibold text-foreground leading-snug">{leg.toStation}</p>
+                    </Step>
+                  )}
 
                   {/* Didi al hotel de destino */}
                   {leg.transferAfter && (
@@ -148,30 +170,38 @@ export default function RouteScheme() {
                 </div>
               </div>
 
+              {!isTrain && leg.notes && (
+                <p className="mt-3 text-[11px] text-muted-foreground leading-snug">{leg.notes}</p>
+              )}
+
               <div className="mt-3 flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg px-3 py-2">
-                <span className="text-xs font-semibold text-foreground">Total del tramo <span className="text-muted-foreground font-normal">(tren 2 pers. + Didi)</span></span>
+                <span className="text-xs font-semibold text-foreground">Total del tramo <span className="text-muted-foreground font-normal">{isTrain ? '(tren 2 pers. + Didi)' : '(solo el Didi)'}</span></span>
                 <span className="text-sm font-bold text-primary">~{legTotal}€</span>
               </div>
 
-              <div className="mt-2 flex gap-2">
-                <a
-                  href={TRIP_TRAINS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold px-3 py-2 active:opacity-80 transition-opacity"
-                >
-                  Buscar en Trip.com <ExternalLink className="h-3 w-3 opacity-80" />
-                </a>
-                <button
-                  onClick={() => copyRouteInfo(leg)}
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-muted text-foreground text-xs font-semibold px-3 py-2 hover:bg-muted/70 transition-colors"
-                >
-                  <Copy className="h-3.5 w-3.5" /> Copiar datos
-                </button>
-              </div>
-              <p className="mt-1.5 text-[10px] text-muted-foreground leading-snug">
-                Trip.com no permite enlazar la búsqueda ya rellena — este botón abre el buscador de trenes de China y "Copiar datos" pone origen, destino y fecha en el portapapeles para pegarlos ahí. Los billetes suelen abrirse a la venta pocas semanas antes del viaje.
-              </p>
+              {isTrain && (
+                <>
+                  <div className="mt-2 flex gap-2">
+                    <a
+                      href={TRIP_TRAINS_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold px-3 py-2 active:opacity-80 transition-opacity"
+                    >
+                      Buscar en Trip.com <ExternalLink className="h-3 w-3 opacity-80" />
+                    </a>
+                    <button
+                      onClick={() => copyRouteInfo(leg)}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-muted text-foreground text-xs font-semibold px-3 py-2 hover:bg-muted/70 transition-colors"
+                    >
+                      <Copy className="h-3.5 w-3.5" /> Copiar datos
+                    </button>
+                  </div>
+                  <p className="mt-1.5 text-[10px] text-muted-foreground leading-snug">
+                    Trip.com no permite enlazar la búsqueda ya rellena — este botón abre el buscador de trenes de China y "Copiar datos" pone origen, destino y fecha en el portapapeles para pegarlos ahí. Los billetes suelen abrirse a la venta pocas semanas antes del viaje.
+                  </p>
+                </>
+              )}
 
               {leg.alertNote && (
                 <div className="mt-3 bg-travel-important-bg text-travel-important text-[11px] leading-snug font-medium px-2.5 py-1.5 rounded-lg flex items-start gap-1.5">
@@ -184,18 +214,23 @@ export default function RouteScheme() {
         })}
 
         {(() => {
-          const totalTrenes = transportLegs.reduce((s, l) => s + (l.price ?? 0), 0);
-          const totalDidi = transportLegs.reduce((s, l) => s + (l.transferBeforeEur ?? 0) + (l.transferAfterEur ?? 0), 0);
+          const trainLegs = transportLegs.filter(l => l.fromStation || l.toStation);
+          const roadLegs = transportLegs.filter(l => !l.fromStation && !l.toStation);
+          const totalTrenes = trainLegs.reduce((s, l) => s + (l.price ?? 0), 0);
+          const numTransfers = transportLegs.reduce((s, l) => s + (l.transferBeforeEur != null ? 1 : 0) + (l.transferAfterEur != null ? 1 : 0), 0);
+          const totalDidi =
+            transportLegs.reduce((s, l) => s + (l.transferBeforeEur ?? 0) + (l.transferAfterEur ?? 0), 0) +
+            roadLegs.reduce((s, l) => s + (l.price ?? 0), 0);
           return (
             <div className="bg-primary/5 rounded-xl border border-primary/30 p-3.5 shadow-sm">
               <p className="text-sm font-bold text-foreground mb-2">💰 Coste total del transporte interno</p>
               <div className="space-y-1 text-[11px] text-foreground">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">8 trenes bala (2ª clase, 2 personas)</span>
+                  <span className="text-muted-foreground">{trainLegs.length} trenes bala (2ª clase, 2 personas)</span>
                   <span className="font-semibold">~{totalTrenes}€</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Didi/taxi a estaciones (16 trayectos)</span>
+                  <span className="text-muted-foreground">Didi/taxi a estaciones y cambios de hotel ({numTransfers + roadLegs.length} trayectos)</span>
                   <span className="font-semibold">~{totalDidi}€</span>
                 </div>
                 <div className="flex justify-between pt-1.5 mt-1 border-t border-primary/20">

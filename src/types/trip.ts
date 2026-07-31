@@ -71,6 +71,12 @@ export interface HotelOption {
   paymentNote?: string;
   booked?: boolean;
   imageUrl?: string;
+  /** Depósito/fianza que el hotel pide al hacer el check-in, en yuanes (CNY). Reembolsable al salir. */
+  depositCny?: number;
+  /** Equivalente en euros del depósito, al cambio anotado en la reserva */
+  depositEur?: number;
+  /** Detalle de la política de depósito, ej. "Se paga al completar el registro de entrada" */
+  depositNote?: string;
 }
 
 export interface TransportLeg {
@@ -96,6 +102,8 @@ export interface TransportLeg {
   transferBeforeEur?: number;
   transferAfterEur?: number;
   stationBuffer?: string;
+  /** Aviso cuando la hora real de salida del hotel NO es la del check-out de la reserva. */
+  hotelDepartureNote?: string;
 }
 
 export interface LocalTransport {

@@ -101,7 +101,7 @@ export default function Dashboard() {
               <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                 <TrainFront className="h-3.5 w-3.5" /> Trenes internos
               </div>
-              <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">{transportLegs.length} tramos</span>
+              <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">{transportLegs.filter(l => l.fromStation || l.toStation).length} trenes</span>
             </div>
             <div className="space-y-2.5">
               {transportLegs.slice(0, 3).map(leg => (

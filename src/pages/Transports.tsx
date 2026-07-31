@@ -72,9 +72,9 @@ export default function Transports() {
         <div className="px-4 mb-4">
           <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
             <h2 className="text-sm font-bold text-foreground mb-2">📅 Calendario de agosto — cuándo entrar en Trip.com</h2>
-            <p className="text-[11px] text-muted-foreground mb-3">Los 8 tramos, en el orden en que os van a tocar. Cada día, entra en Trip.com y activa la reserva anticipada de ese tramo (estaciones exactas en la tarjeta de abajo).</p>
+            <p className="text-[11px] text-muted-foreground mb-3">Los {transportLegs.filter(l => l.preBookingFrom).length} trenes, en el orden en que os van a tocar. Cada día, entra en Trip.com y activa la reserva anticipada de ese tramo (estaciones exactas en la tarjeta de abajo). El cambio de hotel Zhangjiajie → Wulingyuan del 24 oct no sale aquí: es un Didi que se pide en el momento, no se reserva.</p>
             <div className="space-y-1.5">
-              {transportLegs.map((leg, idx) => (
+              {transportLegs.filter(leg => leg.preBookingFrom).map(leg => (
                 <div key={leg.id} className="flex items-center gap-2 text-xs">
                   <span className="font-mono font-bold text-primary w-20 flex-shrink-0">{leg.preBookingFrom}</span>
                   <span className="text-muted-foreground">→</span>
@@ -92,12 +92,14 @@ export default function Transports() {
           <div key={leg.id} className="bg-card rounded-xl border border-border p-4 shadow-sm">
             <div className="flex items-center justify-between gap-2 mb-2">
               <div className="flex items-center gap-2">
-                <Train className="h-4 w-4 text-primary" />
+                {leg.fromStation || leg.toStation
+                  ? <Train className="h-4 w-4 text-primary" />
+                  : <Car className="h-4 w-4 text-amber-600" />}
                 <span className="font-medium text-sm text-foreground">{getCityName(leg.fromCityId)}</span>
                 <ArrowRight className="h-3 w-3 text-muted-foreground" />
                 <span className="font-medium text-sm text-foreground">{getCityName(leg.toCityId)}</span>
               </div>
-              <span className="text-[10px] text-muted-foreground font-mono">Tramo {idx + 1}/8</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Tramo {idx + 1}/{transportLegs.length}</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
               <span className="bg-muted px-1.5 py-0.5 rounded">{leg.mode}</span>
