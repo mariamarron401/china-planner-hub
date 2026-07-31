@@ -55,12 +55,11 @@ export function getHotelDeposits(
 
   const totalCny = items.reduce((s, i) => s + i.cny, 0);
   const totalEur = Math.round(items.reduce((s, i) => s + i.eur, 0) * 100) / 100;
-  const hotelsWithoutData = cities.filter(city => {
-    const hotel = hotels.find(h => h.id === selectedHotels[city.id]);
-    return hotel && !hotel.depositCny;
-  }).length;
+  // Los 7 hoteles restantes se revisaron uno a uno: no tienen política de depósito
+  // (confirmado por María el 31/07/2026), así que el total está cerrado.
+  const hotelsWithoutDeposit = cities.length - items.length;
 
-  return { items, totalCny, totalEur, hotelsWithoutData };
+  return { items, totalCny, totalEur, hotelsWithoutDeposit };
 }
 
 export function getGlobalBudget(

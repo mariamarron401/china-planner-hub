@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 export default function Budget() {
   const { data, updateBudgetExtras } = useTrip();
-  const { cities, hotels, selectedHotels, transportLegs, localTransports, activities, budgetExtras, trip } = data;
+  const { cities, hotels, selectedHotels, transportLegs, localTransports, activities, budgetExtras, trip, airportTransfers } = data;
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
   const deposits = getHotelDeposits(cities, hotels, selectedHotels);
 
@@ -15,11 +15,18 @@ export default function Budget() {
   }, 0);
   const transportComplete = [...transportLegs, ...localTransports].every(t => t.price != null);
 
+  // Traslados de aeropuerto: se cuenta la opción recomendada de cada uno (o la más barata
+  // si ninguna está marcada), porque es la que vais a coger de verdad.
+  const airportTotal = airportTransfers.reduce((sum, t) => {
+    const chosen = t.options.find(o => o.recommended) ?? t.options[0];
+    return sum + (chosen?.priceEur ?? 0);
+  }, 0);
+
   const activitiesTotal = activities.reduce((sum, a) => (a.price != null ? sum + a.price : sum), 0);
   const activitiesComplete = activities.every(a => a.price != null);
 
   const hotelTotal = budget.allSelected ? budget.selectedTotal : budget.avgTotal;
-  const totalKnown = budgetExtras.flightsInsurance + hotelTotal + transportTotal + activitiesTotal
+  const totalKnown = budgetExtras.flightsInsurance + hotelTotal + transportTotal + activitiesTotal + airportTotal
     + budgetExtras.transportExtra + budgetExtras.activitiesExtra + budgetExtras.insurance + budgetExtras.others;
 
   return (
@@ -95,22 +102,29 @@ export default function Budget() {
                 </div>
               ))}
             </div>
-            {deposits.hotelsWithoutData > 0 && (
-              <p className="text-[11px] text-travel-pending mt-3">
-                ⚠ Faltan {deposits.hotelsWithoutData} hoteles por comprobar. Si todos pidieran depósito, la recámara necesaria subiría.
-              </p>
-            )}
+            <p className="text-[11px] text-travel-confirmed mt-3">
+              ✅ Cifra cerrada: los otros {deposits.hotelsWithoutDeposit} hoteles no tienen política de depósito.
+            </p>
           </div>
         )}
 
         {/* Transport */}
         <BudgetCard icon={<Train className="h-3.5 w-3.5" />} title="Transportes">
           {transportComplete ? (
-            <div className="text-2xl font-bold text-foreground">{transportTotal + budgetExtras.transportExtra}€</div>
+            <div className="text-2xl font-bold text-foreground">{Math.round(transportTotal + airportTotal + budgetExtras.transportExtra)}€</div>
           ) : (
             <div>
-              <div className="text-lg font-bold text-foreground">{transportTotal > 0 ? `${transportTotal}€ parcial` : '—'}</div>
+              <div className="text-lg font-bold text-foreground">{transportTotal > 0 ? `${Math.round(transportTotal + airportTotal)}€ parcial` : '—'}</div>
               <div className="text-xs text-travel-pending font-medium mt-1">⚠ Datos incompletos</div>
+            </div>
+          )}
+          {airportTotal > 0 && (
+            <div className="mt-2 pt-2 border-t border-border flex items-start gap-1.5">
+              <Plane className="h-3.5 w-3.5 text-primary mt-px flex-shrink-0" />
+              <div className="text-xs text-muted-foreground">
+                Incluye <span className="font-semibold text-foreground">{Math.round(airportTotal)}€</span> de los {airportTransfers.length} traslados
+                de aeropuerto (opción recomendada de cada uno). Detalle en Transportes → Aeropuertos.
+              </div>
             </div>
           )}
           <EditableAmount label="Extra transporte" value={budgetExtras.transportExtra} onChange={v => updateBudgetExtras({ transportExtra: v })} />

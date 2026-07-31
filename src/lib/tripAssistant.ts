@@ -299,6 +299,40 @@ function answerWhenToBuy(data: TripData): string {
   return `⏰ **Cuándo comprar cada cosa:**\n\n**Trenes bala** (comprar en cuanto abra la venta, se agotan en Golden Week):\n${trains}\n\n**Entradas de actividades:**\n${acts}\n\n👉 Los trenes de Xi'an→Chengdu, Chongqing→Fenghuang y Wulingyuan→Wangxian Valley (sale de Zhangjiajie West el 26 oct) son los más críticos: cómpralos el primer día que se pueda.`;
 }
 
+function answerAirportTransfers(data: TripData, q: string): string {
+  const all = data.airportTransfers ?? [];
+  if (all.length === 0) return 'Todavía no tengo los traslados de aeropuerto cargados.';
+
+  // Si se pregunta por un aeropuerto o momento concreto, se filtra.
+  let picked = all;
+  if (has(q, ['pekin', 'beijing', 'pek', 'llegada', 'aterriz'])) {
+    picked = all.filter((t) => t.id === 'at-pek-llegada');
+  } else if (has(q, ['shanghai', 'hongqiao', 'sha', 'ultimo dia', 'vuelta a casa'])) {
+    picked = all.filter((t) => t.id === 'at-sha-salida');
+  } else if (has(q, ['madrid', 'barajas', 'mad'])) {
+    picked = all.filter((t) => t.id.startsWith('at-mad'));
+  }
+  if (picked.length === 0) picked = all;
+
+  const blocks = picked.map((t) => {
+    const best = t.options.find((o) => o.recommended) ?? t.options[0];
+    const lines = [
+      `${t.direction === 'to_airport' ? '🛫' : '🛬'} **${t.fromText} → ${t.toText}**`,
+      `📅 ${t.date} · ${t.flightRef}`,
+      t.direction === 'to_airport'
+        ? `⏰ **Salir a las ${t.leaveAt}**${t.beAtAirportBy ? ` · estar en el aeropuerto a las ${t.beAtAirportBy}` : ''}`
+        : `⏰ Salís de la terminal sobre las ${t.leaveAt}`,
+      t.terminal ? `📍 ${t.terminal}` : '',
+      best ? `⭐ Mejor opción: **${best.mode}** — ${best.priceText}, ${best.durationMinutes} min` : '',
+      t.hotelNote ? `🏨 ${t.hotelNote}` : '',
+      ...t.warnings.map((w) => w),
+    ];
+    return lines.filter(Boolean).join('\n');
+  });
+
+  return `${blocks.join('\n\n———\n\n')}\n\nTienes el detalle completo, con todas las alternativas y la dirección en chino para el taxista, en **Transportes → Aeropuertos**.`;
+}
+
 function answerDeposits(data: TripData): string {
   const items = data.cities
     .map((c) => ({ c, h: selectedHotelFor(data, c.id) }))
@@ -323,9 +357,7 @@ function answerDeposits(data: TripData): string {
     `**Total a tener disponible en la tarjeta: ¥${totalCny} ≈ ${totalEur.toFixed(2)}€**`,
     '',
     `⚠️ Ojo: **no es gasto del viaje**, es saldo. Se cobra al completar el registro de entrada y se devuelve al hacer el check-out, pero la devolución puede tardar varios días en aparecer en la tarjeta — así que hay que llevar los ${totalEur.toFixed(2)}€ *además* del presupuesto normal, y no contar con ese dinero mientras estáis allí.`,
-    sinDatos > 0
-      ? `\n📋 Quedan ${sinDatos} hoteles por comprobar en Trip.com. Si alguno pide depósito, la cifra subirá.`
-      : '',
+    sinDatos > 0 ? `\n✅ Los otros ${sinDatos} hoteles no piden depósito, así que la cifra está cerrada.` : '',
   ]
     .filter(Boolean)
     .join('\n');
@@ -437,6 +469,11 @@ export function answerQuestion(rawQuestion: string, data: TripData): string {
   // seguro / emergencias
   if (has(q, ['seguro', 'poliza', 'arag', 'medic', 'emergencia', 'hospital', 'asistencia', 'cobertura', 'accidente'])) {
     return INSURANCE_INFO;
+  }
+
+  // traslados de aeropuerto (antes que AVE/Madrid y que trenes, que capturan "traslado")
+  if (has(q, ['aeropuerto', 'terminal', 'hongqiao', 'pudong', 'taxi', 'que hora salimos', 'que hora hay que salir', 'como llegamos al avion'])) {
+    return answerAirportTransfers(data, q);
   }
 
   // AVE / Madrid / España

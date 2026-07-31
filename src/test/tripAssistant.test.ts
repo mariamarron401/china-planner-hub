@@ -72,6 +72,25 @@ describe('tripAssistant', () => {
     expect(a).toContain('64.31');
   });
 
+  it('traslado del aeropuerto de Pekín con la hora real de salida', () => {
+    const a = ask('¿cómo vamos del aeropuerto de Pekín al hotel?');
+    expect(a).toContain('06:00');
+    expect(a).toContain('Taxi');
+    expect(a).toContain('14:00'); // aviso de que el check-in es a las 14:00
+  });
+
+  it('traslado al aeropuerto de Shanghái avisa de Hongqiao vs Pudong', () => {
+    const a = ask('¿a qué hora hay que salir para el aeropuerto de Hongqiao?');
+    expect(a).toContain('06:00');
+    expect(a).toContain('PUDONG');
+  });
+
+  it('traslados de Madrid: los dos sentidos', () => {
+    const a = ask('traslados del aeropuerto de Madrid en taxi');
+    expect(a).toContain('04:20'); // hora de estar en el T2 a la ida
+    expect(a).toContain('33 €');
+  });
+
   it('fallback ante algo raro', () => {
     const a = ask('asdfqwer zzz');
     expect(a).toContain('No estoy seguro');

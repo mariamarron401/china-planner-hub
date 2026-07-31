@@ -46,7 +46,8 @@ export default function Hotels() {
               <span className="text-sm font-semibold text-muted-foreground">≈ {deposits.totalEur.toFixed(2)} €</span>
             </div>
             <p className="text-[11px] text-muted-foreground mt-1">
-              Saldo que hay que llevar disponible en la tarjeta ({deposits.items.length} de {cities.length} hoteles piden depósito).
+              Saldo que hay que llevar disponible en la tarjeta. Solo estos {deposits.items.length} hoteles piden depósito;
+              los otros {deposits.hotelsWithoutDeposit} no tienen esta política, así que el total está cerrado.
               Se cobra al registrar la entrada y se devuelve al salir, pero la devolución puede tardar días → no contar con ese dinero durante el viaje.
             </p>
             <div className="mt-2 pt-2 border-t border-border space-y-1">
@@ -61,11 +62,9 @@ export default function Hotels() {
                 </div>
               ))}
             </div>
-            {deposits.hotelsWithoutData > 0 && (
-              <p className="text-[10px] text-travel-pending mt-2">
-                ⚠ Quedan {deposits.hotelsWithoutData} hoteles sin comprobar la política de depósito — revisar en Trip.com y anotarlo aquí.
-              </p>
-            )}
+            <p className="text-[10px] text-travel-confirmed mt-2">
+              ✅ Total cerrado: los {deposits.hotelsWithoutDeposit} hoteles restantes no piden depósito.
+            </p>
           </div>
         </div>
       )}

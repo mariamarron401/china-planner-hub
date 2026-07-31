@@ -120,6 +120,49 @@ export interface LocalTransport {
   suggestedTime?: string;
 }
 
+/** Una forma concreta de cubrir un traslado de aeropuerto (taxi, metro, bus...). */
+export interface AirportTransferOption {
+  mode: string;
+  durationMinutes: number;
+  /** Precio legible con moneda local si aplica, ej. "¥120-160 (~15-21 €)" */
+  priceText: string;
+  /** Coste estimado en euros para los dos, para el presupuesto. null si no aplica. */
+  priceEur: number | null;
+  /** La opción que recomendamos por defecto (una sola por traslado). */
+  recommended?: boolean;
+  notes: string;
+}
+
+/**
+ * Traslado entre aeropuerto y hotel, en los dos sentidos. Se separa de `LocalTransport`
+ * porque lo que manda aquí es una **hora límite** (facturación de un vuelo concreto) y no
+ * un simple trayecto, y porque incluye Madrid, que no es una parada de `cities`.
+ */
+export interface AirportTransfer {
+  id: string;
+  direction: 'to_airport' | 'from_airport';
+  /** Fecha legible, ej. "9 oct 2026 (viernes)" */
+  date: string;
+  /** Vuelo al que sirve, ej. "SN3732 · Madrid → Bruselas · 06:20" */
+  flightRef: string;
+  fromText: string;
+  toText: string;
+  terminal?: string;
+  /** Hora a la que hay que salir. Es el dato principal de la tarjeta. */
+  leaveAt: string;
+  /** Por qué esa hora (cuenta atrás desde la facturación o desde la llegada). */
+  leaveAtNote: string;
+  /** Solo en `to_airport`: hora a la que hay que estar ya en el aeropuerto. */
+  beAtAirportBy?: string;
+  options: AirportTransferOption[];
+  /** Avisos en rojo: riesgos reales de perder el vuelo o quedarse tirados. */
+  warnings: string[];
+  /** Relación con el check-in/check-out del hotel de ese día. */
+  hotelNote?: string;
+  /** Dirección en caracteres chinos para enseñar al taxista. */
+  addressForDriver?: string;
+}
+
 export interface Activity {
   id: string;
   cityId: string;
@@ -210,6 +253,7 @@ export interface TripData {
   selectedHotels: Record<string, string>;
   transportLegs: TransportLeg[];
   localTransports: LocalTransport[];
+  airportTransfers: AirportTransfer[];
   activities: Activity[];
   versions: TripVersion[];
   flights: FlightLeg[];

@@ -94,6 +94,10 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         parsed.transportLegs = reconcileById(initialTripData.transportLegs, parsed.transportLegs, ['price', 'durationMinutes', 'status']);
         parsed.localTransports = reconcileById(initialTripData.localTransports, parsed.localTransports, ['price', 'durationMinutes']);
         parsed.activities = reconcileById(initialTripData.activities, parsed.activities, ['price', 'duration', 'status']);
+        // Los traslados de aeropuerto son puramente informativos (no se editan desde la app),
+        // así que se toman siempre frescos del código: así una sesión antigua guardada en
+        // localStorage nunca deja la colección a undefined ni se queda con horarios viejos.
+        parsed.airportTransfers = initialTripData.airportTransfers;
         return parsed;
       }
       return initialTripData;

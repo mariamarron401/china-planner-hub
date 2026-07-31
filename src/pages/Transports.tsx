@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
-import { Train, Car, ArrowRight, MapPin, CalendarClock, Calendar, Clock, Luggage, Waypoints } from 'lucide-react';
+import { Train, Car, ArrowRight, MapPin, CalendarClock, Calendar, Clock, Luggage, Waypoints, Plane, PlaneLanding, PlaneTakeoff, AlertTriangle, Building2, Languages } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 export default function Transports() {
   const { data, updateTransportLeg, updateLocalTransport } = useTrip();
-  const { cities, transportLegs, localTransports } = data;
-  const [tab, setTab] = useState<'inter' | 'local'>('inter');
+  const { cities, transportLegs, localTransports, airportTransfers } = data;
+  const [tab, setTab] = useState<'inter' | 'local' | 'airport'>('inter');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState({ price: '', duration: '' });
 
@@ -65,6 +65,14 @@ export default function Transports() {
           }`}
         >
           <Car className="h-3.5 w-3.5" /> Locales ({localTransports.length})
+        </button>
+        <button
+          onClick={() => setTab('airport')}
+          className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${
+            tab === 'airport' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+          }`}
+        >
+          <Plane className="h-3.5 w-3.5" /> Aeropuertos ({airportTransfers.length})
         </button>
       </div>
 
@@ -243,6 +251,104 @@ export default function Transports() {
             )}
           </div>
         ))}
+
+        {tab === 'airport' && airportTransfers.map(t => {
+          const isDeparture = t.direction === 'to_airport';
+          return (
+            <div key={t.id} className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+              {/* Cabecera: vuelo al que sirve */}
+              <div className={`px-4 py-2.5 ${isDeparture ? 'bg-travel-pending-bg' : 'bg-primary/10'}`}>
+                <div className={`flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide ${isDeparture ? 'text-travel-pending' : 'text-primary'}`}>
+                  {isDeparture ? <PlaneTakeoff className="h-3.5 w-3.5" /> : <PlaneLanding className="h-3.5 w-3.5" />}
+                  {isDeparture ? 'Salida hacia el aeropuerto' : 'Llegada desde el aeropuerto'}
+                </div>
+                <div className="text-xs font-medium text-foreground mt-1">{t.flightRef}</div>
+              </div>
+
+              <div className="p-4">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <span className="font-semibold text-sm text-foreground">{t.fromText}</span>
+                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                  <span className="font-semibold text-sm text-foreground">{t.toText}</span>
+                </div>
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Calendar className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                  <span className="text-xs font-semibold text-foreground">{t.date}</span>
+                </div>
+
+                {/* El dato principal: la hora */}
+                <div className="rounded-lg bg-muted/60 border border-border p-3 mb-3">
+                  <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    {isDeparture ? 'Salir a las' : 'Salís del aeropuerto sobre las'}
+                  </div>
+                  <div className="text-2xl font-bold text-foreground mt-0.5">{t.leaveAt}</div>
+                  {t.beAtAirportBy && (
+                    <div className="text-xs font-medium text-travel-pending mt-0.5">
+                      Estar en el aeropuerto a las {t.beAtAirportBy}
+                    </div>
+                  )}
+                  <p className="text-[11px] text-muted-foreground leading-snug mt-1.5">{t.leaveAtNote}</p>
+                </div>
+
+                {t.terminal && (
+                  <div className="flex items-start gap-1.5 text-[11px] text-foreground mb-3">
+                    <MapPin className="h-3.5 w-3.5 text-primary mt-px flex-shrink-0" />
+                    <span>{t.terminal}</span>
+                  </div>
+                )}
+
+                {/* Opciones para cubrirlo */}
+                <div className="space-y-2">
+                  {t.options.map(o => (
+                    <div
+                      key={o.mode}
+                      className={`rounded-lg border p-2.5 ${
+                        o.recommended ? 'border-travel-confirmed bg-travel-confirmed-bg/40' : 'border-border'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <span className="text-xs font-semibold text-foreground">
+                          {o.recommended && '⭐ '}{o.mode}
+                        </span>
+                        <span className="text-xs font-medium text-foreground whitespace-nowrap">{o.priceText}</span>
+                      </div>
+                      <div className="text-[10px] text-muted-foreground mt-0.5">{o.durationMinutes} min</div>
+                      <p className="text-[11px] text-muted-foreground leading-snug mt-1">{o.notes}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {t.hotelNote && (
+                  <div className="flex items-start gap-1.5 mt-3 text-[11px] text-foreground">
+                    <Building2 className="h-3.5 w-3.5 text-primary mt-px flex-shrink-0" />
+                    <span>{t.hotelNote}</span>
+                  </div>
+                )}
+
+                {t.addressForDriver && (
+                  <div className="mt-3 rounded-lg bg-muted p-2.5">
+                    <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground mb-1">
+                      <Languages className="h-3 w-3" /> Para enseñar al taxista
+                    </div>
+                    <p className="text-xs text-foreground leading-snug select-all">{t.addressForDriver}</p>
+                  </div>
+                )}
+
+                {t.warnings.length > 0 && (
+                  <div className="mt-3 space-y-1.5">
+                    {t.warnings.map((w, i) => (
+                      <div key={i} className="flex items-start gap-1.5 text-[11px] leading-snug text-foreground">
+                        <AlertTriangle className="h-3.5 w-3.5 text-travel-pending mt-px flex-shrink-0" />
+                        <span>{w.replace(/^[🔴⚠️]\s*/, '')}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

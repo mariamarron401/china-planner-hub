@@ -1,5 +1,6 @@
 import { useTrip } from '@/context/TripContext';
-import { Plane, Clock, Luggage, ArrowRight } from 'lucide-react';
+import { Plane, Clock, Luggage, ArrowRight, Car } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Flights() {
   const { data } = useTrip();
@@ -11,6 +12,17 @@ export default function Flights() {
       <div className="px-4 pt-12 pb-4">
         <h1 className="text-2xl font-bold text-foreground">🛫 Vuelos</h1>
         <p className="text-sm text-muted-foreground mt-1">Air China · Economy · 2 piezas equipaje</p>
+      </div>
+
+      <div className="px-4 mb-4">
+        <Link to="/transportes" className="flex items-center gap-2.5 bg-primary/10 border border-primary/30 rounded-xl px-3.5 py-3 text-primary">
+          <Car className="h-5 w-5 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold leading-tight">Traslados de aeropuerto</div>
+            <div className="text-[11px] opacity-80 leading-tight">A qué hora salir del hotel, cómo ir y cuánto cuesta — en Transportes → Aeropuertos</div>
+          </div>
+          <ArrowRight className="h-4 w-4 flex-shrink-0" />
+        </Link>
       </div>
 
       <div className="px-4 space-y-6">
