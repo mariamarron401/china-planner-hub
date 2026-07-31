@@ -120,6 +120,39 @@ export interface LocalTransport {
   suggestedTime?: string;
 }
 
+/** Un momento del viaje con la hora que marca el reloj en cada país a la vez. */
+export interface TimelineMilestone {
+  label: string;
+  /** Ej. "vie 9 oct · 06:20" */
+  spainTime: string;
+  chinaTime: string;
+  /** true en el punto donde cambia el día del calendario, para resaltarlo. */
+  dayChange?: boolean;
+}
+
+/**
+ * Explicación del cambio de hora de un vuelo largo: lo que marca el reloj vs.
+ * las horas que se pasan viajando de verdad. Existe porque el salto de día del
+ * calendario despista mucho más que la propia duración del vuelo.
+ */
+export interface FlightTimeline {
+  id: string;
+  direction: 'outbound' | 'return';
+  title: string;
+  /** Horas reales de viaje, vuelos + escala. Ej. "16 h 25 min" */
+  realDuration: string;
+  /** Lo que parece si solo se miran las horas de salida y llegada. */
+  clockDuration: string;
+  /** Ej. "+6 h" (se adelanta) o "−7 h" (se atrasa). */
+  clockJump: string;
+  spainOffset: string;
+  chinaOffset: string;
+  /** Frase que resume en lenguaje llano qué pasa con el calendario. */
+  summary: string;
+  milestones: TimelineMilestone[];
+  advice: string[];
+}
+
 /** Una forma concreta de cubrir un traslado de aeropuerto (taxi, metro, bus...). */
 export interface AirportTransferOption {
   mode: string;
@@ -254,6 +287,7 @@ export interface TripData {
   transportLegs: TransportLeg[];
   localTransports: LocalTransport[];
   airportTransfers: AirportTransfer[];
+  flightTimelines: FlightTimeline[];
   activities: Activity[];
   versions: TripVersion[];
   flights: FlightLeg[];

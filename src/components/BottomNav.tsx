@@ -1,10 +1,11 @@
-import { Home, CalendarDays, Building2, Wallet, MapPinned, Train, Plane, ListTodo, Compass, Video, Waypoints, ChevronRight } from 'lucide-react';
+import { Home, CalendarDays, CalendarRange, Building2, Wallet, MapPinned, Train, Plane, ListTodo, Compass, Video, Waypoints, ChevronRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 
 const tabs = [
   { path: '/', label: 'Inicio', icon: Home },
+  { path: '/calendario', label: 'Calendario', icon: CalendarRange },
   { path: '/itinerario', label: 'Itinerario', icon: CalendarDays },
   { path: '/que-hacer', label: 'Qué hacer', icon: MapPinned },
   { path: '/hoteles', label: 'Hoteles', icon: Building2 },

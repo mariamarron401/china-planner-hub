@@ -8,6 +8,7 @@ import BottomNav from "@/components/BottomNav";
 import TripChat from "@/components/TripChat";
 import Index from "./pages/Index";
 import Itinerary from "./pages/Itinerary";
+import Calendar from "./pages/Calendar";
 import Hotels from "./pages/Hotels";
 import Transports from "./pages/Transports";
 import RouteScheme from "./pages/RouteScheme";
@@ -34,6 +35,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/itinerario" element={<Itinerary />} />
+              <Route path="/calendario" element={<Calendar />} />
               <Route path="/hoteles" element={<Hotels />} />
               <Route path="/transportes" element={<Transports />} />
               <Route path="/trayectos" element={<RouteScheme />} />

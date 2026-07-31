@@ -2,7 +2,7 @@ import { useTrip } from '@/context/TripContext';
 import { usePendingItems } from '@/hooks/usePendingItems';
 import { getGlobalBudget } from '@/lib/calculations';
 import { Link } from 'react-router-dom';
-import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, ChevronRight, ListTodo, Compass, Plane, ArrowLeftRight, TrainFront, Hourglass } from 'lucide-react';
+import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, CalendarRange, ChevronRight, ListTodo, Compass, Plane, ArrowLeftRight, TrainFront, Hourglass } from 'lucide-react';
 
 export default function Dashboard() {
   const { data, orderedCities, toggleRouteDirection } = useTrip();
@@ -168,6 +168,7 @@ export default function Dashboard() {
 
         {/* Quick links */}
         <div className="grid grid-cols-2 gap-3 animate-fade-in" style={{ animationDelay: '0.15s' }}>
+          <QuickLink to="/calendario" icon={<CalendarRange className="h-5 w-5" />} label="Calendario" />
           <QuickLink to="/itinerario" icon={<CalendarDays className="h-5 w-5" />} label="Itinerario" />
           <QuickLink to="/vuelos" icon={<Plane className="h-5 w-5" />} label="Vuelos" />
           <QuickLink to="/actividades" icon={<Compass className="h-5 w-5" />} label={`Actividades (${activities.length})`} />
