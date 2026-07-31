@@ -57,6 +57,21 @@ describe('tripAssistant', () => {
     expect(a).toContain('Hotel');
   });
 
+  it('depósitos de hotel: total y desglose', () => {
+    const a = ask('¿cuánto tenemos que llevar para los depósitos de los hoteles?');
+    expect(a).toContain('¥1000');
+    expect(a).toContain('128.62€');
+    expect(a).toContain('Beijing');
+    expect(a).toContain('Chengdu');
+    expect(a).toContain('Wangxian');
+  });
+
+  it('depósito aparece en el detalle del hotel de Beijing', () => {
+    const a = ask('¿qué hotel tenemos en Pekín?');
+    expect(a).toContain('¥500');
+    expect(a).toContain('64.31');
+  });
+
   it('fallback ante algo raro', () => {
     const a = ask('asdfqwer zzz');
     expect(a).toContain('No estoy seguro');

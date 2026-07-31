@@ -152,6 +152,11 @@ function answerHotel(data: TripData, cities: string[]): string {
       }
       if (h.totalPrice != null) parts.push(`💶 ${h.totalPrice}€ en total${h.breakfastIncluded ? ' · desayuno incluido' : ''}`);
       if (h.paymentNote) parts.push(`💳 ${h.paymentNote}`);
+      if (h.depositCny != null) {
+        parts.push(
+          `🏦 **Depósito al check-in: ¥${h.depositCny}${h.depositEur != null ? ` (~${h.depositEur.toFixed(2)}€)` : ''}** — se paga al registrar la entrada y se devuelve al salir. Llevad la tarjeta con saldo.`
+        );
+      }
       if (h.link) parts.push(`🔗 ${h.link}`);
       return parts.join('\n');
     })
@@ -291,7 +296,39 @@ function answerWhenToBuy(data: TripData): string {
     .filter((a) => a.whenToBuy)
     .map((a) => `- 🎫 ${a.title}: ${a.whenToBuy}`)
     .join('\n');
-  return `⏰ **Cuándo comprar cada cosa:**\n\n**Trenes bala** (comprar en cuanto abra la venta, se agotan en Golden Week):\n${trains}\n\n**Entradas de actividades:**\n${acts}\n\n👉 Los trenes de Xi'an→Chengdu, Chongqing→Fenghuang y Zhangjiajie→Shangrao son los más críticos: cómpralos el primer día que se pueda.`;
+  return `⏰ **Cuándo comprar cada cosa:**\n\n**Trenes bala** (comprar en cuanto abra la venta, se agotan en Golden Week):\n${trains}\n\n**Entradas de actividades:**\n${acts}\n\n👉 Los trenes de Xi'an→Chengdu, Chongqing→Fenghuang y Wulingyuan→Wangxian Valley (sale de Zhangjiajie West el 26 oct) son los más críticos: cómpralos el primer día que se pueda.`;
+}
+
+function answerDeposits(data: TripData): string {
+  const items = data.cities
+    .map((c) => ({ c, h: selectedHotelFor(data, c.id) }))
+    .filter(({ h }) => h?.depositCny != null);
+
+  if (items.length === 0) {
+    return '🏦 Ninguno de los hoteles tiene anotada una política de depósito al check-in. Si veis una en Trip.com, decídmelo y la añado.';
+  }
+
+  const totalCny = items.reduce((s, { h }) => s + (h!.depositCny ?? 0), 0);
+  const totalEur = items.reduce((s, { h }) => s + (h!.depositEur ?? 0), 0);
+  const lines = items
+    .map(({ c, h }) => `- **${shortCity(c.cityName)}** (check-in ${h!.checkInText}): ¥${h!.depositCny} ≈ ${(h!.depositEur ?? 0).toFixed(2)}€`)
+    .join('\n');
+  const sinDatos = data.cities.length - items.length;
+
+  return [
+    `🏦 **Depósitos que piden los hoteles al hacer el check-in:**`,
+    '',
+    lines,
+    '',
+    `**Total a tener disponible en la tarjeta: ¥${totalCny} ≈ ${totalEur.toFixed(2)}€**`,
+    '',
+    `⚠️ Ojo: **no es gasto del viaje**, es saldo. Se cobra al completar el registro de entrada y se devuelve al hacer el check-out, pero la devolución puede tardar varios días en aparecer en la tarjeta — así que hay que llevar los ${totalEur.toFixed(2)}€ *además* del presupuesto normal, y no contar con ese dinero mientras estáis allí.`,
+    sinDatos > 0
+      ? `\n📋 Quedan ${sinDatos} hoteles por comprobar en Trip.com. Si alguno pide depósito, la cifra subirá.`
+      : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
 }
 
 function answerBudget(data: TripData): string {
@@ -301,18 +338,34 @@ function answerBudget(data: TripData): string {
   }, 0);
   const actTotal = data.activities.reduce((sum, a) => sum + (a.price ?? 0) * 2, 0); // precio suele ser por persona
   const flights = data.budgetExtras.flightsInsurance;
+  const deposits = data.cities.reduce(
+    (acc, c) => {
+      const h = selectedHotelFor(data, c.id);
+      if (!h?.depositCny) return acc;
+      return { cny: acc.cny + h.depositCny, eur: acc.eur + (h.depositEur ?? 0), count: acc.count + 1 };
+    },
+    { cny: 0, eur: 0, count: 0 }
+  );
 
-  return [
+  const lines = [
     `💶 **Presupuesto aproximado del viaje** (2 personas):`,
     '',
     `🏨 Hoteles (10 ciudades, ya reservados): **${Math.round(hotelTotal)}€**`,
     `✈️ Vuelos + seguro (ya pagados): **${flights}€**`,
     `🎫 Actividades/entradas (estimado, aún por comprar): **~${Math.round(actTotal)}€**`,
+  ];
+  if (deposits.count > 0) {
+    lines.push(
+      `🏦 Depósitos de hotel al check-in (${deposits.count} hoteles): **¥${deposits.cny} ≈ ${deposits.eur.toFixed(2)}€** — no es gasto, es saldo que hay que llevar en la tarjeta; se devuelve al hacer el check-out.`
+    );
+  }
+  lines.push(
     '',
     `➡️ Falta sumar: trenes internos (aún sin precio), traslados locales (Didi), comidas y compras.`,
     '',
-    'Puedes ver el desglose completo en la pestaña **Presupuesto**.',
-  ].join('\n');
+    'Puedes ver el desglose completo en la pestaña **Presupuesto**.'
+  );
+  return lines.join('\n');
 }
 
 function answerItinerary(data: TripData): string {
@@ -406,6 +459,11 @@ export function answerQuestion(rawQuestion: string, data: TripData): string {
     if (has(q, ['hotel', 'check in', 'checkin', 'check-in', 'check out', 'checkout', 'check-out']) || cities.length > 0) {
       return answerCheckTimes(data, cities);
     }
+  }
+
+  // depósitos / fianzas de hotel
+  if (has(q, ['deposito', 'depositos', 'fianza', 'fianzas', 'recamara', 'saldo', 'garantia'])) {
+    return answerDeposits(data);
   }
 
   // hoteles

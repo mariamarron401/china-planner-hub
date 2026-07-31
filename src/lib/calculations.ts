@@ -25,6 +25,44 @@ export function getCityHotelStats(hotels: HotelOption[], nights: number) {
   };
 }
 
+/**
+ * Depósitos/fianzas que piden los hoteles al hacer el check-in.
+ * Se cobran sobre la tarjeta en el momento del registro de entrada y se devuelven
+ * al hacer el check-out, así que NO son un gasto del viaje: son saldo que hay que
+ * tener disponible. El pico simultáneo es la suma de todos, porque cada devolución
+ * puede tardar varios días en volver a la tarjeta.
+ */
+export function getHotelDeposits(
+  cities: CityStop[],
+  hotels: HotelOption[],
+  selectedHotels: Record<string, string>
+) {
+  const items = cities
+    .map(city => {
+      const hotelId = selectedHotels[city.id];
+      const hotel = hotels.find(h => h.id === hotelId);
+      if (!hotel?.depositCny) return null;
+      return {
+        cityId: city.id,
+        cityName: city.cityName,
+        hotelName: hotel.name ?? city.cityName,
+        checkInText: hotel.checkInText,
+        cny: hotel.depositCny,
+        eur: hotel.depositEur ?? 0,
+      };
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null);
+
+  const totalCny = items.reduce((s, i) => s + i.cny, 0);
+  const totalEur = Math.round(items.reduce((s, i) => s + i.eur, 0) * 100) / 100;
+  const hotelsWithoutData = cities.filter(city => {
+    const hotel = hotels.find(h => h.id === selectedHotels[city.id]);
+    return hotel && !hotel.depositCny;
+  }).length;
+
+  return { items, totalCny, totalEur, hotelsWithoutData };
+}
+
 export function getGlobalBudget(
   cities: CityStop[],
   hotels: HotelOption[],

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
-import { getHotelCalcs, getCityHotelStats } from '@/lib/calculations';
-import { Check, ExternalLink, Coffee, Building2 } from 'lucide-react';
+import { getHotelCalcs, getCityHotelStats, getHotelDeposits } from '@/lib/calculations';
+import { Check, ExternalLink, Coffee, Building2, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -16,6 +16,7 @@ export default function Hotels() {
   const [editPrice, setEditPrice] = useState('');
 
   const filteredCities = filterCity === 'all' ? cities : cities.filter(c => c.id === filterCity);
+  const deposits = getHotelDeposits(cities, hotels, selectedHotels);
 
   const handleSavePrice = (hotelId: string) => {
     const price = parseFloat(editPrice);
@@ -32,6 +33,42 @@ export default function Hotels() {
         <h1 className="text-2xl font-bold text-foreground">Hoteles</h1>
         <p className="text-sm text-muted-foreground mt-1">Todos con desayuno incluido</p>
       </div>
+
+      {/* Resumen de depósitos al check-in */}
+      {deposits.items.length > 0 && (
+        <div className="px-4 mb-4">
+          <div className="bg-card rounded-xl border-2 border-travel-pending/40 p-3 shadow-sm">
+            <div className="flex items-center gap-2 text-xs font-semibold text-travel-pending uppercase tracking-wide">
+              <Wallet className="h-3.5 w-3.5" /> Depósitos al check-in
+            </div>
+            <div className="mt-1.5 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-foreground">¥{deposits.totalCny}</span>
+              <span className="text-sm font-semibold text-muted-foreground">≈ {deposits.totalEur.toFixed(2)} €</span>
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Saldo que hay que llevar disponible en la tarjeta ({deposits.items.length} de {cities.length} hoteles piden depósito).
+              Se cobra al registrar la entrada y se devuelve al salir, pero la devolución puede tardar días → no contar con ese dinero durante el viaje.
+            </p>
+            <div className="mt-2 pt-2 border-t border-border space-y-1">
+              {deposits.items.map(d => (
+                <div key={d.cityId} className="flex items-center justify-between text-[11px]">
+                  <span className="text-muted-foreground truncate pr-2">
+                    {d.cityName.split(' (')[0]} · {d.checkInText}
+                  </span>
+                  <span className="font-semibold text-foreground whitespace-nowrap">
+                    ¥{d.cny} ({d.eur.toFixed(2)} €)
+                  </span>
+                </div>
+              ))}
+            </div>
+            {deposits.hotelsWithoutData > 0 && (
+              <p className="text-[10px] text-travel-pending mt-2">
+                ⚠ Quedan {deposits.hotelsWithoutData} hoteles sin comprobar la política de depósito — revisar en Trip.com y anotarlo aquí.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="px-4 flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
@@ -125,6 +162,18 @@ export default function Hotels() {
                               {' · '}
                               Check-out: <span className="font-medium text-foreground">{hotel.checkOutTime}</span>
                             </p>
+                          )}
+                          {hotel.depositCny != null && (
+                            <div className="mt-2 rounded-lg bg-travel-pending-bg/60 border border-travel-pending/30 px-2.5 py-1.5">
+                              <p className="text-[11px] font-semibold text-travel-pending flex items-center gap-1">
+                                <Wallet className="h-3 w-3" />
+                                Depósito al check-in: ¥{hotel.depositCny}
+                                {hotel.depositEur != null && ` (${hotel.depositEur.toFixed(2)} €)`}
+                              </p>
+                              <p className="text-[10px] text-muted-foreground mt-0.5">
+                                {hotel.depositNote ?? 'Se paga al completar el registro de entrada.'} Hay que llevar la tarjeta con saldo.
+                              </p>
+                            </div>
                           )}
 
                           {isPending ? (

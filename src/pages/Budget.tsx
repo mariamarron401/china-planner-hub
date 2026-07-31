@@ -1,12 +1,13 @@
 import { useTrip } from '@/context/TripContext';
-import { getGlobalBudget } from '@/lib/calculations';
-import { Wallet, Building2, Train, Compass, AlertTriangle, Plane, Shield, Package } from 'lucide-react';
+import { getGlobalBudget, getHotelDeposits } from '@/lib/calculations';
+import { Wallet, Building2, Train, Compass, AlertTriangle, Plane, Shield, Package, CreditCard } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Budget() {
   const { data, updateBudgetExtras } = useTrip();
   const { cities, hotels, selectedHotels, transportLegs, localTransports, activities, budgetExtras, trip } = data;
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
+  const deposits = getHotelDeposits(cities, hotels, selectedHotels);
 
   const transportTotal = [...transportLegs, ...localTransports].reduce((sum, t) => {
     if ('price' in t && t.price != null) return sum + t.price;
@@ -66,6 +67,42 @@ export default function Budget() {
           </div>
         </BudgetCard>
 
+        {/* Hotel deposits */}
+        {deposits.items.length > 0 && (
+          <div className="bg-card rounded-xl border-2 border-travel-pending/40 p-4 shadow-sm">
+            <div className="flex items-center gap-2 text-xs font-semibold text-travel-pending uppercase tracking-wide mb-3">
+              <CreditCard className="h-3.5 w-3.5" /> Depósitos de hotel (recámara en tarjeta)
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-foreground">¥{deposits.totalCny}</span>
+              <span className="text-sm font-semibold text-muted-foreground">≈ {deposits.totalEur.toFixed(2)} €</span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-1.5">
+              <strong className="text-foreground">No es gasto, es saldo.</strong> Cada hotel lo cobra al completar el registro de
+              entrada y lo devuelve al hacer el check-out, pero la devolución puede tardar días en volver a la tarjeta.
+              Por eso hay que llevar los {deposits.totalEur.toFixed(2)} € completos disponibles <em>además</em> del presupuesto del viaje.
+            </p>
+            <div className="mt-3 pt-3 border-t border-border space-y-1.5">
+              {deposits.items.map(d => (
+                <div key={d.cityId} className="flex items-start justify-between text-xs gap-2">
+                  <div className="min-w-0">
+                    <div className="text-foreground font-medium truncate">{d.cityName.split(' (')[0]}</div>
+                    <div className="text-[10px] text-muted-foreground">Check-in {d.checkInText}</div>
+                  </div>
+                  <span className="font-semibold text-foreground whitespace-nowrap">
+                    ¥{d.cny} · {d.eur.toFixed(2)} €
+                  </span>
+                </div>
+              ))}
+            </div>
+            {deposits.hotelsWithoutData > 0 && (
+              <p className="text-[11px] text-travel-pending mt-3">
+                ⚠ Faltan {deposits.hotelsWithoutData} hoteles por comprobar. Si todos pidieran depósito, la recámara necesaria subiría.
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Transport */}
         <BudgetCard icon={<Train className="h-3.5 w-3.5" />} title="Transportes">
           {transportComplete ? (
@@ -112,6 +149,16 @@ export default function Budget() {
             <div>~{Math.round(totalKnown / trip.travelers)}€ por persona</div>
             <div>~{Math.round(totalKnown / trip.totalNights)}€ por día</div>
           </div>
+          {deposits.items.length > 0 && (
+            <div className="mt-3 bg-primary-foreground/10 rounded-lg px-3 py-2">
+              <div className="text-xs text-primary-foreground/80">
+                + {deposits.totalEur.toFixed(2)} € (¥{deposits.totalCny}) en depósitos de hotel — reembolsables, no suman al total
+              </div>
+              <div className="text-sm font-bold text-primary-foreground mt-1">
+                Saldo a tener en la tarjeta: {Math.round(totalKnown + deposits.totalEur)}€
+              </div>
+            </div>
+          )}
           {!budget.allSelected && (
             <div className="flex items-center gap-1.5 mt-3 text-xs text-primary-foreground/80 bg-primary-foreground/10 rounded-lg px-3 py-2">
               <AlertTriangle className="h-3.5 w-3.5" />
