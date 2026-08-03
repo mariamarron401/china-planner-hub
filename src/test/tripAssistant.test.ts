@@ -91,6 +91,19 @@ describe('tripAssistant', () => {
     expect(a).toContain('33 €');
   });
 
+  it('guía sobre el terreno: da la idea clave y remite a Actividades', () => {
+    const a = ask('consejos de los guerreros de terracota');
+    expect(a).toContain('13:00'); // entrar por la tarde
+    expect(a).toContain('3 → 2 → 1'); // ruta inversa de los fosos
+    expect(a).toContain('Guía sobre el terreno');
+  });
+
+  it('reglas generales: power bank y papel higiénico', () => {
+    const a = ask('¿cuánto power bank puedo llevar?');
+    expect(a).toContain('20.000 mAh');
+    expect(ask('¿qué me llevo en la mochila?')).toContain('papel higiénico');
+  });
+
   it('fallback ante algo raro', () => {
     const a = ask('asdfqwer zzz');
     expect(a).toContain('No estoy seguro');

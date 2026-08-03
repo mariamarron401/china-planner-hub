@@ -126,6 +126,8 @@ const GENERAL_TIPS = `💡 **Consejos generales para China:**
 - **Efectivo casi no se usa**, pero lleva algo de yuanes (CNY) por si acaso (barcos, mercados pequeños).
 - Cada entrada/tren suele ser **"real-name"**: se compra con el pasaporte de cada persona. Comprad una por cada uno.
 - Descarga mapas y traductor **offline** por si falla la VPN.
+- **Power bank: máximo 20.000 mAh.** Por encima de eso lo confiscan en el control del tren. Y siempre en el equipaje de mano, nunca en la maleta facturada.
+- **Lleva papel higiénico en la mochila**: los baños públicos en China normalmente no lo tienen.
 - Los trenes internos aún NO están comprados: hay que comprarlos cuando abra la venta (pregúntame "¿cuándo compro los trenes?").`;
 
 // ---------- generadores de respuesta por tema ----------
@@ -266,6 +268,13 @@ function formatActivity(a: Activity): string {
   if (a.whenToBuy) parts.push(`🎟️ Cuándo comprar: ${a.whenToBuy}`);
   if (a.platform) parts.push(`🛒 Dónde: ${a.platform}`);
   if (a.notes) parts.push(`ℹ️ ${a.notes}`);
+  // Solo la idea clave de la guía: los bloques completos se leen en Actividades, para no
+  // soltar aquí una respuesta interminable.
+  if (a.fieldGuide) {
+    parts.push(`🧭 ${a.fieldGuide.headline}`);
+    const bloques = a.fieldGuide.sections.map((s) => s.title.toLowerCase()).join(', ');
+    parts.push(`📖 La guía completa está en Actividades → ${a.title} → "Guía sobre el terreno" (${a.fieldGuide.sections.length} bloques: ${bloques}).`);
+  }
   if (a.bookingUrl) parts.push(`🔗 ${a.bookingUrl}`);
   return parts.join('\n');
 }
@@ -525,6 +534,12 @@ export function answerQuestion(rawQuestion: string, data: TripData): string {
     return answerActivities(data, q, cities);
   }
 
+  // qué llevar / reglas prácticas concretas — va ANTES del presupuesto porque preguntas como
+  // "¿cuánto power bank puedo llevar?" llevan un "cuánto" que si no cae en el presupuesto.
+  if (has(q, ['power bank', 'powerbank', 'bateria', 'papel higienico', 'que llevo', 'que llevamos', 'que me llevo', 'que llevar'])) {
+    return GENERAL_TIPS;
+  }
+
   // presupuesto
   if (has(q, ['presupuesto', 'coste', 'cuesta', 'cuanto', 'precio', 'gasto', 'dinero', 'euros', 'total'])) {
     return answerBudget(data);
@@ -536,7 +551,7 @@ export function answerQuestion(rawQuestion: string, data: TripData): string {
   }
 
   // consejos generales
-  if (has(q, ['consejo', 'consejos', 'tip', 'tips', 'recomend', 'pasaporte', 'efectivo', 'yuan', 'dinero chino', 'traductor'])) {
+  if (has(q, ['consejo', 'consejos', 'tip', 'tips', 'recomend', 'pasaporte', 'efectivo', 'yuan', 'dinero chino', 'traductor', 'power bank', 'powerbank', 'bateria', 'papel higienico', 'que llevo', 'que llevamos', 'que me llevo', 'que llevar'])) {
     return GENERAL_TIPS;
   }
 

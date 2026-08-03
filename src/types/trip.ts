@@ -222,6 +222,27 @@ export interface Activity {
   priceText?: string;
   /** URL para comprar la entrada */
   bookingUrl?: string;
+  /** Guía práctica sobre el terreno (consejos de guías locales). Informativa y de solo lectura. */
+  fieldGuide?: FieldGuide;
+}
+
+/**
+ * Guía práctica de una atracción: consejos concretos para el día de la visita.
+ * Es contenido informativo de solo lectura (vive en `initialData.ts`, no se edita en la app).
+ */
+export interface FieldGuide {
+  /** De dónde viene la información, ej. "Guía Explora China 013" */
+  source: string;
+  /** La idea que no hay que olvidar, en una frase */
+  headline: string;
+  sections: FieldGuideSection[];
+}
+
+export interface FieldGuideSection {
+  /** Emoji que abre la sección, ej. "🚫" */
+  icon: string;
+  title: string;
+  items: string[];
 }
 
 export interface PendingItem {

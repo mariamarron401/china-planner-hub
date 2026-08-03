@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
-import { MapPin, Calendar, Clock, ShoppingCart, ExternalLink, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { MapPin, Calendar, Clock, ShoppingCart, ExternalLink, Info, ChevronDown, ChevronUp, Compass } from 'lucide-react';
 
 export default function Activities() {
   const { data, updateActivity } = useTrip();
   const { activities, cities } = data;
   const [openNotes, setOpenNotes] = useState<Record<string, boolean>>({});
+  const [openGuides, setOpenGuides] = useState<Record<string, boolean>>({});
 
   const getCityName = (id: string) => cities.find(c => c.id === id)?.cityName || id;
 
@@ -22,6 +23,7 @@ export default function Activities() {
   };
 
   const toggleNotes = (id: string) => setOpenNotes(p => ({ ...p, [id]: !p[id] }));
+  const toggleGuide = (id: string) => setOpenGuides(p => ({ ...p, [id]: !p[id] }));
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -113,6 +115,58 @@ export default function Activities() {
                 </button>
                 {openNotes[act.id] && (
                   <div className="px-4 pb-4 text-xs text-muted-foreground leading-relaxed">{act.notes}</div>
+                )}
+              </div>
+            )}
+
+            {/* Guía sobre el terreno — consejos de guías locales, plegable por secciones */}
+            {act.fieldGuide && (
+              <div className="border-t border-border bg-accent/30">
+                {/* La idea clave se ve siempre, sin tener que desplegar nada */}
+                <div className="px-4 pt-3 flex items-start gap-2">
+                  <Compass className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <div className="text-[10px] font-semibold uppercase tracking-wide text-primary/80">
+                      Guía sobre el terreno
+                    </div>
+                    <p className="text-xs font-semibold text-foreground leading-snug mt-0.5">
+                      {act.fieldGuide.headline}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => toggleGuide(act.id)}
+                  className="flex items-center justify-between w-full px-4 py-2.5 text-xs font-medium text-muted-foreground"
+                >
+                  <span>
+                    {openGuides[act.id] ? 'Ocultar' : 'Ver'} los {act.fieldGuide.sections.length} bloques de consejos
+                  </span>
+                  {openGuides[act.id] ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </button>
+
+                {openGuides[act.id] && (
+                  <div className="px-4 pb-4 space-y-3">
+                    {act.fieldGuide.sections.map(section => (
+                      <div key={section.title} className="rounded-xl bg-card border border-border p-3">
+                        <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                          <span aria-hidden="true">{section.icon}</span>
+                          {section.title}
+                        </div>
+                        <ul className="mt-2 space-y-1.5">
+                          {section.items.map((item, i) => (
+                            <li key={i} className="flex gap-1.5 text-xs text-muted-foreground leading-relaxed">
+                              <span className="text-primary shrink-0" aria-hidden="true">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                    <p className="text-[10px] text-muted-foreground/80 pt-1">
+                      Fuente: {act.fieldGuide.source}
+                    </p>
+                  </div>
                 )}
               </div>
             )}
