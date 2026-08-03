@@ -330,14 +330,24 @@ export const initialTripData: TripData = {
   ],
   activities: [
     {
+      id: 'act-8', cityId: 'beijing', title: 'Ciudad Prohibida (Museo del Palacio)', type: 'Medio día',
+      duration: 'Medio día (3-4h)', price: 8, currency: 'EUR', status: 'Por reservar',
+      recommendedDate: 'Domingo 11 oct (mañana)',
+      whenToBuy: '⚠️ El 4 oct a las 20:00 hora china (14:00 en España) · ventana de solo 7 días',
+      platform: 'Web/mini-programa oficial del Museo del Palacio (no revendedores)',
+      priceText: '~8 €/persona (60 CNY, temporada alta hasta el 31 oct)',
+      bookingUrl: 'https://gugong.ktmtech.cn/',
+      notes: '🚫 CIERRA LOS LUNES: por eso va el domingo 11 y la Muralla el lunes 12, y no al revés. 🎟️ Entrada nominal con pasaporte y cupo diario limitado: se agota el mismo día que se libera. La venta abre 7 días antes a las 20:00 hora china, o sea el 4 de octubre a las 20:00 en Pekín = 14:00 en España (España aún en horario de verano). Poned alarma. 🪪 Cada uno reserva con SU pasaporte y se entra escaneándolo, sin taquilla física. 🕘 Se entra por la Puerta del Mediodía (Meridian Gate, sur) y se sale por la Puerta Divina (norte): id pronto y salid por el norte hacia la colina de Jingshan, que tiene la mejor vista de los tejados desde arriba. ℹ️ Reconfirmad al comprar si las galerías del Tesoro y de los Relojes van incluidas o son suplemento, que ha cambiado en los últimos años.',
+    },
+    {
       id: 'act-1', cityId: 'beijing', title: 'Gran Muralla China (Mutianyu + tobogán)', type: 'Excursión',
       duration: 'Medio día (mañana)', price: 25, currency: 'EUR', status: 'Por reservar',
-      recommendedDate: 'Domingo 11 oct (mañana temprano)',
-      whenToBuy: '~1-2 oct · ventana ~10 días',
+      recommendedDate: 'Lunes 12 oct (mañana temprano)',
+      whenToBuy: '~2-3 oct · ventana ~10 días',
       platform: 'Trip.com o web oficial Mutianyu',
       priceText: '~25 €/persona',
       bookingUrl: 'https://en.mutianyugreatwall.com/reservation-center/tickets',
-      notes: 'Por qué el 11: es vuestro primer día completo en Pekín (el 10 llegáis de madrugada) y dejáis el 12 de reserva por si llueve, ya que el tobogán NO funciona con lluvia/nieve. Precio = entrada 40 CNY + bus lanzadera 15 CNY + combo telesilla (subida) y tobogán (bajada) 140 CNY. Se accede a todo con el pasaporte. El tobogán no lo pueden usar mayores de 60 años.',
+      notes: 'Por qué el 12: es el último día completo en Pekín (el 13 salís en tren a Xi\'an a las 09:55) y encaja porque la Ciudad Prohibida cierra los lunes, así que el domingo 11 se aprovecha para el palacio y el lunes 12 para la Muralla. ⚠️ CONTRAPARTIDA A VIGILAR: al ser el último día en Pekín ya no queda jornada de reserva por si llueve, y el tobogán NO funciona con lluvia ni nieve. Mirad la previsión nada más llegar, el 10: si dan lluvia para el 12 y bueno para el 11, intercambiad los dos días (Muralla el domingo 11, Ciudad Prohibida el lunes 12 NO es posible porque cierra los lunes — en ese caso el palacio se quedaría fuera, así que es decisión vuestra qué preferís salvar). Precio = entrada 40 CNY + bus lanzadera 15 CNY + combo telesilla (subida) y tobogán (bajada) 140 CNY. Se accede a todo con el pasaporte. El tobogán no lo pueden usar mayores de 60 años.',
     },
     {
       id: 'act-5', cityId: 'xian', title: 'Guerreros de Terracota', type: 'Excursión',

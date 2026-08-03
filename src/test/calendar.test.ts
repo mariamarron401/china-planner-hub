@@ -50,7 +50,8 @@ describe('calendario día a día', () => {
   });
 
   it('coloca las excursiones en su día', () => {
-    expect(at('2026-10-11').activities.map(a => a.title).join()).toContain('Muralla');
+    expect(at('2026-10-11').activities.map(a => a.title).join()).toContain('Ciudad Prohibida');
+    expect(at('2026-10-12').activities.map(a => a.title).join()).toContain('Muralla');
     expect(at('2026-10-14').activities.map(a => a.title).join()).toContain('Terracota');
     expect(at('2026-10-17').activities.map(a => a.title).join()).toContain('Pandas');
   });
