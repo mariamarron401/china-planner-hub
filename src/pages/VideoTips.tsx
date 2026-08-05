@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
 import { useVideoTips } from '@/hooks/useVideoTips';
-import { Plus, ExternalLink, Trash2, Video, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, ExternalLink, Trash2, Video, ChevronDown, ChevronUp, Sparkles, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,10 +15,14 @@ const platformLabels: Record<VideoTip['platform'], string> = {
   other: 'Otro',
 };
 
+const ANALYSIS_SERVER_URL = import.meta.env.VITE_VIDEO_ANALYSIS_SERVER_URL || 'https://china-video-analysis.onrender.com';
+
 export default function VideoTips() {
   const { data } = useTrip();
   const { videoTips, addVideoTip, deleteVideoTip } = useVideoTips();
 
+  const [analyzeUrl, setAnalyzeUrl] = useState('');
+  const [analyzing, setAnalyzing] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const [showAdd, setShowAdd] = useState(false);
@@ -30,6 +34,35 @@ export default function VideoTips() {
 
   const resetModalState = () => {
     setNewUrl(''); setNewPlatform('tiktok'); setNewTitle(''); setNewTips(''); setNewCityId('');
+  };
+
+  const handleAnalyze = async () => {
+    if (!analyzeUrl.trim()) {
+      toast({ title: 'Pega primero la URL del vídeo', variant: 'destructive' });
+      return;
+    }
+    setAnalyzing(true);
+    try {
+      const res = await fetch(`${ANALYSIS_SERVER_URL}/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: analyzeUrl.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Error desconocido');
+      toast({ title: 'Vídeo analizado ✅', description: `"${data.title}" · ${data.tips?.length ?? 0} tips` });
+      setAnalyzeUrl('');
+    } catch (err: any) {
+      toast({
+        title: 'No se pudo analizar el vídeo',
+        description: err.message?.includes('Instagram')
+          ? 'Instagram ha bloqueado la descarga de este vídeo (protección anti-bot). Prueba con TikTok o pégalo a mano con el botón "+".'
+          : err.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   const handleAdd = async () => {
@@ -73,9 +106,31 @@ export default function VideoTips() {
             <Plus className="h-5 w-5" />
           </button>
         </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          Manda el enlace del vídeo público de TikTok/Instagram por chat al agente: él lo transcribe y lo deja guardado aquí. El botón "+" es solo para añadirlo a mano si lo prefieres.
-        </p>
+      </div>
+
+      {/* Analizar automáticamente */}
+      <div className="px-4 mb-4">
+        <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <h2 className="text-sm font-medium text-foreground">Analizar vídeo automáticamente</h2>
+          </div>
+          <p className="text-xs text-muted-foreground mb-3">
+            Pega el enlace de un vídeo público de TikTok (Instagram a veces lo bloquea) y se transcribe y guarda solo. Puede tardar hasta 1-2 minutos si el servidor llevaba un rato dormido.
+          </p>
+          <div className="flex gap-2">
+            <Input
+              value={analyzeUrl}
+              onChange={e => setAnalyzeUrl(e.target.value)}
+              placeholder="https://vm.tiktok.com/..."
+              disabled={analyzing}
+              className="flex-1"
+            />
+            <Button onClick={handleAnalyze} disabled={analyzing}>
+              {analyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Analizar'}
+            </Button>
+          </div>
+        </div>
       </div>
 
       <div className="px-4 space-y-2">
