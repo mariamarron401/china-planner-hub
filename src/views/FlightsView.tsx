@@ -2,43 +2,35 @@ import { useTrip } from '@/context/TripContext';
 import { Plane, Clock, Luggage, ArrowRight, Car } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FlightTimeline } from '@/types/trip';
+import MoreInfo from '@/components/MoreInfo';
 
-export default function Flights() {
+export default function FlightsView() {
   const { data } = useTrip();
   const outbound = data.flights.filter(f => f.direction === 'outbound');
   const returnFlights = data.flights.filter(f => f.direction === 'return');
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-4">
-        <h1 className="text-2xl font-bold text-foreground">🛫 Vuelos</h1>
-        <p className="text-sm text-muted-foreground mt-1">Air China · Economy · 2 piezas equipaje</p>
-      </div>
+    <div className="px-4 space-y-6">
+      <FlightSection title="✈️ Ida — 9 oct 2026" legs={outbound} />
+      <FlightSection title="✈️ Vuelta — 1 nov 2026" legs={returnFlights} />
 
-      <div className="px-4 mb-4">
-        <Link to="/transportes" className="flex items-center gap-2.5 bg-primary/10 border border-primary/30 rounded-xl px-3.5 py-3 text-primary">
-          <Car className="h-5 w-5 flex-shrink-0" />
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold leading-tight">Traslados de aeropuerto</div>
-            <div className="text-[11px] opacity-80 leading-tight">A qué hora salir del hotel, cómo ir y cuánto cuesta — en Transportes → Aeropuertos</div>
-          </div>
-          <ArrowRight className="h-4 w-4 flex-shrink-0" />
-        </Link>
-      </div>
-
-      <div className="px-4 space-y-6">
-        <div>
-          <h2 className="text-sm font-bold text-foreground mb-3">🕐 EL CAMBIO DE HORA, EXPLICADO</h2>
-          <div className="space-y-4">
-            {(data.flightTimelines ?? []).map(tl => (
-              <TimelineCard key={tl.id} tl={tl} />
-            ))}
-            <DstCard />
-          </div>
+      <Link to="/moverse/traslados" className="flex items-center gap-2.5 bg-primary/10 border border-primary/30 rounded-xl px-3.5 py-3 text-primary">
+        <Car className="h-5 w-5 flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-semibold leading-tight">Cómo llegar al aeropuerto</div>
+          <div className="text-[11px] opacity-80 leading-tight">Hora de salir del hotel, opciones y precio</div>
         </div>
+        <ArrowRight className="h-4 w-4 flex-shrink-0" />
+      </Link>
 
-        <FlightSection title="✈️ IDA — 9 OCT 2026" legs={outbound} />
-        <FlightSection title="✈️ VUELTA — 1 NOV 2026" legs={returnFlights} />
+      <div>
+        <h2 className="text-sm font-bold text-foreground mb-3">🕐 El cambio de hora</h2>
+        <div className="space-y-4">
+          {(data.flightTimelines ?? []).map(tl => (
+            <TimelineCard key={tl.id} tl={tl} />
+          ))}
+          <DstCard />
+        </div>
       </div>
     </div>
   );
@@ -94,14 +86,16 @@ function TimelineCard({ tl }: { tl: FlightTimeline }) {
 
         <p className="text-xs text-foreground leading-snug">{tl.summary}</p>
 
-        <div className="mt-3 pt-3 border-t border-border space-y-1.5">
-          {tl.advice.map((a, i) => (
-            <div key={i} className="flex items-start gap-1.5 text-[11px] leading-snug text-muted-foreground">
-              <span className="text-primary flex-shrink-0">→</span>
-              <span>{a}</span>
-            </div>
-          ))}
-        </div>
+        {tl.advice.length > 0 && (
+          <MoreInfo label={`${tl.advice.length} consejos para este vuelo`}>
+            {tl.advice.map((a, i) => (
+              <p key={i} className="flex items-start gap-1.5">
+                <span className="text-primary flex-shrink-0">→</span>
+                <span>{a}</span>
+              </p>
+            ))}
+          </MoreInfo>
+        )}
       </div>
     </div>
   );
@@ -130,10 +124,7 @@ function DstCard() {
         <Clock className="h-3.5 w-3.5" /> ¿Por qué 6 h a la ida y 7 h a la vuelta?
       </div>
       <p className="text-xs text-foreground leading-snug">
-        Porque <strong>el cambio de hora en España os pilla estando ya en China</strong>. El domingo{' '}
-        <strong>25 de octubre</strong> a las 03:00 en España se atrasan los relojes a las 02:00 (entra el horario de invierno).
-        Ese día vosotros estáis en <strong>Wulingyuan</strong> y no notáis nada, pero a partir de ese momento la diferencia
-        con casa pasa de 6 a 7 horas.
+        Porque <strong>el cambio de hora en España os pilla estando ya en China</strong>, el 25 de octubre.
       </p>
       <div className="mt-3 grid grid-cols-2 gap-2">
         <div className="p-2.5 rounded-lg bg-muted">
@@ -147,10 +138,18 @@ function DstCard() {
           <div className="text-[10px] text-muted-foreground leading-tight">China va 7 h por delante de España</div>
         </div>
       </div>
-      <p className="text-[11px] text-muted-foreground leading-snug mt-3">
-        Práctico para llamar a casa: si en China es mediodía, en España son las 6 de la mañana (o las 5 después del día 25).
-        En China no se cambia la hora nunca, es UTC+8 todo el año y en todo el país, aunque sea enorme.
-      </p>
+      <MoreInfo label="Cómo funciona y cómo calcular la hora de casa">
+        <p>
+          El domingo <span className="font-medium text-foreground">25 de octubre</span> a las 03:00 en España se atrasan
+          los relojes a las 02:00 (entra el horario de invierno). Ese día vosotros estáis en{' '}
+          <span className="font-medium text-foreground">Wulingyuan</span> y no notáis nada, pero a partir de ese momento
+          la diferencia con casa pasa de 6 a 7 horas.
+        </p>
+        <p>
+          Práctico para llamar a casa: si en China es mediodía, en España son las 6 de la mañana (o las 5 después del
+          día 25). En China no se cambia la hora nunca, es UTC+8 todo el año y en todo el país, aunque sea enorme.
+        </p>
+      </MoreInfo>
     </div>
   );
 }

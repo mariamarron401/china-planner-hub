@@ -3,9 +3,10 @@ import { useTrip } from '@/context/TripContext';
 import { AppTask, AppTaskGroup, EsimPlan } from '@/types/trip';
 import { isAppTaskComplete } from '@/lib/calculations';
 import {
-  Smartphone, Zap, TrainFront, MapPinned, Signal, Ban, CheckCircle2, Circle,
-  AlertTriangle, Info, ExternalLink, CalendarClock, Wifi,
+  Zap, TrainFront, MapPinned, Signal, Ban, CheckCircle2, Circle,
+  AlertTriangle, ExternalLink, CalendarClock, Wifi,
 } from 'lucide-react';
+import MoreInfo from '@/components/MoreInfo';
 
 // Cuenta atrás en vivo contra el día real: así las fechas nunca quedan desfasadas
 // y no hay que volver a tocar el código cada semana.
@@ -32,7 +33,7 @@ const GROUPS: { key: AppTaskGroup; label: string; icon: typeof Zap; blurb: strin
   { key: 'descartada', label: 'Descartadas', icon: Ban, blurb: 'Estaban en la lista inicial y se han descartado a propósito. No hay que hacer nada.' },
 ];
 
-export default function AppsSetup() {
+export default function AppsView() {
   const { data, updateAppTask } = useTrip();
   const { tasks, esim, goldenRules } = data.appSetup;
   const [group, setGroup] = useState<AppTaskGroup>('hoy');
@@ -52,54 +53,52 @@ export default function AppsSetup() {
   const groupMeta = GROUPS.find(g => g.key === group);
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="gradient-hero px-5 pt-12 pb-8 rounded-b-3xl">
-        <div className="flex items-center gap-2 text-primary-foreground/80 text-xs font-semibold uppercase tracking-wide">
-          <Smartphone className="h-3.5 w-3.5" /> Apps y conectividad
-        </div>
-        <h1 className="text-2xl font-bold text-primary-foreground mt-1">Todo se configura desde España</h1>
-
-        <div className="mt-4 bg-primary-foreground/15 rounded-2xl px-4 py-3">
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-primary-foreground leading-none">{doneCount}</span>
-            <span className="text-primary-foreground/80 text-sm">de {active.length} gestiones listas</span>
-          </div>
-          <div className="mt-2 h-1.5 bg-primary-foreground/25 rounded-full overflow-hidden">
-            <div className="h-full bg-primary-foreground rounded-full transition-all" style={{ width: `${pct}%` }} />
-          </div>
-        </div>
-
-        {nextUp && (
-          <div className="mt-3 bg-primary-foreground/15 rounded-2xl px-4 py-3">
-            <div className="text-[10px] uppercase tracking-wide text-primary-foreground/80">Lo siguiente con fecha</div>
-            <div className="text-sm font-bold text-primary-foreground leading-tight mt-0.5">
-              {countdownLabel(nextUp.daysLeft)} · {nextUp.task.emoji} {nextUp.task.name}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Los 3 hechos que condicionan el plan entero */}
-      <div className="px-4 -mt-4">
+    <>
+      <div className="px-4">
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-            <Info className="h-3.5 w-3.5" /> Por qué se hace todo ahora y desde casa
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-extrabold text-foreground leading-none">{doneCount}</span>
+            <span className="text-muted-foreground text-sm">de {active.length} gestiones listas</span>
           </div>
-          <ul className="space-y-2 text-[13px] text-foreground leading-snug">
-            <li>
-              📵 <span className="font-medium">La e-SIM de Holafly es de solo datos:</span> no da número chino ni recibe SMS.
-              El número de todas las cuentas es vuestro <span className="font-medium">+34</span>, y el SMS de registro
-              llega sin problemas ahora, no allí.
-            </li>
-            <li>
-              📱 <span className="font-medium">Los dos iPhone se configuran igual.</span> El 14 y el 17 Pro comprados en
-              España conservan bandeja de SIM física: SIM española puesta + e-SIM de Holafly encima.
-            </li>
-            <li>
-              🛡️ <span className="font-medium">La VPN de Holafly va incluida, pero es un único punto de fallo.</span> Si
-              cae, se van Google, WhatsApp y las pantallas «Qué hacer» y «Pendientes» de esta app.
-            </li>
-          </ul>
+          <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${pct}%` }} />
+          </div>
+
+          {nextUp && (
+            <div className="mt-3 rounded-lg bg-primary text-primary-foreground px-3 py-2">
+              <div className="text-[10px] uppercase tracking-wide opacity-80">Lo siguiente con fecha</div>
+              <div className="text-sm font-bold leading-tight mt-0.5">
+                {countdownLabel(nextUp.daysLeft)} · {nextUp.task.emoji} {nextUp.task.name}
+              </div>
+            </div>
+          )}
+
+          {/* Los 3 hechos que condicionan el plan entero */}
+          <MoreInfo label="Por qué se hace todo ahora y desde casa">
+            <p>
+              📵 <span className="font-medium text-foreground">La e-SIM de Holafly es de solo datos:</span> no da número
+              chino ni recibe SMS. El número de todas las cuentas es vuestro{' '}
+              <span className="font-medium text-foreground">+34</span>, y el SMS de registro llega sin problemas ahora,
+              no allí.
+            </p>
+            <p>
+              📱 <span className="font-medium text-foreground">Los dos iPhone se configuran igual.</span> El 14 y el 17
+              Pro comprados en España conservan bandeja de SIM física: SIM española puesta + e-SIM de Holafly encima.
+            </p>
+            <p>
+              🛡️{' '}
+              <span className="font-medium text-foreground">
+                La VPN de Holafly va incluida, pero es un único punto de fallo.
+              </span>{' '}
+              Si cae, se van Google, WhatsApp y las pantallas «Qué hacer» y «Pendientes» de esta app.
+            </p>
+          </MoreInfo>
+
+          <MoreInfo label="Cuatro reglas que valen para todo">
+            {goldenRules.map((r, i) => (
+              <p key={i} className="text-foreground">· {r}</p>
+            ))}
+          </MoreInfo>
         </div>
       </div>
 
@@ -140,21 +139,7 @@ export default function AppsSetup() {
           <TaskCard key={t.id} task={t} onUpdate={updateAppTask} />
         ))}
       </div>
-
-      <div className="px-4 mt-5">
-        <div className="bg-muted/50 rounded-xl border border-border p-4">
-          <h2 className="text-sm font-bold text-foreground mb-2">📌 Cuatro reglas que valen para todo</h2>
-          <ul className="space-y-1.5">
-            {goldenRules.map((r, i) => (
-              <li key={i} className="text-[13px] text-foreground leading-snug flex gap-2">
-                <span className="text-muted-foreground">·</span>
-                <span>{r}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -233,7 +218,9 @@ function TaskCard({
       )}
 
       {task.why && (
-        <p className="mt-2 text-[11px] text-muted-foreground leading-snug italic">💡 {task.why}</p>
+        <MoreInfo label="Por qué esa fecha">
+          <p>{task.why}</p>
+        </MoreInfo>
       )}
 
       {task.url && (
@@ -322,14 +309,11 @@ function EsimCard({ esim }: { esim: EsimPlan }) {
           </div>
         </div>
 
-        <ul className="mt-3 space-y-1.5">
+        <MoreInfo label={`${esim.facts.length} cosas que saber de este plan`}>
           {esim.facts.map((f, i) => (
-            <li key={i} className="text-[12px] text-muted-foreground leading-snug flex gap-2">
-              <span>·</span>
-              <span>{f}</span>
-            </li>
+            <p key={i}>· {f}</p>
           ))}
-        </ul>
+        </MoreInfo>
       </div>
 
       <div className="bg-card rounded-xl border border-border p-4 shadow-sm">

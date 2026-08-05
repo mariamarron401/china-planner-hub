@@ -39,7 +39,7 @@ export default function ActivityDetail() {
       <div className="min-h-screen bg-background pb-24">
         <div className="px-4 pt-12">
           <button
-            onClick={() => navigate('/actividades')}
+            onClick={() => navigate('/descubrir/actividades')}
             className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -65,7 +65,7 @@ export default function ActivityDetail() {
       {/* Cabecera con vuelta atrás */}
       <div className="px-4 pt-12 pb-2">
         <button
-          onClick={() => navigate('/actividades')}
+          onClick={() => navigate('/descubrir/actividades')}
           className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground active:opacity-70"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -236,7 +236,7 @@ export default function ActivityDetail() {
                 </div>
               ))}
             </div>
-            <Link to="/tips-videos" className="mt-2 inline-block px-1 text-[11px] font-medium text-primary">
+            <Link to="/descubrir/videos" className="mt-2 inline-block px-1 text-[11px] font-medium text-primary">
               Ver todos los tips de vídeos →
             </Link>
           </section>

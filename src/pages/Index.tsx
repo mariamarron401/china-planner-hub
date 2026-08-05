@@ -1,27 +1,33 @@
 import { useTrip } from '@/context/TripContext';
 import { usePendingItems } from '@/hooks/usePendingItems';
 import { getGlobalBudget, isAppTaskComplete } from '@/lib/calculations';
+import { buildNextActions, countdownLabel, formatDateLabel } from '@/lib/nextUp';
 import { Link } from 'react-router-dom';
-import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, CalendarRange, ChevronRight, ListTodo, Compass, Plane, ArrowLeftRight, TrainFront, Hourglass, Smartphone } from 'lucide-react';
+import {
+  Moon, Users, ChevronRight, Hourglass, CalendarRange, Route, Compass, ListTodo,
+  MapPin, Bell,
+} from 'lucide-react';
 
+/**
+ * Inicio = una sola pregunta respondida: "¿qué me toca hacer ahora?".
+ * El detalle de cada cosa vive en su pantalla; aquí solo el titular y el enlace.
+ */
 export default function Dashboard() {
-  const { data, orderedCities, toggleRouteDirection } = useTrip();
+  const { data, orderedCities } = useTrip();
   const { items: pendingItems } = usePendingItems();
-  const { trip, cities, hotels, selectedHotels, activities, flights, transportLegs } = data;
+  const { trip, cities, hotels, selectedHotels, flights } = data;
+
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
-  const openPending = pendingItems.filter(p => p.status === 'open');
-  // Progreso de configuración de apps (las descartadas no cuentan: no hay nada que hacer).
+  const openPending = pendingItems.filter(p => p.status === 'open').length;
   const appsTasks = data.appSetup.tasks.filter(t => t.group !== 'descartada');
-  const appsDone = appsTasks.filter(isAppTaskComplete).length;
-  const appsPct = appsTasks.length ? Math.round((appsDone / appsTasks.length) * 100) : 0;
-  const outbound = flights.filter(f => f.direction === 'outbound');
-  const returnFlights = flights.filter(f => f.direction === 'return');
-  const firstCity = orderedCities[0];
-  const lastCity = orderedCities[orderedCities.length - 1];
-  const cityName = (id: string) => cities.find(c => c.id === id)?.cityName?.split(' (')[0] || id;
+  const appsPending = appsTasks.filter(t => !isAppTaskComplete(t)).length;
+
+  const actions = buildNextActions(data, pendingItems);
+  const next = actions[0];
+  const following = actions.slice(1, 4);
 
   // Cuenta atrás hasta la salida del vuelo de ida.
-  const departureDate = outbound[0]?.departureDateTime;
+  const departureDate = flights.find(f => f.direction === 'outbound')?.departureDateTime;
   let daysToGo: number | null = null;
   if (departureDate) {
     const dep = new Date(departureDate);
@@ -32,7 +38,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <div className="gradient-hero px-5 pt-12 pb-8 rounded-b-3xl">
+      <div className="gradient-hero px-5 pt-12 pb-7 rounded-b-3xl">
         <h1 className="text-2xl font-bold text-primary-foreground">{trip.title}</h1>
         <p className="text-primary-foreground/80 text-sm mt-1">{trip.dateRangeText}</p>
 
@@ -44,190 +50,149 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div className="flex gap-4 mt-5">
-          <StatPill icon={<Moon className="h-4 w-4" />} value={trip.totalNights} label="noches" />
-          <StatPill icon={<MapPin className="h-4 w-4" />} value={cities.length} label="ciudades" />
-          <StatPill icon={<Users className="h-4 w-4" />} value={trip.travelers} label="viajeros" />
+        <div className="flex gap-3 mt-4">
+          <StatPill icon={<Moon className="h-4 w-4" />} value={`${trip.totalNights} noches`} />
+          <StatPill icon={<MapPin className="h-4 w-4" />} value={`${cities.length} ciudades`} />
+          <StatPill icon={<Users className="h-4 w-4" />} value={`${trip.travelers} viajeros`} />
         </div>
       </div>
 
-      <div className="px-4 -mt-4 space-y-4">
-        {/* Flights summary */}
-        <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in">
-          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-            <Plane className="h-3.5 w-3.5" /> Vuelos
-          </div>
-          <div className="space-y-2 text-sm">
-            {outbound.length > 0 && (
-              <div className="flex items-center gap-2 text-foreground">
-                <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded font-medium">IDA</span>
-                {outbound[0].fromAirport} → {outbound[outbound.length - 1].toAirport}
-                <span className="text-xs text-muted-foreground ml-auto">{outbound[0].departureDateTime.split('T')[0]}</span>
-              </div>
-            )}
-            {returnFlights.length > 0 && (
-              <div className="flex items-center gap-2 text-foreground">
-                <span className="text-xs bg-secondary/20 text-secondary-foreground px-2 py-0.5 rounded font-medium">VUELTA</span>
-                {returnFlights[0].fromAirport} → {returnFlights[returnFlights.length - 1].toAirport}
-                <span className="text-xs text-muted-foreground ml-auto">{returnFlights[0].departureDateTime.split('T')[0]}</span>
-              </div>
-            )}
-          </div>
-          <Link to="/vuelos" className="text-xs text-primary font-medium mt-2 inline-block">Ver detalle →</Link>
-        </div>
-
-        {/* Route card */}
-        <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.03s' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              <Compass className="h-3.5 w-3.5" /> Ruta
+      <div className="px-4 -mt-4 space-y-3">
+        {/* LO SIGUIENTE QUE TOCA — la única cosa urgente de la pantalla */}
+        {next ? (
+          <Link
+            to={next.to}
+            className="block bg-card rounded-2xl border-2 border-primary/40 p-4 shadow-sm animate-fade-in"
+          >
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-primary">
+              <Bell className="h-3.5 w-3.5" /> Lo siguiente que te toca
             </div>
-            <button onClick={toggleRouteDirection}
-              className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full transition-all hover:bg-primary/20">
-              <ArrowLeftRight className="h-3 w-3" />
-              {firstCity?.cityName.split(' (')[0]} → {lastCity?.cityName.split(' (')[0]}
-            </button>
+            <div className="mt-1.5 flex items-baseline gap-2">
+              <span className="text-lg font-extrabold text-foreground leading-none">
+                {countdownLabel(next.daysLeft)}
+              </span>
+              <span className="text-xs text-muted-foreground">{formatDateLabel(next.iso)}</span>
+            </div>
+            <p className="text-sm text-foreground leading-snug mt-1.5">{next.title}</p>
+            <span className="text-xs font-medium text-primary mt-2 inline-flex items-center">
+              Ver qué hacer <ChevronRight className="h-3.5 w-3.5" />
+            </span>
+          </Link>
+        ) : (
+          <div className="bg-card rounded-2xl border border-border p-4 shadow-sm text-sm text-muted-foreground">
+            No queda nada con fecha pendiente. 🎉
           </div>
-          <div className="flex items-center gap-1.5 flex-wrap">
+        )}
+
+        {/* Las 3 siguientes, en una línea cada una */}
+        {following.length > 0 && (
+          <div className="bg-card rounded-xl border border-border shadow-sm divide-y divide-border">
+            {following.map(a => (
+              <Link key={a.id} to={a.to} className="flex items-center gap-3 px-4 py-2.5">
+                <span className="text-[11px] font-mono font-bold text-primary w-[68px] shrink-0 whitespace-nowrap">
+                  {formatDateLabel(a.iso)}
+                </span>
+                <span className="text-xs text-foreground leading-snug flex-1 line-clamp-2">{a.title}</span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Ruta, de un vistazo */}
+        <Link to="/plan/ciudades" className="block bg-card rounded-xl border border-border p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+            <Route className="h-3.5 w-3.5" /> La ruta
+          </div>
+          <div className="flex items-center gap-1 flex-wrap">
             {orderedCities.map((c, i) => (
-              <span key={c.id} className="flex items-center gap-1.5">
-                <span className="text-sm font-medium text-foreground">{c.cityName.split(' (')[0]}</span>
+              <span key={c.id} className="flex items-center gap-1">
+                <span className="text-[13px] font-medium text-foreground">{c.cityName.split(' (')[0]}</span>
                 {i < orderedCities.length - 1 && <ChevronRight className="h-3 w-3 text-muted-foreground" />}
               </span>
             ))}
           </div>
+        </Link>
+
+        {/* Las 4 secciones, con lo que queda por hacer en cada una */}
+        <div className="grid grid-cols-2 gap-3">
+          <BigLink
+            to="/plan/dias"
+            icon={<CalendarRange className="h-5 w-5" />}
+            label="Plan"
+            hint="Día a día, ciudades y hoteles"
+          />
+          <BigLink
+            to="/moverse/trayectos"
+            icon={<Route className="h-5 w-5" />}
+            label="Moverse"
+            hint="Trenes, traslados y vuelos"
+          />
+          <BigLink
+            to="/descubrir/actividades"
+            icon={<Compass className="h-5 w-5" />}
+            label="Qué hacer"
+            hint={`${data.activities.length} actividades y sitios`}
+          />
+          <BigLink
+            to="/gestiones/pendientes"
+            icon={<ListTodo className="h-5 w-5" />}
+            label="Por hacer"
+            hint={`${openPending} pendientes · ${appsPending} apps`}
+            badge={openPending + appsPending}
+          />
         </div>
 
-        {/* Trenes internos / trayectos */}
-        {transportLegs.length > 0 && (
-          <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.04s' }}>
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                <TrainFront className="h-3.5 w-3.5" /> Trenes internos
-              </div>
-              <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">{transportLegs.filter(l => l.fromStation || l.toStation).length} trenes</span>
+        {/* Dinero, en una línea */}
+        <Link to="/gestiones/dinero" className="flex items-center gap-3 bg-card rounded-xl border border-border px-4 py-3 shadow-sm">
+          <div className="flex-1">
+            <div className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Hoteles</div>
+            <div className="text-lg font-bold text-foreground leading-tight">
+              {budget.allSelected ? `${budget.selectedTotal}€` : `~${budget.avgTotal}€`}
+              <span className="text-xs font-normal text-muted-foreground ml-1.5">
+                ~{budget.avgPerNight}€/noche
+              </span>
             </div>
-            <div className="space-y-2.5">
-              {transportLegs.slice(0, 3).map(leg => (
-                <div key={leg.id} className="text-sm">
-                  <div className="flex items-center gap-1.5 text-foreground font-medium">
-                    <span>{cityName(leg.fromCityId)}</span>
-                    <TrainFront className="h-3 w-3 text-primary flex-shrink-0" />
-                    <span>{cityName(leg.toCityId)}</span>
-                    {leg.travelDate && <span className="text-[11px] text-muted-foreground ml-auto">{leg.travelDate.replace(/\s*\(.*\)/, '')}</span>}
-                  </div>
-                  {leg.suggestedDeparture && (
-                    <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">{leg.suggestedDeparture.replace(/^⭐\s*/, 'Salida ')}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-            <Link to="/trayectos" className="text-xs text-primary font-medium mt-3 inline-block">Ver los {transportLegs.length} tramos puerta a puerta →</Link>
           </div>
-        )}
-
-        {/* Budget preview */}
-        <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.05s' }}>
-          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-            <Wallet className="h-3.5 w-3.5" /> Presupuesto hoteles
-          </div>
-          {budget.allSelected ? (
-            <div>
-              <span className="text-2xl font-bold text-foreground">{budget.selectedTotal}€</span>
-              <span className="text-sm text-muted-foreground ml-2">total seleccionado</span>
-            </div>
-          ) : (
-            <div className="grid grid-cols-3 gap-3">
-              <BudgetMini label="Mínimo" value={`${budget.minTotal}€`} />
-              <BudgetMini label="Promedio" value={`${budget.avgTotal}€`} />
-              <BudgetMini label="Máximo" value={`${budget.maxTotal}€`} />
-            </div>
-          )}
-          <div className="flex gap-4 mt-3 text-xs text-muted-foreground">
-            <span>~{budget.avgPerNight}€/noche</span>
-            <span>~{budget.avgPerPersonPerNight}€/persona/noche</span>
-          </div>
-        </div>
-
-        {/* Pending items */}
-        <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.1s' }}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              <AlertCircle className="h-3.5 w-3.5" /> Pendientes
-            </div>
-            <span className="bg-travel-pending-bg text-travel-pending text-xs font-bold px-2 py-0.5 rounded-full">{openPending.length}</span>
-          </div>
-          <div className="space-y-2">
-            {openPending.slice(0, 3).map(p => (
-              <div key={p.id} className="flex items-start gap-2">
-                <div className={`mt-1 h-2 w-2 rounded-full flex-shrink-0 ${p.priority === 'high' ? 'bg-travel-important' : 'bg-travel-pending'}`} />
-                <span className="text-sm text-foreground">{p.title}</span>
-              </div>
-            ))}
-            {openPending.length > 3 && (
-              <Link to="/pendientes" className="text-xs text-primary font-medium">Ver {openPending.length - 3} más →</Link>
-            )}
-          </div>
-        </div>
-
-        {/* Apps y conectividad */}
-        <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.12s' }}>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              <Smartphone className="h-3.5 w-3.5" /> Apps y conectividad
-            </div>
-            <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
-              {appsDone}/{appsTasks.length}
-            </span>
-          </div>
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-            <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${appsPct}%` }} />
-          </div>
-          <p className="text-xs text-muted-foreground mt-2 leading-snug">
-            {appsDone === appsTasks.length
-              ? 'Todo configurado. Solo queda comprar las e-SIM en octubre.'
-              : 'Se configura todo desde España con el número español: la e-SIM de Holafly es de solo datos y no recibe SMS.'}
-          </p>
-          <Link to="/apps" className="text-xs text-primary font-medium mt-2 inline-block">Ver qué toca hacer →</Link>
-        </div>
-
-        {/* Quick links */}
-        <div className="grid grid-cols-2 gap-3 animate-fade-in" style={{ animationDelay: '0.15s' }}>
-          <QuickLink to="/calendario" icon={<CalendarRange className="h-5 w-5" />} label="Calendario" />
-          <QuickLink to="/itinerario" icon={<CalendarDays className="h-5 w-5" />} label="Itinerario" />
-          <QuickLink to="/vuelos" icon={<Plane className="h-5 w-5" />} label="Vuelos" />
-          <QuickLink to="/actividades" icon={<Compass className="h-5 w-5" />} label={`Actividades (${activities.length})`} />
-          <QuickLink to="/pendientes" icon={<ListTodo className="h-5 w-5" />} label={`Pendientes (${openPending.length})`} />
-        </div>
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+        </Link>
       </div>
     </div>
   );
 }
 
-function StatPill({ icon, value, label }: { icon: React.ReactNode; value: number; label: string }) {
+function StatPill({ icon, value }: { icon: React.ReactNode; value: string }) {
   return (
     <div className="flex items-center gap-1.5 bg-primary-foreground/15 rounded-full px-3 py-1.5">
       <span className="text-primary-foreground/80">{icon}</span>
-      <span className="text-primary-foreground font-bold text-sm">{value}</span>
-      <span className="text-primary-foreground/70 text-xs">{label}</span>
+      <span className="text-primary-foreground font-semibold text-xs">{value}</span>
     </div>
   );
 }
 
-function BudgetMini({ label, value }: { label: string; value: string }) {
+function BigLink({
+  to,
+  icon,
+  label,
+  hint,
+  badge,
+}: {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+  hint: string;
+  badge?: number;
+}) {
   return (
-    <div className="text-center">
-      <div className="text-lg font-bold text-foreground">{value}</div>
-      <div className="text-[10px] text-muted-foreground">{label}</div>
-    </div>
-  );
-}
-
-function QuickLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
-  return (
-    <Link to={to} className="flex items-center gap-3 bg-card rounded-xl border border-border p-4 shadow-sm">
-      <span className="text-muted-foreground">{icon}</span>
-      <span className="text-sm font-medium text-foreground">{label}</span>
+    <Link to={to} className="relative bg-card rounded-xl border border-border p-4 shadow-sm">
+      {!!badge && (
+        <span className="absolute top-2.5 right-2.5 min-w-[20px] h-5 px-1.5 rounded-full bg-travel-important text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+          {badge}
+        </span>
+      )}
+      <span className="text-primary">{icon}</span>
+      <div className="text-sm font-bold text-foreground mt-2">{label}</div>
+      <div className="text-[11px] text-muted-foreground leading-snug mt-0.5">{hint}</div>
     </Link>
   );
 }

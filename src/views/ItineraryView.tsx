@@ -4,7 +4,7 @@ import { getHotelCalcs } from '@/lib/calculations';
 import { MapPin, Moon, Building2, Train, Compass, AlertTriangle, Plane, ArrowLeftRight, Camera } from 'lucide-react';
 import GalleryViewer from '@/components/GalleryViewer';
 
-export default function Itinerary() {
+export default function ItineraryView() {
   const { data, orderedCities, orderedTransportLegs, toggleRouteDirection } = useTrip();
   const { hotels, selectedHotels, activities, flights, cityGallery } = data;
   const [expandedGallery, setExpandedGallery] = useState<string | null>(null);
@@ -14,21 +14,15 @@ export default function Itinerary() {
   const lastFlight = [...flights].reverse().find(f => f.direction === 'return');
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Itinerario</h1>
-            <p className="text-sm text-muted-foreground mt-1">10 ciudades · 22 noches</p>
-          </div>
-          <button
-            onClick={toggleRouteDirection}
-            className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-full transition-all hover:bg-primary/20"
-          >
-            <ArrowLeftRight className="h-3 w-3" />
-            🔁 {data.trip.routeDirection === 'forward' ? 'Normal' : 'Invertido'}
-          </button>
-        </div>
+    <>
+      <div className="px-4 mb-3 flex justify-end">
+        <button
+          onClick={toggleRouteDirection}
+          className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-full transition-all hover:bg-primary/20"
+        >
+          <ArrowLeftRight className="h-3 w-3" />
+          {data.trip.routeDirection === 'forward' ? 'Orden normal' : 'Orden invertido'}
+        </button>
       </div>
 
       <div className="px-4 space-y-3">
@@ -184,7 +178,7 @@ export default function Itinerary() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
 

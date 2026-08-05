@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
 import { getHotelCalcs, getCityHotelStats, getHotelDeposits } from '@/lib/calculations';
-import { Check, ExternalLink, Coffee, Building2, Wallet, AlarmClock } from 'lucide-react';
+import { Check, ExternalLink, Coffee, Wallet, AlarmClock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import MoreInfo from '@/components/MoreInfo';
 
 type SortKey = 'total' | 'perNight' | 'perPersonPerNight';
 
-export default function Hotels() {
+export default function HotelsView() {
   const { data, selectHotel, deselectHotel, updateHotelPrice } = useTrip();
   const { cities, hotels, selectedHotels } = data;
   const earlyStarts = data.earlyStarts ?? [];
   const blocked = earlyStarts.filter(e => e.verdict === 'imposible');
   const tight = earlyStarts.filter(e => e.verdict === 'muy-justo');
+  // Arriba solo se pintan los días que exigen hacer algo; los que encajan de sobra
+  // se quedan plegados al final para no llenar la pantalla de "todo bien".
+  const actionableStarts = earlyStarts.filter(e => e.verdict !== 'ok');
+  const fittingStarts = earlyStarts.filter(e => e.verdict === 'ok');
   const [filterCity, setFilterCity] = useState<string>('all');
   const [sortBy, setSortBy] = useState<SortKey>('total');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -31,27 +36,20 @@ export default function Hotels() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-3">
-        <h1 className="text-2xl font-bold text-foreground">Hoteles</h1>
-        <p className="text-sm text-muted-foreground mt-1">Todos con desayuno incluido</p>
-      </div>
-
+    <>
       {/* Resumen de depósitos al check-in */}
       {deposits.items.length > 0 && (
-        <div className="px-4 mb-4">
+        <div className="px-4 mb-3">
           <div className="bg-card rounded-xl border-2 border-travel-pending/40 p-3 shadow-sm">
             <div className="flex items-center gap-2 text-xs font-semibold text-travel-pending uppercase tracking-wide">
-              <Wallet className="h-3.5 w-3.5" /> Depósitos al check-in
+              <Wallet className="h-3.5 w-3.5" /> Saldo para depósitos
             </div>
             <div className="mt-1.5 flex items-baseline gap-2">
               <span className="text-2xl font-bold text-foreground">¥{deposits.totalCny}</span>
               <span className="text-sm font-semibold text-muted-foreground">≈ {deposits.totalEur.toFixed(2)} €</span>
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Saldo que hay que llevar disponible en la tarjeta. Solo estos {deposits.items.length} hoteles piden depósito;
-              los otros {deposits.hotelsWithoutDeposit} no tienen esta política, así que el total está cerrado.
-              Se cobra al registrar la entrada y se devuelve al salir, pero la devolución puede tardar días → no contar con ese dinero durante el viaje.
+            <p className="text-[11px] text-foreground mt-0.5">
+              Hay que llevarlo libre en la tarjeta, además del presupuesto.
             </p>
             <div className="mt-2 pt-2 border-t border-border space-y-1">
               {deposits.items.map(d => (
@@ -65,43 +63,46 @@ export default function Hotels() {
                 </div>
               ))}
             </div>
-            <p className="text-[10px] text-travel-confirmed mt-2">
-              ✅ Total cerrado: los {deposits.hotelsWithoutDeposit} hoteles restantes no piden depósito.
-            </p>
+            <MoreInfo label="Cómo funciona el depósito">
+              <p>
+                Solo estos {deposits.items.length} hoteles piden depósito; los otros {deposits.hotelsWithoutDeposit} no
+                tienen esta política, así que el total está cerrado.
+              </p>
+              <p>
+                Se cobra al registrar la entrada y se devuelve al salir, pero la devolución puede tardar días → no
+                contéis con ese dinero durante el viaje.
+              </p>
+            </MoreInfo>
           </div>
         </div>
       )}
 
       {/* Madrugones vs. horario de desayuno */}
       {earlyStarts.length > 0 && (
-        <div className="px-4 mb-4">
+        <div className="px-4 mb-3">
           <div className="bg-card rounded-xl border-2 border-border p-3 shadow-sm">
             <div className="flex items-center gap-2 text-xs font-semibold text-foreground uppercase tracking-wide">
-              <AlarmClock className="h-3.5 w-3.5" /> Madrugones y desayuno
+              <AlarmClock className="h-3.5 w-3.5" /> Desayuno los días de madrugón
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              El desayuno está incluido y pagado en los 10 hoteles, así que lo que importa no es si lo hay, sino si os
-              da tiempo a tomarlo. Cruzando la hora real de salida de cada día con el horario de desayuno de cada hotel
-              (verificado el 3 ago 2026), hay <span className="font-semibold text-travel-pending">{blocked.length} días en que es imposible</span>
-              {' '}y <span className="font-semibold text-foreground">{tight.length} al límite</span>. En esos días hay que pedirlo para llevar la noche antes.
+            <p className="text-[11px] text-foreground mt-1">
+              <span className="font-semibold text-travel-pending">{blocked.length} días no da tiempo</span> y{' '}
+              <span className="font-semibold">{tight.length} van al límite</span>. Esos días, pedidlo para llevar la
+              noche antes.
             </p>
 
             <div className="mt-2 space-y-2">
-              {earlyStarts.map(es => {
+              {actionableStarts.map(es => {
                 const style =
                   es.verdict === 'imposible'
                     ? { box: 'bg-travel-pending-bg/50 border-travel-pending/40', label: 'text-travel-pending', tag: 'NO DA TIEMPO' }
-                    : es.verdict === 'muy-justo'
-                    ? { box: 'bg-muted/60 border-border', label: 'text-foreground', tag: 'AL LÍMITE' }
-                    : { box: 'bg-travel-confirmed-bg/40 border-travel-confirmed/30', label: 'text-travel-confirmed', tag: 'ENCAJA' };
+                    : { box: 'bg-muted/60 border-border', label: 'text-foreground', tag: 'AL LÍMITE' };
                 return (
                   <div key={es.id} className={`rounded-lg border px-2.5 py-2 ${style.box}`}>
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-[11px] font-semibold text-foreground leading-snug">{es.dateText}</p>
                       <span className={`text-[9px] font-bold whitespace-nowrap ${style.label}`}>{style.tag}</span>
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-1">{es.reason}</p>
-                    <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px]">
+                    <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px]">
                       <span className="text-muted-foreground">
                         Salís: <span className="font-semibold text-foreground">{es.leaveHotelAt}</span>
                       </span>
@@ -110,25 +111,43 @@ export default function Hotels() {
                       </span>
                       <span className={`font-semibold ${style.label}`}>
                         {es.marginMinutes < 0
-                          ? `Salís ${Math.abs(es.marginMinutes)} min antes de que abra`
+                          ? `${Math.abs(es.marginMinutes)} min antes de que abra`
                           : es.marginMinutes === 0
                           ? 'Justo en el filo'
-                          : `${es.marginMinutes} min de desayuno`}
+                          : `${es.marginMinutes} min`}
                       </span>
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-1.5 leading-snug">{es.advice}</p>
+                    <MoreInfo label="Qué hacer ese día">
+                      <p>{es.reason}</p>
+                      <p className="text-foreground">{es.advice}</p>
+                    </MoreInfo>
                   </div>
                 );
               })}
             </div>
 
-            <p className="text-[10px] text-muted-foreground mt-2 pt-2 border-t border-border leading-snug">
-              Para pedirlo, en recepción la noche antes:{' '}
-              <span className="font-medium text-foreground">请帮我们准备两份打包早餐，明天早上很早出发</span>{' '}
-              («preparadnos dos desayunos para llevar, mañana salimos muy temprano»). En China es normal y se llama{' '}
-              <span className="font-medium text-foreground">打包早餐</span> (dǎbāo zǎocān). Los días que no aparecen en
-              esta lista encajan de sobra y no hay que hacer nada.
-            </p>
+            <MoreInfo label="Cómo pedir el desayuno para llevar">
+              <p>
+                En recepción la noche antes:{' '}
+                <span className="font-medium text-foreground">请帮我们准备两份打包早餐，明天早上很早出发</span>{' '}
+                («preparadnos dos desayunos para llevar, mañana salimos muy temprano»). En China es normal y se llama{' '}
+                <span className="font-medium text-foreground">打包早餐</span> (dǎbāo zǎocān).
+              </p>
+              <p>
+                Horarios de desayuno verificados el 3 ago 2026, cruzados con la hora real de salida de cada día.
+              </p>
+            </MoreInfo>
+
+            {fittingStarts.length > 0 && (
+              <MoreInfo label={`Los ${fittingStarts.length} días que encajan de sobra`}>
+                {fittingStarts.map(es => (
+                  <p key={es.id} className="text-foreground">
+                    <span className="font-medium">{es.dateText}</span> — salís {es.leaveHotelAt}, desayuno{' '}
+                    {es.breakfastHours}. No hay que hacer nada.
+                  </p>
+                ))}
+              </MoreInfo>
+            )}
           </div>
         </div>
       )}
@@ -315,7 +334,7 @@ export default function Hotels() {
           );
         })}
       </div>
-    </div>
+    </>
   );
 }
 

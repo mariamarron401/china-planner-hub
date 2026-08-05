@@ -1,6 +1,7 @@
 import { useTrip } from '@/context/TripContext';
-import { Building2, Car, TrainFront, MapPin, LogOut, LogIn, AlertTriangle, Clock, Copy, ExternalLink } from 'lucide-react';
+import { Building2, Car, TrainFront, MapPin, LogOut, LogIn, AlertTriangle, Copy, ExternalLink } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import MoreInfo from '@/components/MoreInfo';
 
 const TRIP_TRAINS_URL = 'https://www.trip.com/trains/china/list';
 
@@ -35,7 +36,7 @@ function Step({ icon: Icon, iconColor, highlight, children }: StepProps) {
   );
 }
 
-export default function RouteScheme() {
+export default function RouteSchemeView() {
   const { data } = useTrip();
   const { cities, hotels, transportLegs, selectedHotels } = data;
 
@@ -57,20 +58,29 @@ export default function RouteScheme() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-2">
-        <h1 className="text-2xl font-bold text-foreground">Trayectos puerta a puerta</h1>
-        <p className="text-xs text-muted-foreground mt-1 leading-snug">
-          De hotel a hotel en cada tramo: salida del hotel, Didi/taxi a la estación (con distancia), tren bala y traslado hasta el hotel de destino. Preferencia aplicada: <span className="font-medium text-foreground">salidas entre las 9 y las 11 h</span> para no madrugar, cuadrando con los check-in.
-        </p>
-      </div>
-
-      <div className="px-4 mb-4">
-        <div className="bg-card rounded-xl border border-border p-3 shadow-sm flex flex-wrap gap-x-4 gap-y-1.5 text-[11px] text-muted-foreground">
-          <span className="flex items-center gap-1.5"><Building2 className="h-3.5 w-3.5 text-secondary" /> Hotel</span>
-          <span className="flex items-center gap-1.5"><Car className="h-3.5 w-3.5 text-amber-600" /> Didi / taxi</span>
-          <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 text-primary" /> Estación</span>
-          <span className="flex items-center gap-1.5"><TrainFront className="h-3.5 w-3.5 text-primary" /> Tren bala</span>
+    <>
+      <div className="px-4 mb-3">
+        <div className="bg-card rounded-xl border border-border p-3 shadow-sm">
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[11px] text-muted-foreground">
+            <span className="flex items-center gap-1.5"><Building2 className="h-3.5 w-3.5 text-secondary" /> Hotel</span>
+            <span className="flex items-center gap-1.5"><Car className="h-3.5 w-3.5 text-amber-600" /> Didi / taxi</span>
+            <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 text-primary" /> Estación</span>
+            <span className="flex items-center gap-1.5"><TrainFront className="h-3.5 w-3.5 text-primary" /> Tren bala</span>
+          </div>
+          <MoreInfo label="Cómo están calculados estos tramos">
+            <p>
+              De hotel a hotel en cada tramo: salida del hotel, Didi/taxi a la estación (con distancia), tren bala y
+              traslado hasta el hotel de destino. Preferencia aplicada:{' '}
+              <span className="font-medium text-foreground">salidas entre las 9 y las 11 h</span> para no madrugar,
+              cuadrando con los check-in.
+            </p>
+            <p>
+              Horarios de tren tomados del calendario visible hasta el{' '}
+              <span className="font-medium text-foreground">14 de septiembre</span> (el máximo disponible ahora), usado
+              como referencia de octubre. Reconfirmad número y hora exactos cuando 12306/Trip.com abran las fechas de
+              octubre. Los precios (tren y Didi) y los km hotel↔estación son aproximados.
+            </p>
+          </MoreInfo>
         </div>
       </div>
 
@@ -197,9 +207,13 @@ export default function RouteScheme() {
                       <Copy className="h-3.5 w-3.5" /> Copiar datos
                     </button>
                   </div>
-                  <p className="mt-1.5 text-[10px] text-muted-foreground leading-snug">
-                    Trip.com no permite enlazar la búsqueda ya rellena — este botón abre el buscador de trenes de China y "Copiar datos" pone origen, destino y fecha en el portapapeles para pegarlos ahí. Los billetes suelen abrirse a la venta pocas semanas antes del viaje.
-                  </p>
+                  <MoreInfo label="Para qué son estos dos botones">
+                    <p>
+                      Trip.com no permite enlazar la búsqueda ya rellena — el botón abre el buscador de trenes de China
+                      y "Copiar datos" pone origen, destino y fecha en el portapapeles para pegarlos ahí. Los billetes
+                      suelen abrirse a la venta pocas semanas antes del viaje.
+                    </p>
+                  </MoreInfo>
                 </>
               )}
 
@@ -238,18 +252,17 @@ export default function RouteScheme() {
                   <span className="font-bold text-primary text-sm">~{totalTrenes + totalDidi}€</span>
                 </div>
               </div>
-              <p className="text-[10px] text-muted-foreground mt-2 leading-snug">Precios de tren = tarifa oficial de 2ª clase por persona × 2. Los Didi son por coche (las 2 personas juntas) y varían por tráfico/hora; en Fenghuang y Furong suele ser tarifa fija negociada. Si usáis metro en las ciudades grandes, sale bastante más barato.</p>
+              <MoreInfo label="Cómo se han calculado estos precios">
+                <p>
+                  Precios de tren = tarifa oficial de 2ª clase por persona × 2. Los Didi son por coche (las 2 personas
+                  juntas) y varían por tráfico/hora; en Fenghuang y Furong suele ser tarifa fija negociada. Si usáis
+                  metro en las ciudades grandes, sale bastante más barato.
+                </p>
+              </MoreInfo>
             </div>
           );
         })()}
-
-        <div className="bg-card rounded-xl border border-border p-3 shadow-sm flex items-start gap-2">
-          <Clock className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-          <p className="text-[11px] text-muted-foreground leading-snug">
-            Horarios de tren tomados del calendario visible hasta el <span className="font-medium text-foreground">14 de septiembre</span> (el máximo disponible ahora), usado como referencia de octubre. Reconfirmad número y hora exactos cuando 12306/Trip.com abran las fechas de octubre. Los precios (tren y Didi) y los km hotel↔estación son aproximados.
-          </p>
-        </div>
       </div>
-    </div>
+    </>
   );
 }

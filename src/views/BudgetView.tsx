@@ -2,8 +2,9 @@ import { useTrip } from '@/context/TripContext';
 import { getGlobalBudget, getHotelDeposits } from '@/lib/calculations';
 import { Wallet, Building2, Train, Compass, AlertTriangle, Plane, Shield, Package, CreditCard } from 'lucide-react';
 import { useState } from 'react';
+import MoreInfo from '@/components/MoreInfo';
 
-export default function Budget() {
+export default function BudgetView() {
   const { data, updateBudgetExtras } = useTrip();
   const { cities, hotels, selectedHotels, transportLegs, localTransports, activities, budgetExtras, trip, airportTransfers } = data;
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
@@ -30,13 +31,35 @@ export default function Budget() {
     + budgetExtras.transportExtra + budgetExtras.activitiesExtra + budgetExtras.insurance + budgetExtras.others;
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-4">
-        <h1 className="text-2xl font-bold text-foreground">Presupuesto</h1>
-        <p className="text-sm text-muted-foreground mt-1">Para {trip.travelers} viajeros · {trip.totalNights} noches</p>
-      </div>
+    <div className="px-4 space-y-4">
+        {/* Total arriba: es la cifra que se busca al entrar */}
+        <div className="gradient-hero rounded-xl p-4 shadow-lg">
+          <div className="flex items-center gap-2 text-xs font-semibold text-primary-foreground/70 uppercase tracking-wide mb-2">
+            <Wallet className="h-3.5 w-3.5" /> Total estimado · {trip.travelers} personas
+          </div>
+          <div className="text-3xl font-bold text-primary-foreground">{totalKnown}€</div>
+          <div className="grid grid-cols-2 gap-2 mt-2 text-sm text-primary-foreground/70">
+            <div>~{Math.round(totalKnown / trip.travelers)}€ por persona</div>
+            <div>~{Math.round(totalKnown / trip.totalNights)}€ por día</div>
+          </div>
+          {deposits.items.length > 0 && (
+            <div className="mt-3 bg-primary-foreground/10 rounded-lg px-3 py-2">
+              <div className="text-sm font-bold text-primary-foreground">
+                Saldo a tener en la tarjeta: {Math.round(totalKnown + deposits.totalEur)}€
+              </div>
+              <div className="text-[11px] text-primary-foreground/80 mt-0.5">
+                incluye {deposits.totalEur.toFixed(2)} € de depósitos de hotel, que se devuelven
+              </div>
+            </div>
+          )}
+          {!budget.allSelected && (
+            <div className="flex items-center gap-1.5 mt-3 text-xs text-primary-foreground/80 bg-primary-foreground/10 rounded-lg px-3 py-2">
+              <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
+              Basado en promedios — elige hoteles para que sea exacto
+            </div>
+          )}
+        </div>
 
-      <div className="px-4 space-y-4">
         {/* Flights + Insurance */}
         <BudgetCard
           icon={<Plane className="h-3.5 w-3.5" />}
@@ -84,11 +107,16 @@ export default function Budget() {
               <span className="text-2xl font-bold text-foreground">¥{deposits.totalCny}</span>
               <span className="text-sm font-semibold text-muted-foreground">≈ {deposits.totalEur.toFixed(2)} €</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1.5">
-              <strong className="text-foreground">No es gasto, es saldo.</strong> Cada hotel lo cobra al completar el registro de
-              entrada y lo devuelve al hacer el check-out, pero la devolución puede tardar días en volver a la tarjeta.
-              Por eso hay que llevar los {deposits.totalEur.toFixed(2)} € completos disponibles <em>además</em> del presupuesto del viaje.
+            <p className="text-xs text-foreground mt-1.5">
+              <strong>No es gasto, es saldo</strong> — hay que llevarlo además del presupuesto.
             </p>
+            <MoreInfo label="Cuándo se cobra y cuándo vuelve">
+              <p>
+                Cada hotel lo cobra al completar el registro de entrada y lo devuelve al hacer el check-out, pero la
+                devolución puede tardar días en volver a la tarjeta. Por eso hay que llevar los{' '}
+                {deposits.totalEur.toFixed(2)} € completos disponibles además del presupuesto del viaje.
+              </p>
+            </MoreInfo>
             <div className="mt-3 pt-3 border-t border-border space-y-1.5">
               {deposits.items.map(d => (
                 <div key={d.cityId} className="flex items-start justify-between text-xs gap-2">
@@ -123,7 +151,7 @@ export default function Budget() {
               <Plane className="h-3.5 w-3.5 text-primary mt-px flex-shrink-0" />
               <div className="text-xs text-muted-foreground">
                 Incluye <span className="font-semibold text-foreground">{Math.round(airportTotal)}€</span> de los {airportTransfers.length} traslados
-                de aeropuerto (opción recomendada de cada uno). Detalle en Transportes → Aeropuertos.
+                de aeropuerto (opción recomendada de cada uno). Detalle en Moverse → Traslados.
               </div>
             </div>
           )}
@@ -153,34 +181,6 @@ export default function Budget() {
           <EditableAmount label="Otros" value={budgetExtras.others} onChange={v => updateBudgetExtras({ others: v })} />
         </BudgetCard>
 
-        {/* Total */}
-        <div className="gradient-hero rounded-xl p-4 shadow-lg">
-          <div className="flex items-center gap-2 text-xs font-semibold text-primary-foreground/70 uppercase tracking-wide mb-2">
-            <Wallet className="h-3.5 w-3.5" /> Total estimado
-          </div>
-          <div className="text-3xl font-bold text-primary-foreground">{totalKnown}€</div>
-          <div className="grid grid-cols-2 gap-2 mt-2 text-sm text-primary-foreground/70">
-            <div>~{Math.round(totalKnown / trip.travelers)}€ por persona</div>
-            <div>~{Math.round(totalKnown / trip.totalNights)}€ por día</div>
-          </div>
-          {deposits.items.length > 0 && (
-            <div className="mt-3 bg-primary-foreground/10 rounded-lg px-3 py-2">
-              <div className="text-xs text-primary-foreground/80">
-                + {deposits.totalEur.toFixed(2)} € (¥{deposits.totalCny}) en depósitos de hotel — reembolsables, no suman al total
-              </div>
-              <div className="text-sm font-bold text-primary-foreground mt-1">
-                Saldo a tener en la tarjeta: {Math.round(totalKnown + deposits.totalEur)}€
-              </div>
-            </div>
-          )}
-          {!budget.allSelected && (
-            <div className="flex items-center gap-1.5 mt-3 text-xs text-primary-foreground/80 bg-primary-foreground/10 rounded-lg px-3 py-2">
-              <AlertTriangle className="h-3.5 w-3.5" />
-              Presupuesto basado en promedios — selecciona hoteles para exactitud
-            </div>
-          )}
-        </div>
-      </div>
     </div>
   );
 }

@@ -50,7 +50,7 @@ export default function CityWhatToDo() {
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className="gradient-hero px-5 pt-10 pb-5 rounded-b-3xl">
-        <button onClick={() => navigate('/que-hacer')} className="flex items-center gap-1 text-primary-foreground/80 text-sm mb-2">
+        <button onClick={() => navigate('/descubrir/sitios')} className="flex items-center gap-1 text-primary-foreground/80 text-sm mb-2">
           <ArrowLeft className="h-4 w-4" /> Volver
         </button>
         <h1 className="text-xl font-bold text-primary-foreground">{city.cityName}</h1>

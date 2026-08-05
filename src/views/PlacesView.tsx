@@ -17,19 +17,13 @@ const CATEGORY_LABELS: Record<PlaceCategory, string> = {
   places_to_visit: 'Lugares',
 };
 
-export default function WhatToDo() {
+export default function PlacesView() {
   const { data, orderedCities } = useTrip();
   const { places } = usePlaces();
   const { cityGallery } = data;
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="gradient-hero px-5 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-2xl font-bold text-primary-foreground">Qué hacer</h1>
-        <p className="text-primary-foreground/80 text-sm mt-1">Listas por ciudad · estilo Apple Maps</p>
-      </div>
-
-      <div className="px-4 -mt-3 space-y-3">
+    <div className="px-4 space-y-3">
         {orderedCities.map(city => {
           const cityPlaces = places.filter(p => p.cityId === city.id);
           const coverImg = cityGallery.find(g => g.cityId === city.id)?.imageUrl;
@@ -76,7 +70,6 @@ export default function WhatToDo() {
             </Link>
           );
         })}
-      </div>
     </div>
   );
 }

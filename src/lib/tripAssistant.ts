@@ -81,7 +81,7 @@ function activitiesForCity(data: TripData, cityId: string): Activity[] {
 
 // ---------- base de conocimiento estática (no está en TripContext) ----------
 
-const APPS_INFO = `📱 **Apps y conectividad.** Tienes la lista completa, paso a paso y con casillas para marcar, en **la pantalla "Apps"** (barra de abajo). Resumen:
+const APPS_INFO = `📱 **Apps y conectividad.** Tienes la lista completa, paso a paso y con casillas para marcar, en **Por hacer → Apps del móvil**. Resumen:
 
 ⚠️ **Todo se configura ahora, desde España, con vuestro número +34.** La e-SIM de Holafly es de **solo datos**: no da número chino ni recibe SMS, así que los códigos de registro solo llegan bien ahora.
 
@@ -127,7 +127,7 @@ const SPAIN_INFO = `🚌 **Zaragoza ↔ Madrid en bus nocturno** (decidido el 31
 ✅ El **lunes 2 de noviembre es festivo en Aragón**, así que tenéis el día para recuperar.
 🔴 El billete de vuelta es el más urgente de comprar: el domingo 1 nov es final de puente largo y la noche del domingo es la de más demanda.
 
-👉 El detalle completo, con horarios y alternativas, está en **Transportes → Aeropuertos**.`;
+👉 El detalle completo, con horarios y alternativas, está en **Moverse → Traslados**.`;
 
 const GENERAL_TIPS = `💡 **Consejos generales para China:**
 
@@ -352,7 +352,7 @@ function answerAirportTransfers(data: TripData, q: string): string {
     return lines.filter(Boolean).join('\n');
   });
 
-  return `${blocks.join('\n\n———\n\n')}\n\nTienes el detalle completo, con todas las alternativas y la dirección en chino para el taxista, en **Transportes → Aeropuertos**.`;
+  return `${blocks.join('\n\n———\n\n')}\n\nTienes el detalle completo, con todas las alternativas y la dirección en chino para el taxista, en **Moverse → Traslados**.`;
 }
 
 function answerDeposits(data: TripData): string {
@@ -417,7 +417,7 @@ function answerBudget(data: TripData): string {
     '',
     `➡️ Falta sumar: trenes internos (aún sin precio), traslados locales (Didi), comidas y compras.`,
     '',
-    'Puedes ver el desglose completo en la pestaña **Presupuesto**.'
+    'Puedes ver el desglose completo en **Por hacer → Dinero**.'
   );
   return lines.join('\n');
 }

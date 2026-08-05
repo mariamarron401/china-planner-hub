@@ -1,20 +1,19 @@
 import { useState } from 'react';
 import { usePendingItems } from '@/hooks/usePendingItems';
 import { useTrip } from '@/context/TripContext';
-import { CheckCircle2, Circle, Plus, RotateCcw, Filter } from 'lucide-react';
+import { CheckCircle2, Circle, Plus, RotateCcw } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 
 type ViewFilter = 'all' | 'open' | 'done';
-type PriorityFilter = 'all' | 'high' | 'medium' | 'low';
 
-export default function PendingItems() {
+export default function PendingView() {
   const { items, resolveItem, reopenItem, addItem } = usePendingItems();
   const { data } = useTrip();
-  const [viewFilter, setViewFilter] = useState<ViewFilter>('all');
-  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all');
+  // Por defecto solo lo que queda por hacer: lo resuelto no debe ocupar pantalla.
+  const [viewFilter, setViewFilter] = useState<ViewFilter>('open');
   const [showAdd, setShowAdd] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
@@ -27,10 +26,16 @@ export default function PendingItems() {
     .filter(p => {
       if (viewFilter === 'open' && p.status !== 'open') return false;
       if (viewFilter === 'done' && p.status !== 'done') return false;
-      if (priorityFilter !== 'all' && p.priority !== priorityFilter) return false;
       return true;
     })
-    .sort((a, b) => (a.status === 'done' ? 1 : 0) - (b.status === 'done' ? 1 : 0));
+    // Sin filtro de prioridad: las urgentes suben solas arriba, que es lo que
+    // hacía falta. Un control menos que entender.
+    .sort((a, b) => {
+      const byStatus = (a.status === 'done' ? 1 : 0) - (b.status === 'done' ? 1 : 0);
+      if (byStatus) return byStatus;
+      const rank = { high: 0, medium: 1, low: 2 } as const;
+      return rank[a.priority] - rank[b.priority];
+    });
 
   const open = items.filter(p => p.status === 'open');
   const done = items.filter(p => p.status === 'done');
@@ -65,41 +70,30 @@ export default function PendingItems() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Pendientes</h1>
-            <p className="text-sm text-muted-foreground mt-1">{open.length} pendientes · {done.length} resueltos</p>
-          </div>
-          <button
-            onClick={() => setShowAdd(true)}
-            aria-label="Añadir pendiente"
-            className="flex-shrink-0 h-10 w-10 rounded-full bg-primary text-primary-foreground shadow-sm flex items-center justify-center hover:bg-primary/90 transition-colors"
-          >
-            <Plus className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="px-4 flex gap-2 flex-wrap mb-3">
-        {(['all', 'open', 'done'] as ViewFilter[]).map(f => (
+    <>
+      {/* Filtros: lo mínimo para no perderse */}
+      <div className="px-4 flex gap-2 flex-wrap mb-3 items-center">
+        {(['open', 'done', 'all'] as ViewFilter[]).map(f => (
           <button key={f} onClick={() => setViewFilter(f)}
             className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${viewFilter === f ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
-            {{ all: 'Todos', open: 'Abiertos', done: 'Completados' }[f]}
+            {{ open: `Por hacer (${open.length})`, done: `Hechos (${done.length})`, all: 'Todos' }[f]}
           </button>
         ))}
-        <span className="text-muted-foreground text-xs flex items-center"><Filter className="h-3 w-3 mr-1" /></span>
-        {(['all', 'high', 'medium', 'low'] as PriorityFilter[]).map(f => (
-          <button key={f} onClick={() => setPriorityFilter(f)}
-            className={`text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${priorityFilter === f ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
-            {f === 'all' ? 'Todas' : priorityLabels[f]}
-          </button>
-        ))}
+        <button
+          onClick={() => setShowAdd(true)}
+          aria-label="Añadir pendiente"
+          className="ml-auto h-8 w-8 rounded-full bg-primary text-primary-foreground shadow-sm flex items-center justify-center hover:bg-primary/90 transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+        </button>
       </div>
 
       <div className="px-4 space-y-2">
+        {filtered.length === 0 && (
+          <p className="text-sm text-muted-foreground text-center py-8">
+            {viewFilter === 'open' ? '🎉 No queda nada pendiente aquí.' : 'Nada que cumpla ese filtro.'}
+          </p>
+        )}
         {filtered.map(p => (
           <div key={p.id} className={`bg-card rounded-xl border border-border p-4 shadow-sm ${p.status === 'done' ? 'opacity-60' : ''}`}>
             <div className="flex items-start gap-3">
@@ -191,6 +185,6 @@ export default function PendingItems() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

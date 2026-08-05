@@ -3,7 +3,7 @@ import { useTrip } from '@/context/TripContext';
 import { useVideoTips } from '@/hooks/useVideoTips';
 import { MapPin, Calendar, Clock, ShoppingCart, ExternalLink, ChevronRight, Compass, Video } from 'lucide-react';
 
-export default function Activities() {
+export default function ActivitiesView() {
   const navigate = useNavigate();
   const { data, updateActivity } = useTrip();
   const { videoTips } = useVideoTips();
@@ -24,15 +24,7 @@ export default function Activities() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-4">
-        <h1 className="text-2xl font-bold text-foreground">Actividades</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          {activities.length} entradas · toca una actividad para ver sus consejos
-        </p>
-      </div>
-
-      <div className="px-4 space-y-4">
+    <div className="px-4 space-y-4">
         {activities.map(act => {
           const guideSections = act.fieldGuide?.sections.length || 0;
           const cityTipsCount = videoTips.filter(v => v.cityId === act.cityId).length;
@@ -140,7 +132,6 @@ export default function Activities() {
             </div>
           );
         })}
-      </div>
     </div>
   );
 }

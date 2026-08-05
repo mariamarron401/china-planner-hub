@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { VideoTip, VideoTipEntry, TipCategory } from '@/types/trip';
+import MoreInfo from '@/components/MoreInfo';
 
 const platformLabels: Record<VideoTip['platform'], string> = {
   tiktok: 'TikTok',
@@ -33,7 +34,7 @@ interface GroupedTip {
   video: VideoTip;
 }
 
-export default function VideoTips() {
+export default function VideoTipsView() {
   const { data, orderedCities } = useTrip();
   const { videoTips, addVideoTip, deleteVideoTip } = useVideoTips();
 
@@ -127,33 +128,14 @@ export default function VideoTips() {
   const cityOrder = [...orderedCities.map(c => c.id), NO_CITY_KEY].filter(id => grouped.has(id));
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Tips de vídeos</h1>
-            <p className="text-sm text-muted-foreground mt-1">{videoTips.length} vídeos analizados</p>
-          </div>
-          <button
-            onClick={() => { resetModalState(); setShowAdd(true); }}
-            aria-label="Añadir tip de vídeo"
-            className="flex-shrink-0 h-10 w-10 rounded-full bg-primary text-primary-foreground shadow-sm flex items-center justify-center hover:bg-primary/90 transition-colors"
-          >
-            <Plus className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-
+    <>
       {/* Analizar automáticamente */}
       <div className="px-4 mb-4">
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="h-4 w-4 text-primary" />
-            <h2 className="text-sm font-medium text-foreground">Analizar vídeo automáticamente</h2>
+            <h2 className="text-sm font-medium text-foreground">Pega un vídeo y se analiza solo</h2>
           </div>
-          <p className="text-xs text-muted-foreground mb-3">
-            Pega el enlace de un vídeo público de TikTok (Instagram a veces lo bloquea) y se transcribe y guarda solo, ya clasificado por ciudad y temática. Puede tardar hasta 1-2 minutos si el servidor llevaba un rato dormido.
-          </p>
           <div className="flex gap-2">
             <Input
               value={analyzeUrl}
@@ -166,6 +148,22 @@ export default function VideoTips() {
               {analyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Analizar'}
             </Button>
           </div>
+          <div className="mt-2 flex items-center justify-between gap-2">
+            <button
+              onClick={() => { resetModalState(); setShowAdd(true); }}
+              className="flex items-center gap-1 text-[11px] font-medium text-primary"
+            >
+              <Plus className="h-3.5 w-3.5" /> Añadir un tip a mano
+            </button>
+            <span className="text-[10px] text-muted-foreground">{videoTips.length} vídeos guardados</span>
+          </div>
+          <MoreInfo label="Cómo funciona y qué tarda">
+            <p>
+              Se transcribe el vídeo y se guarda solo, ya clasificado por ciudad y temática. Funciona con vídeos
+              públicos de TikTok; Instagram a veces bloquea la descarga.
+            </p>
+            <p>Puede tardar 1-2 minutos si el servidor llevaba un rato dormido.</p>
+          </MoreInfo>
         </div>
       </div>
 
@@ -331,6 +329,6 @@ export default function VideoTips() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

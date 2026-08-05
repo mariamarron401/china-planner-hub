@@ -16,7 +16,7 @@ import {
 
 type Filter = 'all' | 'activities' | 'travel';
 
-export default function Calendar() {
+export default function CalendarView() {
   const { data } = useTrip();
   const days = useMemo(() => buildCalendar(data), [data]);
   const [filter, setFilter] = useState<Filter>('all');
@@ -33,14 +33,7 @@ export default function Calendar() {
   const travelDays = days.filter(d => d.isTravelDay).length;
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="px-4 pt-12 pb-3">
-        <h1 className="text-2xl font-bold text-foreground">Calendario</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Del 8 oct al 2 nov · día a día, con hotel, excursiones y traslados
-        </p>
-      </div>
-
+    <>
       {/* Resumen */}
       <div className="px-4 mb-4 grid grid-cols-3 gap-2">
         <Stat value={String(days.length)} label="días en total" />
@@ -75,7 +68,7 @@ export default function Calendar() {
           <p className="text-sm text-muted-foreground text-center py-8">No hay días que cumplan ese filtro.</p>
         )}
       </div>
-    </div>
+    </>
   );
 }
 
