@@ -81,17 +81,26 @@ function activitiesForCity(data: TripData, cityId: string): Activity[] {
 
 // ---------- base de conocimiento estática (no está en TripContext) ----------
 
-const APPS_INFO = `📱 **Apps imprescindibles para China** (instálalas y configúralas ANTES de salir de España):
+const APPS_INFO = `📱 **Apps y conectividad.** Tienes la lista completa, paso a paso y con casillas para marcar, en **la pantalla "Apps"** (barra de abajo). Resumen:
 
-- **Alipay** y **WeChat Pay** — pago móvil, se usa para casi todo. Hay que vincular una tarjeta Visa/Mastercard desde la app internacional.
-- **Amap Global** (高德地图, versión internacional) — mapas y navegación; Google Maps no va bien en China.
-- **Didi** — el "Uber" chino, para taxis.
-- **Trip.com** — billetes de tren bala (ya la usáis para los hoteles).
-- **Dianping** — reseñas de restaurantes (el TripAdvisor chino).
-- **Meituan** — comida a domicilio.
-- **Holafly (e-SIM + VPN)** — conectividad y acceso a apps bloqueadas (Google, WhatsApp...). Actívala justo antes de aterrizar en Beijing.
+⚠️ **Todo se configura ahora, desde España, con vuestro número +34.** La e-SIM de Holafly es de **solo datos**: no da número chino ni recibe SMS, así que los códigos de registro solo llegan bien ahora.
 
-⚠️ **La VPN es obligatoria** para que carguen las secciones "Qué hacer" y "Pendientes" de esta app dentro de China. El resto de la app (hoteles, vuelos, itinerario, trenes, presupuesto) funciona sin internet.`;
+**HOY, por orden:**
+- **WeChat** — lo primero y lo más urgente. Toda cuenta nueva necesita que **un usuario existente escanee tu QR** (cuenta con +6 meses, verificada, que no haya avalado a nadie en el último mes) → hacen falta **dos avalistas distintos**. Sin WeChat no se puede reservar la **plaza de Tiananmen el 4 de octubre**.
+- **Alipay** — registro con el móvil español + verificación con el pasaporte + Visa/Mastercard. Ojo: ~3 % de comisión en pagos de más de 200 CNY.
+- **VPN de pago de respaldo** — instalarla ya: las apps de VPN no están en la App Store china y no se pueden contratar allí.
+- **Operador español** — confirmar que hay roaming en China para SMS (los códigos del banco).
+- **Banco** — avisar del viaje y comprobar pagos online en yuanes.
+
+**Antes del 14 de agosto:** guardar los dos pasaportes en el perfil de **Trip.com**. **Esta semana:** registrar **12306** (documento "Passport", nombre igual que la zona MRZ; la verificación tarda hasta 24 h).
+
+**Septiembre:** Amap Global, mapas y traductor **offline**, Didi, Klook + app de Shanghai Disney.
+
+**e-SIM:** dos planes de **Holafly China de 30 días** (73,90 € cada uno, ~147,80 €), comprados el **5-7 de octubre** y con los perfiles instalados en casa con WiFi. Una por móvil: el hotspot está limitado a ~500 MB/día.
+
+**Descartadas a propósito:** Dianping, Meituan y Taobao/Duoduo (exigen número chino o dirección local).
+
+⚠️ **La VPN es obligatoria** para que carguen las secciones "Qué hacer" y "Pendientes" de esta app dentro de China. El resto (hoteles, vuelos, itinerario, trenes, presupuesto) funciona sin internet.`;
 
 const INSURANCE_INFO = `🛡️ **Seguro de viaje** (contratado por la agencia, ARAG / Insurance Travel, cubre todo el viaje 9 oct – 1 nov 2026):
 

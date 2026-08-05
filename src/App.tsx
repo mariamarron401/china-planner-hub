@@ -14,12 +14,14 @@ import Transports from "./pages/Transports";
 import RouteScheme from "./pages/RouteScheme";
 import Budget from "./pages/Budget";
 import Activities from "./pages/Activities";
+import ActivityDetail from "./pages/ActivityDetail";
 import PendingItems from "./pages/PendingItems";
 import Flights from "./pages/Flights";
 import WhatToDo from "./pages/WhatToDo";
 import CityWhatToDo from "./pages/CityWhatToDo";
 import CategoryPlaces from "./pages/CategoryPlaces";
 import VideoTips from "./pages/VideoTips";
+import AppsSetup from "./pages/AppsSetup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,12 +43,14 @@ const App = () => (
               <Route path="/trayectos" element={<RouteScheme />} />
               <Route path="/presupuesto" element={<Budget />} />
               <Route path="/actividades" element={<Activities />} />
+              <Route path="/actividades/:activityId" element={<ActivityDetail />} />
               <Route path="/pendientes" element={<PendingItems />} />
               <Route path="/vuelos" element={<Flights />} />
               <Route path="/que-hacer" element={<WhatToDo />} />
               <Route path="/que-hacer/:cityId" element={<CityWhatToDo />} />
               <Route path="/que-hacer/:cityId/:category" element={<CategoryPlaces />} />
               <Route path="/tips-videos" element={<VideoTips />} />
+              <Route path="/apps" element={<AppsSetup />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <TripChat />

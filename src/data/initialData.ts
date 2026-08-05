@@ -338,7 +338,41 @@ export const initialTripData: TripData = {
       platform: 'Web/mini-programa oficial del Museo del Palacio (no revendedores)',
       priceText: '~8 €/persona (60 CNY, temporada alta hasta el 31 oct)',
       bookingUrl: 'https://gugong.ktmtech.cn/',
-      notes: '🚫 CIERRA LOS LUNES: por eso va el domingo 11 y la Muralla el lunes 12, y no al revés. 🎟️ Entrada nominal con pasaporte y cupo diario limitado: se agota el mismo día que se libera. La venta abre 7 días antes a las 20:00 hora china, o sea el 4 de octubre a las 20:00 en Pekín = 14:00 en España (España aún en horario de verano). Poned alarma. 🪪 Cada uno reserva con SU pasaporte y se entra escaneándolo, sin taquilla física. 🕘 Se entra por la Puerta del Mediodía (Meridian Gate, sur) y se sale por la Puerta Divina (norte): id pronto y salid por el norte hacia la colina de Jingshan, que tiene la mejor vista de los tejados desde arriba. ℹ️ Reconfirmad al comprar si las galerías del Tesoro y de los Relojes van incluidas o son suplemento, que ha cambiado en los últimos años.',
+      notes: '🚫 CIERRA LOS LUNES: por eso va el domingo 11 y la Muralla el lunes 12, y no al revés. 🎟️ Entrada nominal con pasaporte y cupo diario limitado: se agota el mismo día que se libera. La venta abre 7 días antes a las 20:00 hora china, o sea el 4 de octubre a las 20:00 en Pekín = 14:00 en España (España aún en horario de verano). Poned alarma. 🪪 Cada uno reserva con SU pasaporte y se entra escaneándolo, sin taquilla física. 🕘 Se entra por la Puerta del Mediodía (Meridian Gate, sur) y se sale por la Puerta Divina (norte): id pronto y salid por el norte hacia la colina de Jingshan, que tiene la mejor vista de los tejados desde arriba. ⚠️ OJO CON EL CAMINO DE ENTRADA: la plaza de Tiananmen NO es zona de paso, tiene su propia reserva aparte (ver la actividad "Plaza de Tiananmen"). Si no la lleváis reservada no podéis cruzarla para llegar a la Puerta del Mediodía: hay que dar la vuelta por el Templo Ancestral, en el lado este. ℹ️ Reconfirmad al comprar si las galerías del Tesoro y de los Relojes van incluidas o son suplemento, que ha cambiado en los últimos años.',
+      fieldGuide: {
+        source: 'TikTok "Pekín en 3 días: nuestra ruta completa" + verificación propia (ago 2026)',
+        headline: 'La plaza de Tiananmen no es el camino de entrada: está vallada y tiene reserva propia. Para llegar a la Puerta del Mediodía sin cruzarla, entrad por el Templo Ancestral (lado este).',
+        sections: [
+          {
+            icon: '🚫',
+            title: 'El error que cometieron en el vídeo',
+            items: [
+              'Querían cruzar la plaza de Tiananmen para entrar directamente en la Ciudad Prohibida, y no se puede: la plaza está vallada, no es abierta, está llena de controles y necesita SU PROPIA reserva.',
+              'Resultado: se dieron “una vuelta enorme” para llegar a Wumen (la Puerta del Mediodía), que es la entrada real. Perdieron una parte de la mañana, que es justo la franja buena del palacio.',
+              'Traducción para vosotros: reservad la plaza también (es gratis) o id directos a Wumen por el camino de abajo. Lo que no funciona es dar por hecho que se pasa por la plaza.',
+            ],
+          },
+          {
+            icon: '🚶',
+            title: 'Cómo llegar a la Puerta del Mediodía sin pasar por la plaza',
+            items: [
+              'Metro Línea 1 hasta Tiananmen East (Tiananmen Dong), salida B.',
+              'Andando unos metros hasta la calle Nanchizi Dajie (南池子大街) y subiendo hacia el norte.',
+              'Se entra por el Palacio de la Cultura del Pueblo Trabajador / Templo Ancestral (劳动人民文化宫), que cuesta 2 CNY (~0,25 €) y NO exige reserva de la plaza.',
+              'Desde ahí se sale directamente al control de seguridad de Wumen. Son unos 15 minutos desde la boca del metro y os saltáis la cola de la plaza.',
+            ],
+          },
+          {
+            icon: '🗺️',
+            title: 'El orden de la visita que les funcionó',
+            items: [
+              'Ciudad Prohibida entera de sur a norte (Wumen → Puerta Divina).',
+              'Al salir por el norte, subir a la colina de Jingshan para verla desde arriba. Es el remate natural y ya lo teníais previsto.',
+              'Y para cerrar el día, Templo del Cielo (queda al sur, cerca de Qianmen — encaja con acercarse luego a la plaza de Tiananmen para la bajada de bandera).',
+            ],
+          },
+        ],
+      },
     },
     {
       id: 'act-1', cityId: 'beijing', title: 'Gran Muralla China (Mutianyu + tobogán)', type: 'Excursión',
@@ -348,7 +382,93 @@ export const initialTripData: TripData = {
       platform: 'Trip.com o web oficial Mutianyu',
       priceText: '~25 €/persona',
       bookingUrl: 'https://en.mutianyugreatwall.com/reservation-center/tickets',
-      notes: 'Por qué el 12: es el último día completo en Pekín (el 13 salís en tren a Xi\'an a las 09:55) y encaja porque la Ciudad Prohibida cierra los lunes, así que el domingo 11 se aprovecha para el palacio y el lunes 12 para la Muralla. ⚠️ CONTRAPARTIDA A VIGILAR: al ser el último día en Pekín ya no queda jornada de reserva por si llueve, y el tobogán NO funciona con lluvia ni nieve. Mirad la previsión nada más llegar, el 10: si dan lluvia para el 12 y bueno para el 11, intercambiad los dos días (Muralla el domingo 11, Ciudad Prohibida el lunes 12 NO es posible porque cierra los lunes — en ese caso el palacio se quedaría fuera, así que es decisión vuestra qué preferís salvar). Precio = entrada 40 CNY + bus lanzadera 15 CNY + combo telesilla (subida) y tobogán (bajada) 140 CNY. Se accede a todo con el pasaporte. El tobogán no lo pueden usar mayores de 60 años.',
+      notes: 'Por qué el 12: es el último día completo en Pekín (el 13 salís en tren a Xi\'an a las 09:55) y encaja porque la Ciudad Prohibida cierra los lunes, así que el domingo 11 se aprovecha para el palacio y el lunes 12 para la Muralla. ⚠️ CONTRAPARTIDA A VIGILAR: al ser el último día en Pekín ya no queda jornada de reserva por si llueve, y el tobogán NO funciona con lluvia ni nieve. Mirad la previsión nada más llegar, el 10: si dan lluvia para el 12 y bueno para el 11, intercambiad los dos días (Muralla el domingo 11, Ciudad Prohibida el lunes 12 NO es posible porque cierra los lunes — en ese caso el palacio se quedaría fuera, así que es decisión vuestra qué preferís salvar). Precio = entrada 40 CNY + bus lanzadera 15 CNY + combo telesilla (subida) y tobogán (bajada) 140 CNY. Se accede a todo con el pasaporte. El tobogán no lo pueden usar mayores de 60 años. ✅ PUNTO EXACTO DEL TOBOGÁN RESUELTO: es la Torre 6 de Mutianyu (ver la guía sobre el terreno de aquí abajo). El combo de 140 CNY que ya teníais apuntado es precisamente ese, telesilla de subida + tobogán de bajada, así que no hay que cambiar nada de la compra.',
+      fieldGuide: {
+        source: 'TikTok "Pekín en 3 días: nuestra ruta completa" + verificación propia (ago 2026)',
+        headline: 'Telesilla hasta la Torre 6, caminar hasta la Torre 12 (la encontraron prácticamente vacía) y volver a la 6 para bajar en tobogán.',
+        sections: [
+          {
+            icon: '🎢',
+            title: 'Qué torre es la del tobogán (duda cerrada)',
+            items: [
+              'Mutianyu tiene DOS subidas distintas y solo una sirve para el tobogán. La TELESILLA (silla abierta) sube a la Torre 6, y de ahí baja el tobogán: 1.580 m de canaleta de acero por la ladera este.',
+              'El TELEFÉRICO (cabina cerrada) sube a la Torre 14 y por ahí NO hay tobogán. Si compráis ese, os quedáis sin bajada divertida.',
+              'Al comprar, buscad el combo “telesilla + tobogán” (140 CNY). Es el que ya estaba apuntado en el precio, así que la compra prevista es la correcta.',
+              'Recordatorio que ya sabíais y aquí importa doble: el tobogán se cierra con lluvia. Si el 12 amanece lloviendo, la telesilla y el tobogán son justo lo primero que cae.',
+            ],
+          },
+          {
+            icon: '🥾',
+            title: 'El tramo que recomiendan andar',
+            items: [
+              'Subir en telesilla a la Torre 6 y caminar hacia la Torre 12. En el vídeo la muralla estaba “prácticamente vacía” en ese tramo.',
+              'Calculad en torno a 1 hora por sentido a paso tranquilo (el tramo 6 → 12 va cuesta arriba; el de vuelta es el fácil).',
+              'Después hay que volver a la Torre 6 para el tobogán, porque es el único punto de bajada. No os alejéis más de lo que os apetezca desandar.',
+              'Si un día vais con menos fuerzas: la Torre 6 ya tiene vistas de sobra y podéis quedaros cerca sin perderos nada esencial.',
+            ],
+          },
+          {
+            icon: '🚗',
+            title: 'Cómo llegaron ellos',
+            items: [
+              'En Didi directo desde Pekín hasta Mutianyu. Es la opción cómoda si salís temprano y no queréis depender del bus 916 + lanzadera.',
+              'Ojo al volver: en la zona de la Muralla hay menos coches disponibles en Didi. Merece la pena acordar la vuelta con el mismo conductor o pedirlo con margen.',
+            ],
+          },
+          {
+            icon: '🕐',
+            title: 'Cómo les cuadró el día',
+            items: [
+              'Ellos hicieron la Muralla por la mañana y por la tarde volvieron a Pekín, a la plaza de Tiananmen, a tiempo para la bajada de bandera al atardecer.',
+              'Vosotros tenéis la Muralla el lunes 12 por la mañana: la tarde queda libre, así que ese mismo esquema es viable si preferís dejar Tiananmen para el 12 en vez del 11.',
+            ],
+          },
+        ],
+      },
+    },
+    {
+      id: 'act-9', cityId: 'beijing', title: 'Plaza de Tiananmen (+ bajada de bandera)', type: 'Un par de horas',
+      duration: '1-2 h', price: 0, currency: 'EUR', status: 'Por reservar',
+      recommendedDate: 'Domingo 11 oct (tarde) — o el lunes 12 tras la Muralla · A DECIDIR',
+      whenToBuy: '⚠️ El 4 oct (7 días antes) · gratis pero OBLIGATORIA. Las fechas nuevas se liberan cada día: intentadlo por la mañana española y reintentad por la tarde',
+      platform: 'Mini-programa de WeChat 天安门广场预约参观 (gratis, con pasaporte). Sin WeChat: gestores tipo GetYourGuide/Civitatis lo tramitan por vosotros',
+      priceText: 'Gratis (0 €) — pero sin reserva no se entra',
+      notes: '🆕 ESTO NO ESTABA EN EL PLAN y es un descubrimiento del TikTok de Pekín: la plaza de Tiananmen tiene reserva propia, separada de la Ciudad Prohibida. Es gratis, pero es obligatoria y nominal (nombre, pasaporte, nacionalidad, fecha de nacimiento y móvil de cada uno). 📱 Se hace en el mini-programa de WeChat 天安门广场预约参观 — buscad ese nombre en el buscador de WeChat y entrad en el mini-programa del icono rojo, opción 个人预约 (reserva individual). Guardad el mensaje de confirmación: hay que enseñarlo en el control. ⏰ Ventana de 7 días, igual que la Ciudad Prohibida: para el 11 de octubre toca el 4 de octubre. Las fuentes discrepan en la hora exacta a la que se liberan las plazas nuevas (unas dicen 12:00 y otras 17:00 hora china), así que ese día ya vais a estar pendientes por la Ciudad Prohibida (20:00 China = 14:00 España): mirad la plaza antes, por la mañana española, y si el día 11 no aparece, reintentad por la tarde. 🚩 LAS FRANJAS NO SON INTERCAMBIABLES: al reservar se elige entre izada de bandera (升旗), mañana (上午), tarde (下午) y bajada de bandera (降旗). Si queréis ver la bajada de bandera hay que reservar ESA franja concreta, no vale la de tarde. La bajada es al atardecer, sobre las 17:45-17:55 en esas fechas, y dura unos 30 minutos (la hora exacta la da el propio mini-programa, que va con el atardecer del día). 🛂 Controles de seguridad serios, tipo frontera: pasaporte encima, sin mecheros, y contad ~20 minutos de cola en un día normal. Entrad por Qianmen (sur), que es el control más rápido. 🤔 QUÉ DÍA: el 11 encaja bien si cerráis el día con el Templo del Cielo, que está al sur y cerca. El 12 también vale (la Muralla es por la mañana y la tarde queda libre), que es justo lo que hicieron en el vídeo, pero es más justo de tiempo para llegar al atardecer. Decidid vosotros y lo dejo fijado.',
+      fieldGuide: {
+        source: 'TikTok "Pekín en 3 días: nuestra ruta completa" + verificación propia (ago 2026)',
+        headline: 'Gratis pero obligatoria, y con franja horaria propia para la bajada de bandera. Sin ella no se cruza la plaza ni de paso.',
+        sections: [
+          {
+            icon: '🚫',
+            title: 'El error del vídeo, tal cual',
+            items: [
+              'Fueron a cruzar la plaza el segundo día para entrar a la Ciudad Prohibida y se la encontraron vallada, con controles y exigiendo reserva propia. No pudieron pasar.',
+              'Tuvieron que dar un rodeo largo hasta Wumen y dejaron la plaza para el tercer día, ya con reserva hecha.',
+              'La lectura buena: no es una plaza pública por la que se pasea, es un recinto con aforo. Se planifica como una entrada más.',
+            ],
+          },
+          {
+            icon: '✅',
+            title: 'Lo que sí les salió bien',
+            items: [
+              'El tercer día volvieron con la reserva, pasaron todos los controles y pillaron la bajada de bandera. Lo cuentan como uno de los momentos del viaje.',
+              'La ceremonia es al atardecer y dura una media hora. Hay que estar dentro antes, no llegar a la hora justa.',
+            ],
+          },
+          {
+            icon: '📱',
+            title: 'Cómo se reserva, paso a paso',
+            items: [
+              'Abrid WeChat y buscad 天安门广场预约参观. Aparece un mini-programa con icono rojo: es el oficial.',
+              'Elegid la primera opción, 个人预约 (reserva individual).',
+              'Escoged día y FRANJA. Para la ceremonia del atardecer, la franja 降旗 (bajada de bandera).',
+              'Rellenad nombre, pasaporte, nacionalidad, sexo, fecha de nacimiento y móvil. Uno por persona: José Miguel y María por separado.',
+              'Guardad el mensaje de confirmación en el móvil. Es lo que se enseña en el control junto al pasaporte.',
+              'Si no queréis pelearos con WeChat, hay gestores (GetYourGuide, Civitatis) que hacen la reserva y os mandan la confirmación el día antes.',
+            ],
+          },
+        ],
+      },
     },
     {
       id: 'act-5', cityId: 'xian', title: 'Guerreros de Terracota', type: 'Excursión',
@@ -693,4 +813,308 @@ export const initialTripData: TripData = {
       advice: 'No es un madrugón, es el riesgo contrario: si os dormís lo perdéis, porque cierra a las 09:00 y ese día no tenéis ninguna prisa para levantaros. Poned despertador a las 08:30 y desayunad antes de hacer el check-out (que es entre las 12:00 y las 14:00 según habitación — confirmadlo en recepción el día 23).',
     },
   ],
+
+  // Apps y conectividad. Replanificado el 05/08/2026 con dos datos que lo condicionan todo:
+  // (1) la e-SIM de Holafly es de SOLO DATOS (no da número chino ni recibe SMS) → todas las
+  // cuentas se crean desde España con el número +34; (2) el iPhone 14 y el 17 Pro comprados en
+  // España conservan bandeja de SIM física, así que la configuración es idéntica en los dos.
+  // El contenido es informativo y se toma siempre del código; solo las casillas (done/doneJm/
+  // doneMaria) se editan y viajan por Supabase para verse en los dos móviles.
+  appSetup: {
+    tasks: [
+      // ---------- HOY ----------
+      {
+        id: 'app-wechat',
+        name: 'WeChat',
+        emoji: '💬',
+        group: 'hoy',
+        purpose: 'Único canal para reservar la plaza de Tiananmen (gratis, pero obligatoria y nominal). Y el segundo sistema de pago del país.',
+        whenLabel: 'HOY · lo primero de todo',
+        deadline: '2026-10-04',
+        perPerson: true,
+        steps: [
+          'Buscar DOS avalistas distintos, uno para José Miguel y otro para María: alguien con WeChat desde hace más de 6 meses, con su identidad verificada y que no haya avalado a nadie en el último mes.',
+          'Descargar WeChat y registrarse cada uno con su número español (+34). Llega un SMS con el código.',
+          'Cuando la app lo pida, enseñar el QR al avalista para que lo escanee. Sin este paso la cuenta se queda a medias y no sirve para los mini-programas.',
+          'Añadiros como contactos y usar la cuenta con normalidad unas semanas antes de vincular la tarjeta: las cuentas de extranjero recién creadas y con poca actividad son las que se bloquean.',
+          'Vincular una Visa o Mastercard en Yo → Servicios → Cartera.',
+        ],
+        warning: '🚩 El 4 de octubre hay que reservar la plaza de Tiananmen desde el mini-programa 天安门广场预约参观, que solo existe dentro de WeChat. Fecha de control: si el 1 de septiembre las dos cuentas no están validadas, se tira del plan B (que lo tramite GetYourGuide o Civitatis).',
+        why: 'Desde 2025-2026 toda cuenta nueva necesita que un usuario existente escanee tu QR. No hay forma de saltárselo.',
+      },
+      {
+        id: 'app-alipay',
+        name: 'Alipay',
+        emoji: '💳',
+        group: 'hoy',
+        purpose: 'Pago móvil en casi todo comercio chino. Además lleva dentro el QR del metro, Didi y un traductor.',
+        whenLabel: 'HOY',
+        perPerson: true,
+        steps: [
+          'Descargar Alipay y registrarse cada uno con su número español.',
+          'Hacer la verificación de identidad subiendo la foto de la página de datos del pasaporte: sin reflejos y con el nombre en el mismo orden que aparece en el pasaporte.',
+          'Vincular una Visa o Mastercard.',
+          'Antes de salir, buscar dentro de la app los mini-programas de Didi, metro y traducción, para saber dónde están cuando haga falta.',
+        ],
+        warning: '⚠️ Comisión de ~3 % en pagos superiores a 200 CNY con tarjeta extranjera. Para el día a día conviene pagar por debajo de esa cifra cuando se pueda.',
+        why: 'Es la red de seguridad de todo el viaje: si una app china falla, casi siempre existe su mini-programa dentro de Alipay.',
+      },
+      {
+        id: 'app-vpn',
+        name: 'VPN de respaldo',
+        emoji: '🛡️',
+        group: 'hoy',
+        purpose: 'Plan B si la VPN que viene incluida en Holafly falla.',
+        whenLabel: 'HOY',
+        perPerson: true,
+        steps: [
+          'Contratar una VPN de pago de las que funcionan en China (Astrill, LetsVPN o NordVPN con servidores ofuscados).',
+          'Instalarla y hacer login en los DOS iPhone.',
+          'Probar que conecta desde casa antes de guardarla.',
+          'Apuntar usuario y contraseña en papel, no solo dentro del móvil.',
+        ],
+        warning: '⚠️ Esto solo se puede hacer desde España: las apps de VPN no están en la App Store china y no se pueden contratar estando ya allí. Si Holafly falla sin plan B, se pierden Google, WhatsApp y las pantallas «Qué hacer» y «Pendientes» de esta app (dependen de Supabase, bloqueado en China).',
+      },
+      {
+        id: 'app-roaming',
+        name: 'Operador español: roaming en China',
+        emoji: '📶',
+        group: 'hoy',
+        purpose: 'Que os lleguen los SMS del banco durante el viaje.',
+        whenLabel: 'HOY',
+        perPerson: true,
+        steps: [
+          'Llamar al operador y confirmar que tenéis roaming activo en China para llamadas y SMS.',
+          'Preguntar cuánto cuesta el SMS y el minuto allí, para no llevarse sorpresas.',
+          'Confirmar que no hay que activar nada a mano al llegar.',
+        ],
+        why: 'La e-SIM de Holafly es de solo datos: no da número ni recibe SMS. El único número que tenéis en China es el español.',
+      },
+      {
+        id: 'app-banco',
+        name: 'Banco y tarjetas',
+        emoji: '🏦',
+        group: 'hoy',
+        purpose: 'Que no se bloquee la tarjeta justo el día de una compra importante.',
+        whenLabel: 'HOY',
+        perPerson: false,
+        steps: [
+          'Avisar al banco de las fechas (9 oct – 1 nov) y del destino.',
+          'Confirmar que la tarjeta admite pagos online en yuanes y en comercios chinos.',
+          'Comprobar el límite diario de compra online: la entrada de Disney para dos son ~150-200 € de golpe.',
+          'Llevar una segunda tarjeta de otro banco como respaldo.',
+        ],
+        why: 'Alipay, WeChat, Trip.com, 12306 y Disney cobran en tarjeta. Un bloqueo antifraude el día que abre la venta cuesta la entrada.',
+      },
+
+      // ---------- TRENES ----------
+      {
+        id: 'app-tripcom',
+        name: 'Trip.com',
+        emoji: '🚄',
+        group: 'trenes',
+        purpose: 'Ya la usáis para los hoteles. Ahora es la herramienta con la que se compran los 8 trenes.',
+        whenLabel: 'Antes del 14 de agosto',
+        deadline: '2026-08-14',
+        perPerson: true,
+        steps: [
+          'Entrar en Perfil → Viajeros y guardar el pasaporte de los dos: nombre exacto, número y caducidad.',
+          'Activar las notificaciones de la app.',
+          'Comprobar que la tarjeta guardada no está caducada.',
+        ],
+        why: 'El 14 de agosto es la primera pre-reserva de tren (Beijing → Xi\'an). Con los pasaportes ya guardados, cada compra son 2 minutos en vez de 15.',
+      },
+      {
+        id: 'app-12306',
+        name: '12306 (China Railway)',
+        emoji: '🎫',
+        group: 'trenes',
+        purpose: 'Respaldo oficial de Trip.com y única forma de ver la hora exacta a la que sale cada tren a la venta.',
+        whenLabel: 'Esta semana',
+        perPerson: true,
+        steps: [
+          'Descargar la app oficial «China Railway 12306» y ponerla en inglés.',
+          'Registrarse eligiendo tipo de documento «Passport» y escribir el nombre EXACTAMENTE como aparece en las dos líneas de códigos del final de la página del pasaporte (la zona MRZ).',
+          'Completar las tres verificaciones que pide: pasaporte (subiendo foto), móvil y email.',
+          'Con la cuenta ya verificada, mirar 我的 → 出行向导 → 起售时间 para ver a qué hora abre la venta cada estación.',
+        ],
+        warning: '⚠️ La verificación puede tardar hasta 24 h. No vale dejarlo para el día de una apertura de venta.',
+      },
+
+      // ---------- SOBRE EL TERRENO ----------
+      {
+        id: 'app-amap',
+        name: 'Amap Global + mapas offline',
+        emoji: '🗺️',
+        group: 'terreno',
+        purpose: 'Navegar por China. Google Maps no funciona bien allí.',
+        whenLabel: 'Septiembre',
+        perPerson: true,
+        steps: [
+          'Instalar Amap Global (versión internacional en inglés), NO el 高德地图 doméstico: la internacional no pide número chino.',
+          'Descargar en Mapas de Apple los mapas de las 10 ciudades de la ruta, para tenerlos sin conexión.',
+          'No usar los favoritos de Amap para la lista de sitios: no se comparten bien entre dos personas. Para eso está «Qué hacer» de esta app.',
+        ],
+        why: 'Mapas de Apple sí funciona en China (usa los datos de Amap) y offline aguanta aunque caiga la VPN.',
+        url: 'https://apps.apple.com/es/app/amap-global/id461703208',
+      },
+      {
+        id: 'app-didi',
+        name: 'Didi',
+        emoji: '🚕',
+        group: 'terreno',
+        purpose: 'El Uber chino. Se usa en los traslados locales ya planificados: estaciones, Wulingyuan, Leshan.',
+        whenLabel: 'Septiembre',
+        perPerson: true,
+        steps: [
+          'Instalar «DiDi Rider» y registrarse con el número español.',
+          'Vincular tarjeta, o dejar Alipay como forma de pago.',
+          'Si la app da problemas, la salida es el mini-programa de Didi dentro de Alipay: va en inglés y cobra por Alipay.',
+          'Guardar la dirección de los hoteles en caracteres chinos (las tenéis en Transportes → Aeropuertos) para enseñárselas al conductor.',
+        ],
+      },
+      {
+        id: 'app-klook',
+        name: 'Klook + Shanghai Disney',
+        emoji: '🎢',
+        group: 'terreno',
+        purpose: 'Comprar la entrada de Disneyland, que es la única de precio dinámico del viaje.',
+        whenLabel: 'Septiembre',
+        deadline: '2026-09-30',
+        perPerson: false,
+        steps: [
+          'Instalar Klook y la app oficial de Shanghai Disney Resort.',
+          'Crear cuenta en las dos y guardar los pasaportes.',
+          'A mediados de septiembre, revisar el calendario de precios de Disney para elegir el día: el 28 o el 29 salen más baratos que el 30-31 (fin de semana).',
+        ],
+        why: 'La venta de Disney abre unos 30 días antes y Klook suele tener un 5-10 % de descuento.',
+      },
+      {
+        id: 'app-traductor',
+        name: 'Traductor offline',
+        emoji: '🔤',
+        group: 'terreno',
+        purpose: 'Menús, carteles y entenderse con taxistas.',
+        whenLabel: 'Septiembre',
+        perPerson: true,
+        steps: [
+          'En Traductor de Google: descargar el paquete de chino para usarlo sin conexión.',
+          'En Traducir de Apple: descargar también chino (mandarín) offline.',
+          'Probar la cámara traduciendo un texto en chino desde casa, para saber usarla antes de necesitarla.',
+        ],
+        why: 'Offline no depende de la VPN ni de la cobertura.',
+      },
+
+      // ---------- E-SIM (octubre) ----------
+      {
+        id: 'esim-comprar',
+        name: 'Comprar las 2 e-SIM de Holafly',
+        emoji: '📲',
+        group: 'esim',
+        purpose: 'Datos ilimitados y VPN integrada durante todo el viaje.',
+        whenLabel: '5-7 de octubre',
+        deadline: '2026-10-07',
+        perPerson: false,
+        steps: [
+          'Comprar en la web de Holafly DOS planes de China de 30 días, uno por móvil.',
+          'NO comprar uno solo para compartir: el hotspot está limitado a ~500 MB al día y se agota en una tarde.',
+          'Guardar los dos correos con los QR e identificar cuál es de cada móvil: una vez instalado, un QR no se puede pasar al otro teléfono.',
+        ],
+        why: 'El plan no empieza a contar al comprarlo, sino en la primera conexión a una red compatible. Comprarlo unos días antes no gasta días de viaje y da margen si algo sale mal.',
+        url: 'https://esim.holafly.com/esim-china/',
+      },
+      {
+        id: 'esim-instalar',
+        name: 'Instalar los perfiles de e-SIM',
+        emoji: '📥',
+        group: 'esim',
+        purpose: 'Llegar a Pekín con un solo interruptor por pulsar.',
+        whenLabel: 'En casa, antes de salir el 8 de octubre',
+        deadline: '2026-10-08',
+        perPerson: true,
+        steps: [
+          'En casa y con WiFi: Ajustes → Datos móviles → Añadir plan de datos → escanear el QR del correo.',
+          'Etiquetar la línea nueva como «Holafly» y la española con vuestro nombre, para no confundirlas luego.',
+          'Dejar la línea Holafly APAGADA hasta aterrizar. Instalar el perfil no consume días del plan.',
+        ],
+        warning: '⚠️ Hacedlo en casa, no en el aeropuerto: si el QR da error, hace falta tiempo y una conexión estable para que Holafly lo reemita.',
+      },
+
+      // ---------- DESCARTADAS ----------
+      {
+        id: 'app-dianping',
+        name: 'Dianping',
+        emoji: '🍜',
+        group: 'descartada',
+        purpose: 'Reseñas de restaurantes, el TripAdvisor chino.',
+        whenLabel: 'Descartada',
+        perPerson: false,
+        steps: [
+          'No instalarla: exige número chino para servir de algo.',
+          'Sustituto: las reseñas y rankings que ya trae Amap Global.',
+          'Si en algún momento hiciera falta, existe su mini-programa dentro de WeChat.',
+        ],
+      },
+      {
+        id: 'app-meituan',
+        name: 'Meituan',
+        emoji: '🛵',
+        group: 'descartada',
+        purpose: 'Comida a domicilio.',
+        whenLabel: 'Descartada',
+        perPerson: false,
+        steps: [
+          'No instalarla: exige número chino y dirección local escrita en chino.',
+          'Sustituto: pedirlo en recepción del hotel, que además resuelve el idioma.',
+          'O el mini-programa dentro de Alipay.',
+        ],
+      },
+      {
+        id: 'app-taobao',
+        name: 'Taobao / Duoduo',
+        emoji: '📦',
+        group: 'descartada',
+        purpose: 'Compras online en China.',
+        whenLabel: 'Descartada',
+        perPerson: false,
+        steps: [
+          'Descartadas: en 22 noches cambiando de hotel cada 1-3 días no hay dónde recibir un envío.',
+          'Para compras, mercados y tiendas físicas pagando con Alipay.',
+        ],
+      },
+    ],
+
+    esim: {
+      provider: 'Holafly',
+      planLabel: 'China · 30 días · datos ilimitados',
+      priceEachEur: 73.9,
+      units: 2,
+      buyWindow: '5-7 de octubre de 2026',
+      buyDeadline: '2026-10-07',
+      activateWhen: 'Al aterrizar en Pekín, el 10 de octubre',
+      facts: [
+        'Datos ilimitados y VPN integrada: enruta por servidores de Singapur y Hong Kong, así que Google, Gmail, WhatsApp e Instagram funcionan sin configurar nada.',
+        'Es de SOLO DATOS: no da número chino ni recibe SMS. El número para el banco y las apps sigue siendo el español.',
+        'Hotspot limitado a ~500 MB al día: por eso hace falta una por móvil y no se puede compartir.',
+        'Necesitáis 24 días de conectividad (9 oct → 1 nov). El plan de 15 días (50,50 €) no llega; el de 30 días sí, con margen.',
+        'El plan empieza a contar en la primera conexión a una red compatible, no al comprarlo.',
+      ],
+      lineSetup: [
+        { line: 'Línea española', setting: 'Llamadas y SMS', value: 'ACTIVADA', tone: 'ok' },
+        { line: 'Línea española', setting: 'Roaming de datos', value: 'DESACTIVADO', tone: 'warn' },
+        { line: 'Línea española', setting: 'Usarla como línea de datos', value: 'NO', tone: 'warn' },
+        { line: 'Línea Holafly', setting: 'Usarla como línea de datos', value: 'SÍ', tone: 'ok' },
+        { line: 'Línea Holafly', setting: 'Roaming de datos', value: 'ACTIVADO', tone: 'ok' },
+        { line: 'Los dos iPhone', setting: 'Permitir cambios de datos móviles', value: 'DESACTIVADO', tone: 'warn' },
+      ],
+      phonesNote: 'Igual en el iPhone 14 y en el 17 Pro: los dos, comprados en España, conservan bandeja de SIM física (en España solo el iPhone Air es exclusivamente e-SIM). Así que la SIM española se queda puesta y la de Holafly entra como e-SIM, sin tocar nada más.',
+    },
+
+    goldenRules: [
+      'Descargar y registrar TODO desde España, mientras el SMS al +34 llega sin problemas.',
+      'No cambiar la región del Apple ID. Si una app no está en la App Store española, se usa su mini-programa dentro de Alipay o WeChat, nunca un Apple ID chino.',
+      'Una cuenta por persona en todo lo que sea real-name: trenes y entradas se compran con el pasaporte de cada uno.',
+      'Llevar en papel: usuario y contraseña de la VPN, el teléfono del seguro y la dirección de los hoteles en chino.',
+    ],
+  },
 };

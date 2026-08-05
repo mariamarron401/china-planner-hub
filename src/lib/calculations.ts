@@ -1,4 +1,4 @@
-import { HotelOption, CityStop } from '@/types/trip';
+import { HotelOption, CityStop, AppTask } from '@/types/trip';
 
 export function getHotelCalcs(hotel: HotelOption, nights: number) {
   if (hotel.priceStatus === 'pending' || hotel.totalPrice === null) return null;
@@ -98,4 +98,13 @@ export function getGlobalBudget(
     avgPerPersonPerNight: totalNightsWithData > 0 ? Math.round(avgTotal / totalNightsWithData / 2) : 0,
     totalNights,
   };
+}
+
+/**
+ * Una gestión de la pantalla Apps está terminada cuando la han hecho los dos (si necesita
+ * una cuenta por persona) o cuando está marcada una sola vez (si es una gestión compartida).
+ * Vive aquí para que la pantalla Apps y el inicio cuenten exactamente lo mismo.
+ */
+export function isAppTaskComplete(task: AppTask): boolean {
+  return task.perPerson ? Boolean(task.doneJm && task.doneMaria) : Boolean(task.done);
 }

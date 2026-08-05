@@ -1,8 +1,8 @@
 import { useTrip } from '@/context/TripContext';
 import { usePendingItems } from '@/hooks/usePendingItems';
-import { getGlobalBudget } from '@/lib/calculations';
+import { getGlobalBudget, isAppTaskComplete } from '@/lib/calculations';
 import { Link } from 'react-router-dom';
-import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, CalendarRange, ChevronRight, ListTodo, Compass, Plane, ArrowLeftRight, TrainFront, Hourglass } from 'lucide-react';
+import { MapPin, Moon, Users, Wallet, AlertCircle, CalendarDays, CalendarRange, ChevronRight, ListTodo, Compass, Plane, ArrowLeftRight, TrainFront, Hourglass, Smartphone } from 'lucide-react';
 
 export default function Dashboard() {
   const { data, orderedCities, toggleRouteDirection } = useTrip();
@@ -10,6 +10,10 @@ export default function Dashboard() {
   const { trip, cities, hotels, selectedHotels, activities, flights, transportLegs } = data;
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
   const openPending = pendingItems.filter(p => p.status === 'open');
+  // Progreso de configuración de apps (las descartadas no cuentan: no hay nada que hacer).
+  const appsTasks = data.appSetup.tasks.filter(t => t.group !== 'descartada');
+  const appsDone = appsTasks.filter(isAppTaskComplete).length;
+  const appsPct = appsTasks.length ? Math.round((appsDone / appsTasks.length) * 100) : 0;
   const outbound = flights.filter(f => f.direction === 'outbound');
   const returnFlights = flights.filter(f => f.direction === 'return');
   const firstCity = orderedCities[0];
@@ -164,6 +168,27 @@ export default function Dashboard() {
               <Link to="/pendientes" className="text-xs text-primary font-medium">Ver {openPending.length - 3} más →</Link>
             )}
           </div>
+        </div>
+
+        {/* Apps y conectividad */}
+        <div className="bg-card rounded-xl border border-border p-4 shadow-sm animate-fade-in" style={{ animationDelay: '0.12s' }}>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              <Smartphone className="h-3.5 w-3.5" /> Apps y conectividad
+            </div>
+            <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
+              {appsDone}/{appsTasks.length}
+            </span>
+          </div>
+          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${appsPct}%` }} />
+          </div>
+          <p className="text-xs text-muted-foreground mt-2 leading-snug">
+            {appsDone === appsTasks.length
+              ? 'Todo configurado. Solo queda comprar las e-SIM en octubre.'
+              : 'Se configura todo desde España con el número español: la e-SIM de Holafly es de solo datos y no recibe SMS.'}
+          </p>
+          <Link to="/apps" className="text-xs text-primary font-medium mt-2 inline-block">Ver qué toca hacer →</Link>
         </div>
 
         {/* Quick links */}

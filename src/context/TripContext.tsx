@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, BudgetExtras } from '@/types/trip';
+import { TripData, HotelOption, TransportLeg, LocalTransport, Activity, BudgetExtras, AppTask } from '@/types/trip';
 import { initialTripData } from '@/data/initialData';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -13,6 +13,7 @@ interface TripContextType {
   updateTransportLeg: (id: string, updates: Partial<TransportLeg>) => void;
   updateLocalTransport: (id: string, updates: Partial<LocalTransport>) => void;
   updateActivity: (id: string, updates: Partial<Activity>) => void;
+  updateAppTask: (id: string, updates: Partial<Pick<AppTask, 'done' | 'doneJm' | 'doneMaria'>>) => void;
   toggleRouteDirection: () => void;
   resetData: () => void;
   updateBudgetExtras: (extras: Partial<BudgetExtras>) => void;
@@ -71,6 +72,13 @@ function applyOverrides(base: TripData, overrides: Record<string, any>): TripDat
       return o ? { ...lt, ...o } : lt;
     }),
     budgetExtras: budgetExtrasOverride ? { ...base.budgetExtras, ...budgetExtrasOverride } : base.budgetExtras,
+    appSetup: {
+      ...base.appSetup,
+      tasks: base.appSetup.tasks.map(t => {
+        const o = overrides[`override:appTask:${t.id}`];
+        return o ? { ...t, ...o } : t;
+      }),
+    },
   };
 }
 
@@ -103,6 +111,10 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         // y se recalculan al verificar datos, así que siempre se toman del código. Sin esta
         // línea, una sesión guardada antes del 03/08/2026 no vería el bloque en Hoteles.
         parsed.earlyStarts = initialTripData.earlyStarts;
+        // Las apps a configurar son contenido informativo del código; lo único editable son
+        // las casillas, que viven en los overrides de Supabase (compartidas entre los dos
+        // móviles). Por eso el bloque se toma siempre fresco y no se guarda en localStorage.
+        parsed.appSetup = initialTripData.appSetup;
         return parsed;
       }
       return initialTripData;
@@ -227,6 +239,19 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
     setOverride(`override:activity:${id}`, { price: merged.price, duration: merged.duration, status: merged.status });
   }, [data.activities, setOverride]);
 
+  // Las casillas de la pantalla Apps solo viven en los overrides compartidos: así, si María
+  // marca WeChat como listo en su móvil, José Miguel lo ve en el suyo sin recargar.
+  const updateAppTask = useCallback((id: string, updates: Partial<Pick<AppTask, 'done' | 'doneJm' | 'doneMaria'>>) => {
+    const current = data.appSetup.tasks.find(t => t.id === id);
+    const merged = {
+      done: current?.done ?? false,
+      doneJm: current?.doneJm ?? false,
+      doneMaria: current?.doneMaria ?? false,
+      ...updates,
+    };
+    setOverride(`override:appTask:${id}`, merged);
+  }, [data.appSetup.tasks, setOverride]);
+
   const toggleRouteDirection = useCallback(() => {
     const next = data.trip.routeDirection === 'forward' ? 'reverse' : 'forward';
     setLocalData(prev => ({ ...prev, trip: { ...prev.trip, routeDirection: next } }));
@@ -250,7 +275,7 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
     <TripContext.Provider value={{
       data, orderedCities, orderedTransportLegs,
       selectHotel, deselectHotel, updateHotelPrice,
-      updateTransportLeg, updateLocalTransport, updateActivity,
+      updateTransportLeg, updateLocalTransport, updateActivity, updateAppTask,
       toggleRouteDirection, resetData, updateBudgetExtras,
     }}>
       {children}
