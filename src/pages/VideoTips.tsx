@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTrip } from '@/context/TripContext';
 import { useVideoTips } from '@/hooks/useVideoTips';
-import { Plus, ExternalLink, Trash2, Video, ChevronDown, ChevronUp, Sparkles, Loader2 } from 'lucide-react';
+import { Plus, ExternalLink, Trash2, Video, ChevronDown, ChevronUp, Sparkles, Loader2, MapPin } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import { VideoTip } from '@/types/trip';
+import { VideoTip, VideoTipEntry, TipCategory } from '@/types/trip';
 
 const platformLabels: Record<VideoTip['platform'], string> = {
   tiktok: 'TikTok',
@@ -15,25 +15,43 @@ const platformLabels: Record<VideoTip['platform'], string> = {
   other: 'Otro',
 };
 
+const CATEGORY_ORDER: TipCategory[] = ['restaurante', 'cafeteria', 'sitios_a_visitar', 'requisitos_ciudad', 'clip', 'otro'];
+const CATEGORY_LABELS: Record<TipCategory, string> = {
+  restaurante: '🍜 Restaurantes',
+  cafeteria: '☕ Cafeterías',
+  sitios_a_visitar: '📍 Sitios a visitar',
+  requisitos_ciudad: '📋 Requisitos de la ciudad',
+  clip: '🎬 Clips y trucos',
+  otro: '✨ Otros',
+};
+
+const NO_CITY_KEY = '__sin_ciudad__';
 const ANALYSIS_SERVER_URL = import.meta.env.VITE_VIDEO_ANALYSIS_SERVER_URL || 'https://china-video-analysis.onrender.com';
 
+interface GroupedTip {
+  text: string;
+  video: VideoTip;
+}
+
 export default function VideoTips() {
-  const { data } = useTrip();
+  const { data, orderedCities } = useTrip();
   const { videoTips, addVideoTip, deleteVideoTip } = useVideoTips();
 
   const [analyzeUrl, setAnalyzeUrl] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [showVideoList, setShowVideoList] = useState(false);
 
   const [showAdd, setShowAdd] = useState(false);
   const [newUrl, setNewUrl] = useState('');
   const [newPlatform, setNewPlatform] = useState<VideoTip['platform']>('tiktok');
   const [newTitle, setNewTitle] = useState('');
   const [newTips, setNewTips] = useState('');
+  const [newTipCategory, setNewTipCategory] = useState<TipCategory>('otro');
   const [newCityId, setNewCityId] = useState('');
 
   const resetModalState = () => {
-    setNewUrl(''); setNewPlatform('tiktok'); setNewTitle(''); setNewTips(''); setNewCityId('');
+    setNewUrl(''); setNewPlatform('tiktok'); setNewTitle(''); setNewTips(''); setNewTipCategory('otro'); setNewCityId('');
   };
 
   const handleAnalyze = async () => {
@@ -70,7 +88,8 @@ export default function VideoTips() {
       toast({ title: 'URL y título son obligatorios', variant: 'destructive' });
       return;
     }
-    const tipsList = newTips.split('\n').map(t => t.trim()).filter(Boolean);
+    const tipsList: VideoTipEntry[] = newTips.split('\n').map(t => t.trim()).filter(Boolean)
+      .map(text => ({ text, category: newTipCategory }));
     const now = new Date().toISOString();
     await addVideoTip({
       id: `vt-${Date.now()}`,
@@ -89,6 +108,23 @@ export default function VideoTips() {
   };
 
   const cityName = (cityId?: string) => data.cities.find(c => c.id === cityId)?.cityName;
+
+  // Agrupa todos los tips de todos los vídeos por ciudad y, dentro de cada ciudad, por temática.
+  const grouped = useMemo(() => {
+    const map = new Map<string, Map<TipCategory, GroupedTip[]>>();
+    videoTips.forEach(v => {
+      const cityKey = v.cityId || NO_CITY_KEY;
+      if (!map.has(cityKey)) map.set(cityKey, new Map());
+      const catMap = map.get(cityKey)!;
+      v.tips.forEach(t => {
+        if (!catMap.has(t.category)) catMap.set(t.category, []);
+        catMap.get(t.category)!.push({ text: t.text, video: v });
+      });
+    });
+    return map;
+  }, [videoTips]);
+
+  const cityOrder = [...orderedCities.map(c => c.id), NO_CITY_KEY].filter(id => grouped.has(id));
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -116,7 +152,7 @@ export default function VideoTips() {
             <h2 className="text-sm font-medium text-foreground">Analizar vídeo automáticamente</h2>
           </div>
           <p className="text-xs text-muted-foreground mb-3">
-            Pega el enlace de un vídeo público de TikTok (Instagram a veces lo bloquea) y se transcribe y guarda solo. Puede tardar hasta 1-2 minutos si el servidor llevaba un rato dormido.
+            Pega el enlace de un vídeo público de TikTok (Instagram a veces lo bloquea) y se transcribe y guarda solo, ya clasificado por ciudad y temática. Puede tardar hasta 1-2 minutos si el servidor llevaba un rato dormido.
           </p>
           <div className="flex gap-2">
             <Input
@@ -133,81 +169,119 @@ export default function VideoTips() {
         </div>
       </div>
 
-      <div className="px-4 space-y-2">
+      {/* Tips agrupados por ciudad y temática */}
+      <div className="px-4 space-y-4">
         {videoTips.length === 0 && (
           <div className="text-center text-sm text-muted-foreground py-10">
-            Aún no hay tips guardados. Manda un enlace de un vídeo público de TikTok/Instagram sobre China al agente y aparecerá aquí.
+            Aún no hay tips guardados. Pega arriba el enlace de un vídeo público sobre China y aparecerá aquí, ya clasificado.
           </div>
         )}
-        {videoTips.map(v => (
-          <div key={v.id} className="bg-card rounded-xl border border-border p-4 shadow-sm">
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <Video className="h-4 w-4 text-primary flex-shrink-0" />
-                <h3 className="font-medium text-sm text-foreground truncate">{v.title}</h3>
+        {cityOrder.map(cityKey => {
+          const catMap = grouped.get(cityKey)!;
+          const label = cityKey === NO_CITY_KEY ? 'Sin ciudad concreta' : cityName(cityKey) || cityKey;
+          return (
+            <div key={cityKey}>
+              <div className="flex items-center gap-1.5 mb-2">
+                <MapPin className="h-4 w-4 text-primary" />
+                <h2 className="text-base font-bold text-foreground">{label}</h2>
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                  {platformLabels[v.platform]}
-                </span>
-                <button onClick={() => deleteVideoTip(v.id)} className="text-muted-foreground hover:text-destructive">
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </div>
-            {v.status === 'pending_review' && (
-              <span className="inline-block mt-2 text-[10px] font-medium px-2 py-0.5 rounded-full bg-travel-pending-bg text-travel-pending">
-                Pendiente de revisar transcripción
-              </span>
-            )}
-            {v.tips.length > 0 && (
-              <ul className="mt-2 space-y-1 list-disc list-inside">
-                {v.tips.map((t, i) => (
-                  <li key={i} className="text-xs text-muted-foreground">{t}</li>
-                ))}
-              </ul>
-            )}
-            {(v.transcript || v.caption) && (
-              <div className="mt-2">
-                <button
-                  onClick={() => setExpandedId(expandedId === v.id ? null : v.id)}
-                  className="text-[10px] text-primary flex items-center gap-1"
-                >
-                  {expandedId === v.id ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-                  {expandedId === v.id ? 'Ocultar transcripción' : 'Ver transcripción / caption original'}
-                </button>
-                {expandedId === v.id && (
-                  <div className="mt-2 space-y-2">
-                    {v.caption && (
-                      <p className="text-xs text-muted-foreground bg-muted rounded-md p-2 whitespace-pre-wrap">{v.caption}</p>
-                    )}
-                    {v.transcript && (
-                      <p className="text-xs text-muted-foreground bg-muted rounded-md p-2 whitespace-pre-wrap">{v.transcript}</p>
-                    )}
+              <div className="space-y-3">
+                {CATEGORY_ORDER.filter(cat => catMap.has(cat)).map(cat => (
+                  <div key={cat} className="bg-card rounded-xl border border-border p-3.5 shadow-sm">
+                    <h3 className="text-xs font-semibold text-foreground mb-2">{CATEGORY_LABELS[cat]}</h3>
+                    <ul className="space-y-1.5">
+                      {catMap.get(cat)!.map((item, i) => (
+                        <li key={i} className="text-xs text-muted-foreground flex items-start justify-between gap-2">
+                          <span className="flex-1">• {item.text}</span>
+                          <a
+                            href={item.video.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={`Ver vídeo: ${item.video.title}`}
+                            className="text-primary flex-shrink-0"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                )}
+                ))}
               </div>
-            )}
-            <div className="flex items-center gap-2 mt-2">
-              {cityName(v.cityId) && (
-                <span className="text-[10px] bg-muted text-muted-foreground px-2 py-0.5 rounded">{cityName(v.cityId)}</span>
-              )}
-              <a href={v.url} target="_blank" rel="noopener noreferrer"
-                className="text-[10px] text-primary flex items-center gap-1 ml-auto">
-                Ver vídeo original <ExternalLink className="h-3 w-3" />
-              </a>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* FAB */}
-      <button
-        onClick={() => { resetModalState(); setShowAdd(true); }}
-        className="fixed bottom-20 right-4 z-40 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:bg-primary/90 transition-colors"
-      >
-        <Plus className="h-6 w-6" />
-      </button>
+      {/* Vídeos analizados (para borrar o ver la transcripción original) */}
+      {videoTips.length > 0 && (
+        <div className="px-4 mt-6">
+          <button
+            onClick={() => setShowVideoList(!showVideoList)}
+            className="text-xs font-medium text-muted-foreground flex items-center gap-1"
+          >
+            {showVideoList ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+            Vídeos analizados ({videoTips.length})
+          </button>
+          {showVideoList && (
+            <div className="space-y-2 mt-2">
+              {videoTips.map(v => (
+                <div key={v.id} className="bg-card rounded-xl border border-border p-4 shadow-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Video className="h-4 w-4 text-primary flex-shrink-0" />
+                      <h3 className="font-medium text-sm text-foreground truncate">{v.title}</h3>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                        {platformLabels[v.platform]}
+                      </span>
+                      <button onClick={() => deleteVideoTip(v.id)} className="text-muted-foreground hover:text-destructive">
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                  {v.status === 'pending_review' && (
+                    <span className="inline-block mt-2 text-[10px] font-medium px-2 py-0.5 rounded-full bg-travel-pending-bg text-travel-pending">
+                      Pendiente de revisar transcripción
+                    </span>
+                  )}
+                  {(v.transcript || v.caption) && (
+                    <div className="mt-2">
+                      <button
+                        onClick={() => setExpandedId(expandedId === v.id ? null : v.id)}
+                        className="text-[10px] text-primary flex items-center gap-1"
+                      >
+                        {expandedId === v.id ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                        {expandedId === v.id ? 'Ocultar transcripción' : 'Ver transcripción / caption original'}
+                      </button>
+                      {expandedId === v.id && (
+                        <div className="mt-2 space-y-2">
+                          {v.caption && (
+                            <p className="text-xs text-muted-foreground bg-muted rounded-md p-2 whitespace-pre-wrap">{v.caption}</p>
+                          )}
+                          {v.transcript && (
+                            <p className="text-xs text-muted-foreground bg-muted rounded-md p-2 whitespace-pre-wrap">{v.transcript}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 mt-2">
+                    {cityName(v.cityId) && (
+                      <span className="text-[10px] bg-muted text-muted-foreground px-2 py-0.5 rounded">{cityName(v.cityId)}</span>
+                    )}
+                    <a href={v.url} target="_blank" rel="noopener noreferrer"
+                      className="text-[10px] text-primary flex items-center gap-1 ml-auto">
+                      Ver vídeo original <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Add modal */}
       <Dialog open={showAdd} onOpenChange={v => { if (!v) { setShowAdd(false); resetModalState(); } }}>
@@ -232,6 +306,13 @@ export default function VideoTips() {
             <div>
               <label className="text-xs font-medium text-muted-foreground">Título / resumen corto *</label>
               <Input value={newTitle} onChange={e => setNewTitle(e.target.value)} className="mt-1" />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Temática de estos tips</label>
+              <select value={newTipCategory} onChange={e => setNewTipCategory(e.target.value as TipCategory)}
+                className="w-full mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm">
+                {CATEGORY_ORDER.map(cat => <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>)}
+              </select>
             </div>
             <div>
               <label className="text-xs font-medium text-muted-foreground">Tips (uno por línea)</label>

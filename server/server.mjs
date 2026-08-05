@@ -10,6 +10,9 @@
 //   SUPABASE_ANON_KEY       misma que VITE_SUPABASE_PUBLISHABLE_KEY de la app
 //   YTDLP_PATH (opcional)   ruta al binario yt-dlp, por defecto "yt-dlp" (debe estar en PATH)
 //   PORT (opcional)         puerto, Render lo inyecta solo
+//   INSTAGRAM_COOKIES_PATH (opcional)  ruta a un cookies.txt de una sesión de Instagram logueada,
+//                                      para que yt-dlp pueda descargar reels que bloquea sin sesión.
+//                                      Subir el fichero como "Secret File" en Render (nunca en git).
 
 import http from 'node:http';
 import os from 'node:os';
@@ -48,6 +51,16 @@ const CITIES = [
 ];
 const NO_CITY = 'none';
 
+// Cookies de una sesión de Instagram logueada (fichero Netscape cookies.txt), para que
+// yt-dlp pueda descargar reels que bloquea a peticiones anónimas. Se sube como "Secret File"
+// en Render, nunca vive en el código ni en git. Si no está configurado, yt-dlp simplemente
+// intenta sin cookies (funciona con TikTok/YouTube igualmente).
+const INSTAGRAM_COOKIES_PATH = process.env.INSTAGRAM_COOKIES_PATH;
+
+// Categorías fijas para clasificar cada tip individual (pedidas por María): se usan tanto
+// en el prompt de Groq como (con los mismos ids) en el frontend para agrupar la vista.
+const TIP_CATEGORIES = ['restaurante', 'cafeteria', 'sitios_a_visitar', 'requisitos_ciudad', 'clip', 'otro'];
+
 function detectPlatform(url) {
   try {
     const host = new URL(url).hostname.replace(/^www\./, '');
@@ -61,13 +74,20 @@ function detectPlatform(url) {
 }
 
 async function downloadVideo(url, workdir) {
-  await execFileAsync(YTDLP_PATH, [
+  const args = [
     '--no-playlist',
     '--write-description',
     '--write-info-json',
     '-o', path.join(workdir, 'video.%(ext)s'),
-    url,
-  ], { timeout: 5 * 60 * 1000, maxBuffer: 20 * 1024 * 1024 });
+  ];
+  // Usar cookies de sesión solo para Instagram: es lo que necesita para no bloquear la
+  // descarga, y evita mandar una cookie de Instagram a otros sitios sin necesidad.
+  if (detectPlatform(url) === 'instagram' && INSTAGRAM_COOKIES_PATH && existsSync(INSTAGRAM_COOKIES_PATH)) {
+    args.push('--cookies', INSTAGRAM_COOKIES_PATH);
+  }
+  args.push(url);
+
+  await execFileAsync(YTDLP_PATH, args, { timeout: 5 * 60 * 1000, maxBuffer: 20 * 1024 * 1024 });
 
   const files = await fs.readdir(workdir);
   const videoFile = files.find(f => f.startsWith('video.') && !f.endsWith('.json') && !f.endsWith('.description'));
@@ -119,6 +139,7 @@ async function extractTips({ title, caption, transcript }) {
   const cityList = CITIES.map(c => `${c.id} = ${c.name}`).join(', ');
   const prompt = `Eres un asistente que ayuda a extraer tips de viaje de vídeos de TikTok/Instagram sobre un viaje a China.
 Ciudades válidas de la ruta (usa el id exacto o "${NO_CITY}" si no aplica a ninguna): ${cityList}.
+Categorías válidas para cada tip (usa el id exacto): restaurante, cafeteria, sitios_a_visitar, requisitos_ciudad (trámites/reservas/entradas/normas necesarias para visitar algo), clip (trucos o datos sueltos que no encajan en las anteriores), otro.
 
 Título del vídeo: ${title || '(sin título)'}
 Caption/descripción original: ${caption || '(sin descripción)'}
@@ -128,7 +149,7 @@ Devuelve SOLO un JSON con esta forma exacta, sin explicaciones:
 {
   "title": "resumen corto y claro del vídeo (máx 80 caracteres)",
   "cityId": "uno de los ids de la lista, o \\"${NO_CITY}\\"",
-  "tips": ["tip concreto y accionable 1", "tip concreto y accionable 2", "..."]
+  "tips": [{"text": "tip concreto y accionable", "category": "una de las categorías válidas"}]
 }
 Los tips deben ser frases cortas, concretas y accionables (sitios, precios, trucos, horarios, apps, comida...), en español, basadas solo en lo que dice el vídeo. Si no hay tips claros, devuelve un array vacío.`;
 
@@ -145,15 +166,23 @@ Los tips deben ser frases cortas, concretas y accionables (sitios, precios, truc
   if (!res.ok) throw new Error(`Groq (extracción) devolvió ${res.status}: ${await res.text()}`);
   const data = await res.json();
   const parsed = JSON.parse(data.choices[0].message.content);
+  const tips = Array.isArray(parsed.tips)
+    ? parsed.tips
+      .filter(t => t && t.text)
+      .map(t => ({ text: t.text, category: TIP_CATEGORIES.includes(t.category) ? t.category : 'otro' }))
+    : [];
   return {
     title: parsed.title || title || 'Vídeo sin título',
     cityId: CITIES.some(c => c.id === parsed.cityId) ? parsed.cityId : NO_CITY,
-    tips: Array.isArray(parsed.tips) ? parsed.tips.filter(Boolean) : [],
+    tips,
   };
 }
 
 async function saveToSupabase({ url, platform, title, cityId, tips, caption, transcript }) {
   const id = `vt-${Date.now()}`;
+  // `tags` es un TEXT[] en la tabla — se codifica cada tip como "categoria::texto" para
+  // poder agrupar por categoría en el frontend sin tocar el esquema de la tabla.
+  const encodedTags = tips.map(t => `${t.category}::${t.text}`);
   const res = await fetch(`${SUPABASE_URL}/rest/v1/places`, {
     method: 'POST',
     headers: {
@@ -169,7 +198,7 @@ async function saveToSupabase({ url, platform, title, cityId, tips, caption, tra
       name: title,
       alt_name: platform,
       url,
-      tags: tips,
+      tags: encodedTags,
       notes: JSON.stringify({ caption, transcript, status: 'reviewed' }),
       status: 'saved',
     }),

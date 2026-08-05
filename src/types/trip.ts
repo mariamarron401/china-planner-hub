@@ -331,18 +331,86 @@ export interface PlaceItem {
   updatedAt: string;
 }
 
+/** Temática de un tip individual de vídeo, para poder agruparlos por ciudad + tema en la app. */
+export type TipCategory = 'restaurante' | 'cafeteria' | 'sitios_a_visitar' | 'requisitos_ciudad' | 'clip' | 'otro';
+
+export interface VideoTipEntry {
+  text: string;
+  category: TipCategory;
+}
+
 export interface VideoTip {
   id: string;
   url: string;
   platform: 'tiktok' | 'instagram' | 'youtube' | 'other';
   title: string;
-  tips: string[];
+  tips: VideoTipEntry[];
   cityId?: string;
   transcript?: string;
   caption?: string;
   status: 'pending_review' | 'reviewed';
   createdAt: string;
   updatedAt: string;
+}
+
+/** Bloque de la pantalla "Apps" en el que se agrupa cada gestión. */
+export type AppTaskGroup = 'hoy' | 'trenes' | 'terreno' | 'esim' | 'descartada';
+
+/**
+ * Una app o gestión de conectividad que hay que dejar lista antes de volar.
+ * El contenido informativo vive en initialData.ts; solo los campos `done*` son
+ * editables y se comparten entre los dos móviles vía Supabase.
+ */
+export interface AppTask {
+  id: string;
+  /** Nombre visible, ej. "WeChat" */
+  name: string;
+  emoji: string;
+  group: AppTaskGroup;
+  /** Para qué sirve, en una línea */
+  purpose: string;
+  /** Cuándo toca hacerlo, en texto: "HOY", "Antes del 14 ago"... */
+  whenLabel: string;
+  /** Fecha límite real (YYYY-MM-DD) para la cuenta atrás en vivo */
+  deadline?: string;
+  /** true si hace falta una cuenta/configuración por persona (José Miguel y María) */
+  perPerson: boolean;
+  /** Pasos accionables, en orden */
+  steps: string[];
+  /** Aviso destacado */
+  warning?: string;
+  /** Por qué esa fecha y no otra */
+  why?: string;
+  /** Enlace de descarga o de información */
+  url?: string;
+  /** Estado marcable de las tareas de una sola casilla */
+  done?: boolean;
+  /** Estado marcable de José Miguel (solo en tareas perPerson) */
+  doneJm?: boolean;
+  /** Estado marcable de María (solo en tareas perPerson) */
+  doneMaria?: boolean;
+}
+
+/** Plan de e-SIM. Decisión ya tomada: se contrata de cara al viaje, no ahora. */
+export interface EsimPlan {
+  provider: string;
+  planLabel: string;
+  priceEachEur: number;
+  units: number;
+  buyWindow: string;
+  /** Fecha objetivo de compra (YYYY-MM-DD) para la cuenta atrás */
+  buyDeadline: string;
+  activateWhen: string;
+  facts: string[];
+  /** Configuración de las dos líneas, igual en el iPhone 14 y en el 17 Pro */
+  lineSetup: { line: string; setting: string; value: string; tone: 'ok' | 'warn' }[];
+  phonesNote: string;
+}
+
+export interface AppSetup {
+  tasks: AppTask[];
+  esim: EsimPlan;
+  goldenRules: string[];
 }
 
 export interface TripData {
@@ -362,4 +430,6 @@ export interface TripData {
   budgetExtras: BudgetExtras;
   /** Días de salida temprana cruzados con el horario de desayuno de cada hotel. */
   earlyStarts: EarlyStart[];
+  /** Apps a configurar desde España + plan de e-SIM y configuración de los dos iPhone. */
+  appSetup: AppSetup;
 }

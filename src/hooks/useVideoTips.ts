@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { VideoTip } from '@/types/trip';
+import { VideoTip, VideoTipEntry, TipCategory } from '@/types/trip';
 
 // Los tips de vídeo se guardan en la tabla Supabase `places` (category = 'video_tip'),
 // reutilizando columnas ya existentes: alt_name=platform, tags=lista de tips,
@@ -10,6 +10,21 @@ import { VideoTip } from '@/types/trip';
 // city_id es NOT NULL en la tabla, así que los tips sin ciudad usan el sentinel 'none'.
 const CATEGORY = 'video_tip';
 const NO_CITY = 'none';
+const TIP_CATEGORIES: TipCategory[] = ['restaurante', 'cafeteria', 'sitios_a_visitar', 'requisitos_ciudad', 'clip', 'otro'];
+
+// Cada tip se guarda en `tags` como "categoria::texto" para poder agruparlos por temática
+// sin tocar el esquema de la tabla. Los tips antiguos (guardados antes de esto, sin "::")
+// se tratan como categoría "otro" para no perderlos.
+function decodeTag(tag: string): VideoTipEntry {
+  const sep = tag.indexOf('::');
+  if (sep === -1) return { text: tag, category: 'otro' };
+  const category = tag.slice(0, sep) as TipCategory;
+  return { text: tag.slice(sep + 2), category: TIP_CATEGORIES.includes(category) ? category : 'otro' };
+}
+
+function encodeTag(entry: VideoTipEntry): string {
+  return `${entry.category}::${entry.text}`;
+}
 
 function rowToVideoTip(row: any): VideoTip {
   let extra: { caption?: string; transcript?: string; status?: VideoTip['status'] } = {};
@@ -23,7 +38,7 @@ function rowToVideoTip(row: any): VideoTip {
     url: row.url || '',
     platform: (row.alt_name as VideoTip['platform']) || 'other',
     title: row.name,
-    tips: row.tags || [],
+    tips: (row.tags || []).map(decodeTag),
     cityId: (row.city_id && row.city_id !== NO_CITY) ? row.city_id : undefined,
     caption: extra.caption || undefined,
     transcript: extra.transcript || undefined,
@@ -66,7 +81,7 @@ export function useVideoTips() {
       name: tip.title,
       alt_name: tip.platform,
       url: tip.url,
-      tags: tip.tips,
+      tags: tip.tips.map(encodeTag),
       notes: JSON.stringify({ caption: tip.caption, transcript: tip.transcript, status: tip.status }),
       status: 'saved',
     });
@@ -79,7 +94,7 @@ export function useVideoTips() {
     if (updates.platform !== undefined) mapped.alt_name = updates.platform;
     if (updates.url !== undefined) mapped.url = updates.url;
     if (updates.cityId !== undefined) mapped.city_id = updates.cityId || NO_CITY;
-    if (updates.tips !== undefined) mapped.tags = updates.tips;
+    if (updates.tips !== undefined) mapped.tags = updates.tips.map(encodeTag);
     if (current && (updates.caption !== undefined || updates.transcript !== undefined || updates.status !== undefined)) {
       mapped.notes = JSON.stringify({
         caption: updates.caption !== undefined ? updates.caption : current.caption,

@@ -19,6 +19,21 @@ Servidor que recibe la URL de un vídeo público (TikTok/Instagram/YouTube), lo 
 
 Ninguna de estas claves debe estar nunca en el código ni en git — solo en el panel de Render.
 
+### Cookies de Instagram (opcional, para que descargue reels que bloquea sin sesión)
+
+Instagram bloquea a veces la descarga anónima de reels públicos. Para evitarlo, yt-dlp puede usar las cookies de una sesión de Instagram ya logueada:
+
+1. Instala la extensión de navegador **"Get cookies.txt LOCALLY"** (Chrome/Firefox/Edge).
+2. Con la extensión instalada, entra en **instagram.com** ya logueada con tu cuenta.
+3. Pulsa el icono de la extensión → exporta/descarga el `cookies.txt` de ese sitio.
+4. En Render → tu servicio → pestaña **"Environment"** → sección **"Secret Files"** → añade un fichero nuevo:
+   - **Filename** (ruta donde Render lo monta): `/etc/secrets/instagram_cookies.txt`
+   - **Contents:** pega el contenido del `cookies.txt` descargado.
+5. Añade la variable de entorno `INSTAGRAM_COOKIES_PATH` = `/etc/secrets/instagram_cookies.txt`.
+6. Redeploy del servicio (Render suele hacerlo solo al guardar).
+
+Este fichero es una sesión personal de Instagram — nunca debe subirse a git ni compartirse; Render lo guarda cifrado y no lo expone en el código. Si las cookies caducan (cierre de sesión, cambio de contraseña...), hay que repetir el proceso.
+
 ## Desarrollo local
 
 ```
