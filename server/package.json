@@ -1,0 +1,15 @@
+{
+  "name": "video-analysis-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Servidor que descarga un vídeo público (TikTok/Instagram/YouTube), lo transcribe y extrae tips de viaje con Groq, y los guarda en Supabase. Ver README.md.",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "build": "npm install && curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o yt-dlp && chmod +x yt-dlp"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0"
+  }
+}
