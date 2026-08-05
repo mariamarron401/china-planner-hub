@@ -14,6 +14,11 @@ export default function Transports() {
 
   const getCityName = (id: string) => cities.find(c => c.id === id)?.cityName?.split(' (')[0] || id;
 
+  // Fechas en que hay que estar atenta, calculadas en vivo contra el día de hoy
+  // para que la cuenta atrás nunca quede desfasada.
+  const watchDates = buildWatchDates(transportLegs, getCityName);
+  const nextWatch = watchDates.find(w => w.daysLeft >= 0);
+
   const handleSave = (id: string, type: 'inter' | 'local') => {
     const price = editValues.price ? parseFloat(editValues.price) : null;
     const duration = editValues.duration ? parseInt(editValues.duration) : null;
@@ -79,16 +84,55 @@ export default function Transports() {
       {tab === 'inter' && (
         <div className="px-4 mb-4">
           <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
-            <h2 className="text-sm font-bold text-foreground mb-2">📅 Calendario de agosto — cuándo entrar en Trip.com</h2>
-            <p className="text-[11px] text-muted-foreground mb-3">Los {transportLegs.filter(l => l.preBookingFrom).length} trenes, en el orden en que os van a tocar. Cada día, entra en Trip.com y activa la reserva anticipada de ese tramo (estaciones exactas en la tarjeta de abajo). El cambio de hotel Zhangjiajie → Wulingyuan del 24 oct no sale aquí: es un Didi que se pide en el momento, no se reserva.</p>
-            <div className="space-y-1.5">
-              {transportLegs.filter(leg => leg.preBookingFrom).map(leg => (
-                <div key={leg.id} className="flex items-center gap-2 text-xs">
-                  <span className="font-mono font-bold text-primary w-20 flex-shrink-0">{leg.preBookingFrom}</span>
-                  <span className="text-muted-foreground">→</span>
-                  <span className="text-foreground">{getCityName(leg.fromCityId)} → {getCityName(leg.toCityId)}</span>
-                  <span className="text-muted-foreground text-[10px] ml-auto flex-shrink-0">(viaje {leg.travelDate?.split(' (')[0]})</span>
+            <h2 className="text-sm font-bold text-foreground mb-1">📅 Días en que tienes que estar atenta</h2>
+
+            {nextWatch ? (
+              <div className="mt-2 mb-3 rounded-lg bg-primary text-primary-foreground px-3 py-2">
+                <div className="text-[10px] uppercase tracking-wide opacity-80">Lo siguiente que te toca</div>
+                <div className="text-sm font-bold leading-tight mt-0.5">
+                  {nextWatch.daysLeft === 0
+                    ? '¡HOY!'
+                    : nextWatch.daysLeft === 1
+                    ? 'Mañana'
+                    : `Faltan ${nextWatch.daysLeft} días`}
+                  {' · '}{nextWatch.dateLabel}
                 </div>
+                <div className="text-[11px] opacity-90 mt-0.5">
+                  {nextWatch.kind === 'pre'
+                    ? `Activar la pre-reserva en Trip.com: ${nextWatch.label}`
+                    : `Comprobar que el billete se emitió: ${nextWatch.label}`}
+                </div>
+              </div>
+            ) : (
+              <p className="text-[11px] text-travel-confirmed mt-1 mb-3">
+                ✅ Ya han pasado todas las fechas de la lista: solo queda comprobar que los billetes están emitidos.
+              </p>
+            )}
+
+            <p className="text-[11px] text-muted-foreground mb-3">
+              Dos cosas distintas por tramo. Primero, en agosto, <span className="font-medium text-foreground">activar la pre-reserva</span> en
+              Trip.com (60 días antes del viaje): Trip.com compra sola en cuanto China abra la venta. Después, ya en
+              octubre, <span className="font-medium text-foreground">comprobar que el billete se emitió de verdad</span> (15 días
+              antes, que es cuando 12306 abre la venta real). Si alguna fecha de agosto todavía no la acepta Trip.com,
+              reintenta al día siguiente: su ventana es de 59-60 días según el momento. El cambio de hotel
+              Zhangjiajie → Wulingyuan del 24 oct no sale aquí: es un Didi que se pide en el momento.
+            </p>
+
+            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">
+              Agosto · activar pre-reserva
+            </div>
+            <div className="space-y-1.5">
+              {watchDates.filter(w => w.kind === 'pre').map(w => (
+                <WatchRow key={`p-${w.id}`} w={w} />
+              ))}
+            </div>
+
+            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mt-3 mb-1.5">
+              Sept-oct · comprobar que el billete salió
+            </div>
+            <div className="space-y-1.5">
+              {watchDates.filter(w => w.kind === 'sale').map(w => (
+                <WatchRow key={`s-${w.id}`} w={w} />
               ))}
             </div>
           </div>
@@ -356,4 +400,78 @@ export default function Transports() {
 
 function PendingBadge() {
   return <span className="bg-travel-pending-bg text-travel-pending text-[10px] font-medium px-1.5 py-0.5 rounded">PENDIENTE</span>;
+}
+
+interface WatchDate {
+  id: string;
+  /** 'pre' = activar la pre-reserva en Trip.com (D-60). 'sale' = comprobar que el billete salió (D-15). */
+  kind: 'pre' | 'sale';
+  iso: string;
+  /** Ej. "vie 14 ago" */
+  dateLabel: string;
+  /** Ej. "Beijing → Xi'an" */
+  label: string;
+  /** Ej. "13 oct" */
+  travelLabel: string;
+  /** Días desde hoy: 0 = hoy, negativo = ya pasó. */
+  daysLeft: number;
+  /** true en los tramos con riesgo alto (pocos trenes o Golden Week). */
+  critical: boolean;
+}
+
+const DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
+
+/** Días de calendario entre hoy y una fecha ISO, ignorando la hora. */
+function daysUntil(iso: string): number {
+  const [y, m, d] = iso.split('-').map(Number);
+  const target = new Date(y, m - 1, d).getTime();
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  return Math.round((target - today) / 86400000);
+}
+
+function formatDateLabel(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  return `${DIAS[date.getDay()]} ${d} ${MESES[m - 1]}`;
+}
+
+function buildWatchDates(
+  legs: { id: string; fromCityId: string; toCityId: string; preBookingIso?: string; saleOpensIso?: string; travelDate?: string; alertNote?: string }[],
+  getCityName: (id: string) => string,
+): WatchDate[] {
+  const out: WatchDate[] = [];
+  for (const leg of legs) {
+    const label = `${getCityName(leg.fromCityId)} → ${getCityName(leg.toCityId)}`;
+    const travelLabel = leg.travelDate?.split(' (')[0] ?? '';
+    const critical = (leg.alertNote ?? '').includes('🔴🔴') || (leg.alertNote ?? '').includes('MÁS CRÍTICO');
+    if (leg.preBookingIso) {
+      out.push({ id: leg.id, kind: 'pre', iso: leg.preBookingIso, dateLabel: formatDateLabel(leg.preBookingIso), label, travelLabel, daysLeft: daysUntil(leg.preBookingIso), critical });
+    }
+    if (leg.saleOpensIso) {
+      out.push({ id: leg.id, kind: 'sale', iso: leg.saleOpensIso, dateLabel: formatDateLabel(leg.saleOpensIso), label, travelLabel, daysLeft: daysUntil(leg.saleOpensIso), critical });
+    }
+  }
+  return out.sort((a, b) => a.iso.localeCompare(b.iso));
+}
+
+function WatchRow({ w }: { w: WatchDate }) {
+  const past = w.daysLeft < 0;
+  const today = w.daysLeft === 0;
+  return (
+    <div className={`flex items-center gap-2 text-xs ${past ? 'opacity-45' : ''}`}>
+      <span className={`font-mono font-bold w-[68px] flex-shrink-0 ${today ? 'text-travel-pending' : 'text-primary'}`}>
+        {w.dateLabel}
+      </span>
+      <span className="text-muted-foreground">→</span>
+      <span className="text-foreground truncate">
+        {w.critical && <span title="Tramo con pocos trenes: no fallar este día">🔴 </span>}
+        {w.label}
+      </span>
+      <span className={`text-[10px] ml-auto flex-shrink-0 font-medium ${today ? 'text-travel-pending' : 'text-muted-foreground'}`}>
+        {today ? '¡HOY!' : past ? 'ya pasó' : w.daysLeft === 1 ? 'mañana' : `en ${w.daysLeft} d`}
+      </span>
+    </div>
+  );
 }

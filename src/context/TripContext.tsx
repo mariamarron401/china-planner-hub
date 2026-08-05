@@ -99,6 +99,10 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         // localStorage nunca deja la colección a undefined ni se queda con horarios viejos.
         parsed.airportTransfers = initialTripData.airportTransfers;
         parsed.flightTimelines = initialTripData.flightTimelines;
+        // Mismo caso: los días de salida temprana vs. horario de desayuno son informativos
+        // y se recalculan al verificar datos, así que siempre se toman del código. Sin esta
+        // línea, una sesión guardada antes del 03/08/2026 no vería el bloque en Hoteles.
+        parsed.earlyStarts = initialTripData.earlyStarts;
         return parsed;
       }
       return initialTripData;

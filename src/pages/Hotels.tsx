@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
 import { getHotelCalcs, getCityHotelStats, getHotelDeposits } from '@/lib/calculations';
-import { Check, ExternalLink, Coffee, Building2, Wallet } from 'lucide-react';
+import { Check, ExternalLink, Coffee, Building2, Wallet, AlarmClock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -10,6 +10,9 @@ type SortKey = 'total' | 'perNight' | 'perPersonPerNight';
 export default function Hotels() {
   const { data, selectHotel, deselectHotel, updateHotelPrice } = useTrip();
   const { cities, hotels, selectedHotels } = data;
+  const earlyStarts = data.earlyStarts ?? [];
+  const blocked = earlyStarts.filter(e => e.verdict === 'imposible');
+  const tight = earlyStarts.filter(e => e.verdict === 'muy-justo');
   const [filterCity, setFilterCity] = useState<string>('all');
   const [sortBy, setSortBy] = useState<SortKey>('total');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -64,6 +67,67 @@ export default function Hotels() {
             </div>
             <p className="text-[10px] text-travel-confirmed mt-2">
               ✅ Total cerrado: los {deposits.hotelsWithoutDeposit} hoteles restantes no piden depósito.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Madrugones vs. horario de desayuno */}
+      {earlyStarts.length > 0 && (
+        <div className="px-4 mb-4">
+          <div className="bg-card rounded-xl border-2 border-border p-3 shadow-sm">
+            <div className="flex items-center gap-2 text-xs font-semibold text-foreground uppercase tracking-wide">
+              <AlarmClock className="h-3.5 w-3.5" /> Madrugones y desayuno
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              El desayuno está incluido y pagado en los 10 hoteles, así que lo que importa no es si lo hay, sino si os
+              da tiempo a tomarlo. Cruzando la hora real de salida de cada día con el horario de desayuno de cada hotel
+              (verificado el 3 ago 2026), hay <span className="font-semibold text-travel-pending">{blocked.length} días en que es imposible</span>
+              {' '}y <span className="font-semibold text-foreground">{tight.length} al límite</span>. En esos días hay que pedirlo para llevar la noche antes.
+            </p>
+
+            <div className="mt-2 space-y-2">
+              {earlyStarts.map(es => {
+                const style =
+                  es.verdict === 'imposible'
+                    ? { box: 'bg-travel-pending-bg/50 border-travel-pending/40', label: 'text-travel-pending', tag: 'NO DA TIEMPO' }
+                    : es.verdict === 'muy-justo'
+                    ? { box: 'bg-muted/60 border-border', label: 'text-foreground', tag: 'AL LÍMITE' }
+                    : { box: 'bg-travel-confirmed-bg/40 border-travel-confirmed/30', label: 'text-travel-confirmed', tag: 'ENCAJA' };
+                return (
+                  <div key={es.id} className={`rounded-lg border px-2.5 py-2 ${style.box}`}>
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-[11px] font-semibold text-foreground leading-snug">{es.dateText}</p>
+                      <span className={`text-[9px] font-bold whitespace-nowrap ${style.label}`}>{style.tag}</span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-1">{es.reason}</p>
+                    <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px]">
+                      <span className="text-muted-foreground">
+                        Salís: <span className="font-semibold text-foreground">{es.leaveHotelAt}</span>
+                      </span>
+                      <span className="text-muted-foreground">
+                        Desayuno: <span className="font-semibold text-foreground">{es.breakfastHours}</span>
+                      </span>
+                      <span className={`font-semibold ${style.label}`}>
+                        {es.marginMinutes < 0
+                          ? `Salís ${Math.abs(es.marginMinutes)} min antes de que abra`
+                          : es.marginMinutes === 0
+                          ? 'Justo en el filo'
+                          : `${es.marginMinutes} min de desayuno`}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-1.5 leading-snug">{es.advice}</p>
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="text-[10px] text-muted-foreground mt-2 pt-2 border-t border-border leading-snug">
+              Para pedirlo, en recepción la noche antes:{' '}
+              <span className="font-medium text-foreground">请帮我们准备两份打包早餐，明天早上很早出发</span>{' '}
+              («preparadnos dos desayunos para llevar, mañana salimos muy temprano»). En China es normal y se llama{' '}
+              <span className="font-medium text-foreground">打包早餐</span> (dǎbāo zǎocān). Los días que no aparecen en
+              esta lista encajan de sobra y no hay que hacer nada.
             </p>
           </div>
         </div>
@@ -160,6 +224,22 @@ export default function Hotels() {
                               Check-in: <span className="font-medium text-foreground">{hotel.checkInTime}</span>
                               {' · '}
                               Check-out: <span className="font-medium text-foreground">{hotel.checkOutTime}</span>
+                            </p>
+                          )}
+                          {hotel.breakfastHours && (
+                            <p className="text-[11px] text-muted-foreground mt-0.5 flex items-start gap-1">
+                              <Coffee className="h-3 w-3 mt-[1px] shrink-0" />
+                              <span>
+                                Desayuno: <span className="font-medium text-foreground">{hotel.breakfastHours}</span>
+                                {hotel.breakfastType && <span className="text-muted-foreground"> · {hotel.breakfastType}</span>}
+                              </span>
+                            </p>
+                          )}
+                          {hotel.breakfastAlert && (
+                            <p className={`text-[10px] mt-1 leading-snug ${
+                              hotel.breakfastAlert.startsWith('⚠️') ? 'text-travel-pending' : 'text-muted-foreground'
+                            }`}>
+                              {hotel.breakfastAlert}
                             </p>
                           )}
                           {hotel.depositCny != null && (

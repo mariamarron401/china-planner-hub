@@ -77,6 +77,41 @@ export interface HotelOption {
   depositEur?: number;
   /** Detalle de la política de depósito, ej. "Se paga al completar el registro de entrada" */
   depositNote?: string;
+  /** Horario en que el hotel sirve el desayuno, ej. "07:00-09:30". Verificado en Trip.com el 03/08/2026. */
+  breakfastHours?: string;
+  /** Tipo de desayuno, ej. "Bufé · occidental y chino" */
+  breakfastType?: string;
+  /** Aviso cuando algún día de la estancia hay que salir antes de que abra el desayuno. */
+  breakfastAlert?: string;
+}
+
+/**
+ * Un día en que hay que salir del hotel a una hora que choca (o casi) con el
+ * horario de desayuno. Existe porque el desayuno ya está pagado en los 10
+ * hoteles: si no se puede tomar, hay que pedirlo para llevar la noche antes.
+ */
+export interface EarlyStart {
+  id: string;
+  /** Ej. "1 nov 2026 (domingo)" */
+  dateText: string;
+  cityId: string;
+  hotelName: string;
+  /** Por qué hay que salir temprano, ej. "Vuelo CA1590 a Pekín (sale 08:55 de Hongqiao)" */
+  reason: string;
+  /** Hora a la que hay que salir del hotel, ej. "06:00-06:15" */
+  leaveHotelAt: string;
+  /** Horario de desayuno del hotel, ej. "07:30-13:30" */
+  breakfastHours: string;
+  /**
+   * 'imposible' = se sale antes de que abra → desayuno para llevar obligatorio.
+   * 'muy-justo' = quedan menos de 30 min → mejor pedirlo para llevar.
+   * 'ok' = entra de sobra, no hay que hacer nada.
+   */
+  verdict: 'imposible' | 'muy-justo' | 'ok';
+  /** Minutos de desayuno realmente disponibles (negativo si se sale antes de que abra). */
+  marginMinutes: number;
+  /** Qué hacer exactamente. */
+  advice: string;
 }
 
 export interface TransportLeg {
@@ -93,6 +128,10 @@ export interface TransportLeg {
   toStation?: string;
   preBookingFrom?: string;
   saleOpensOn?: string;
+  /** Fecha ISO en que se puede activar la pre-reserva de Trip.com (D-60). Sirve para la cuenta atrás en vivo. */
+  preBookingIso?: string;
+  /** Fecha ISO en que 12306 abre la venta real (D-15). Día de verificar que el billete se emitió. */
+  saleOpensIso?: string;
   alertNote?: string;
   travelDate?: string;
   suggestedDeparture?: string;
@@ -321,4 +360,6 @@ export interface TripData {
   cityGallery: CityGalleryImage[];
   hotelGallery: HotelGalleryImage[];
   budgetExtras: BudgetExtras;
+  /** Días de salida temprana cruzados con el horario de desayuno de cada hotel. */
+  earlyStarts: EarlyStart[];
 }
