@@ -132,11 +132,21 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
   const [overrides, setOverridesState] = useState<Record<string, any>>({});
 
   const fetchOverrides = useCallback(async () => {
-    const { data: rows, error } = await supabase
-      .from('places')
-      .select('id, notes')
-      .eq('category', OVERRIDES_CATEGORY);
-    if (!error && rows) {
+    // En China, supabase.co está bloqueado por el Gran Cortafuegos y esta llamada falla por red
+    // (no devuelve `error`, lanza). Sin el try/catch sería una promesa rechazada sin capturar:
+    // la app se queda con los datos locales, que es justo lo que debe pasar.
+    let rows: { id: string; notes: string | null }[] | null = null;
+    try {
+      const res = await supabase
+        .from('places')
+        .select('id, notes')
+        .eq('category', OVERRIDES_CATEGORY);
+      if (res.error) return;
+      rows = res.data;
+    } catch {
+      return;
+    }
+    if (rows) {
       const map: Record<string, any> = {};
       rows.forEach(r => {
         try { map[r.id] = r.notes ? JSON.parse(r.notes) : {}; } catch { /* ignore fila corrupta */ }

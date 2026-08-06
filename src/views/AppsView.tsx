@@ -7,6 +7,7 @@ import {
   AlertTriangle, ExternalLink, CalendarClock, Wifi,
 } from 'lucide-react';
 import MoreInfo from '@/components/MoreInfo';
+import OfflineReadyCard from '@/components/OfflineReadyCard';
 
 // Cuenta atrás en vivo contra el día real: así las fechas nunca quedan desfasadas
 // y no hay que volver a tocar el código cada semana.
@@ -90,7 +91,8 @@ export default function AppsView() {
               <span className="font-medium text-foreground">
                 La VPN de Holafly va incluida, pero es un único punto de fallo.
               </span>{' '}
-              Si cae, se van Google, WhatsApp y las pantallas «Qué hacer» y «Pendientes» de esta app.
+              Si cae, se van Google, WhatsApp y las pantallas «Qué hacer» y «Pendientes» de esta app. La app en sí
+              sigue abriéndose sin VPN (está guardada en el móvil): ver la tarjeta de aquí abajo.
             </p>
           </MoreInfo>
 
@@ -101,6 +103,9 @@ export default function AppsView() {
           </MoreInfo>
         </div>
       </div>
+
+      {/* Si esta app se abrirá o no en China, y cómo dejarla guardada en el móvil */}
+      <OfflineReadyCard />
 
       {/* Filtros por bloque */}
       <div className="px-4 mt-4 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
