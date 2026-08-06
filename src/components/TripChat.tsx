@@ -44,9 +44,40 @@ function renderInline(line: string) {
   });
 }
 
+/**
+ * Cuánto tapa por abajo el teclado del móvil, en píxeles.
+ *
+ * En iOS el teclado NO encoge el viewport de CSS: `100vh` (y `100dvh`) siguen
+ * midiendo la pantalla entera, así que un panel anclado abajo se queda por
+ * debajo del teclado y no se ve dónde escribir. El único que sabe la verdad es
+ * `visualViewport`, y es lo que se usa aquí para apartar el panel hacia arriba.
+ */
+function useKeyboardInset() {
+  const [inset, setInset] = useState(0);
+
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const update = () => {
+      const covered = window.innerHeight - (vv.height + vv.offsetTop);
+      setInset(covered > 40 ? Math.round(covered) : 0);
+    };
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+    };
+  }, []);
+
+  return inset;
+}
+
 export default function TripChat() {
   const { data } = useTrip();
   const [open, setOpen] = useState(false);
+  const keyboardInset = useKeyboardInset();
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: 0, role: 'assistant', text: WELCOME },
@@ -90,9 +121,15 @@ export default function TripChat() {
 
       {/* Ventana de chat */}
       {open && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30" onClick={() => setOpen(false)}>
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/30"
+          // El relleno de abajo aparta el panel del teclado; `max-h-full` del
+          // panel se mide contra este hueco ya recortado, así que se encoge solo.
+          style={{ paddingBottom: keyboardInset }}
+          onClick={() => setOpen(false)}
+        >
           <div
-            className="w-full max-w-lg h-[80vh] bg-background rounded-t-2xl shadow-2xl flex flex-col animate-fade-in"
+            className="w-full max-w-lg h-[80dvh] max-h-full bg-background rounded-t-2xl shadow-2xl flex flex-col animate-fade-in overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Cabecera */}
@@ -110,7 +147,9 @@ export default function TripChat() {
             </div>
 
             {/* Mensajes */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
+            {/* `min-h-0` es imprescindible: sin él, un hijo flexible no encoge y
+                la lista de mensajes empuja el formulario fuera del panel. */}
+            <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto px-3 py-3 space-y-3">
               {messages.map((m) => (
                 <div key={m.id} className={cn('flex', m.role === 'user' ? 'justify-end' : 'justify-start')}>
                   <div
@@ -143,13 +182,28 @@ export default function TripChat() {
             </div>
 
             {/* Entrada de texto */}
-            <form onSubmit={handleSubmit} className="flex-shrink-0 border-t border-border p-2.5 flex items-center gap-2">
+            <form
+              onSubmit={handleSubmit}
+              className="flex-shrink-0 border-t border-border p-2.5 flex items-center gap-2 bg-background"
+              // Con el teclado cerrado hay que respetar la barra de gestos del
+              // iPhone; con el teclado abierto ese hueco ya no existe.
+              style={{ paddingBottom: keyboardInset ? undefined : 'calc(0.625rem + env(safe-area-inset-bottom))' }}
+            >
               <input
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onFocus={() => {
+                  // El teclado tarda en subir: al acabar, dejar el último
+                  // mensaje a la vista en vez de la mitad de la conversación.
+                  setTimeout(() => {
+                    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                  }, 350);
+                }}
+                enterKeyHint="send"
+                autoComplete="off"
                 placeholder="Escribe tu pregunta..."
-                className="flex-1 bg-muted rounded-full px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+                className="flex-1 min-w-0 bg-muted rounded-full px-4 py-2.5 text-base sm:text-sm outline-none focus:ring-2 focus:ring-primary/40"
               />
               <button
                 type="submit"

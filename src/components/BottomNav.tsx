@@ -29,7 +29,10 @@ export default function BottomNav() {
     (pathname === '/' ? '/' : tabs.slice(1).find(t => pathname.startsWith(t.path))?.path);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border safe-area-bottom">
+    // z-40 a propósito, por debajo de los paneles (chat y diálogos van en z-50):
+    // con el mismo z-index la barra se dibujaba encima y tapaba justo la caja de
+    // escribir del chat y los botones del final de los diálogos.
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-md border-t border-border safe-area-bottom">
       <div className="max-w-lg mx-auto flex items-stretch h-16 px-1">
         {tabs.map(tab => {
           const active = tab.path === activeTab;
