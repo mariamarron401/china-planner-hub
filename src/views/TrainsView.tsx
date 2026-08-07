@@ -226,15 +226,27 @@ export default function TrainsView() {
             </p>
           </div>
 
-          <MoreInfo label="El traslado que más cuidado necesita">
+          <MoreInfo label="¿Las maletas dan algún problema en el tren bala?">
             <p>
-              El del <span className="font-medium text-foreground">21 de octubre a Chongqing East</span>: 21 km desde
-              el hotel, a las 07:15 de la mañana y en hora punta. Es el más largo del viaje hasta una estación y el
-              único con solo 3 trenes al día si lo perdéis. Ese conviene dejarlo programado la víspera.
+              <span className="font-medium text-foreground">No. En los trenes chinos no hay límite de número de
+              bultos</span> — las normas solo hablan de peso y de tamaño por pieza. Y no se factura nada: en alta
+              velocidad lo subís todo vosotros al vagón.
             </p>
             <p>
-              Regla oficial en trenes G: cada bulto, sumando largo + ancho + alto, no debería pasar de 130 cm (una
-              maleta de 28" ronda los 158 cm). En la práctica no miden salvo que sea algo escandaloso.
+              Los dos límites teóricos: <span className="font-medium text-foreground">20 kg por adulto</span> y{' '}
+              <span className="font-medium text-foreground">130 cm por bulto</span> sumando largo + ancho + alto (160
+              cm en trenes normales). Una maleta facturada de avión suele ir a 23 kg y una de 28" ronda los 158 cm, o
+              sea que sobre el papel os pasáis en las dos cosas. En la práctica no pesan ni miden nada salvo que sea
+              algo escandaloso, y con 4 bultos entre dos personas no vais a llamar la atención.
+            </p>
+            <p>
+              Lo único real es dónde ponerlas: los estantes están en las uniones entre vagones, de ahí lo de coger
+              asiento en la primera o la última fila.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">El traslado que sí necesita cuidado</span> es el del 21 de
+              octubre a Chongqing East: 21 km desde el hotel, a las 07:15 y en hora punta. Es el más largo del viaje
+              hasta una estación y solo hay 3 trenes al día si lo perdéis.
             </p>
           </MoreInfo>
         </div>
