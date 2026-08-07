@@ -152,6 +152,35 @@ export default function TrainsView() {
             ))}
           </div>
 
+          <MoreInfo label="¿Por qué esa estación y no otra más cerca del hotel?">
+            <p>
+              Comprobado el 7 ago 2026 en las cinco ciudades que tienen más de una estación. El criterio es{' '}
+              <span className="font-medium text-foreground">tren directo primero</span>, cercanía después.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">Pekín:</span> no sale ningún tren de alta velocidad a
+              Xi'an desde la estación central, que sería la más cercana al hotel. Beijing West es obligada.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">Xi'an:</span> sí hay dos trenes a la estación central
+              (a 2,5 km del hotel, frente a los 13 km de Xi'an North), pero tardan 5h54 en vez de 4h10. Casi dos
+              horas más de tren para ahorrar 20 min de coche no compensa.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">Chengdu:</span> Chengdu South cae más cerca del hotel,
+              pero no hay ningún directo desde Xi'an. Chengdu East es obligada.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">Chongqing:</span> hay directo tanto a Chongqing North
+              como a Shapingba. Se mantiene North: yendo en Didi la distancia es casi la misma (8 vs 9 km) y North
+              tiene 154 trenes al día de red de seguridad, frente a 2 en la franja de mañana a Shapingba.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">Shanghái:</span> no hay ningún tren desde Shangrao a la
+              estación central. Hongqiao es obligada.
+            </p>
+          </MoreInfo>
+
           <MoreInfo label="Los tres errores fáciles de cometer">
             <p>
               <span className="font-medium text-foreground">Chongqing tiene 4 estaciones.</span> Llegáis el 19 oct a
@@ -164,6 +193,46 @@ export default function TrainsView() {
             <p>
               <span className="font-medium text-foreground">En Shanghái, siempre Hongqiao.</span> «Shanghai» a secas es
               otra estación distinta y peor comunicada con el hotel.
+            </p>
+          </MoreInfo>
+        </div>
+      </div>
+
+      {/* 8 bultos entre los dos: condiciona el tipo de Didi y el asiento del tren. */}
+      <div className="px-4 mb-4">
+        <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+          <h2 className="text-sm font-bold text-foreground">🧳 Vais con 8 bultos</h2>
+          <p className="text-[11px] text-muted-foreground mt-1 mb-3">
+            2 maletas facturadas + 2 de cabina cada uno. Eso cambia dos cosas en cada traslado.
+          </p>
+
+          <div className="rounded-lg bg-travel-important-bg px-3 py-2 mb-2">
+            <div className="text-xs font-semibold text-foreground">🚗 En Didi, coche de 6 plazas (六座)</div>
+            <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">
+              Un Didi normal (快车) es un turismo y con 4 maletas grandes no entráis. Pedid siempre la opción de 6
+              plazas. Y los traslados que no admiten fallo, dejadlos <span className="font-medium text-foreground">
+              programados con antelación</span> (Didi acepta reservas hasta 7 días antes y cierra el precio).
+            </p>
+          </div>
+
+          <div className="rounded-lg bg-muted/50 px-3 py-2">
+            <div className="text-xs font-semibold text-foreground">🚄 En el tren, fila 1 o última del vagón</div>
+            <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">
+              Las maletas grandes no caben en el portaequipajes de encima del asiento: van en los estantes de los
+              extremos del vagón. Si elegís asiento en la primera o la última fila, las tenéis al lado y no las
+              arrastráis por el pasillo.
+            </p>
+          </div>
+
+          <MoreInfo label="El traslado que más cuidado necesita">
+            <p>
+              El del <span className="font-medium text-foreground">21 de octubre a Chongqing East</span>: 21 km desde
+              el hotel, a las 07:15 de la mañana y en hora punta. Es el más largo del viaje hasta una estación y el
+              único con solo 3 trenes al día si lo perdéis. Ese conviene dejarlo programado la víspera.
+            </p>
+            <p>
+              Regla oficial en trenes G: cada bulto, sumando largo + ancho + alto, no debería pasar de 130 cm (una
+              maleta de 28" ronda los 158 cm). En la práctica no miden salvo que sea algo escandaloso.
             </p>
           </MoreInfo>
         </div>
