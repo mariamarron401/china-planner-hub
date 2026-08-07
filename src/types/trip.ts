@@ -438,4 +438,10 @@ export interface TripData {
   earlyStarts: EarlyStart[];
   /** Apps a configurar desde España + plan de e-SIM y configuración de los dos iPhone. */
   appSetup: AppSetup;
+  /**
+   * Sello de la última re-verificación de precios y duraciones de los tramos de tren.
+   * Solo se escribe en localStorage; sirve para que una corrección de cifras llegue a
+   * quien ya tenía la app abierta (ver `FARES_VERIFIED_ON` en `TripContext.tsx`).
+   */
+  faresVerifiedOn?: string;
 }

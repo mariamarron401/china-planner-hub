@@ -22,6 +22,22 @@ interface TripContextType {
 const TripContext = createContext<TripContextType | null>(null);
 
 const STORAGE_KEY = 'china-trip-data';
+
+/**
+ * Sello de la última vez que se re-verificaron las CIFRAS de los tramos de tren
+ * (precio y duración) contra la venta real. Subirlo obliga a que esos dos campos
+ * se vuelvan a tomar de `initialData.ts` en vez de conservar los que hubiera
+ * guardados en el navegador.
+ *
+ * Hace falta porque `reconcileById` preserva `price` y `durationMinutes` para no
+ * pisar ediciones manuales, y eso también impedía que llegara una corrección
+ * nuestra: el 07/08/2026 el tramo 8 pasó de 62 € a 70 € y las duraciones de los
+ * tramos 1 y 2 cambiaron, pero quien ya tuviera la app abierta habría seguido
+ * viendo las cifras viejas para siempre.
+ *
+ * No afecta a los hoteles: ahí `totalPrice` es el importe real de la reserva.
+ */
+const FARES_VERIFIED_ON = '2026-08-07';
 const OVERRIDES_CATEGORY = 'app_state';
 const NO_CITY = 'none'; // city_id es NOT NULL en la tabla places
 
@@ -99,7 +115,16 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         delete parsed.videoTips; // ahora vive en Supabase (tabla places, category='video_tip'), no en localStorage
         // Refrescar contenido informativo desde initialData.ts sin perder ediciones manuales
         parsed.hotels = reconcileById(initialTripData.hotels, parsed.hotels, ['totalPrice', 'priceStatus', 'booked']);
-        parsed.transportLegs = reconcileById(initialTripData.transportLegs, parsed.transportLegs, ['price', 'durationMinutes', 'status']);
+        // Si hemos re-verificado precios/duraciones desde la última vez que se guardó,
+        // esas dos cifras se toman frescas del código: una corrección nuestra tiene que
+        // poder llegar. El resto de veces se conservan, para no pisar ediciones manuales.
+        const faresAreStale = parsed.faresVerifiedOn !== FARES_VERIFIED_ON;
+        parsed.transportLegs = reconcileById(
+          initialTripData.transportLegs,
+          parsed.transportLegs,
+          faresAreStale ? ['status'] : ['price', 'durationMinutes', 'status']
+        );
+        parsed.faresVerifiedOn = FARES_VERIFIED_ON;
         parsed.localTransports = reconcileById(initialTripData.localTransports, parsed.localTransports, ['price', 'durationMinutes']);
         parsed.activities = reconcileById(initialTripData.activities, parsed.activities, ['price', 'duration', 'status']);
         // Los traslados de aeropuerto son puramente informativos (no se editan desde la app),
