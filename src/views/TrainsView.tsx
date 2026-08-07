@@ -198,20 +198,22 @@ export default function TrainsView() {
         </div>
       </div>
 
-      {/* 8 bultos entre los dos: condiciona el tipo de Didi y el asiento del tren. */}
+      {/* 4 bultos entre los dos (2 facturadas + 2 de cabina): condiciona el asiento del tren. */}
       <div className="px-4 mb-4">
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
-          <h2 className="text-sm font-bold text-foreground">🧳 Vais con 8 bultos</h2>
+          <h2 className="text-sm font-bold text-foreground">🧳 Vais con 4 bultos</h2>
           <p className="text-[11px] text-muted-foreground mt-1 mb-3">
-            2 maletas facturadas + 2 de cabina cada uno. Eso cambia dos cosas en cada traslado.
+            2 maletas facturadas + 2 de cabina. Con eso el Didi normal os vale, pero hay dos detalles útiles.
           </p>
 
-          <div className="rounded-lg bg-travel-important-bg px-3 py-2 mb-2">
-            <div className="text-xs font-semibold text-foreground">🚗 En Didi, coche de 6 plazas (六座)</div>
+          <div className="rounded-lg bg-muted/50 px-3 py-2 mb-2">
+            <div className="text-xs font-semibold text-foreground">🚗 El Didi normal (快车) os sirve</div>
             <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">
-              Un Didi normal (快车) es un turismo y con 4 maletas grandes no entráis. Pedid siempre la opción de 6
-              plazas. Y los traslados que no admiten fallo, dejadlos <span className="font-medium text-foreground">
-              programados con antelación</span> (Didi acepta reservas hasta 7 días antes y cierra el precio).
+              Dos maletas grandes entran en el maletero de un turismo y las de cabina van dentro con vosotros. Si las
+              facturadas son de 28" y veis que el coche asignado es pequeño, subid a{' '}
+              <span className="font-medium text-foreground">优享 o 6 plazas (六座)</span>. Los traslados que no admiten
+              fallo, dejadlos <span className="font-medium text-foreground">programados con antelación</span>: Didi
+              acepta reservas hasta 7 días antes y cierra el precio.
             </p>
           </div>
 
