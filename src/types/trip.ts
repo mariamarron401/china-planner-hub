@@ -64,6 +64,12 @@ export interface HotelOption {
   breakfastIncluded: boolean;
   priceStatus: 'known' | 'pending';
   name?: string;
+  /** Nombre del hotel en caracteres chinos, tal como lo registra Ctrip. Es lo que hay
+   *  que pegar en Amap (高德地图) para que lo encuentre: el nombre occidental a menudo no existe allí.
+   *  Verificado hotel por hotel en Ctrip el 07/08/2026. */
+  nameZh?: string;
+  /** Dirección completa en chino, para pegar en Amap o enseñar a un taxista si el nombre falla. */
+  addressZh?: string;
   checkInText?: string;
   checkOutText?: string;
   checkInTime?: string;

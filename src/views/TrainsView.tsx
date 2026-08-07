@@ -10,6 +10,23 @@ import MoreInfo from '@/components/MoreInfo';
  * de cada tramo. Los traslados de aeropuerto y los de dentro de la ciudad están
  * en `TransfersView` (misma pantalla "Moverse", otra sub-pestaña).
  */
+/**
+ * Nombre exacto de cada estación tal y como lo escribe Trip.com en su buscador,
+ * verificado contra la venta real el 07/08/2026. En orden de uso durante el viaje.
+ */
+const TRIP_STATION_NAMES: { name: string; zh: string; warn?: string }[] = [
+  { name: 'Beijing West', zh: '北京西站', warn: 'No confundir con Beijing Fengtai ni Qinghe: hay trenes a Xi\'an que salen de ahí' },
+  { name: "Xi'an North", zh: '西安北站' },
+  { name: 'Chengdu East', zh: '成都东站' },
+  { name: 'Chongqing North', zh: '重庆北站', warn: 'Llegáis aquí el 19 oct. Es la más céntrica' },
+  { name: 'Chongqing East', zh: '重庆东站', warn: 'Salís de aquí el 21 oct. Es OTRA estación, a 21 km del hotel. Abrió el 27 jun 2025' },
+  { name: 'Fenghuang Gucheng', zh: '凤凰古城站', warn: 'No es «Fenghuang» a secas' },
+  { name: 'Furongzhen', zh: '芙蓉镇站', warn: 'Todo junto. No es «Furong», ni Yongshun, ni Guzhang' },
+  { name: 'Zhangjiajie West', zh: '张家界西站', warn: 'A veces aparece como «Zhangjiajiexi». No es «Zhangjiajie», que es la estación antigua' },
+  { name: 'Shangrao', zh: '上饶站' },
+  { name: 'Shanghai Hongqiao', zh: '上海虹桥站', warn: 'No «Shanghai» a secas, ni South, ni West' },
+];
+
 export default function TrainsView() {
   const { data, updateTransportLeg } = useTrip();
   const { cities, transportLegs } = data;
@@ -93,9 +110,60 @@ export default function TrainsView() {
               antes, que es cuando 12306 abre la venta real).
             </p>
             <p>
-              Si alguna fecha de agosto todavía no la acepta Trip.com, reintenta al día siguiente: su ventana es de
-              59-60 días según el momento. El cambio de hotel Zhangjiajie → Wulingyuan del 24 oct no sale aquí: es un
-              Didi que se pide en el momento.
+              <span className="font-medium text-foreground">Fechas recalculadas el 7 ago 2026</span> con la ventana
+              real medida ese día: Trip.com dejaba llegar hasta el 4 de octubre, o sea{' '}
+              <span className="font-medium text-foreground">58 días</span> por delante, no 60. Por eso cada fecha se ha
+              movido 2 días más tarde. Si quieres ir sobrada puedes probar un par de días antes: no pasa nada, como
+              mucho te dirá que aún no.
+            </p>
+            <p>
+              Ojo, son dos calendarios distintos dentro de Trip.com: el de{' '}
+              <span className="font-medium text-foreground">venta real</span> hoy solo llega a 15 días vista, y el de{' '}
+              <span className="font-medium text-foreground">pre-reserva</span> es el que llega a 58. El primer tren del
+              viaje es el 13 de octubre, así que hoy todavía no se puede tocar nada.
+            </p>
+            <p>
+              El cambio de hotel Zhangjiajie → Wulingyuan del 24 oct no sale aquí: es un Didi que se pide en el
+              momento.
+            </p>
+          </MoreInfo>
+        </div>
+      </div>
+
+      {/* Chuleta de nombres exactos: lo que hay que teclear literalmente en el buscador
+          de Trip.com. Verificado contra la venta real el 07/08/2026. */}
+      <div className="px-4 mb-4">
+        <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+          <h2 className="text-sm font-bold text-foreground">🚉 Cómo se llama cada estación en Trip.com</h2>
+          <p className="text-[11px] text-muted-foreground mt-1 mb-3">
+            Escribe el nombre <span className="font-medium text-foreground">tal cual</span> aparece aquí. Las 11
+            estaciones están abiertas y vendiendo billetes (comprobado el 7 ago 2026).
+          </p>
+
+          <div className="space-y-1.5">
+            {TRIP_STATION_NAMES.map(s => (
+              <div key={s.name} className="rounded-lg bg-muted/50 px-2.5 py-1.5">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-xs font-semibold text-foreground">{s.name}</span>
+                  <span className="text-[10px] text-muted-foreground shrink-0">{s.zh}</span>
+                </div>
+                {s.warn && <div className="text-[10px] text-travel-important mt-0.5 leading-snug">{s.warn}</div>}
+              </div>
+            ))}
+          </div>
+
+          <MoreInfo label="Los tres errores fáciles de cometer">
+            <p>
+              <span className="font-medium text-foreground">Chongqing tiene 4 estaciones.</span> Llegáis el 19 oct a
+              Chongqing North y salís el 21 oct desde Chongqing East, que es otra distinta y está a 21 km del hotel.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">Los pueblos llevan sufijo.</span> La estación de Fenghuang
+              es «Fenghuang Gucheng» y la de Furong es «Furongzhen». Sin el sufijo, o no aparece o es otro sitio.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">En Shanghái, siempre Hongqiao.</span> «Shanghai» a secas es
+              otra estación distinta y peor comunicada con el hotel.
             </p>
           </MoreInfo>
         </div>

@@ -235,6 +235,21 @@ export default function HotelsView() {
                           {hotel.name && (
                             <p className="text-sm font-semibold text-foreground mt-1">{hotel.name}</p>
                           )}
+                          {hotel.nameZh && (
+                            <div className="mt-1.5 rounded-lg bg-muted/60 px-2.5 py-1.5">
+                              <div className="text-[9px] uppercase tracking-wide text-muted-foreground mb-0.5">
+                                Para buscarlo en Amap · toca para seleccionar
+                              </div>
+                              <p className="text-[13px] font-semibold text-foreground leading-snug select-all">
+                                {hotel.nameZh}
+                              </p>
+                              {hotel.addressZh && (
+                                <p className="text-[11px] text-muted-foreground leading-snug select-all mt-0.5">
+                                  {hotel.addressZh}
+                                </p>
+                              )}
+                            </div>
+                          )}
                           {hotel.paymentNote && (
                             <p className="text-[11px] text-muted-foreground mt-0.5">{hotel.paymentNote}</p>
                           )}

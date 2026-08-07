@@ -162,6 +162,9 @@ function answerHotel(data: TripData, cities: string[]): string {
         `🏨 **${shortCity(c.cityName)} — ${h.name}**`,
         `📅 Entrada ${h.checkInText} · Salida ${h.checkOutText} (${c.nights} ${c.nights === 1 ? 'noche' : 'noches'})`,
       ];
+      if (h.nameZh) {
+        parts.push(`🇨🇳 En chino, para buscarlo en Amap: **${h.nameZh}**${h.addressZh ? `\n📍 ${h.addressZh}` : ''}`);
+      }
       if (h.checkInTime || h.checkOutTime) {
         parts.push(`🕐 Check-in desde las ${h.checkInTime ?? '—'} · Check-out hasta las ${h.checkOutTime ?? '—'}`);
       }
