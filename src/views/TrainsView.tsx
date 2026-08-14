@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTrip } from '@/context/TripContext';
-import { Train, Car, ArrowRight, MapPin, CalendarClock, Calendar, Clock, Luggage } from 'lucide-react';
+import { Train, Car, ArrowRight, MapPin, CalendarClock, Calendar, Clock, Luggage, CalendarPlus, Bell } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import MoreInfo from '@/components/MoreInfo';
+import { downloadTripIcs, countTripAlerts } from '@/lib/calendarExport';
+import { enablePush, getPushState, sendTestNotification, type PushState } from '@/lib/pushNotifications';
+import { toast } from 'sonner';
 
 /**
  * Trenes entre ciudades: las fechas en que hay que entrar en Trip.com y la ficha
@@ -39,6 +42,49 @@ export default function TrainsView() {
   // para que la cuenta atrás nunca quede desfasada.
   const watchDates = buildWatchDates(transportLegs, getCityName);
   const nextWatch = watchDates.find(w => w.daysLeft >= 0);
+
+  const alertCount = countTripAlerts(transportLegs);
+
+  const [pushState, setPushState] = useState<PushState | null>(null);
+  const [pushBusy, setPushBusy] = useState(false);
+
+  useEffect(() => {
+    getPushState().then(setPushState).catch(() => setPushState('no-soportado'));
+  }, []);
+
+  const handleEnablePush = async () => {
+    setPushBusy(true);
+    try {
+      const label = `iPhone · ${new Date().toLocaleDateString('es-ES')}`;
+      const result = await enablePush(label);
+      setPushState(result);
+      if (result === 'activo') {
+        await sendTestNotification();
+        toast.success('Avisos activados en este móvil', {
+          description: 'Te acabo de mandar una notificación de prueba.',
+        });
+      } else if (result === 'necesita-instalar') {
+        toast.error('Primero añade la app a la pantalla de inicio', {
+          description: 'Compartir → Añadir a inicio. iOS solo permite avisos así.',
+        });
+      } else if (result === 'denegado') {
+        toast.error('Las notificaciones están bloqueadas', {
+          description: 'Ajustes → Viaje China → Notificaciones, y actívalas.',
+        });
+      }
+    } catch {
+      toast.error('No se pudo activar', { description: 'Vuelve a intentarlo con conexión.' });
+    } finally {
+      setPushBusy(false);
+    }
+  };
+
+  const handleAddToCalendar = () => {
+    downloadTripIcs(transportLegs, getCityName);
+    toast.success(`${alertCount} avisos listos`, {
+      description: 'Acepta en el Calendario para añadirlos. Repítelo en el otro móvil.',
+    });
+  };
 
   const handleSave = (id: string) => {
     const price = editValues.price ? parseFloat(editValues.price) : null;
@@ -102,7 +148,7 @@ export default function TrainsView() {
           <MoreInfo label="Por qué hay dos fechas por tren">
             <p>
               Primero, en agosto, <span className="font-medium text-foreground">activar la pre-reserva</span> en
-              Trip.com (60 días antes del viaje): Trip.com compra sola en cuanto China abra la venta.
+              Trip.com (58 días antes del viaje): Trip.com compra sola en cuanto China abra la venta.
             </p>
             <p>
               Después, ya en octubre,{' '}
@@ -110,21 +156,116 @@ export default function TrainsView() {
               antes, que es cuando 12306 abre la venta real).
             </p>
             <p>
-              <span className="font-medium text-foreground">Fechas recalculadas el 7 ago 2026</span> con la ventana
-              real medida ese día: Trip.com dejaba llegar hasta el 4 de octubre, o sea{' '}
-              <span className="font-medium text-foreground">58 días</span> por delante, no 60. Por eso cada fecha se ha
-              movido 2 días más tarde. Si quieres ir sobrada puedes probar un par de días antes: no pasa nada, como
-              mucho te dirá que aún no.
+              <span className="font-medium text-foreground">La hora exacta: las 18:00 de España.</span> La ventana de
+              Trip.com son 58 días contados sobre la fecha de <span className="font-medium text-foreground">Pekín</span>,
+              y en Pekín el día cambia a las 00:00, que aquí son las 18:00 de la tarde anterior. Por eso cada fecha de
+              arriba es la tarde de antes: a las 18:00 se destapa un día nuevo del calendario.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">No es una carrera.</span> La pre-reserva no consume cupo:
+              solo dejas la orden aparcada para que Trip.com la ejecute el día de la venta real. Da igual hacerla a las
+              18:00 que a las 23:00 o a la mañana siguiente. Y si un día la fecha aún no te aparece, al día siguiente
+              está seguro.
             </p>
             <p>
               Ojo, son dos calendarios distintos dentro de Trip.com: el de{' '}
-              <span className="font-medium text-foreground">venta real</span> hoy solo llega a 15 días vista, y el de{' '}
-              <span className="font-medium text-foreground">pre-reserva</span> es el que llega a 58. El primer tren del
-              viaje es el 13 de octubre, así que hoy todavía no se puede tocar nada.
+              <span className="font-medium text-foreground">venta real</span> solo llega a 15 días vista, y el de{' '}
+              <span className="font-medium text-foreground">pre-reserva</span> es el que llega a 58. El que ves cuando
+              eliges fechas de octubre es el de pre-reserva.
             </p>
             <p>
               El cambio de hotel Zhangjiajie → Wulingyuan del 24 oct no sale aquí: es un Didi que se pide en el
               momento.
+            </p>
+          </MoreInfo>
+        </div>
+      </div>
+
+      {/* Avisos al móvil. Se hace con el calendario del iPhone y no solo con push porque
+          la alarma la dispara iOS en el propio dispositivo: suena sin cobertura, sin VPN
+          y sin depender de que github.io (bloqueado en China) sea accesible. */}
+      <div className="px-4 mb-4">
+        <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+          <h2 className="text-sm font-bold text-foreground">🔔 Que el móvil os avise</h2>
+          <p className="text-[11px] text-muted-foreground mt-1 mb-3">
+            Añade los <span className="font-medium text-foreground">{alertCount} avisos</span> al Calendario del
+            iPhone: los días de comprar en Trip.com y, en el viaje, cada tren la noche antes y a la hora de salir del
+            hotel.
+          </p>
+
+          <Button onClick={handleAddToCalendar} className="w-full" size="sm">
+            <CalendarPlus className="h-4 w-4 mr-2" />
+            Añadir los avisos al calendario
+          </Button>
+
+          <p className="text-[10px] text-muted-foreground mt-2 leading-snug">
+            Hazlo <span className="font-medium text-foreground">en cada móvil</span>. Se abrirá el Calendario
+            pidiendo confirmación: acepta y ya está. Las alarmas suenan solas, sin internet y sin VPN.
+          </p>
+
+          {/* Push como refuerzo del calendario, nunca como sustituto: depende de red. */}
+          <div className="mt-3 pt-3 border-t border-border">
+            <div className="text-xs font-semibold text-foreground mb-1">Y además, notificación de la app</div>
+            {pushState === 'activo' ? (
+              <p className="text-[11px] text-travel-confirmed leading-snug">
+                ✅ Activadas en este móvil. Llegarán además de las del calendario.
+              </p>
+            ) : pushState === 'necesita-instalar' ? (
+              <p className="text-[11px] text-travel-pending leading-snug">
+                Para esto hace falta abrir la app instalada, no en una pestaña: pulsa{' '}
+                <span className="font-medium text-foreground">Compartir → Añadir a inicio</span>, ábrela desde el
+                icono y vuelve aquí. iOS no permite notificaciones de otra forma.
+              </p>
+            ) : pushState === 'denegado' ? (
+              <p className="text-[11px] text-travel-pending leading-snug">
+                Están bloqueadas en el sistema. Ve a{' '}
+                <span className="font-medium text-foreground">Ajustes → Viaje China → Notificaciones</span> y
+                actívalas.
+              </p>
+            ) : pushState === 'no-soportado' ? (
+              <p className="text-[11px] text-muted-foreground leading-snug">
+                Este navegador no admite notificaciones. Los avisos del calendario sí funcionan.
+              </p>
+            ) : (
+              <Button
+                onClick={handleEnablePush}
+                disabled={pushBusy}
+                variant="outline"
+                size="sm"
+                className="w-full"
+              >
+                <Bell className="h-4 w-4 mr-2" />
+                {pushBusy ? 'Activando…' : 'Activar notificaciones en este móvil'}
+              </Button>
+            )}
+          </div>
+
+          <MoreInfo label="Qué avisos se añaden exactamente">
+            <p>
+              <span className="font-medium text-foreground">8 avisos en agosto</span>, uno por tramo,{' '}
+              <span className="font-medium text-foreground">a las 18:00</span> hora de España: es el minuto exacto en
+              que ese tren entra en la ventana de pre-reserva de Trip.com.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">8 avisos entre el 28 sept y el 12 oct</span>, para
+              comprobar que el billete se emitió de verdad cuando China abre la venta real. Cada uno suena a su hora,
+              que depende de la estación de salida: los de Pekín, Xi'an y Chengdu a las 09:00 (abren de madrugada, no
+              merece la pena levantarse), el de Chongqing a las{' '}
+              <span className="font-medium text-foreground">4:50 de la madrugada</span> (es el tramo de solo 3 trenes)
+              y los de Zhangjiajie y Shangrao a media mañana.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">2 avisos por cada día de trayecto</span>: uno la noche
+              antes a las 20:00 con el tren del día siguiente, y otro justo a la hora de salir del hotel. Cada evento
+              lleva dentro el número de tren, las dos estaciones, la hora y el traslado.
+            </p>
+            <p>
+              Las horas van sin zona horaria a propósito: el iPhone las interpreta con su propio reloj, así que los
+              de agosto suenan en hora española y los de octubre en hora china, sin que tengas que hacer cuentas.
+            </p>
+            <p>
+              Si algún tren cambia, vuelve a pulsar el botón: los avisos se actualizan solos porque cada uno lleva
+              identificador propio, no se duplican.
             </p>
           </MoreInfo>
         </div>
@@ -274,7 +415,7 @@ export default function TrainsView() {
               <div className="mb-2 bg-primary text-primary-foreground rounded-lg px-3 py-2 flex items-center gap-2">
                 <CalendarClock className="h-4 w-4 flex-shrink-0" />
                 <div className="text-xs leading-tight">
-                  <div className="opacity-80">Entra tú en Trip.com este día:</div>
+                  <div className="opacity-80">Deja la pre-reserva en Trip.com:</div>
                   <div className="text-sm font-bold">{leg.preBookingFrom}</div>
                 </div>
               </div>

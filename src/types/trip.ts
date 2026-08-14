@@ -134,12 +134,34 @@ export interface TransportLeg {
   toStation?: string;
   preBookingFrom?: string;
   saleOpensOn?: string;
-  /** Fecha ISO en que se puede activar la pre-reserva de Trip.com (D-60). Sirve para la cuenta atrás en vivo. */
+  /**
+   * Fecha ISO en que se puede activar la pre-reserva de Trip.com. Sirve para la cuenta atrás en vivo.
+   * La ventana de Trip es de 58 días contados sobre la fecha de PEKÍN, y el calendario avanza un día
+   * a las 00:00 de Pekín = las 18:00 en España. Por eso esta fecha es la TARDE ANTERIOR al día D-58:
+   * a partir de las 18:00 h ya se puede dejar puesta la pre-reserva.
+   */
   preBookingIso?: string;
   /** Fecha ISO en que 12306 abre la venta real (D-15). Día de verificar que el billete se emitió. */
   saleOpensIso?: string;
+  /**
+   * Hora (HH:MM, hora española) a la que conviene mirar el día de la venta real. No es la misma para
+   * todos: 12306 libera los billetes a la hora fija de la estación DE SALIDA, entre las 8:00 y las
+   * 18:00 de Pekín. En los tramos críticos se pone justo antes de la apertura; en el resto, a una
+   * hora civilizada ya pasada la apertura. Si no se indica, el aviso se genera a las 09:00.
+   */
+  saleCheckTime?: string;
   alertNote?: string;
   travelDate?: string;
+  /** Fecha del viaje en ISO. Necesaria para generar los avisos de calendario. */
+  travelDateIso?: string;
+  /** Número del tren recomendado, ej. 'G365'. Vacío en el tramo que no es tren. */
+  trainNumber?: string;
+  /** Hora de salida del tren recomendado en HH:MM, hora local de China. */
+  departTime?: string;
+  /** Hora de llegada del tren recomendado en HH:MM, hora local de China. */
+  arriveTime?: string;
+  /** Hora a la que hay que salir del hotel, en HH:MM. Sale del análisis de cada tramo. */
+  leaveHotelTime?: string;
   suggestedDeparture?: string;
   estimatedArrival?: string;
   transferBefore?: string;
