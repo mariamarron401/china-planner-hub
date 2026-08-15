@@ -17,7 +17,13 @@
  *    vieja sería peor que un error.
  */
 
-const CACHE = 'viaje-china-v2';
+// Subir este número invalida TODA la caché del móvil: `activate` borra cualquier caché
+// cuyo nombre no coincida y `install` vuelve a descargarlo todo del servidor.
+// v3 (15/08/2026): María no veía los cambios del G351 ni el desglose de dinero pese a que
+// el bundle publicado sí los tenía. La app instalada seguía arrancando del index.html
+// cacheado, que apunta a los JS antiguos. Ante un "no me aparece" ya descartado el deploy,
+// esta es la palanca.
+const CACHE = 'viaje-china-v3';
 const NAV_TIMEOUT_MS = 4000;
 
 // Dominios de datos en vivo: no se cachean nunca.
