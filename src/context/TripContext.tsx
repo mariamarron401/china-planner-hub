@@ -37,7 +37,7 @@ const STORAGE_KEY = 'china-trip-data';
  *
  * No afecta a los hoteles: ahí `totalPrice` es el importe real de la reserva.
  */
-const FARES_VERIFIED_ON = '2026-08-07';
+const FARES_VERIFIED_ON = '2026-08-15';
 const OVERRIDES_CATEGORY = 'app_state';
 const NO_CITY = 'none'; // city_id es NOT NULL en la tabla places
 

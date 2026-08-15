@@ -148,7 +148,7 @@ export default function TrainsView() {
           <MoreInfo label="Por qué hay dos fechas por tren">
             <p>
               Primero, en agosto, <span className="font-medium text-foreground">activar la pre-reserva</span> en
-              Trip.com (58 días antes del viaje): Trip.com compra sola en cuanto China abra la venta.
+              Trip.com (unos 59-60 días antes del viaje): Trip.com compra sola en cuanto China abra la venta.
             </p>
             <p>
               Después, ya en octubre,{' '}
@@ -156,10 +156,16 @@ export default function TrainsView() {
               antes, que es cuando 12306 abre la venta real).
             </p>
             <p>
-              <span className="font-medium text-foreground">La hora exacta: las 18:00 de España.</span> La ventana de
-              Trip.com son 58 días contados sobre la fecha de <span className="font-medium text-foreground">Pekín</span>,
-              y en Pekín el día cambia a las 00:00, que aquí son las 18:00 de la tarde anterior. Por eso cada fecha de
-              arriba es la tarde de antes: a las 18:00 se destapa un día nuevo del calendario.
+              <span className="font-medium text-foreground">A partir de las 18:00 de la tarde.</span> La ventana se
+              cuenta sobre la fecha de <span className="font-medium text-foreground">Pekín</span>, y en Pekín el día
+              cambia a las 00:00, que aquí son las 18:00 de la tarde anterior. Por eso cada fecha de arriba es una
+              tarde: a esa hora se destapa un día nuevo del calendario.
+            </p>
+            <p>
+              <span className="font-medium text-foreground">Medido, no supuesto.</span> El 15 de agosto a las 02:13 de
+              la madrugada el tren del 13 de octubre ya estaba a la venta, o sea que se había abierto la tarde del 14.
+              Eso son <span className="font-medium text-foreground">59-60 días</span> de ventana, no los 58 que se
+              calcularon el 7 de agosto. Las ocho fechas se han adelantado un día.
             </p>
             <p>
               <span className="font-medium text-foreground">No es una carrera.</span> La pre-reserva no consume cupo:
