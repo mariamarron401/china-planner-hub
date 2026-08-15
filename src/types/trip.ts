@@ -144,6 +144,15 @@ export interface TransportLeg {
   /** Fecha ISO en que 12306 abre la venta real (D-15). Día de verificar que el billete se emitió. */
   saleOpensIso?: string;
   /**
+   * Importe REAL pagado por los dos billetes de este tramo, en euros. Se rellena solo cuando
+   * la compra está hecha. Manda sobre `price` (que es la estimación calculada desde el precio
+   * en yuanes) tanto en el total del presupuesto como en la pantalla Dinero, para que la cifra
+   * se vaya volviendo real a medida que se compran los tramos.
+   */
+  paidEur?: number;
+  /** Fecha legible en que se compró/pre-reservó este tramo, ej. '15 ago 2026'. */
+  paidOn?: string;
+  /**
    * Hora (HH:MM, hora española) a la que conviene mirar el día de la venta real. No es la misma para
    * todos: 12306 libera los billetes a la hora fija de la estación DE SALIDA, entre las 8:00 y las
    * 18:00 de Pekín. En los tramos críticos se pone justo antes de la apertura; en el resto, a una

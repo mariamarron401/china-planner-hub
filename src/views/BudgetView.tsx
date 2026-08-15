@@ -10,11 +10,23 @@ export default function BudgetView() {
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
   const deposits = getHotelDeposits(cities, hotels, selectedHotels);
 
+  // El importe realmente pagado manda sobre la estimación: según se van comprando los
+  // tramos, el total deja de ser un cálculo y pasa a ser dinero de verdad.
   const transportTotal = [...transportLegs, ...localTransports].reduce((sum, t) => {
+    if ('paidEur' in t && t.paidEur != null) return sum + t.paidEur;
     if ('price' in t && t.price != null) return sum + t.price;
     return sum;
   }, 0);
   const transportComplete = [...transportLegs, ...localTransports].every(t => t.price != null);
+
+  // Progreso de compra de los trenes. Solo cuentan los tramos que son tren de verdad:
+  // el cambio de hotel Zhangjiajie → Wulingyuan es un Didi y no se compra por adelantado.
+  const trainLegs = transportLegs.filter(t => t.trainNumber);
+  const trainsBought = trainLegs.filter(t => t.paidEur != null);
+  const trainsPaidTotal = trainsBought.reduce((sum, t) => sum + (t.paidEur ?? 0), 0);
+  const trainsPendingEstimate = trainLegs
+    .filter(t => t.paidEur == null)
+    .reduce((sum, t) => sum + (t.price ?? 0), 0);
 
   // Traslados de aeropuerto: se cuenta la opción recomendada de cada uno (o la más barata
   // si ninguna está marcada), porque es la que vais a coger de verdad.
@@ -146,6 +158,58 @@ export default function BudgetView() {
               <div className="text-xs text-travel-pending font-medium mt-1">⚠ Datos incompletos</div>
             </div>
           )}
+          {/* Trenes: cuánto es ya dinero real y cuánto sigue siendo estimación. */}
+          {trainLegs.length > 0 && (
+            <div className="mt-2 pt-2 border-t border-border">
+              <div className="flex items-center justify-between text-xs mb-1.5">
+                <span className="flex items-center gap-1.5 font-semibold text-foreground">
+                  <Train className="h-3.5 w-3.5 text-primary" />
+                  Trenes: {trainsBought.length} de {trainLegs.length} comprados
+                </span>
+                <span className="font-mono text-[11px] text-muted-foreground">
+                  {Math.round((trainsBought.length / trainLegs.length) * 100)}%
+                </span>
+              </div>
+              <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden mb-2">
+                <div
+                  className="h-full bg-travel-confirmed rounded-full transition-all"
+                  style={{ width: `${(trainsBought.length / trainLegs.length) * 100}%` }}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <div className="text-travel-confirmed font-bold">{trainsPaidTotal.toFixed(2)}€</div>
+                  <div className="text-[10px] text-muted-foreground leading-tight">pagado de verdad</div>
+                </div>
+                <div>
+                  <div className="text-travel-pending font-bold">{Math.round(trainsPendingEstimate)}€</div>
+                  <div className="text-[10px] text-muted-foreground leading-tight">
+                    estimado, {trainLegs.length - trainsBought.length} sin comprar
+                  </div>
+                </div>
+              </div>
+              {trainsBought.length > 0 && (
+                <div className="mt-2 space-y-0.5">
+                  {trainsBought.map(t => (
+                    <div key={t.id} className="flex justify-between text-[11px] text-muted-foreground">
+                      <span>
+                        ✅ {t.trainNumber} · {t.travelDate?.split(' (')[0]}
+                      </span>
+                      <span className="font-mono text-foreground">{t.paidEur?.toFixed(2)}€</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {trainsBought.length < trainLegs.length && (
+                <p className="text-[10px] text-muted-foreground mt-2 leading-snug">
+                  Lo estimado sale del precio en yuanes. El primer tren real costó un{' '}
+                  <span className="font-medium text-foreground">~8% más</span> por el cambio y la comisión de
+                  Trip.com, así que es previsible que el resto también suba algo.
+                </p>
+              )}
+            </div>
+          )}
+
           {airportTotal > 0 && (
             <div className="mt-2 pt-2 border-t border-border flex items-start gap-1.5">
               <Plane className="h-3.5 w-3.5 text-primary mt-px flex-shrink-0" />
