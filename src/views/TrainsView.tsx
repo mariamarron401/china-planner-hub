@@ -459,6 +459,21 @@ export default function TrainsView() {
               </div>
             )}
 
+            {/* El desayuno va incluido y pagado en los 10 hoteles: perderlo es tirar dinero,
+                así que el veredicto se ve aquí y no solo en la pantalla Hoteles. */}
+            {leg.breakfastNote && (
+              <div
+                className={`mt-2.5 text-[11px] leading-snug px-2.5 py-1.5 rounded-lg ${
+                  leg.breakfastNote.startsWith('✅')
+                    ? 'bg-travel-confirmed-bg text-travel-confirmed'
+                    : 'bg-travel-pending-bg text-travel-pending'
+                }`}
+              >
+                <span className="font-semibold">☕ Desayuno: </span>
+                {leg.breakfastNote}
+              </div>
+            )}
+
             {leg.alertNote && (
               <div className="mt-2.5 bg-travel-important-bg text-travel-important text-[11px] leading-snug font-medium px-2.5 py-1.5 rounded-lg">
                 {leg.alertNote}

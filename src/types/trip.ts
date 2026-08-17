@@ -153,6 +153,15 @@ export interface TransportLeg {
   /** Fecha legible en que se compró/pre-reservó este tramo, ej. '15 ago 2026'. */
   paidOn?: string;
   /**
+   * Veredicto del desayuno del hotel de origen ese día. Los 10 hoteles lo tienen incluido y
+   * PAGADO, así que perderlo es tirar dinero — es una preocupación explícita de María
+   * (17/08/2026). Cruza el horario real de desayuno de cada hotel (verificados en Trip.com el
+   * 03/08/2026, ver `.agent/knowledge/04-hoteles.md`) con la hora de salida de este tramo.
+   * Vive aquí, y no solo en la pantalla Hoteles, porque la decisión de qué tren coger se toma
+   * en Trenes.
+   */
+  breakfastNote?: string;
+  /**
    * Hora (HH:MM, hora española) a la que conviene mirar el día de la venta real. No es la misma para
    * todos: 12306 libera los billetes a la hora fija de la estación DE SALIDA, entre las 8:00 y las
    * 18:00 de Pekín. En los tramos críticos se pone justo antes de la apertura; en el resto, a una
