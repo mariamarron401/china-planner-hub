@@ -83,7 +83,12 @@ export interface HotelOption {
   depositEur?: number;
   /** Detalle de la política de depósito, ej. "Se paga al completar el registro de entrada" */
   depositNote?: string;
-  /** Horario en que el hotel sirve el desayuno, ej. "07:00-09:30". Verificado en Trip.com el 03/08/2026. */
+  /**
+   * Horario en que el hotel sirve el desayuno, ej. "07:00-09:30".
+   * Verificado en Trip.com el 03/08/2026 y **re-verificado hotel por hotel el 17/08/2026**
+   * entrando en las 10 fichas ("Opening hours" de la sección de comidas): los 10 coincidían,
+   * ninguno había cambiado. No hace falta volver a comprobarlos salvo cambio de reserva.
+   */
   breakfastHours?: string;
   /** Tipo de desayuno, ej. "Bufé · occidental y chino" */
   breakfastType?: string;
