@@ -202,9 +202,19 @@ export default function BudgetView() {
               )}
               {trainsBought.length < trainLegs.length && (
                 <p className="text-[10px] text-muted-foreground mt-2 leading-snug">
-                  Lo estimado sale del precio en yuanes. El primer tren real costó un{' '}
-                  <span className="font-medium text-foreground">~8% más</span> por el cambio y la comisión de
-                  Trip.com, así que es previsible que el resto también suba algo.
+                  Lo estimado sale del precio en yuanes y{' '}
+                  <span className="font-medium text-foreground">se está quedando corto</span>. Con dos trenes ya
+                  comprados el desvío medio es de un{' '}
+                  <span className="font-medium text-travel-pending">+15%</span> (tramo 1: +8%; tramo 2: +30%). Si se
+                  mantiene, los {trainLegs.length - trainsBought.length} que faltan costarán unos{' '}
+                  <span className="font-medium text-foreground">
+                    {Math.round(trainsPendingEstimate * 1.15)}€
+                  </span>{' '}
+                  en vez de {Math.round(trainsPendingEstimate)}€ — unos{' '}
+                  <span className="font-medium text-foreground">
+                    {Math.round(trainsPendingEstimate * 0.15)}€ más
+                  </span>{' '}
+                  de lo que marca este presupuesto.
                 </p>
               )}
             </div>
