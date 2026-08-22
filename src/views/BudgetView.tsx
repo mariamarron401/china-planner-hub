@@ -201,6 +201,7 @@ export default function BudgetView() {
                 </div>
               )}
               {trainsBought.length < trainLegs.length && (
+                <>
                 <p className="text-[10px] text-muted-foreground mt-2 leading-snug">
                   Lo estimado sale del precio en yuanes y{' '}
                   <span className="font-medium text-foreground">se queda corto</span>. En los tres tramos comparables
@@ -214,6 +215,7 @@ export default function BudgetView() {
                   vez de {Math.round(trainsPendingEstimate)}€. El grueso es{' '}
                   <span className="font-medium text-foreground">Zhangjiajie → Shangrao</span>, el más caro del viaje.
                 </p>
+                </>
               )}
             </div>
           )}
