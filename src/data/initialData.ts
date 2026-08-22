@@ -848,18 +848,6 @@ export const initialTripData: TripData = {
       advice: 'Mismo problema que el día del vuelo: el bufé abre media hora después de que tengáis que salir. Pedidlo para llevar la noche antes. Alternativa: si preferís desayunar tranquilos a las 07:30, entrad al parque sobre las 09:15-09:30 y asumid una cola algo mayor en las primeras atracciones — con 5 noches en Shanghái tampoco es un drama.',
     },
     {
-      id: 'es-chongqing-fenghuang',
-      dateText: '21 oct 2026 (miércoles) — tren a Fenghuang',
-      cityId: 'chongqing',
-      hotelName: 'Hongyadong Holiday Riverside Hotel',
-      reason: 'Tren D3969 a Fenghuang Gucheng, sale a las 08:39 de Chongqing East, que está a 21 km del hotel (35-45 min de Didi en hora punta + 45-60 min de margen en estación). No es la estación por la que llegasteis el 19/10.',
-      leaveHotelAt: '06:50',
-      breakfastHours: '07:00 - 09:30',
-      verdict: 'imposible',
-      marginMinutes: -10,
-      advice: 'Solo si cogéis el tren de las 08:39. El bufé abre a las 07:00, así que técnicamente entra, pero son 15-30 min comiendo con el reloj encima y las maletas hechas. Pedidlo para llevar la noche del 20 y desayunad en el tren, que son 4h19 de viaje. Si en cambio elegís el tren de las 12:55, este problema desaparece del todo y desayunáis con calma.',
-    },
-    {
       id: 'es-chengdu-leshan',
       dateText: '18 oct 2026 (domingo) — Buda de Leshan',
       cityId: 'chengdu',
