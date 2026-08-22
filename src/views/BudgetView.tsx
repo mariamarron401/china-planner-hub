@@ -203,18 +203,16 @@ export default function BudgetView() {
               {trainsBought.length < trainLegs.length && (
                 <p className="text-[10px] text-muted-foreground mt-2 leading-snug">
                   Lo estimado sale del precio en yuanes y{' '}
-                  <span className="font-medium text-foreground">se está quedando corto</span>. Con dos trenes ya
-                  comprados el desvío medio es de un{' '}
-                  <span className="font-medium text-travel-pending">+15%</span> (tramo 1: +8%; tramo 2: +30%). Si se
-                  mantiene, los {trainLegs.length - trainsBought.length} que faltan costarán unos{' '}
-                  <span className="font-medium text-foreground">
-                    {Math.round(trainsPendingEstimate * 1.15)}€
-                  </span>{' '}
-                  en vez de {Math.round(trainsPendingEstimate)}€ — unos{' '}
-                  <span className="font-medium text-foreground">
-                    {Math.round(trainsPendingEstimate * 0.15)}€ más
-                  </span>{' '}
-                  de lo que marca este presupuesto.
+                  <span className="font-medium text-foreground">se queda corto</span>. En los tres tramos comparables
+                  (mismo tren que se estimó) el desvío medio es de un{' '}
+                  <span className="font-medium text-travel-pending">+16,5%</span>: +8%, +30% y +26%. El tramo 4 se
+                  disparó un +77%, pero ahí la causa es otra — se cambió un tren D por uno G, que cuesta más.
+                </p>
+                <p className="text-[10px] text-muted-foreground mt-1.5 leading-snug">
+                  Si el +16,5% se mantiene, los {trainLegs.length - trainsBought.length} que faltan costarán unos{' '}
+                  <span className="font-medium text-foreground">{Math.round(trainsPendingEstimate * 1.165)}€</span> en
+                  vez de {Math.round(trainsPendingEstimate)}€. El grueso es{' '}
+                  <span className="font-medium text-foreground">Zhangjiajie → Shangrao</span>, el más caro del viaje.
                 </p>
               )}
             </div>
