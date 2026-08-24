@@ -164,6 +164,43 @@ function DayRow({ d, open, onToggle }: { d: CalendarDay; open: boolean; onToggle
 
       {open && (
         <div className="px-3 pb-3 pt-0 space-y-2 border-t border-border mt-1">
+          {/* Horario del día: lo primero que hay que ver al abrir un día. */}
+          {d.timeline.length > 0 && (
+            <div className="rounded-lg bg-muted/40 p-2.5">
+              <div className="text-[11px] font-bold text-foreground mb-2 flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5 text-primary" /> Horario del día
+              </div>
+              <ol className="space-y-1.5">
+                {d.timeline.map((e, i) => (
+                  <li key={`t-${i}`} className="flex gap-2 text-[11px] leading-snug">
+                    <span
+                      className={`font-mono font-semibold shrink-0 w-[38px] tabular-nums ${
+                        e.kind === 'clave' ? 'text-travel-important' : 'text-muted-foreground'
+                      }`}
+                    >
+                      {e.time || '·'}
+                    </span>
+                    <span
+                      className={
+                        e.kind === 'clave'
+                          ? 'text-foreground font-medium'
+                          : e.kind === 'comida'
+                            ? 'text-travel-confirmed'
+                            : 'text-muted-foreground'
+                      }
+                    >
+                      {e.what}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <p className="text-[9px] text-muted-foreground mt-2 leading-snug">
+                Horas de China. En <span className="text-travel-important font-medium">rojo</span> lo que no se puede
+                fallar; en <span className="text-travel-confirmed font-medium">verde</span> las comidas.
+              </p>
+            </div>
+          )}
+
           {d.notes.map((n, i) => (
             <Detail key={`n-${i}`} icon={<Info className="h-3.5 w-3.5 text-primary" />} title="Nota del día" body={n} />
           ))}
