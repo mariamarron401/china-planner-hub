@@ -30,6 +30,37 @@ const TRIP_STATION_NAMES: { name: string; zh: string; warn?: string }[] = [
   { name: 'Shanghai Hongqiao', zh: '上海虹桥站', warn: 'No «Shanghai» a secas, ni South, ni West' },
 ];
 
+
+/**
+ * Las fichas se habían llenado de párrafos y María avisó (24/08/2026) de que se agobia
+ * y se lía. Regla desde ahora: en la tarjeta solo dato corto y visual; la explicación
+ * larga se pliega en "Ver detalle". Estos dos helpers recortan lo que ya está escrito
+ * sin tener que reescribir los datos.
+ */
+
+/** 'Chongqing North · en Trip.com: "ChongqingBei" (重庆北站). Bei 北 = norte. Aquí...' → 'ChongqingBei' */
+function stationShort(text?: string): string {
+  if (!text) return '';
+  const quoted = text.match(/"([^"]+)"/);
+  if (quoted) return quoted[1];
+  return text.split('·')[0].split('(')[0].split('—')[0].trim();
+}
+
+/** Primera frase, para enseñar la esencia y plegar el resto. */
+function firstSentence(text?: string, max = 95): string {
+  if (!text) return '';
+  const cut = text.split(/(?<=[.:])\s/)[0].trim();
+  return cut.length > max ? cut.slice(0, max).trimEnd() + '…' : cut;
+}
+
+/** Emoji de cabecera del aviso, para que el estado se lea de un vistazo. */
+function noteTone(text?: string): 'ok' | 'warn' | 'bad' {
+  if (!text) return 'ok';
+  if (text.startsWith('✅')) return 'ok';
+  if (text.startsWith('🔴')) return 'bad';
+  return 'warn';
+}
+
 export default function TrainsView() {
   const { data, updateTransportLeg } = useTrip();
   const { cities, transportLegs } = data;
@@ -434,13 +465,30 @@ export default function TrainsView() {
               </div>
             )}
 
-            {(leg.suggestedDeparture || leg.estimatedArrival) && (
-              <div className="flex items-start gap-1.5 mb-1">
-                <Clock className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
-                <div className="text-[11px] leading-snug text-foreground">
-                  <div><span className="text-muted-foreground">Salida:</span> <span className="font-medium">{leg.suggestedDeparture}</span></div>
-                  <div><span className="text-muted-foreground">Llegada:</span> <span className="font-medium">{leg.estimatedArrival}</span></div>
+            {(leg.departTime || leg.arriveTime) && (
+              <div className="my-2 flex items-center justify-center gap-3 rounded-lg bg-muted/50 py-2">
+                <div className="text-center">
+                  <div className="text-lg font-bold tabular-nums text-foreground leading-none">{leg.departTime}</div>
+                  <div className="text-[9px] uppercase tracking-wide text-muted-foreground mt-0.5">salida</div>
                 </div>
+                <div className="flex flex-col items-center">
+                  <ArrowRight className="h-4 w-4 text-primary" />
+                  {leg.durationMinutes != null && (
+                    <span className="text-[9px] text-muted-foreground tabular-nums">
+                      {Math.floor(leg.durationMinutes / 60)}h{String(leg.durationMinutes % 60).padStart(2, '0')}
+                    </span>
+                  )}
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold tabular-nums text-foreground leading-none">{leg.arriveTime}</div>
+                  <div className="text-[9px] uppercase tracking-wide text-muted-foreground mt-0.5">llegada</div>
+                </div>
+                {leg.leaveHotelTime && (
+                  <div className="text-center border-l border-border pl-3 ml-1">
+                    <div className="text-base font-bold tabular-nums text-travel-important leading-none">{leg.leaveHotelTime}</div>
+                    <div className="text-[9px] uppercase tracking-wide text-muted-foreground mt-0.5">salir hotel</div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -450,11 +498,12 @@ export default function TrainsView() {
             </div>
 
             {(leg.fromStation || leg.toStation) && (
-              <div className="mt-2.5 pt-2.5 border-t border-border/60 flex items-start gap-1.5">
-                <MapPin className="h-3.5 w-3.5 text-primary mt-0.5 flex-shrink-0" />
-                <div className="text-[11px] leading-snug text-foreground">
-                  <div><span className="text-muted-foreground">Escribe en Trip.com — Origen:</span> <span className="font-medium">{leg.fromStation}</span></div>
-                  <div><span className="text-muted-foreground">Destino:</span> <span className="font-medium">{leg.toStation}</span></div>
+              <div className="mt-2.5 pt-2.5 border-t border-border/60 flex items-center gap-2">
+                <MapPin className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+                  <code className="text-[11px] font-bold bg-muted px-1.5 py-0.5 rounded">{stationShort(leg.fromStation)}</code>
+                  <ArrowRight className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                  <code className="text-[11px] font-bold bg-muted px-1.5 py-0.5 rounded">{stationShort(leg.toStation)}</code>
                 </div>
               </div>
             )}
@@ -463,26 +512,38 @@ export default function TrainsView() {
                 así que el veredicto se ve aquí y no solo en la pantalla Hoteles. */}
             {leg.breakfastNote && (
               <div
-                className={`mt-2.5 text-[11px] leading-snug px-2.5 py-1.5 rounded-lg ${
-                  leg.breakfastNote.startsWith('✅')
+                className={`mt-2.5 text-[11px] leading-snug px-2.5 py-1.5 rounded-lg flex items-start gap-1.5 ${
+                  noteTone(leg.breakfastNote) === 'ok'
                     ? 'bg-travel-confirmed-bg text-travel-confirmed'
                     : 'bg-travel-pending-bg text-travel-pending'
                 }`}
               >
-                <span className="font-semibold">☕ Desayuno: </span>
-                {leg.breakfastNote}
+                <span className="flex-shrink-0">☕</span>
+                <span>{firstSentence(leg.breakfastNote, 80)}</span>
               </div>
             )}
 
             {leg.alertNote && (
               <div className="mt-2.5 bg-travel-important-bg text-travel-important text-[11px] leading-snug font-medium px-2.5 py-1.5 rounded-lg">
-                {leg.alertNote}
+                {firstSentence(leg.alertNote, 110)}
               </div>
             )}
 
             {/* El detalle largo (maletas, márgenes, notas) queda plegado */}
             {(leg.transferBefore || leg.transferAfter || leg.stationBuffer || leg.notes || leg.saleOpensOn) && (
-              <MoreInfo label="Maletas, márgenes y notas del tramo">
+              <MoreInfo label="Ver detalle: estaciones, desayuno, maletas y notas">
+                {(leg.fromStation || leg.toStation) && (
+                  <p>
+                    <span className="text-foreground font-medium">Estaciones completas:</span> {leg.fromStation}
+                    {' → '}{leg.toStation}
+                  </p>
+                )}
+                {leg.breakfastNote && (
+                  <p><span className="text-foreground font-medium">☕ Desayuno:</span> {leg.breakfastNote}</p>
+                )}
+                {leg.alertNote && (
+                  <p><span className="text-foreground font-medium">⚠️ Aviso completo:</span> {leg.alertNote}</p>
+                )}
                 {leg.transferBefore && (
                   <p className="flex gap-1.5">
                     <Luggage className="h-3.5 w-3.5 text-primary mt-px flex-shrink-0" />

@@ -189,7 +189,9 @@ function DayRow({ d, open, onToggle }: { d: CalendarDay; open: boolean; onToggle
                             : 'text-muted-foreground'
                       }
                     >
-                      {e.what}
+                      {/* Solo la primera frase: lo largo agobia. El resto vive en la
+                          pantalla del tramo o de la actividad, que es donde toca. */}
+                      {e.what.split(/(?<=[.:])\s/)[0]}
                     </span>
                   </li>
                 ))}
