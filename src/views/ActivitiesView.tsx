@@ -1,7 +1,27 @@
 import { useNavigate } from 'react-router-dom';
 import { useTrip } from '@/context/TripContext';
 import { useVideoTips } from '@/hooks/useVideoTips';
-import { MapPin, Calendar, Clock, ShoppingCart, ExternalLink, ChevronRight, Compass, Video } from 'lucide-react';
+import { MapPin, Calendar, Clock, ShoppingCart, ExternalLink, ChevronRight, Compass, Video, AlarmClock } from 'lucide-react';
+
+
+/**
+ * Días que faltan para una fecha ISO, contra el día de hoy. Negativo si ya pasó.
+ * Con los 7 trenes comprados (28/08/2026), las entradas son la única gestión viva
+ * del viaje: esta pantalla necesita el mismo aviso de "lo siguiente que te toca"
+ * que tenía Trenes, porque varias entradas se agotan el día que se liberan.
+ */
+function daysUntil(iso: string): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const [y, m, d] = iso.split('-').map(Number);
+  const target = new Date(y, m - 1, d);
+  return Math.round((target.getTime() - today.getTime()) / 86400000);
+}
+
+function dateLabel(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+}
 
 export default function ActivitiesView() {
   const navigate = useNavigate();
@@ -23,8 +43,50 @@ export default function ActivitiesView() {
     updateActivity(id, { status: order[(idx + 1) % order.length] });
   };
 
+  // Entradas pendientes, ordenadas por la fecha en que se abre su venta.
+  const porComprar = activities
+    .filter(a => a.status !== 'Hecha' && a.buyOpensIso)
+    .sort((x, y) => (x.buyOpensIso! < y.buyOpensIso! ? -1 : 1));
+  const siguiente = porComprar.find(a => daysUntil(a.buyOpensIso!) >= 0) ?? porComprar[0];
+
   return (
     <div className="px-4 space-y-4">
+        {/* Lo único que queda vivo del viaje: comprar las entradas. */}
+        {siguiente && (
+          <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+            <h2 className="text-sm font-bold text-foreground mb-2">🎟️ Entradas: lo siguiente que toca</h2>
+            <div className="rounded-lg bg-primary text-primary-foreground px-3 py-2">
+              <div className="text-[10px] uppercase tracking-wide opacity-80">
+                {(() => {
+                  const d = daysUntil(siguiente.buyOpensIso!);
+                  return d === 0 ? '¡HOY!' : d === 1 ? 'Mañana' : d > 0 ? `Faltan ${d} días` : 'Ya se puede';
+                })()}
+                {' · '}{dateLabel(siguiente.buyOpensIso!)}
+                {siguiente.buyOpensTime ? ` · ${siguiente.buyOpensTime} h` : ''}
+              </div>
+              <div className="text-sm font-bold leading-tight mt-0.5">{siguiente.title}</div>
+            </div>
+
+            <div className="mt-3 space-y-1">
+              {porComprar.map(a => {
+                const d = daysUntil(a.buyOpensIso!);
+                return (
+                  <div key={a.id} className="flex items-center gap-2 text-[11px]">
+                    <span className={`font-mono tabular-nums w-[62px] shrink-0 font-semibold ${d <= 0 ? 'text-travel-confirmed' : d <= 7 ? 'text-travel-important' : 'text-muted-foreground'}`}>
+                      {dateLabel(a.buyOpensIso!)}
+                    </span>
+                    <span className="truncate text-foreground">{a.title}</span>
+                    {a.buyOpensTime && <AlarmClock className="h-3 w-3 text-travel-important shrink-0" />}
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2 leading-snug">
+              ⏰ El reloj = hora exacta, no vale mirarlo cuando puedas. Las de Pekín se agotan el mismo día.
+            </p>
+          </div>
+        )}
+
         {activities.map(act => {
           const guideSections = act.fieldGuide?.sections.length || 0;
           const cityTipsCount = videoTips.filter(v => v.cityId === act.cityId).length;

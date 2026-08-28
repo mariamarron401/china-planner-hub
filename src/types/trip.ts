@@ -306,6 +306,14 @@ export interface Activity {
   recommendedDate?: string;
   /** Cuándo hay que comprar la entrada, ej. "~1-2 oct (ventana ~10 días)" */
   whenToBuy?: string;
+  /**
+   * Fecha ISO en que se ABRE la venta de esta entrada. Con los 7 trenes ya comprados
+   * (28/08/2026), las entradas pasan a ser la única gestión viva del viaje, así que la
+   * pantalla Actividades necesita cuenta atrás y orden de urgencia, como tenía Trenes.
+   */
+  buyOpensIso?: string;
+  /** Hora española a la que se libera, si es crítica. Ej. '14:00' en la Ciudad Prohibida. */
+  buyOpensTime?: string;
   /** Plataforma recomendada para comprar, ej. "Trip.com" */
   platform?: string;
   /** Precio en texto legible, ej. "~25 €/persona" */

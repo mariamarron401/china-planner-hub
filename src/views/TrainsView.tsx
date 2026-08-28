@@ -158,17 +158,14 @@ export default function TrainsView() {
             </p>
           )}
 
-          <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">
-            Agosto · activar pre-reserva
-          </div>
-          <div className="space-y-1.5">
-            {watchDates.filter(w => w.kind === 'pre').map(w => (
-              <WatchRow key={`p-${w.id}`} w={w} />
-            ))}
+          {/* Los 7 trenes se compraron entre el 15 y el 25 de agosto: la lista de
+              pre-reservas ya no aporta nada y solo añadía ruido. Se resume en una línea. */}
+          <div className="rounded-lg bg-travel-confirmed-bg text-travel-confirmed px-3 py-2 text-[11px] font-medium">
+            ✅ Los 7 trenes comprados · 652,88 €
           </div>
 
           <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mt-3 mb-1.5">
-            Sept-oct · comprobar que el billete salió
+            Sept-oct · comprobar que el billete se emitió
           </div>
           <div className="space-y-1.5">
             {watchDates.filter(w => w.kind === 'sale').map(w => (
@@ -176,43 +173,16 @@ export default function TrainsView() {
             ))}
           </div>
 
-          <MoreInfo label="Por qué hay dos fechas por tren">
+          <MoreInfo label="¿Por qué hay que comprobar los billetes en octubre?">
             <p>
-              Primero, en agosto, <span className="font-medium text-foreground">activar la pre-reserva</span> en
-              Trip.com (unos 59-60 días antes del viaje): Trip.com compra sola en cuanto China abra la venta.
+              Los 7 se compraron en <span className="font-medium text-foreground">pre-reserva</span>, con dos meses de
+              antelación. Trip.com guardó la orden, pero China no emite el billete de verdad hasta{' '}
+              <span className="font-medium text-foreground">15 días antes</span> de cada viaje.
             </p>
             <p>
-              Después, ya en octubre,{' '}
-              <span className="font-medium text-foreground">comprobar que el billete se emitió de verdad</span> (15 días
-              antes, que es cuando 12306 abre la venta real).
-            </p>
-            <p>
-              <span className="font-medium text-foreground">A partir de las 18:00 de la tarde.</span> La ventana se
-              cuenta sobre la fecha de <span className="font-medium text-foreground">Pekín</span>, y en Pekín el día
-              cambia a las 00:00, que aquí son las 18:00 de la tarde anterior. Por eso cada fecha de arriba es una
-              tarde: a esa hora se destapa un día nuevo del calendario.
-            </p>
-            <p>
-              <span className="font-medium text-foreground">Medido, no supuesto.</span> El 15 de agosto a las 02:13 de
-              la madrugada el tren del 13 de octubre ya estaba a la venta, o sea que se había abierto la tarde del 14.
-              Eso son <span className="font-medium text-foreground">59-60 días</span> de ventana, no los 58 que se
-              calcularon el 7 de agosto. Las ocho fechas se han adelantado un día.
-            </p>
-            <p>
-              <span className="font-medium text-foreground">No es una carrera.</span> La pre-reserva no consume cupo:
-              solo dejas la orden aparcada para que Trip.com la ejecute el día de la venta real. Da igual hacerla a las
-              18:00 que a las 23:00 o a la mañana siguiente. Y si un día la fecha aún no te aparece, al día siguiente
-              está seguro.
-            </p>
-            <p>
-              Ojo, son dos calendarios distintos dentro de Trip.com: el de{' '}
-              <span className="font-medium text-foreground">venta real</span> solo llega a 15 días vista, y el de{' '}
-              <span className="font-medium text-foreground">pre-reserva</span> es el que llega a 58. El que ves cuando
-              eliges fechas de octubre es el de pre-reserva.
-            </p>
-            <p>
-              El cambio de hotel Zhangjiajie → Wulingyuan del 24 oct no sale aquí: es un Didi que se pide en el
-              momento.
+              Por eso quedan esas 7 fechas entre el 28 de septiembre y el 12 de octubre:{' '}
+              <span className="font-medium text-foreground">entrar y comprobar que el billete se emitió</span>. Si
+              alguna pre-reserva falló, ese día hay que comprarlo a mano.
             </p>
           </MoreInfo>
         </div>

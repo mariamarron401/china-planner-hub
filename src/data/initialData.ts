@@ -346,7 +346,8 @@ export const initialTripData: TripData = {
   ],
   activities: [
     {
-      id: 'act-8', cityId: 'beijing', title: 'Ciudad Prohibida (Museo del Palacio)', type: 'Medio día',
+      id: 'act-8',
+      buyOpensIso: '2026-10-04', buyOpensTime: '14:00', cityId: 'beijing', title: 'Ciudad Prohibida (Museo del Palacio)', type: 'Medio día',
       duration: 'Medio día (3-4h)', price: 8, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Domingo 11 oct (mañana)',
       whenToBuy: '⚠️ El 4 oct a las 20:00 hora china (14:00 en España) · ventana de solo 7 días',
@@ -390,7 +391,8 @@ export const initialTripData: TripData = {
       },
     },
     {
-      id: 'act-1', cityId: 'beijing', title: 'Gran Muralla China (Mutianyu + tobogán)', type: 'Excursión',
+      id: 'act-1',
+      buyOpensIso: '2026-10-02', cityId: 'beijing', title: 'Gran Muralla China (Mutianyu + tobogán)', type: 'Excursión',
       duration: 'Medio día (mañana)', price: 25, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Lunes 12 oct (mañana temprano)',
       whenToBuy: '~2-3 oct · ventana ~10 días',
@@ -442,7 +444,8 @@ export const initialTripData: TripData = {
       },
     },
     {
-      id: 'act-9', cityId: 'beijing', title: 'Plaza de Tiananmen (+ bajada de bandera)', type: 'Un par de horas',
+      id: 'act-9',
+      buyOpensIso: '2026-10-04', cityId: 'beijing', title: 'Plaza de Tiananmen (+ bajada de bandera)', type: 'Un par de horas',
       duration: '1-2 h', price: 0, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Domingo 11 oct (tarde) — o el lunes 12 tras la Muralla · A DECIDIR',
       whenToBuy: '⚠️ El 4 oct (7 días antes) · gratis pero OBLIGATORIA. Las fechas nuevas se liberan cada día: intentadlo por la mañana española y reintentad por la tarde',
@@ -486,7 +489,8 @@ export const initialTripData: TripData = {
       },
     },
     {
-      id: 'act-5', cityId: 'xian', title: 'Guerreros de Terracota', type: 'Excursión',
+      id: 'act-5',
+      buyOpensIso: '2026-10-07', cityId: 'xian', title: 'Guerreros de Terracota', type: 'Excursión',
       duration: 'Medio día', price: 16, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Miércoles 14 oct · POR LA TARDE, llegando sobre las 13:30',
       whenToBuy: '⚠️ El mismo día que abra, ~7-8 oct · ventana de solo 7 días (la más urgente)',
@@ -610,7 +614,8 @@ export const initialTripData: TripData = {
       },
     },
     {
-      id: 'act-2', cityId: 'chengdu', title: 'Base de Pandas de Chengdu', type: 'Medio día',
+      id: 'act-2',
+      buyOpensIso: '2026-10-03', cityId: 'chengdu', title: 'Base de Pandas de Chengdu', type: 'Medio día',
       duration: 'Mañana (3-4h)', price: 7, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Sábado 17 oct (a primera hora, 7:30-8:00)',
       whenToBuy: 'El 3 oct · abre la ventana de 14 días',
@@ -620,7 +625,8 @@ export const initialTripData: TripData = {
       notes: 'Por qué el 17 a primera hora: los pandas están más activos de 8:00 a 10:00 y es sábado (más gente) — hay que entrar en cuanto abra. Reservar el slot de MAÑANA (7:30-12:00). Real-name: pasaporte + nº de confirmación. El recinto es enorme, el bus interno (~4 €) ahorra mucha caminata.',
     },
     {
-      id: 'act-3', cityId: 'chengdu', title: 'Buda Gigante de Leshan', type: 'Excursión',
+      id: 'act-3',
+      buyOpensIso: '2026-09-15', cityId: 'chengdu', title: 'Buda Gigante de Leshan', type: 'Excursión',
       duration: 'Día completo', price: 20, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Domingo 18 oct (día completo)',
       whenToBuy: 'Seguimiento desde mediados de sept; comprar al liberarse el cupo del 18 oct',
@@ -630,7 +636,8 @@ export const initialTripData: TripData = {
       notes: 'Por qué el 18: es el 2.º día completo en Chengdu, excursión de día entero. La ENTRADA se compra online (~10 €); el CRUCERO EN BARCO NO se vende online, se paga en el muelle (~9 €, efectivo CNY/Alipay/WeChat). El barco es lo recomendado: 30 min, vista frontal, sin las colas de 2-4h de la escalera. Reserva con franja horaria obligatoria.',
     },
     {
-      id: 'act-6', cityId: 'zhangjiajie', title: 'Tianmen Mountain', type: 'Excursión',
+      id: 'act-6',
+      buyOpensIso: '2026-09-23', cityId: 'zhangjiajie', title: 'Tianmen Mountain', type: 'Excursión',
       duration: 'Tarde + noche (~7h: subís sobre las 14:00 y el espectáculo de luces dura hasta las 21:00)', price: 37, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Viernes 23 oct · tarde y noche, el mismo día que llegáis en tren (12:28)',
       whenToBuy: 'ENTRADA: en cuanto abra vuestra fecha (venta hasta 30 días antes, ~23 sept). Cupo de 15.000/día y en temporada alta se agota hasta 3 días antes. TOUR NOCTURNO: reservarlo con semanas de antelación y reconfirmar que opera en octubre de 2026',
@@ -640,7 +647,8 @@ export const initialTripData: TripData = {
       notes: '🌗 LO QUE QUERÉIS (día + noche) SÍ SE PUEDE, PERO CON MATIZ: el espectáculo de luces de la Puerta del Cielo es de 18:30 a 21:00, y los visitantes de día TIENEN QUE BAJAR ANTES DE LAS 18:00. Solo se ve de cerca de dos maneras: durmiendo en el hotel de la montaña o contratando un tour nocturno guiado (~130 €/persona, incluye guía, traslados desde el hotel y la subida; la entrada de 278-288 CNY va aparte). ⚠️ Ese tour hay que reconfirmarlo para octubre de 2026: las webs que lo venden todavía describen la subida directa en teleférico hasta la cima, que hoy NO existe. 🕐 PLAN DEL 23: tren a Zhangjiajie West 12:28 · Didi al hotel (~30 min) y maletas a la habitación · la estación baja del teleférico está a ~1 km del hotel, junto a la estación de tren · franja de entrada de las 14:00 (la última permitida es la de las 16:00). ⬆️ SUBIDA: teleférico de la ciudad hasta la estación intermedia (28 min) → bus gratuito por la carretera de las 99 curvas (25-30 min) → 7 tramos de escaleras mecánicas dentro de la montaña hasta la cima. El tramo superior del teleférico sigue cerrado por obra (desde nov-2025, hasta 2027). 🥾 ARRIBA: pasarelas de cristal (fundas de zapatos 5-10 CNY por tramo, se pagan allí), sendero del Valle de los Fantasmas, templo, y los 999 escalones de la Puerta del Cielo. El atardecer del 23 es sobre las 17:55, justo cuando encienden las luces. 🌙 DE NOCHE se ilumina precisamente lo que queréis ver: la Puerta del Cielo y los 999 escalones; los mejores sitios son la plaza de Tianmen Cave y la salida de las escaleras mecánicas. 🧥 Arriba hace 5-10 ºC menos que en la ciudad y a esa hora ya es de noche: llevad chaqueta y calzado con suela que agarre. ⛔ Regla de oro de las guías locales: nunca Tianmen y el parque de Avatar el mismo día — con Tianmen el 23 y el parque el 25 lo cumplís de sobra.',
     },
     {
-      id: 'act-7', cityId: 'wulingyuan', title: 'Parque Avatar / Zhangjiajie Forest Park', type: 'Día completo',
+      id: 'act-7',
+      buyOpensIso: '2026-09-26', cityId: 'wulingyuan', title: 'Parque Avatar / Zhangjiajie Forest Park', type: 'Día completo',
       duration: 'Día completo de verdad (8-9h, de 07:00 a media tarde)', price: 48, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Domingo 25 oct · entrar en la primera franja (07:00-07:30)',
       whenToBuy: 'En cuanto abra vuestra fecha (hasta 30 días antes, ~25 sept) y como muy tarde 1-2 semanas antes: hay cupo diario y las franjas buenas vuelan',
@@ -650,7 +658,8 @@ export const initialTripData: TripData = {
       notes: '💶 OJO CON EL PRECIO: la entrada de 236 CNY (4 días, incluye los buses lanzadera internos) NO incluye ni el ascensor Bailong (65 CNY por trayecto) ni los teleféricos (Tianzi 72 CNY, Yangjiajie 76 CNY). Con la ruta normal salen ~373 CNY (~48 €) por persona, no 31 €. ⚠️ EL 25 ES DOMINGO y con color de otoño: es el peor día para la cola del ascensor Bailong (1-2 h a media mañana, hasta 3 h en punta). 🕖 PLAN DEL DÍA: entrad por la puerta de Wulingyuan (East / Sign Gate), que es la vuestra por hotel (estáis en Wuling Avenue) y la mejor para Bailong y Tianzi · primera franja 07:00-07:30 · bus lanzadera interno hasta el ascensor Bailong (30-40 min) · subir en Bailong · Yuanjiajie: montañas flotantes de Avatar y Primer Puente bajo el Cielo (~2 h) · bus a Tianzi Mountain y comer arriba · miradores de Tianzi · BAJAR en el teleférico de Tianzi · lanzadera de vuelta a la puerta. Son 8-9 h con los desplazamientos internos incluidos. 🔁 SI AL LLEGAR LA COLA DEL BAILONG PASA DE 1 H: dadle la vuelta al día — subid por el teleférico de Tianzi y dejad el Bailong para bajar a partir de las 16:00, cuando la cola cae. 🌿 LA TARDE DEL 24, DE PROPINA: como la entrada vale 4 días y el 24 llegáis a mediodía sin nada planeado, podéis estrenarla esa misma tarde con el Golden Whip Stream (paseo llano de ~7,5 km junto al río entre los picos, ~2,5 h, sin colas ni teleféricos). Si lo hacéis, reservad la primera entrada/franja para el 24 y pedid dentro del parque la franja del 25. 🪪 Real-name desde jun-2025: se reserva puerta + franja con el pasaporte y en la primera entrada os registran la cara (el registro vale los 4 días del pase). Si volvierais otro día, la nueva franja se pide al personal ya dentro del parque, no vale con presentarse.',
     },
     {
-      id: 'act-4', cityId: 'shanghai', title: 'Shanghai Disneyland', type: 'Día completo',
+      id: 'act-4',
+      buyOpensIso: '2026-08-31', cityId: 'shanghai', title: 'Shanghai Disneyland', type: 'Día completo',
       duration: 'Día completo', price: 78, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Jueves 29 oct (entre semana; evitar vie 30 y sáb 31)',
       whenToBuy: 'Lunes 31 de agosto (mirar ya desde el sábado 29)',
