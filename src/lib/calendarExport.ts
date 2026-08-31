@@ -6,13 +6,13 @@ import { TransportLeg } from '@/types/trip';
  * porque una alarma de calendario la dispara iOS en el propio móvil: funciona sin
  * cobertura, sin VPN y sin depender de que github.io sea accesible desde China.
  *
- * Tres bloques de avisos:
- *  1. Agosto — activar la pre-reserva en Trip.com de cada tramo (D-58).
- *  2. Sept-oct — comprobar que el billete se emitió de verdad (D-15).
- *  3. Los días de tren — aviso la noche antes y aviso a la hora de salir del hotel.
+ * Dos bloques de avisos:
+ *  1. Sept-oct — comprobar que el billete se emitió de verdad (D-15). Los 7 trenes
+ *     están comprados desde agosto; esto solo verifica que China los emite.
+ *  2. Los días de trayecto — aviso la noche antes y aviso a la hora de salir del hotel.
  *
  * Las horas van en "hora local flotante" (sin zona horaria): iOS las interpreta con
- * el reloj del móvil. Es justo lo que queremos — los avisos de agosto suenan a esa
+ * el reloj del móvil. Es justo lo que queremos — los avisos de septiembre suenan a esa
  * hora en España y los de octubre a esa hora en China, sin cálculos de husos.
  */
 
@@ -152,29 +152,7 @@ export function buildTripIcs(legs: TransportLeg[], cityName: (id: string) => str
   legs.forEach(leg => {
     const ruta = cityLabel(leg, cityName);
 
-    // 1. Activar la pre-reserva en Trip.com (estando aún en España).
-    if (leg.preBookingIso && leg.trainNumber) {
-      events.push({
-        uid: `prebook-${leg.id}@viajechina2026`,
-        dateIso: leg.preBookingIso,
-        startTime: '18:00',
-        endTime: '18:15',
-        title: `💳 Pre-reservar tren: ${ruta}`,
-        description: [
-          `A las 18:00 de hoy entra en ventana el tren del ${leg.travelDate ?? ''}.`,
-          `Tren recomendado: ${leg.trainNumber} ${leg.departTime} → ${leg.arriveTime}.`,
-          `Origen: ${cleanStation(leg.fromStation)}`,
-          `Destino: ${cleanStation(leg.toStation)}`,
-          '',
-          'Entra en Trip.com y deja puesta la pre-reserva: comprará sola cuando China abra la venta.',
-          'No es una carrera: no hay cupo limitado, solo dejas la orden aparcada.',
-          'Si aún no te deja elegir la fecha, reintenta mañana: ahí está seguro.',
-        ].join('\n'),
-        alarms: [{ minutesBefore: 0, description: `Pre-reservar ${ruta} en Trip.com` }],
-      });
-    }
-
-    // 2. Comprobar que el billete se emitió de verdad (D-15).
+    // 1. Comprobar que el billete se emitió de verdad (D-15).
     if (leg.saleOpensIso && leg.trainNumber) {
       events.push({
         uid: `checkticket-${leg.id}@viajechina2026`,
@@ -184,16 +162,16 @@ export function buildTripIcs(legs: TransportLeg[], cityName: (id: string) => str
         title: `✅ Comprobar billete: ${ruta}`,
         description: [
           'Hoy China abre la venta real de este tren.',
-          `Comprueba en Trip.com que el billete del ${leg.trainNumber} se emitió de verdad.`,
-          'Si la pre-reserva falló, cómpralo a mano AHORA.',
+          `El billete está pagado desde agosto: comprueba en Trip.com que el del ${leg.trainNumber} se ha emitido.`,
+          `${leg.departTime} → ${leg.arriveTime}, ${leg.travelDate ?? ''}.`,
           '',
-          'Reconfirma el número de tren: hay ajuste trimestral de horarios a principios de octubre.',
+          'Si la pre-reserva falló, cómpralo a mano AHORA.',
         ].join('\n'),
         alarms: [{ minutesBefore: 0, description: `¿Se emitió el billete de ${ruta}?` }],
       });
     }
 
-    // 3. El día del trayecto.
+    // 2. El día del trayecto.
     if (!leg.travelDateIso || !leg.leaveHotelTime) return;
 
     const esTren = Boolean(leg.trainNumber && leg.departTime && leg.arriveTime);
@@ -224,7 +202,7 @@ export function buildTripIcs(legs: TransportLeg[], cityName: (id: string) => str
       endDayOffset: endCalc.dayOffset,
       title: esTren
         ? `🚄 ${leg.trainNumber} ${start} · ${ruta}`
-        : `🚗 Didi a Wulingyuan · ${ruta}`,
+        : `🚗 ${leg.mode} · ${ruta}`,
       description: esTren
         ? [
             `Tren ${leg.trainNumber}: sale ${start}, llega ${leg.arriveTime}.`,
@@ -239,9 +217,10 @@ export function buildTripIcs(legs: TransportLeg[], cityName: (id: string) => str
             .filter(Boolean)
             .join('\n')
         : [
-            'Cambio de hotel en Didi, no es tren: no hay billete que sacar.',
-            `Salir sobre las ${leg.leaveHotelTime}.`,
+            `${leg.mode}: este tramo no es tren, no hay billete que sacar.`,
+            `Salir a las ${leg.leaveHotelTime}.`,
             leg.transferBefore ?? '',
+            leg.notes ?? '',
           ]
             .filter(Boolean)
             .join('\n'),
@@ -251,13 +230,13 @@ export function buildTripIcs(legs: TransportLeg[], cityName: (id: string) => str
           minutesBefore: nocheAntes,
           description: esTren
             ? `Mañana tren ${leg.trainNumber} a las ${start} desde ${cleanStation(leg.fromStation)}`
-            : `Mañana cambio de hotel a Wulingyuan en Didi`,
+            : `Mañana ${leg.mode.toLowerCase()} a ${cityName(leg.toCityId)} a las ${start}`,
         },
         {
           minutesBefore: alSalir,
           description: esTren
             ? `Salir YA hacia ${cleanStation(leg.fromStation)} · tren ${leg.trainNumber} a las ${start}`
-            : 'Hora de pedir el Didi a Wulingyuan',
+            : `Hora de salir hacia ${cityName(leg.toCityId)}`,
         },
       ],
     });
@@ -282,7 +261,6 @@ export function buildTripIcs(legs: TransportLeg[], cityName: (id: string) => str
 export function countTripAlerts(legs: TransportLeg[]): number {
   return legs.reduce((n, leg) => {
     let count = 0;
-    if (leg.preBookingIso && leg.trainNumber) count += 1;
     if (leg.saleOpensIso && leg.trainNumber) count += 1;
     if (leg.travelDateIso && leg.leaveHotelTime) count += 2; // noche antes + al salir
     return n + count;

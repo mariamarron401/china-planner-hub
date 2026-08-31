@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTrip } from '@/context/TripContext';
-import { Train, Car, ArrowRight, MapPin, CalendarClock, Calendar, Clock, Luggage, CalendarPlus, Bell } from 'lucide-react';
+import { Train, Car, ArrowRight, MapPin, CheckCircle2, Calendar, Clock, Luggage, CalendarPlus, Bell } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import MoreInfo from '@/components/MoreInfo';
@@ -76,6 +76,10 @@ export default function TrainsView() {
 
   const alertCount = countTripAlerts(transportLegs);
 
+  // Suma de lo realmente pagado por los billetes. Se calcula, no se escribe a mano,
+  // para que no pueda quedarse desfasada respecto a los datos de los tramos.
+  const trainsPaidTotal = transportLegs.reduce((sum, leg) => sum + (leg.paidEur ?? 0), 0);
+
   const [pushState, setPushState] = useState<PushState | null>(null);
   const [pushBusy, setPushBusy] = useState(false);
 
@@ -130,13 +134,23 @@ export default function TrainsView() {
 
   return (
     <>
-      {/* Lo único que hay que hacer hoy con los trenes: mirar el calendario */}
+      {/* Lo único que queda por hacer con los trenes: comprobar que los 7 billetes se emiten. */}
       <div className="px-4 mb-4">
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
-          <h2 className="text-sm font-bold text-foreground">📅 Días en que tienes que estar atenta</h2>
+          <div className="rounded-lg bg-travel-confirmed-bg text-travel-confirmed px-3 py-2.5">
+            <div className="text-sm font-bold">✅ Los 7 trenes están comprados</div>
+            <div className="text-[11px] mt-0.5">
+              {trainsPaidTotal.toFixed(2).replace('.', ',')} € los dos · pagados con la cuenta de María
+            </div>
+          </div>
 
-          {nextWatch ? (
-            <div className="mt-2 mb-3 rounded-lg bg-primary text-primary-foreground px-3 py-2">
+          <h2 className="text-sm font-bold text-foreground mt-4">📅 Lo que queda por hacer</h2>
+          <p className="text-[11px] text-muted-foreground mt-0.5 mb-3">
+            Nada que comprar. Solo entrar en Trip.com estos 7 días y ver que el billete está emitido.
+          </p>
+
+          {nextWatch && (
+            <div className="mb-3 rounded-lg bg-primary text-primary-foreground px-3 py-2">
               <div className="text-[10px] uppercase tracking-wide opacity-80">Lo siguiente que te toca</div>
               <div className="text-sm font-bold leading-tight mt-0.5">
                 {nextWatch.daysLeft === 0
@@ -147,42 +161,33 @@ export default function TrainsView() {
                 {' · '}{nextWatch.dateLabel}
               </div>
               <div className="text-[11px] opacity-90 mt-0.5">
-                {nextWatch.kind === 'pre'
-                  ? `Activar la pre-reserva en Trip.com: ${nextWatch.label}`
-                  : `Comprobar que el billete se emitió: ${nextWatch.label}`}
+                Comprobar que el billete se emitió: {nextWatch.label}
               </div>
             </div>
-          ) : (
-            <p className="text-[11px] text-travel-confirmed mt-1 mb-3">
-              ✅ Ya han pasado todas las fechas de la lista: solo queda comprobar que los billetes están emitidos.
-            </p>
           )}
 
-          {/* Los 7 trenes se compraron entre el 15 y el 25 de agosto: la lista de
-              pre-reservas ya no aporta nada y solo añadía ruido. Se resume en una línea. */}
-          <div className="rounded-lg bg-travel-confirmed-bg text-travel-confirmed px-3 py-2 text-[11px] font-medium">
-            ✅ Los 7 trenes comprados · 652,88 €
-          </div>
-
-          <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mt-3 mb-1.5">
-            Sept-oct · comprobar que el billete se emitió
-          </div>
           <div className="space-y-1.5">
-            {watchDates.filter(w => w.kind === 'sale').map(w => (
+            {watchDates.map(w => (
               <WatchRow key={`s-${w.id}`} w={w} />
             ))}
           </div>
 
-          <MoreInfo label="¿Por qué hay que comprobar los billetes en octubre?">
+          {!nextWatch && (
+            <p className="text-[11px] text-travel-confirmed mt-3">
+              ✅ Han pasado las 7 fechas: los billetes están emitidos y no queda nada pendiente aquí.
+            </p>
+          )}
+
+          <MoreInfo label="¿Por qué hay que comprobar los billetes si ya están pagados?">
             <p>
               Los 7 se compraron en <span className="font-medium text-foreground">pre-reserva</span>, con dos meses de
-              antelación. Trip.com guardó la orden, pero China no emite el billete de verdad hasta{' '}
+              antelación. Trip.com cobró y guardó la orden, pero China no emite el billete de verdad hasta{' '}
               <span className="font-medium text-foreground">15 días antes</span> de cada viaje.
             </p>
             <p>
-              Por eso quedan esas 7 fechas entre el 28 de septiembre y el 12 de octubre:{' '}
-              <span className="font-medium text-foreground">entrar y comprobar que el billete se emitió</span>. Si
-              alguna pre-reserva falló, ese día hay que comprarlo a mano.
+              De ahí esas 7 fechas entre el 28 de septiembre y el 12 de octubre: entrar y ver que el billete salió. Si
+              alguna pre-reserva hubiera fallado, ese día hay que comprarlo a mano — por eso el del 6 de octubre
+              (Chongqing → Fenghuang) lleva despertador: es el tramo con solo 3 trenes al día.
             </p>
           </MoreInfo>
         </div>
@@ -196,8 +201,8 @@ export default function TrainsView() {
           <h2 className="text-sm font-bold text-foreground">🔔 Que el móvil os avise</h2>
           <p className="text-[11px] text-muted-foreground mt-1 mb-3">
             Añade los <span className="font-medium text-foreground">{alertCount} avisos</span> al Calendario del
-            iPhone: los días de comprar en Trip.com y, en el viaje, cada tren la noche antes y a la hora de salir del
-            hotel.
+            iPhone: los 7 días de comprobar el billete y, ya en el viaje, cada trayecto la noche antes y a la hora
+            exacta de salir del hotel.
           </p>
 
           <Button onClick={handleAddToCalendar} className="w-full" size="sm">
@@ -249,14 +254,9 @@ export default function TrainsView() {
 
           <MoreInfo label="Qué avisos se añaden exactamente">
             <p>
-              <span className="font-medium text-foreground">8 avisos en agosto</span>, uno por tramo,{' '}
-              <span className="font-medium text-foreground">a las 18:00</span> hora de España: es el minuto exacto en
-              que ese tren entra en la ventana de pre-reserva de Trip.com.
-            </p>
-            <p>
-              <span className="font-medium text-foreground">8 avisos entre el 28 sept y el 12 oct</span>, para
-              comprobar que el billete se emitió de verdad cuando China abre la venta real. Cada uno suena a su hora,
-              que depende de la estación de salida: los de Pekín, Xi'an y Chengdu a las 09:00 (abren de madrugada, no
+              <span className="font-medium text-foreground">7 avisos entre el 28 sept y el 12 oct</span>, para
+              comprobar que cada billete se emitió cuando China abre la venta real. Cada uno suena a su hora, que
+              depende de la estación de salida: los de Pekín, Xi'an y Chengdu a las 09:00 (abren de madrugada, no
               merece la pena levantarse), el de Chongqing a las{' '}
               <span className="font-medium text-foreground">4:50 de la madrugada</span> (es el tramo de solo 3 trenes)
               y los de Zhangjiajie y Shangrao a media mañana.
@@ -267,11 +267,11 @@ export default function TrainsView() {
               lleva dentro el número de tren, las dos estaciones, la hora y el traslado.
             </p>
             <p>
-              Las horas van sin zona horaria a propósito: el iPhone las interpreta con su propio reloj, así que los
-              de agosto suenan en hora española y los de octubre en hora china, sin que tengas que hacer cuentas.
+              Las horas van sin zona horaria a propósito: el iPhone las interpreta con su propio reloj, así que las de
+              octubre suenan en hora china sin que tengas que hacer cuentas.
             </p>
             <p>
-              Si algún tren cambia, vuelve a pulsar el botón: los avisos se actualizan solos porque cada uno lleva
+              Si algo cambia, vuelve a pulsar el botón: los avisos se actualizan solos porque cada uno lleva
               identificador propio, no se duplican.
             </p>
           </MoreInfo>
@@ -284,8 +284,9 @@ export default function TrainsView() {
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
           <h2 className="text-sm font-bold text-foreground">🚉 Cómo se llama cada estación en Trip.com</h2>
           <p className="text-[11px] text-muted-foreground mt-1 mb-3">
-            Escribe el nombre <span className="font-medium text-foreground">tal cual</span> aparece aquí. Las 11
-            estaciones están abiertas y vendiendo billetes (comprobado el 7 ago 2026).
+            Las <span className="font-medium text-foreground">10 estaciones del viaje</span>, con el nombre tal cual
+            lo escribe Trip.com. Útil para buscar el pedido, para el panel de la estación y para enseñárselo al
+            conductor del Didi.
           </p>
 
           <div className="space-y-1.5">
@@ -299,35 +300,6 @@ export default function TrainsView() {
               </div>
             ))}
           </div>
-
-          <MoreInfo label="¿Por qué esa estación y no otra más cerca del hotel?">
-            <p>
-              Comprobado el 7 ago 2026 en las cinco ciudades que tienen más de una estación. El criterio es{' '}
-              <span className="font-medium text-foreground">tren directo primero</span>, cercanía después.
-            </p>
-            <p>
-              <span className="font-medium text-foreground">Pekín:</span> no sale ningún tren de alta velocidad a
-              Xi'an desde la estación central, que sería la más cercana al hotel. Beijing West es obligada.
-            </p>
-            <p>
-              <span className="font-medium text-foreground">Xi'an:</span> sí hay dos trenes a la estación central
-              (a 2,5 km del hotel, frente a los 13 km de Xi'an North), pero tardan 5h54 en vez de 4h10. Casi dos
-              horas más de tren para ahorrar 20 min de coche no compensa.
-            </p>
-            <p>
-              <span className="font-medium text-foreground">Chengdu:</span> Chengdu South cae más cerca del hotel,
-              pero no hay ningún directo desde Xi'an. Chengdu East es obligada.
-            </p>
-            <p>
-              <span className="font-medium text-foreground">Chongqing:</span> hay directo tanto a Chongqing North
-              como a Shapingba. Se mantiene North: yendo en Didi la distancia es casi la misma (8 vs 9 km) y North
-              tiene 154 trenes al día de red de seguridad, frente a 2 en la franja de mañana a Shapingba.
-            </p>
-            <p>
-              <span className="font-medium text-foreground">Shanghái:</span> no hay ningún tren desde Shangrao a la
-              estación central. Hongqiao es obligada.
-            </p>
-          </MoreInfo>
 
           <MoreInfo label="Los tres errores fáciles de cometer">
             <p>
@@ -418,12 +390,16 @@ export default function TrainsView() {
               <span className="bg-muted px-1.5 py-0.5 rounded">{leg.mode}</span>
             </div>
 
-            {leg.preBookingFrom && (
-              <div className="mb-2 bg-primary text-primary-foreground rounded-lg px-3 py-2 flex items-center gap-2">
-                <CalendarClock className="h-4 w-4 flex-shrink-0" />
+            {leg.paidEur != null && (
+              <div className="mb-2 rounded-lg bg-travel-confirmed-bg text-travel-confirmed px-3 py-2 flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
                 <div className="text-xs leading-tight">
-                  <div className="opacity-80">Deja la pre-reserva en Trip.com:</div>
-                  <div className="text-sm font-bold">{leg.preBookingFrom}</div>
+                  <div className="text-sm font-bold">
+                    Comprado · {leg.paidEur.toFixed(2).replace('.', ',')} €
+                  </div>
+                  <div className="opacity-80">
+                    el {leg.paidOn} · cuenta de María · los dos billetes, 2ª clase
+                  </div>
                 </div>
               </div>
             )}
@@ -463,7 +439,13 @@ export default function TrainsView() {
             )}
 
             <div className="flex gap-4 text-xs mt-1">
-              <span>Precio: {leg.price != null ? `${leg.price}€` : <PendingBadge />}</span>
+              <span>
+                {leg.paidEur != null
+                  ? `Pagado: ${leg.paidEur.toFixed(2).replace('.', ',')}€`
+                  : leg.price != null
+                  ? `Se paga allí: ~${leg.price}€`
+                  : <PendingBadge />}
+              </span>
               <span>Duración: {leg.durationMinutes != null ? `${leg.durationMinutes} min` : <PendingBadge />}</span>
             </div>
 
@@ -521,16 +503,20 @@ export default function TrainsView() {
                   </p>
                 )}
                 {leg.stationBuffer && (
-                  <p><span className="text-foreground font-medium">Margen en la estación:</span> {leg.stationBuffer}</p>
+                  <p>
+                    <span className="text-foreground font-medium">
+                      {leg.trainNumber ? 'Margen en la estación:' : 'Antes de salir:'}
+                    </span>{' '}
+                    {leg.stationBuffer}
+                  </p>
                 )}
                 {leg.transferAfter && (
                   <p><span className="text-foreground font-medium">Después del tren:</span> {leg.transferAfter}</p>
                 )}
                 {leg.saleOpensOn && (
                   <p>
-                    Si haces la pre-reserva en la fecha de arriba, Trip.com la compra sola en cuanto China abra la venta
-                    real (será a partir del <span className="font-medium text-foreground">{leg.saleOpensOn}</span>). Si
-                    no la hiciste a tiempo, entra tú ese día a comprarla a mano.
+                    <span className="text-foreground font-medium">📅 Día de comprobar el billete:</span>{' '}
+                    {leg.saleOpensOn}
                   </p>
                 )}
                 {leg.notes && <p>{leg.notes}</p>}

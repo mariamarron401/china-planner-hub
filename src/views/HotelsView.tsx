@@ -251,7 +251,12 @@ export default function HotelsView() {
                             </div>
                           )}
                           {hotel.paymentNote && (
-                            <p className="text-[11px] text-muted-foreground mt-0.5">{hotel.paymentNote}</p>
+                            <p className="text-[11px] text-muted-foreground mt-0.5">
+                              {hotel.paymentNote}
+                              {/* Las 10 reservas se hicieron con la cuenta de María, así que los cargos
+                                  automáticos de octubre salen de ahí y no de la cuenta conjunta. */}
+                              <span className="text-foreground"> · cuenta de María</span>
+                            </p>
                           )}
                           {(hotel.checkInTime || hotel.checkOutTime) && (
                             <p className="text-[11px] text-muted-foreground mt-0.5">

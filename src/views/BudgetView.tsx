@@ -39,6 +39,20 @@ export default function BudgetView() {
   const activitiesComplete = activities.every(a => a.price != null);
 
   const hotelTotal = budget.allSelected ? budget.selectedTotal : budget.avgTotal;
+
+  // De qué cuenta sale cada cosa. Los trenes y los hoteles se reservaron con la cuenta
+  // de MARÍA; la cuenta conjunta que abrieron es para el gasto del día a día allí.
+  // Ojo con los hoteles de "pago más tarde": el cargo salta solo en octubre, así que
+  // ese dinero tiene que estar en la cuenta de María, no en la conjunta.
+  const chosenHotels = cities.map(c => hotels.find(h => h.id === selectedHotels[c.id])).filter(Boolean) as typeof hotels;
+  const hotelsCharged = chosenHotels.filter(h => (h.paymentNote ?? '').toLowerCase().includes('más tarde'));
+  const hotelsChargedTotal = hotelsCharged.reduce((sum, h) => sum + (h.totalPrice ?? 0), 0);
+  const hotelsAlreadyPaid = chosenHotels.filter(h => (h.paymentNote ?? '').toLowerCase().includes('completado'));
+  const hotelsAlreadyPaidTotal = hotelsAlreadyPaid.reduce((sum, h) => sum + (h.totalPrice ?? 0), 0);
+  const mariaTotal = trainsPaidTotal + hotelsChargedTotal + hotelsAlreadyPaidTotal;
+
+  /** '...se cobra el 8/10' → '8/10'. Vacío si la reserva no lleva fecha de cargo. */
+  const chargeDate = (note?: string) => note?.match(/se cobra el ([\d/]+)/)?.[1] ?? '';
   const totalKnown = budgetExtras.flightsInsurance + hotelTotal + transportTotal + activitiesTotal + airportTotal
     + budgetExtras.transportExtra + budgetExtras.activitiesExtra + budgetExtras.insurance + budgetExtras.others;
 
@@ -68,6 +82,87 @@ export default function BudgetView() {
             <div className="flex items-center gap-1.5 mt-3 text-xs text-primary-foreground/80 bg-primary-foreground/10 rounded-lg px-3 py-2">
               <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
               Basado en promedios — elige hoteles para que sea exacto
+            </div>
+          )}
+        </div>
+
+        {/* Con qué cuenta se paga cada cosa. Abrieron una cuenta conjunta para el viaje, pero
+            trenes y hoteles ya estaban reservados con la de María — y 8 hoteles se cobran
+            solos en octubre de esa misma cuenta, que es lo que hay que tener presente. */}
+        <div className="bg-card rounded-xl border-2 border-primary/30 p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wide mb-3">
+            <CreditCard className="h-3.5 w-3.5" /> Con qué cuenta se paga cada cosa
+          </div>
+
+          <div className="rounded-lg bg-muted/50 px-3 py-2.5">
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-xs font-bold text-foreground">Cuenta de María</span>
+              <span className="text-sm font-bold text-foreground whitespace-nowrap">
+                {mariaTotal.toFixed(2).replace('.', ',')}€
+              </span>
+            </div>
+            <p className="text-[11px] text-muted-foreground leading-snug mt-1">
+              Los <span className="font-medium text-foreground">7 trenes</span> (
+              {trainsPaidTotal.toFixed(2).replace('.', ',')}€, ya cobrados) y los{' '}
+              <span className="font-medium text-foreground">{chosenHotels.length} hoteles</span> (
+              {(hotelsChargedTotal + hotelsAlreadyPaidTotal).toFixed(2).replace('.', ',')}€). Se reservó todo con
+              esta cuenta antes de abrir la conjunta.
+            </p>
+          </div>
+
+          {hotelsCharged.length > 0 && (
+            <div className="mt-2 rounded-lg bg-travel-pending-bg px-3 py-2.5">
+              <div className="text-xs font-bold text-travel-pending">
+                ⚠️ {hotelsCharged.length} hoteles se cobran solos en octubre
+              </div>
+              <p className="text-[11px] text-travel-pending leading-snug mt-1">
+                Son <span className="font-semibold">{hotelsChargedTotal.toFixed(2).replace('.', ',')}€</span> de
+                reservas con "pago más tarde": Trip.com los carga automáticamente en{' '}
+                <span className="font-semibold">la cuenta de María</span>, no en la conjunta. Tiene que haber saldo
+                ahí esos días.
+              </p>
+              <div className="mt-2 space-y-1">
+                {hotelsCharged.map(h => (
+                  <div key={h.id} className="flex items-center justify-between gap-2 text-[11px]">
+                    <span className="font-mono font-bold text-travel-pending w-[46px] flex-shrink-0">
+                      {chargeDate(h.paymentNote)}
+                    </span>
+                    <span className="text-foreground truncate">
+                      {cities.find(c => c.id === h.cityId)?.cityName?.split(' (')[0] ?? h.cityId}
+                    </span>
+                    <span className="font-mono text-foreground ml-auto flex-shrink-0">
+                      {h.totalPrice?.toFixed(2).replace('.', ',')}€
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {hotelsAlreadyPaid.length > 0 && (
+                <p className="text-[11px] text-travel-confirmed mt-2">
+                  ✅ Los otros {hotelsAlreadyPaid.length} ({hotelsAlreadyPaidTotal.toFixed(2).replace('.', ',')}€) ya
+                  están pagados y no llevan cargo pendiente.
+                </p>
+              )}
+            </div>
+          )}
+
+          <div className="mt-2 rounded-lg bg-muted/50 px-3 py-2.5">
+            <div className="text-xs font-bold text-foreground">Cuenta conjunta</div>
+            <p className="text-[11px] text-muted-foreground leading-snug mt-1">
+              Todo el gasto de allí: comidas, Didi y taxis, entradas que se compren sobre la marcha, el coche de
+              Furong a Zhangjiajie y las compras. Es la cuenta que se vincula a{' '}
+              <span className="font-medium text-foreground">Alipay y WeChat Pay</span> al llegar.
+            </p>
+          </div>
+
+          {deposits.items.length > 0 && (
+            <div className="mt-2 rounded-lg border border-border px-3 py-2.5">
+              <div className="text-xs font-bold text-foreground">🔲 Los depósitos: decidid la tarjeta</div>
+              <p className="text-[11px] text-muted-foreground leading-snug mt-1">
+                Los {deposits.totalEur.toFixed(2).replace('.', ',')} € de fianza los retiene el hotel en la tarjeta
+                que presentéis <span className="font-medium text-foreground">al hacer el check-in</span>, no en la de
+                la reserva. Como tarda días en volver, mejor usar siempre la misma tarjeta en los 3 hoteles y saber
+                cuál es antes de entrar.
+              </p>
             </div>
           )}
         </div>
@@ -176,18 +271,29 @@ export default function BudgetView() {
                   style={{ width: `${(trainsBought.length / trainLegs.length) * 100}%` }}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div>
-                  <div className="text-travel-confirmed font-bold">{trainsPaidTotal.toFixed(2)}€</div>
-                  <div className="text-[10px] text-muted-foreground leading-tight">pagado de verdad</div>
-                </div>
-                <div>
-                  <div className="text-travel-pending font-bold">{Math.round(trainsPendingEstimate)}€</div>
+              {trainsBought.length === trainLegs.length ? (
+                <div className="text-xs">
+                  <div className="text-travel-confirmed font-bold">
+                    {trainsPaidTotal.toFixed(2).replace('.', ',')}€ pagados
+                  </div>
                   <div className="text-[10px] text-muted-foreground leading-tight">
-                    estimado, {trainLegs.length - trainsBought.length} sin comprar
+                    cifra cerrada, no estimación · cuenta de María
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <div className="text-travel-confirmed font-bold">{trainsPaidTotal.toFixed(2)}€</div>
+                    <div className="text-[10px] text-muted-foreground leading-tight">pagado de verdad</div>
+                  </div>
+                  <div>
+                    <div className="text-travel-pending font-bold">{Math.round(trainsPendingEstimate)}€</div>
+                    <div className="text-[10px] text-muted-foreground leading-tight">
+                      estimado, {trainLegs.length - trainsBought.length} sin comprar
+                    </div>
+                  </div>
+                </div>
+              )}
               {trainsBought.length > 0 && (
                 <div className="mt-2 space-y-0.5">
                   {trainsBought.map(t => (
@@ -199,23 +305,6 @@ export default function BudgetView() {
                     </div>
                   ))}
                 </div>
-              )}
-              {trainsBought.length < trainLegs.length && (
-                <>
-                <p className="text-[10px] text-muted-foreground mt-2 leading-snug">
-                  Lo estimado sale del precio en yuanes y{' '}
-                  <span className="font-medium text-foreground">se queda corto</span>. En los tres tramos comparables
-                  (mismo tren que se estimó) el desvío medio es de un{' '}
-                  <span className="font-medium text-travel-pending">+16,5%</span>: +8%, +30% y +26%. El tramo 4 se
-                  disparó un +77%, pero ahí la causa es otra — se cambió un tren D por uno G, que cuesta más.
-                </p>
-                <p className="text-[10px] text-muted-foreground mt-1.5 leading-snug">
-                  Si el +16,5% se mantiene, los {trainLegs.length - trainsBought.length} que faltan costarán unos{' '}
-                  <span className="font-medium text-foreground">{Math.round(trainsPendingEstimate * 1.165)}€</span> en
-                  vez de {Math.round(trainsPendingEstimate)}€. El grueso es{' '}
-                  <span className="font-medium text-foreground">Zhangjiajie → Shangrao</span>, el más caro del viaje.
-                </p>
-                </>
               )}
             </div>
           )}

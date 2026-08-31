@@ -258,7 +258,7 @@ export const DAY_TIMELINE: Record<string, TimelineEntry[]> = {
     { time: '07:28', what: '🚄 Tren G1367 → Shangrao. 6h11. Desayunáis en el tren y dormís lo que podáis.', kind: 'clave' },
     { time: '13:39', what: 'Llegada a Shangrao. Traslado a Wangxian Valley: ~40 km, ~1 h.' },
     { time: '14:40', what: 'En el hotel, DENTRO del recinto. La entrada al área escénica va incluida.' },
-    { time: '', what: '🌄 Tarde entera en el valle, que con este tren se gana: 2 h más que con el de las 09:51.', kind: 'libre' },
+    { time: '', what: '🌄 Tarde entera en el valle: llegáis a las 14:40 y no hay nada más en la agenda.', kind: 'libre' },
     { time: '', what: '🌙 Y de noche, sin turistas de día y sin pagar entrada aparte. Es por esto que elegisteis dormir dentro.', kind: 'libre' },
   ],
   '2026-10-27': [

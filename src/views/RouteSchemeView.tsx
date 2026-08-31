@@ -1,15 +1,77 @@
 import { useTrip } from '@/context/TripContext';
-import { Building2, Car, TrainFront, MapPin, LogOut, LogIn, AlertTriangle, Copy, ExternalLink } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { Building2, Car, TrainFront, MapPin, LogOut, LogIn, AlertTriangle, Clock } from 'lucide-react';
 import MoreInfo from '@/components/MoreInfo';
 
-const TRIP_TRAINS_URL = 'https://www.trip.com/trains/china/list';
+/**
+ * Puerta a puerta: la secuencia del día de viaje y nada más — a qué hora se sale del
+ * hotel, qué Didi, qué estación, qué tren, y el check-in del hotel de destino.
+ *
+ * María pidió el 31/08/2026 quitar de aquí todo lo que no fuera necesario. Criterio
+ * aplicado: en la tarjeta solo lo que hace falta MIRAR ESE DÍA con el móvil en la mano.
+ * Lo que se ha quitado y dónde está ahora:
+ *  - Precios por tramo y total del transporte → pantalla **Dinero**. Aquí no se decide
+ *    nada de dinero, y ocupaban dos bloques por tarjeta.
+ *  - Los textos largos de traslado, márgenes y desayuno → plegados en "Ver detalle".
+ *  - La leyenda de iconos y el "qué estás viendo aquí" → los pasos ya llevan su texto.
+ *  - El botón de copiar/buscar en Trip.com → era de cuando había que comprar los billetes.
+ */
 
 function formatDuration(min: number) {
   if (min < 60) return `${min} min`;
   const h = Math.floor(min / 60);
   const m = min % 60;
   return m ? `${h}h${m.toString().padStart(2, '0')}` : `${h}h`;
+}
+
+/**
+ * Primera frase, cortando solo en punto y espacio (no en dos puntos: varios textos
+ * llevan «a las 11:55, saliendo del hotel a las 11:10: ...» y ahí la coma manda).
+ */
+function firstPhrase(text?: string): string {
+  if (!text) return '';
+  return text.split(/\.\s/)[0].trim().replace(/\.$/, '');
+}
+
+/**
+ * 'Beijing West (北京西站) · en Trip.com "Beijingxi"' → 'Beijing West (北京西站)'.
+ * El nombre literal para teclear en Trip.com y los avisos de no confundirse de estación
+ * están en Moverse → Trenes; aquí solo hace falta saber a qué estación se va.
+ */
+function stationName(text?: string): string {
+  if (!text) return '';
+  return text.split(' · ')[0].trim();
+}
+
+/**
+ * '🕐 En la estación a las 08:36, saliendo del hotel a las 08:00' → 'Llegar a las 08:36'.
+ * Del margen solo hace falta la hora de estar allí: la de salir del hotel ya va destacada
+ * en el paso anterior, y repetirla era la duplicación más visible de la pantalla.
+ */
+function stationArrival(text?: string): string {
+  const hora = text?.match(/a las (\d{1,2}:\d{2})/)?.[1];
+  return hora ? `Llegar a las ${hora}` : firstPhrase(text);
+}
+
+/**
+ * 'Hotel (Yabaolu, Chaoyang) → Beijing West: ~12 km, 40 min en Didi · ~40 CNY (~5€). A las…'
+ * → '~12 km, 40 min en Didi · ~40 CNY (~5€)'
+ * Se quita el «origen → destino» porque son justo los dos pasos que rodean al Didi en el
+ * esquema, y se queda la primera frase, que es la que lleva km, minutos y precio.
+ */
+function transferShort(text?: string): string {
+  if (!text) return '';
+  const i = text.indexOf(': ');
+  const cabeza = i > 0 ? text.slice(0, i) : '';
+  const cuerpo = cabeza.includes('→') ? text.slice(i + 2) : text;
+  return firstPhrase(cuerpo);
+}
+
+/**
+ * Solo los avisos marcados con 🔴 (no equivocarse) o 🔲 (queda algo por hacer) salen en
+ * la tarjeta. Los demás repetían datos que ya están arriba, como la hora de salir.
+ */
+function esAvisoCritico(text?: string): boolean {
+  return Boolean(text && (text.startsWith('🔴') || text.startsWith('🔲')));
 }
 
 interface StepProps {
@@ -43,226 +105,175 @@ export default function RouteSchemeView() {
   const cityName = (id: string) => cities.find(c => c.id === id)?.cityName?.split(' (')[0] || id;
   const hotelFor = (cityId: string) => hotels.find(h => h.id === selectedHotels[cityId]);
 
-  const copyRouteInfo = async (leg: (typeof transportLegs)[number]) => {
-    const text = [
-      `${leg.fromStation ?? cityName(leg.fromCityId)} → ${leg.toStation ?? cityName(leg.toCityId)}`,
-      leg.travelDate,
-      leg.suggestedDeparture ? `Salida deseada: ${leg.suggestedDeparture}` : null,
-    ].filter(Boolean).join(' · ');
-    try {
-      await navigator.clipboard.writeText(text);
-      toast({ title: 'Datos del trayecto copiados ✅', description: text });
-    } catch {
-      toast({ title: 'No se ha podido copiar', variant: 'destructive' });
-    }
-  };
-
   return (
-    <>
-      <div className="px-4 mb-3">
-        <div className="bg-card rounded-xl border border-border p-3 shadow-sm">
-          <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[11px] text-muted-foreground">
-            <span className="flex items-center gap-1.5"><Building2 className="h-3.5 w-3.5 text-secondary" /> Hotel</span>
-            <span className="flex items-center gap-1.5"><Car className="h-3.5 w-3.5 text-amber-600" /> Didi / taxi</span>
-            <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 text-primary" /> Estación</span>
-            <span className="flex items-center gap-1.5"><TrainFront className="h-3.5 w-3.5 text-primary" /> Tren bala</span>
-          </div>
-          <MoreInfo label="Cómo están calculados estos tramos">
-            <p>
-              De hotel a hotel en cada tramo: salida del hotel, Didi/taxi a la estación (con distancia), tren bala y
-              traslado hasta el hotel de destino. Preferencia aplicada:{' '}
-              <span className="font-medium text-foreground">salidas entre las 9 y las 11 h</span> para no madrugar,
-              cuadrando con los check-in.
-            </p>
-            <p>
-              Horarios de tren tomados del calendario visible hasta el{' '}
-              <span className="font-medium text-foreground">14 de septiembre</span> (el máximo disponible ahora), usado
-              como referencia de octubre. Reconfirmad número y hora exactos cuando 12306/Trip.com abran las fechas de
-              octubre. Los precios (tren y Didi) y los km hotel↔estación son aproximados.
-            </p>
-          </MoreInfo>
-        </div>
-      </div>
-
-      <div className="px-4 space-y-4">
-        {transportLegs.map((leg, idx) => {
-          const originHotel = hotelFor(leg.fromCityId);
-          const destHotel = hotelFor(leg.toCityId);
-          const legTotal = (leg.price ?? 0) + (leg.transferBeforeEur ?? 0) + (leg.transferAfterEur ?? 0);
-          // Algunos tramos son solo cambio de hotel en coche (sin estación ni tren): se dibujan
-          // hotel → Didi → hotel, sin los pasos de estación y sin botones de Trip.com.
-          const isTrain = Boolean(leg.fromStation || leg.toStation);
-          const HeaderIcon = isTrain ? TrainFront : Car;
-          return (
-            <div key={leg.id} className="bg-card rounded-2xl border border-border p-4 shadow-sm">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">Tramo {idx + 1}/{transportLegs.length}</span>
-                {leg.travelDate && <span className="text-[10px] text-muted-foreground">{leg.travelDate}</span>}
-              </div>
-
-              <div className="flex items-center gap-2 mb-3.5">
-                <span className="text-base font-bold text-foreground">{cityName(leg.fromCityId)}</span>
-                <HeaderIcon className={`h-4 w-4 flex-shrink-0 ${isTrain ? 'text-primary' : 'text-amber-600'}`} />
-                <span className="text-base font-bold text-foreground">{cityName(leg.toCityId)}</span>
-              </div>
-
-              {!isTrain && (
-                <p className="text-[11px] leading-snug text-amber-700 dark:text-amber-500 bg-amber-500/10 rounded-lg px-2.5 py-1.5 mb-3">
-                  Este tramo <span className="font-semibold">no lleva tren</span>: es solo el cambio de hotel en Didi/taxi, el mismo día.
-                </p>
-              )}
-
-              <div className="relative">
-                <div className="absolute left-[11px] top-3 bottom-3 w-px bg-border" />
-                <div className="space-y-3">
-                  {/* Hotel de origen */}
-                  <Step icon={Building2} iconColor="text-secondary">
-                    <p className="text-xs font-semibold text-foreground leading-snug">{originHotel?.name ?? cityName(leg.fromCityId)}</p>
-                    <p className="text-[11px] text-muted-foreground flex items-center gap-1">
-                      <LogOut className="h-3 w-3" /> Check-out {originHotel?.checkOutTime ?? '—'}
-                    </p>
-                    {leg.hotelDepartureNote && (
-                      <p className="text-[11px] leading-snug font-medium text-travel-important bg-travel-important-bg rounded-md px-2 py-1 mt-1">
-                        {leg.hotelDepartureNote}
-                      </p>
-                    )}
-                  </Step>
-
-                  {/* Didi a la estación de origen */}
-                  {leg.transferBefore && (
-                    <Step icon={Car} iconColor="text-amber-600">
-                      <p className="text-[11px] text-foreground leading-snug">{leg.transferBefore}</p>
-                    </Step>
-                  )}
-
-                  {/* Estación de origen */}
-                  {isTrain && (
-                    <Step icon={MapPin} iconColor="text-primary">
-                      <p className="text-xs font-semibold text-foreground leading-snug">{leg.fromStation}</p>
-                      {leg.stationBuffer && <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">{leg.stationBuffer}</p>}
-                    </Step>
-                  )}
-
-                  {/* Tren bala, o el trayecto en coche si el tramo no lleva tren */}
-                  <Step icon={isTrain ? TrainFront : Car} iconColor={isTrain ? 'text-primary' : 'text-amber-600'} highlight>
-                    <p className={`text-xs font-bold mb-0.5 ${isTrain ? 'text-primary' : 'text-amber-700 dark:text-amber-500'}`}>{leg.mode}{leg.durationMinutes != null ? ` · ~${formatDuration(leg.durationMinutes)}` : ''}</p>
-                    <p className="text-[11px] text-foreground leading-snug"><span className="text-muted-foreground">Salida:</span> <span className="font-medium">{leg.suggestedDeparture}</span></p>
-                    <p className="text-[11px] text-foreground leading-snug"><span className="text-muted-foreground">Llegada:</span> <span className="font-medium">{leg.estimatedArrival}</span></p>
-                    {leg.price != null && (
-                      <p className="text-[11px] text-foreground leading-snug">
-                        <span className="text-muted-foreground">{isTrain ? 'Billete:' : 'Coche:'}</span>{' '}
-                        <span className="font-medium">~{leg.price}€ {isTrain ? '(2ª clase, 2 pers.)' : '(el coche, los dos juntos)'}</span>
-                      </p>
-                    )}
-                  </Step>
-
-                  {/* Estación de destino */}
-                  {isTrain && (
-                    <Step icon={MapPin} iconColor="text-primary">
-                      <p className="text-xs font-semibold text-foreground leading-snug">{leg.toStation}</p>
-                    </Step>
-                  )}
-
-                  {/* Didi al hotel de destino */}
-                  {leg.transferAfter && (
-                    <Step icon={Car} iconColor="text-amber-600">
-                      <p className="text-[11px] text-foreground leading-snug">{leg.transferAfter}</p>
-                    </Step>
-                  )}
-
-                  {/* Hotel de destino */}
-                  <Step icon={Building2} iconColor="text-secondary">
-                    <p className="text-xs font-semibold text-foreground leading-snug">{destHotel?.name ?? cityName(leg.toCityId)}</p>
-                    <p className="text-[11px] text-muted-foreground flex items-center gap-1">
-                      <LogIn className="h-3 w-3" /> Check-in {destHotel?.checkInTime ?? '—'}
-                    </p>
-                  </Step>
-                </div>
-              </div>
-
-              {!isTrain && leg.notes && (
-                <p className="mt-3 text-[11px] text-muted-foreground leading-snug">{leg.notes}</p>
-              )}
-
-              <div className="mt-3 flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg px-3 py-2">
-                <span className="text-xs font-semibold text-foreground">Total del tramo <span className="text-muted-foreground font-normal">{isTrain ? '(tren 2 pers. + Didi)' : '(solo el Didi)'}</span></span>
-                <span className="text-sm font-bold text-primary">~{legTotal}€</span>
-              </div>
-
-              {isTrain && (
-                <>
-                  <div className="mt-2 flex gap-2">
-                    <a
-                      href={TRIP_TRAINS_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold px-3 py-2 active:opacity-80 transition-opacity"
-                    >
-                      Buscar en Trip.com <ExternalLink className="h-3 w-3 opacity-80" />
-                    </a>
-                    <button
-                      onClick={() => copyRouteInfo(leg)}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-muted text-foreground text-xs font-semibold px-3 py-2 hover:bg-muted/70 transition-colors"
-                    >
-                      <Copy className="h-3.5 w-3.5" /> Copiar datos
-                    </button>
-                  </div>
-                  <MoreInfo label="Para qué son estos dos botones">
-                    <p>
-                      Trip.com no permite enlazar la búsqueda ya rellena — el botón abre el buscador de trenes de China
-                      y "Copiar datos" pone origen, destino y fecha en el portapapeles para pegarlos ahí. Los billetes
-                      suelen abrirse a la venta pocas semanas antes del viaje.
-                    </p>
-                  </MoreInfo>
-                </>
-              )}
-
-              {leg.alertNote && (
-                <div className="mt-3 bg-travel-important-bg text-travel-important text-[11px] leading-snug font-medium px-2.5 py-1.5 rounded-lg flex items-start gap-1.5">
-                  <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
-                  <span>{leg.alertNote}</span>
-                </div>
-              )}
+    <div className="px-4 space-y-4">
+      {transportLegs.map((leg, idx) => {
+        const originHotel = hotelFor(leg.fromCityId);
+        const destHotel = hotelFor(leg.toCityId);
+        // Los tramos que no son tren (el coche del 23 y el Didi del 24) se dibujan
+        // hotel → coche → hotel, sin los pasos de estación.
+        const isTrain = Boolean(leg.fromStation || leg.toStation);
+        const HeaderIcon = isTrain ? TrainFront : Car;
+        const avisoCritico = esAvisoCritico(leg.alertNote);
+        return (
+          <div key={leg.id} className="bg-card rounded-2xl border border-border p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                Tramo {idx + 1}/{transportLegs.length}
+              </span>
+              {leg.travelDate && <span className="text-[10px] text-muted-foreground">{leg.travelDate}</span>}
             </div>
-          );
-        })}
 
-        {(() => {
-          const trainLegs = transportLegs.filter(l => l.fromStation || l.toStation);
-          const roadLegs = transportLegs.filter(l => !l.fromStation && !l.toStation);
-          const totalTrenes = trainLegs.reduce((s, l) => s + (l.price ?? 0), 0);
-          const numTransfers = transportLegs.reduce((s, l) => s + (l.transferBeforeEur != null ? 1 : 0) + (l.transferAfterEur != null ? 1 : 0), 0);
-          const totalDidi =
-            transportLegs.reduce((s, l) => s + (l.transferBeforeEur ?? 0) + (l.transferAfterEur ?? 0), 0) +
-            roadLegs.reduce((s, l) => s + (l.price ?? 0), 0);
-          return (
-            <div className="bg-primary/5 rounded-xl border border-primary/30 p-3.5 shadow-sm">
-              <p className="text-sm font-bold text-foreground mb-2">💰 Coste total del transporte interno</p>
-              <div className="space-y-1 text-[11px] text-foreground">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{trainLegs.length} trenes bala (2ª clase, 2 personas)</span>
-                  <span className="font-semibold">~{totalTrenes}€</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Didi/taxi a estaciones y cambios de hotel ({numTransfers + roadLegs.length} trayectos)</span>
-                  <span className="font-semibold">~{totalDidi}€</span>
-                </div>
-                <div className="flex justify-between pt-1.5 mt-1 border-t border-primary/20">
-                  <span className="font-bold text-foreground">TOTAL los dos</span>
-                  <span className="font-bold text-primary text-sm">~{totalTrenes + totalDidi}€</span>
-                </div>
+            <div className="flex items-center gap-2 mb-3.5">
+              <span className="text-base font-bold text-foreground">{cityName(leg.fromCityId)}</span>
+              <HeaderIcon className={`h-4 w-4 flex-shrink-0 ${isTrain ? 'text-primary' : 'text-amber-600'}`} />
+              <span className="text-base font-bold text-foreground">{cityName(leg.toCityId)}</span>
+            </div>
+
+            <div className="relative">
+              <div className="absolute left-[11px] top-3 bottom-3 w-px bg-border" />
+              <div className="space-y-3">
+                {/* Hotel de origen. La hora de salir es el dato que evita quedarse tirados,
+                    así que va destacada y no escondida en un párrafo. */}
+                <Step icon={Building2} iconColor="text-secondary">
+                  <p className="text-xs font-semibold text-foreground leading-snug">
+                    {originHotel?.name ?? cityName(leg.fromCityId)}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+                    <LogOut className="h-3 w-3" /> Check-out {originHotel?.checkOutTime ?? '—'}
+                  </p>
+                  {leg.leaveHotelTime && (
+                    <p className="mt-1 inline-flex items-center gap-1 rounded-md bg-travel-important-bg px-2 py-1 text-[11px] font-bold text-travel-important">
+                      <Clock className="h-3 w-3" /> Salir a las {leg.leaveHotelTime}
+                    </p>
+                  )}
+                </Step>
+
+                {/* Coche hasta la estación. En los tramos sin tren no se pinta: el coche
+                    del paso siguiente ya es el tramo entero, puerta a puerta. */}
+                {isTrain && leg.transferBefore && (
+                  <Step icon={Car} iconColor="text-amber-600">
+                    <p className="text-[11px] text-foreground leading-snug">{transferShort(leg.transferBefore)}</p>
+                  </Step>
+                )}
+
+                {/* Estación de salida */}
+                {isTrain && (
+                  <Step icon={MapPin} iconColor="text-primary">
+                    <p className="text-xs font-semibold text-foreground leading-snug">{stationName(leg.fromStation)}</p>
+                    {leg.stationBuffer && (
+                      <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">
+                        {stationArrival(leg.stationBuffer)}
+                      </p>
+                    )}
+                  </Step>
+                )}
+
+                {/* El tren (o el coche, en los dos tramos que no son tren) */}
+                <Step
+                  icon={isTrain ? TrainFront : Car}
+                  iconColor={isTrain ? 'text-primary' : 'text-amber-600'}
+                  highlight
+                >
+                  <p
+                    className={`text-xs font-bold ${
+                      isTrain ? 'text-primary' : 'text-amber-700 dark:text-amber-500'
+                    }`}
+                  >
+                    {leg.trainNumber ?? leg.mode}
+                    {leg.durationMinutes != null && ` · ${formatDuration(leg.durationMinutes)}`}
+                  </p>
+                  {leg.departTime && leg.arriveTime && (
+                    <p className="mt-0.5 text-lg font-bold tabular-nums leading-none text-foreground">
+                      {leg.departTime} <span className="text-muted-foreground font-normal">→</span> {leg.arriveTime}
+                    </p>
+                  )}
+                </Step>
+
+                {/* Estación de llegada */}
+                {isTrain && (
+                  <Step icon={MapPin} iconColor="text-primary">
+                    <p className="text-xs font-semibold text-foreground leading-snug">{stationName(leg.toStation)}</p>
+                  </Step>
+                )}
+
+                {/* Coche hasta el hotel */}
+                {isTrain && leg.transferAfter && (
+                  <Step icon={Car} iconColor="text-amber-600">
+                    <p className="text-[11px] text-foreground leading-snug">{transferShort(leg.transferAfter)}</p>
+                  </Step>
+                )}
+
+                {/* Hotel de destino */}
+                <Step icon={Building2} iconColor="text-secondary">
+                  <p className="text-xs font-semibold text-foreground leading-snug">
+                    {destHotel?.name ?? cityName(leg.toCityId)}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+                    <LogIn className="h-3 w-3" /> Check-in {destHotel?.checkInTime ?? '—'}
+                  </p>
+                </Step>
               </div>
-              <MoreInfo label="Cómo se han calculado estos precios">
+            </div>
+
+            {avisoCritico && (
+              <div className="mt-3 bg-travel-important-bg text-travel-important text-[11px] leading-snug font-medium px-2.5 py-1.5 rounded-lg flex items-start gap-1.5">
+                <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+                <span>{leg.alertNote}</span>
+              </div>
+            )}
+
+            <MoreInfo label="Ver detalle del tramo">
+              {leg.hotelDepartureNote && <p>{leg.hotelDepartureNote}</p>}
+              {leg.suggestedDeparture && (
                 <p>
-                  Precios de tren = tarifa oficial de 2ª clase por persona × 2. Los Didi son por coche (las 2 personas
-                  juntas) y varían por tráfico/hora; en Fenghuang y Furong suele ser tarifa fija negociada. Si usáis
-                  metro en las ciudades grandes, sale bastante más barato.
+                  <span className="text-foreground font-medium">Salida:</span> {leg.suggestedDeparture}
                 </p>
-              </MoreInfo>
-            </div>
-          );
-        })()}
-      </div>
-    </>
+              )}
+              {leg.estimatedArrival && (
+                <p>
+                  <span className="text-foreground font-medium">Llegada:</span> {leg.estimatedArrival}
+                </p>
+              )}
+              {leg.transferBefore && (
+                <p>
+                  <span className="text-foreground font-medium">Antes:</span> {leg.transferBefore}
+                </p>
+              )}
+              {leg.stationBuffer && (
+                <p>
+                  <span className="text-foreground font-medium">
+                    {isTrain ? 'Margen en la estación:' : 'Al salir:'}
+                  </span>{' '}
+                  {leg.stationBuffer}
+                </p>
+              )}
+              {isTrain && (
+                <p>
+                  <span className="text-foreground font-medium">Estaciones completas:</span>{' '}
+                  {leg.fromStation} → {leg.toStation}
+                </p>
+              )}
+              {leg.transferAfter && (
+                <p>
+                  <span className="text-foreground font-medium">Después:</span> {leg.transferAfter}
+                </p>
+              )}
+              {leg.breakfastNote && (
+                <p>
+                  <span className="text-foreground font-medium">☕ Desayuno:</span> {leg.breakfastNote}
+                </p>
+              )}
+              {leg.alertNote && !avisoCritico && <p>{leg.alertNote}</p>}
+              {leg.notes && <p>{leg.notes}</p>}
+              <p className="text-muted-foreground">
+                Lo que cuesta este tramo y de qué cuenta sale está en la pantalla{' '}
+                <span className="text-foreground font-medium">Dinero</span>.
+              </p>
+            </MoreInfo>
+          </div>
+        );
+      })}
+    </div>
   );
 }

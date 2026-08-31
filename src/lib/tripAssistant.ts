@@ -137,7 +137,7 @@ const GENERAL_TIPS = `💡 **Consejos generales para China:**
 - Descarga mapas y traductor **offline** por si falla la VPN.
 - **Power bank: máximo 20.000 mAh.** Por encima de eso lo confiscan en el control del tren. Y siempre en el equipaje de mano, nunca en la maleta facturada.
 - **Lleva papel higiénico en la mochila**: los baños públicos en China normalmente no lo tienen.
-- Los trenes internos aún NO están comprados: hay que comprarlos cuando abra la venta (pregúntame "¿cuándo compro los trenes?").`;
+- Los 7 trenes internos **ya están comprados y pagados** (652,88 € los dos, cuenta de María). Lo único que queda es comprobar en Trip.com que cada billete se emite 15 días antes de su viaje (pregúntame "¿cuándo compruebo los billetes?").`;
 
 // ---------- generadores de respuesta por tema ----------
 
@@ -216,7 +216,9 @@ function answerTrain(data: TripData, cities: string[]): string {
           `- **${shortCity(cityName(data, t.fromCityId))} → ${shortCity(cityName(data, t.toCityId))}** (${t.travelDate ?? ''}): ${t.suggestedDeparture ?? t.mode}`
       )
       .join('\n');
-    return `🚄 **Vuestros 8 trayectos en tren bala** (aún por comprar):\n\n${summary}\n\nPregúntame por un tramo concreto (ej. "tren de Beijing a Xi'an") para ver estaciones, horarios y cuándo abre la venta.`;
+    const trenes = data.transportLegs.filter((t) => t.trainNumber).length;
+    const pagado = data.transportLegs.reduce((sum, t) => sum + (t.paidEur ?? 0), 0);
+    return `🚄 **Vuestros ${data.transportLegs.length} trayectos entre ciudades** — los ${trenes} trenes están comprados (${pagado.toFixed(2).replace('.', ',')} €, cuenta de María):\n\n${summary}\n\nPregúntame por un tramo concreto (ej. "tren de Beijing a Xi'an") para ver el número de tren, las estaciones y la hora de salir del hotel.`;
   }
 
   if (legs.length === 0) return 'No encuentro ese trayecto en tren. Los trayectos van entre ciudades consecutivas de la ruta.';
@@ -226,13 +228,21 @@ function answerTrain(data: TripData, cities: string[]): string {
       const parts = [
         `🚄 **${shortCity(cityName(data, t.fromCityId))} → ${shortCity(cityName(data, t.toCityId))}** (${t.travelDate ?? ''})`,
       ];
-      if (t.suggestedDeparture) parts.push(`🕘 Salida sugerida: ${t.suggestedDeparture}`);
+      if (t.paidEur != null) {
+        parts.push(`✅ Comprado y pagado: ${t.paidEur.toFixed(2).replace('.', ',')} € los dos (cuenta de María, el ${t.paidOn}).`);
+      }
+      if (t.trainNumber && t.departTime && t.arriveTime) {
+        parts.push(`🚄 Tren ${t.trainNumber}: sale ${t.departTime} → llega ${t.arriveTime}`);
+      }
+      if (t.leaveHotelTime) parts.push(`🕘 **Salir del hotel a las ${t.leaveHotelTime}**`);
+      if (t.suggestedDeparture) parts.push(`🚏 Salida: ${t.suggestedDeparture}`);
       if (t.estimatedArrival) parts.push(`🏁 Llegada: ${t.estimatedArrival}`);
       if (t.fromStation) parts.push(`📍 Desde: ${t.fromStation}`);
       if (t.toStation) parts.push(`📍 Hasta: ${t.toStation}`);
-      if (t.transferBefore) parts.push(`➡️ Antes del tren: ${t.transferBefore}`);
-      if (t.transferAfter) parts.push(`➡️ Después del tren: ${t.transferAfter}`);
-      if (t.saleOpensOn) parts.push(`🎟️ La venta abre aprox. el ${t.saleOpensOn} — hay que comprarlo entonces.`);
+      if (t.breakfastNote) parts.push(`☕ Desayuno: ${t.breakfastNote}`);
+      if (t.transferBefore) parts.push(`➡️ Antes: ${t.transferBefore}`);
+      if (t.transferAfter) parts.push(`➡️ Después: ${t.transferAfter}`);
+      if (t.saleOpensOn) parts.push(`🎟️ Comprobar que el billete se emitió: ${t.saleOpensOn}`);
       if (t.alertNote) parts.push(`⚠️ ${t.alertNote}`);
       return parts.join('\n');
     })
@@ -315,13 +325,13 @@ function answerActivities(data: TripData, q: string, cities: string[]): string {
 function answerWhenToBuy(data: TripData): string {
   const trains = data.transportLegs
     .filter((t) => t.saleOpensOn)
-    .map((t) => `- 🚄 ${shortCity(cityName(data, t.fromCityId))} → ${shortCity(cityName(data, t.toCityId))}: venta abre ~${t.saleOpensOn}`)
+    .map((t) => `- 🚄 ${shortCity(cityName(data, t.fromCityId))} → ${shortCity(cityName(data, t.toCityId))} (${t.trainNumber}): ${t.saleOpensOn}`)
     .join('\n');
   const acts = data.activities
     .filter((a) => a.whenToBuy)
     .map((a) => `- 🎫 ${a.title}: ${a.whenToBuy}`)
     .join('\n');
-  return `⏰ **Cuándo comprar cada cosa:**\n\n**Trenes bala** (comprar en cuanto abra la venta, se agotan en Golden Week):\n${trains}\n\n**Entradas de actividades:**\n${acts}\n\n👉 Los trenes de Xi'an→Chengdu, Chongqing→Fenghuang y Wulingyuan→Wangxian Valley (sale de Zhangjiajie West el 26 oct) son los más críticos: cómpralos el primer día que se pueda.`;
+  return `⏰ **Qué queda por hacer y cuándo:**\n\n**Trenes bala — ya están comprados los 7.** Lo único pendiente es entrar en Trip.com estos días y ver que el billete se ha emitido (China lo emite 15 días antes de cada viaje):\n${trains}\n\n**Entradas de actividades:**\n${acts}\n\n👉 De los 7, el que más importa es el del 6 de octubre (Chongqing → Fenghuang): es el tramo con solo 3 trenes al día, así que si esa pre-reserva hubiera fallado hay que comprarlo a mano ese mismo día.`;
 }
 
 function answerAirportTransfers(data: TripData, q: string): string {
@@ -456,7 +466,7 @@ const GREETING = `¡Hola! 👋 Soy vuestro asistente del viaje a China. Tengo TO
 
 Puedo ayudaros con:
 🏨 Hoteles y horarios de check-in/check-out
-🚄 Trenes internos (horarios, estaciones, cuándo comprarlos)
+🚄 Trenes internos (número de tren, horarios, estaciones, hora de salir del hotel)
 ✈️ Vuelos
 🎫 Entradas y actividades (muralla, pandas, Disney...)
 💶 Presupuesto

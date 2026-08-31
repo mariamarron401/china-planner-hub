@@ -40,9 +40,9 @@ export function countdownLabel(daysLeft: number): string {
 }
 
 /**
- * Junta en una sola lista TODO lo que tiene fecha y sigue sin hacer: trenes por
- * pre-reservar o comprobar, gestiones de apps, la compra de las e-SIM y los
- * pendientes con fecha límite. Ordenado por fecha, lo primero es lo que toca.
+ * Junta en una sola lista TODO lo que tiene fecha y sigue sin hacer: los billetes
+ * de tren por comprobar, gestiones de apps, la compra de las e-SIM y los pendientes
+ * con fecha límite. Ordenado por fecha, lo primero es lo que toca.
  *
  * Existe para que la pantalla de inicio pueda responder a una sola pregunta
  * ("¿qué me toca hacer ahora?") sin que haya que ir mirando cinco pantallas.
@@ -53,16 +53,6 @@ export function buildNextActions(data: TripData, pendingItems: PendingItem[] = [
 
   for (const leg of data.transportLegs) {
     const route = `${cityName(leg.fromCityId)} → ${cityName(leg.toCityId)}`;
-    if (leg.preBookingIso) {
-      out.push({
-        id: `${leg.id}-pre`,
-        iso: leg.preBookingIso,
-        daysLeft: daysUntil(leg.preBookingIso),
-        title: `Activar la pre-reserva del tren ${route}`,
-        kind: 'tren',
-        to: '/moverse/trenes',
-      });
-    }
     if (leg.saleOpensIso) {
       out.push({
         id: `${leg.id}-sale`,

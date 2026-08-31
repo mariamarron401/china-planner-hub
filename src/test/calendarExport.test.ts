@@ -21,19 +21,20 @@ describe('avisos de calendario (.ics)', () => {
     expect(count(/BEGIN:VALARM/g)).toBe(count(/END:VALARM/g));
   });
 
-  it('cubre los 8 trenes: pre-reserva, comprobación y día del viaje', () => {
+  it('cubre los 7 trenes comprados: comprobación del billete y día del viaje', () => {
     const trenes = legs.filter(l => l.trainNumber);
-    expect(trenes).toHaveLength(8);
-    expect((ics.match(/UID:prebook-/g) || []).length).toBe(8);
-    expect((ics.match(/UID:checkticket-/g) || []).length).toBe(8);
-    // 9 tramos con día de viaje: los 8 trenes + el cambio de hotel en Didi del 24 oct
+    expect(trenes).toHaveLength(7);
+    // Los 7 se compraron en agosto: ya no hay avisos de pre-reserva.
+    expect((ics.match(/UID:prebook-/g) || []).length).toBe(0);
+    expect((ics.match(/UID:checkticket-/g) || []).length).toBe(7);
+    // 9 tramos con día de viaje: los 7 trenes + el coche del 23 oct + el Didi del 24
     expect((ics.match(/UID:leg-/g) || []).length).toBe(9);
   });
 
   it('pone dos alarmas en cada día de trayecto: la noche antes y al salir del hotel', () => {
-    // 8 pre-reservas + 8 comprobaciones + 9 trayectos x 2 alarmas = 34
-    expect((ics.match(/BEGIN:VALARM/g) || []).length).toBe(34);
-    expect(countTripAlerts(legs)).toBe(34);
+    // 7 comprobaciones de billete + 9 trayectos x 2 alarmas = 25
+    expect((ics.match(/BEGIN:VALARM/g) || []).length).toBe(25);
+    expect(countTripAlerts(legs)).toBe(25);
   });
 
   it('ninguna alarma cae después de su evento', () => {
@@ -63,15 +64,23 @@ describe('avisos de calendario (.ics)', () => {
     });
   });
 
-  it('el primer tren lleva el G365 y su hora real', () => {
+  it('el primer tren lleva el G351 comprado y su hora real', () => {
     const bloque = ics.split('BEGIN:VEVENT').find(b => b.includes('UID:leg-tl-1'))!;
-    expect(bloque).toContain('DTSTART:20261013T095500');
-    expect(bloque).toContain('DTEND:20261013T140500');
-    expect(bloque).toContain('G365');
-    // Aviso la noche antes a las 20:00 → 13h55 antes de las 09:55
-    expect(bloque).toContain('TRIGGER:-PT835M');
-    // Aviso al salir del hotel a las 08:15 → 100 min antes
+    expect(bloque).toContain('DTSTART:20261013T075500');
+    expect(bloque).toContain('DTEND:20261013T120500');
+    expect(bloque).toContain('G351');
+    // Aviso la noche antes a las 20:00 → 11h55 antes de las 07:55
+    expect(bloque).toContain('TRIGGER:-PT715M');
+    // Aviso al salir del hotel a las 06:15 → 100 min antes
     expect(bloque).toContain('TRIGGER:-PT100M');
+  });
+
+  it('el tramo del 23 oct es el coche a Zhangjiajie, no un tren ni el Didi del 24', () => {
+    const bloque = ics.split('BEGIN:VEVENT').find(b => b.includes('UID:leg-tl-6'))!;
+    expect(bloque).toContain('Coche con ch');
+    expect(bloque).not.toMatch(/Tren [GD]\d/);
+    expect(bloque).not.toContain('Wulingyuan');
+    expect(ics).not.toContain('UID:checkticket-tl-6@');
   });
 
   it('el tramo del 24 oct no inventa un tren, porque es un Didi', () => {

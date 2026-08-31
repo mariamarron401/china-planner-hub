@@ -158,6 +158,13 @@ export interface TransportLeg {
   /** Fecha legible en que se compró/pre-reservó este tramo, ej. '15 ago 2026'. */
   paidOn?: string;
   /**
+   * Con qué cuenta se pagó. Los 7 trenes y los 10 hoteles van con la cuenta de MARÍA;
+   * la cuenta conjunta que abrieron es para los gastos del día a día allí (comidas,
+   * Didi, entradas, compras). Se guarda por tramo para que la pantalla Dinero pueda
+   * decir de qué cuenta sale cada cosa sin que haya que recordarlo.
+   */
+  paidWith?: 'maria' | 'conjunta';
+  /**
    * Veredicto del desayuno del hotel de origen ese día. Los 10 hoteles lo tienen incluido y
    * PAGADO, así que perderlo es tirar dinero — es una preocupación explícita de María
    * (17/08/2026). Cruza el horario real de desayuno de cada hotel (verificados en Trip.com el

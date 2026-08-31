@@ -13,8 +13,8 @@ const SECTIONS: ShellSection[] = [
 ];
 
 const SUBTITLES: Record<string, string> = {
-  trayectos: 'Hotel → estación → tren → hotel, con horas',
-  trenes: 'Los 8 trenes bala y cuándo comprarlos',
+  trayectos: 'Hotel → estación → tren → hotel, con las horas del billete',
+  trenes: 'Los 7 trenes, comprados · 652,88 €',
   traslados: 'Aeropuertos y coches dentro de la ciudad',
   vuelos: 'Air China · Economy · 2 piezas de equipaje',
 };
