@@ -4,7 +4,9 @@
  *
  * Se genera desde `src/data/initialData.ts` en cada build, en vez de mantener un JSON
  * a mano, para que no pueda desincronizarse de los trenes reales. Si mañana cambia un
- * tren, el aviso cambia solo.
+ * tren, el aviso cambia solo. Los 7 billetes están comprados desde agosto, así que ya no
+ * hay avisos de pre-reserva: quedan el de comprobar que China emite cada billete y los
+ * dos de cada día de trayecto.
  *
  * Ojo con los husos: aquí SÍ hacen falta horas absolutas (a diferencia del .ics, que usa
  * hora local flotante), porque quien envía es un servidor y tiene que saber el instante
@@ -44,8 +46,10 @@ function offsetFor(dateIso) {
   return dateIso >= LLEGADA_A_CHINA ? OFFSET_CHINA : OFFSET_ESPANA;
 }
 
+// Deja solo la estación. Corta por los dos separadores que usan los datos, ' · ' y ' — ':
+// el nombre para teclear en Trip.com no cabe en una notificación del móvil.
 function cleanStation(station) {
-  return station ? station.split(' — ')[0].trim() : '';
+  return station ? station.split(/ · | — /)[0].trim() : '';
 }
 
 async function loadTripData() {
@@ -72,27 +76,20 @@ const alerts = [];
 for (const leg of data.transportLegs) {
   const ruta = `${cityName(leg.fromCityId)} → ${cityName(leg.toCityId)}`;
 
-  // 1. Día de activar la pre-reserva en Trip.com (aún en España).
-  if (leg.preBookingIso && leg.trainNumber) {
-    alerts.push({
-      id: `prebook-${leg.id}`,
-      atUtc: toUtcIso(leg.preBookingIso, '09:00', offsetFor(leg.preBookingIso)),
-      title: `💳 Hoy toca pre-reservar: ${ruta}`,
-      body: `Tren ${leg.trainNumber} del ${leg.travelDate ?? ''}. Entra en Trip.com y deja puesta la pre-reserva.`,
-    });
-  }
-
-  // 2. Día en que China abre la venta real: comprobar que el billete se emitió.
+  // 1. Día en que China abre la venta real: comprobar que el billete se emitió.
+  //    La hora sale de `saleCheckTime`, igual que en el .ics: no es la misma para todos
+  //    (el de Chongqing es a las 4:50 porque es el tramo de solo 3 trenes al día), y
+  //    poner 09:00 fijo dejaba el aviso crítico 4 h tarde.
   if (leg.saleOpensIso && leg.trainNumber) {
     alerts.push({
       id: `checkticket-${leg.id}`,
-      atUtc: toUtcIso(leg.saleOpensIso, '09:00', offsetFor(leg.saleOpensIso)),
+      atUtc: toUtcIso(leg.saleOpensIso, leg.saleCheckTime ?? '09:00', offsetFor(leg.saleOpensIso)),
       title: `✅ Comprobar billete: ${ruta}`,
-      body: `Hoy abre la venta real del ${leg.trainNumber}. Comprueba en Trip.com que se emitió; si no, cómpralo a mano.`,
+      body: `El ${leg.trainNumber} está pagado desde agosto, pero China lo emite hoy. Comprueba en Trip.com que salió; si la pre-reserva falló, cómpralo a mano ahora.`,
     });
   }
 
-  // 3. Los dos avisos del día del trayecto.
+  // 2. Los dos avisos del día del trayecto.
   if (!leg.travelDateIso || !leg.leaveHotelTime) continue;
 
   const esTren = Boolean(leg.trainNumber && leg.departTime);
@@ -101,19 +98,19 @@ for (const leg of data.transportLegs) {
   alerts.push({
     id: `eve-${leg.id}`,
     atUtc: toUtcIso(vispera, '20:00', OFFSET_CHINA),
-    title: esTren ? `🚄 Mañana: tren ${leg.trainNumber}` : '🚗 Mañana: cambio de hotel',
+    title: esTren ? `🚄 Mañana: tren ${leg.trainNumber}` : `🚗 Mañana: ${leg.mode}`,
     body: esTren
       ? `${ruta}. Sale a las ${leg.departTime} de ${cleanStation(leg.fromStation)}. Salir del hotel a las ${leg.leaveHotelTime}.`
-      : `${ruta} en Didi. Salir sobre las ${leg.leaveHotelTime}.`,
+      : `${ruta} en ${leg.mode.toLowerCase()}. Salir a las ${leg.leaveHotelTime}.`,
   });
 
   alerts.push({
     id: `go-${leg.id}`,
     atUtc: toUtcIso(leg.travelDateIso, leg.leaveHotelTime, OFFSET_CHINA),
-    title: esTren ? `⏰ Salir ya · tren ${leg.trainNumber}` : '⏰ Pedid el Didi ya',
+    title: esTren ? `⏰ Salir ya · tren ${leg.trainNumber}` : `⏰ Salir ya · ${ruta}`,
     body: esTren
       ? `${cleanStation(leg.fromStation)}, tren de las ${leg.departTime}. Asiento en fila 1 o última del vagón.`
-      : `${ruta}. ~45 min de trayecto.`,
+      : `${ruta} en ${leg.mode.toLowerCase()}${leg.durationMinutes ? `, ~${leg.durationMinutes} min` : ''}.`,
   });
 }
 

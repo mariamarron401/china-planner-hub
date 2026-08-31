@@ -137,15 +137,7 @@ export interface TransportLeg {
   notes: string;
   fromStation?: string;
   toStation?: string;
-  preBookingFrom?: string;
   saleOpensOn?: string;
-  /**
-   * Fecha ISO en que se puede activar la pre-reserva de Trip.com. Sirve para la cuenta atrás en vivo.
-   * La ventana de Trip es de 58 días contados sobre la fecha de PEKÍN, y el calendario avanza un día
-   * a las 00:00 de Pekín = las 18:00 en España. Por eso esta fecha es la TARDE ANTERIOR al día D-58:
-   * a partir de las 18:00 h ya se puede dejar puesta la pre-reserva.
-   */
-  preBookingIso?: string;
   /** Fecha ISO en que 12306 abre la venta real (D-15). Día de verificar que el billete se emitió. */
   saleOpensIso?: string;
   /**
@@ -184,7 +176,7 @@ export interface TransportLeg {
   travelDate?: string;
   /** Fecha del viaje en ISO. Necesaria para generar los avisos de calendario. */
   travelDateIso?: string;
-  /** Número del tren recomendado, ej. 'G365'. Vacío en el tramo que no es tren. */
+  /** Número del tren comprado, ej. 'G351'. Vacío en los dos tramos que no son tren. */
   trainNumber?: string;
   /** Hora de salida del tren recomendado en HH:MM, hora local de China. */
   departTime?: string;

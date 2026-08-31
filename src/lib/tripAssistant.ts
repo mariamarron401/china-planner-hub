@@ -419,7 +419,7 @@ function answerBudget(data: TripData): string {
     '',
     `🏨 Hoteles (10 ciudades, ya reservados): **${Math.round(hotelTotal)}€**`,
     `✈️ Vuelos + seguro (ya pagados): **${flights}€**`,
-    `🎫 Actividades/entradas (estimado, aún por comprar): **~${Math.round(actTotal)}€**`,
+    `🎫 Actividades/entradas (estimado, aún por comprar): **~${Math.round(actTotal * data.trip.travelers)}€** los dos`,
   ];
   if (deposits.count > 0) {
     lines.push(

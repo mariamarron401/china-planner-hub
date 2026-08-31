@@ -552,8 +552,8 @@ function PendingBadge() {
 
 interface WatchDate {
   id: string;
-  /** 'pre' = activar la pre-reserva en Trip.com (D-60). 'sale' = comprobar que el billete salió (D-15). */
-  kind: 'pre' | 'sale';
+  /** Comprobar que el billete se emitió (D-15). Es lo único que queda: los 7 están pagados. */
+  kind: 'sale';
   iso: string;
   /** Ej. "vie 14 ago" */
   dateLabel: string;
@@ -586,7 +586,7 @@ function formatDateLabel(iso: string): string {
 }
 
 export function buildWatchDates(
-  legs: { id: string; fromCityId: string; toCityId: string; preBookingIso?: string; saleOpensIso?: string; travelDate?: string; alertNote?: string }[],
+  legs: { id: string; fromCityId: string; toCityId: string; saleOpensIso?: string; travelDate?: string; alertNote?: string }[],
   getCityName: (id: string) => string,
 ): WatchDate[] {
   const out: WatchDate[] = [];
@@ -594,9 +594,6 @@ export function buildWatchDates(
     const label = `${getCityName(leg.fromCityId)} → ${getCityName(leg.toCityId)}`;
     const travelLabel = leg.travelDate?.split(' (')[0] ?? '';
     const critical = (leg.alertNote ?? '').includes('🔴🔴') || (leg.alertNote ?? '').includes('MÁS CRÍTICO');
-    if (leg.preBookingIso) {
-      out.push({ id: leg.id, kind: 'pre', iso: leg.preBookingIso, dateLabel: formatDateLabel(leg.preBookingIso), label, travelLabel, daysLeft: daysUntil(leg.preBookingIso), critical });
-    }
     if (leg.saleOpensIso) {
       out.push({ id: leg.id, kind: 'sale', iso: leg.saleOpensIso, dateLabel: formatDateLabel(leg.saleOpensIso), label, travelLabel, daysLeft: daysUntil(leg.saleOpensIso), critical });
     }

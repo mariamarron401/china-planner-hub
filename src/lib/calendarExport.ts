@@ -139,10 +139,14 @@ function cityLabel(leg: TransportLeg, cityName: (id: string) => string): string 
   return `${cityName(leg.fromCityId)} → ${cityName(leg.toCityId)}`;
 }
 
-/** Quita de los nombres de estación los avisos largos que se añadieron para la pantalla. */
+/**
+  * Deja solo la estación: 'Beijing West (北京西站) · en Trip.com "Beijingxi"' → 'Beijing West (北京西站)'.
+  * Corta por los dos separadores que usan los datos, ' · ' y ' — ': el nombre para teclear
+  * en Trip.com y los avisos de no confundirse de estación no caben en una notificación.
+  */
 function cleanStation(station?: string): string {
   if (!station) return '';
-  return station.split(' — ')[0].trim();
+  return station.split(/ · | — /)[0].trim();
 }
 
 export function buildTripIcs(legs: TransportLeg[], cityName: (id: string) => string): string {

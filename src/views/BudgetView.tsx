@@ -35,7 +35,11 @@ export default function BudgetView() {
     return sum + (chosen?.priceEur ?? 0);
   }, 0);
 
-  const activitiesTotal = activities.reduce((sum, a) => (a.price != null ? sum + a.price : sum), 0);
+  // ⚠️ El `price` de cada actividad es POR PERSONA (así lo dice su `priceText`), pero
+  // aquí se sumaba tal cual y el total de entradas salía a mitad de precio. Se multiplica
+  // por los viajeros, que es lo que de verdad hay que pagar.
+  const activitiesPerPerson = activities.reduce((sum, a) => (a.price != null ? sum + a.price : sum), 0);
+  const activitiesTotal = activitiesPerPerson * trip.travelers;
   const activitiesComplete = activities.every(a => a.price != null);
 
   const hotelTotal = budget.allSelected ? budget.selectedTotal : budget.avgTotal;
@@ -324,7 +328,13 @@ export default function BudgetView() {
         {/* Activities */}
         <BudgetCard icon={<Compass className="h-3.5 w-3.5" />} title="Actividades">
           {activitiesComplete ? (
-            <div className="text-2xl font-bold text-foreground">{activitiesTotal + budgetExtras.activitiesExtra}€</div>
+            <div>
+              <div className="text-2xl font-bold text-foreground">{activitiesTotal + budgetExtras.activitiesExtra}€</div>
+              <div className="text-[11px] text-muted-foreground mt-0.5">
+                {activities.length} entradas · {activitiesPerPerson}€ por persona × {trip.travelers} · se pagan con la
+                cuenta conjunta
+              </div>
+            </div>
           ) : (
             <div>
               <div className="text-lg font-bold text-foreground">{activitiesTotal > 0 ? `${activitiesTotal}€ parcial` : '—'}</div>

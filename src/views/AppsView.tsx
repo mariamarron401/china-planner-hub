@@ -28,7 +28,7 @@ function countdownLabel(daysLeft: number): string {
 
 const GROUPS: { key: AppTaskGroup; label: string; icon: typeof Zap; blurb: string }[] = [
   { key: 'hoy', label: 'Hoy', icon: Zap, blurb: 'Lo que hay que hacer ya, porque otras cosas dependen de esto.' },
-  { key: 'trenes', label: 'Trenes', icon: TrainFront, blurb: 'Las dos cuentas con las que se compran los 8 trenes.' },
+  { key: 'trenes', label: 'Trenes', icon: TrainFront, blurb: 'Las dos cuentas de los 7 billetes, ya comprados. Sirven para comprobar en octubre que China los emite.' },
   { key: 'terreno', label: 'Sobre el terreno', icon: MapPinned, blurb: 'Se pueden dejar para septiembre, pero siempre desde España.' },
   { key: 'esim', label: 'e-SIM', icon: Signal, blurb: 'Se contrata de cara al viaje. Aquí está exactamente qué comprar y cómo dejarlo listo.' },
   { key: 'descartada', label: 'Descartadas', icon: Ban, blurb: 'Estaban en la lista inicial y se han descartado a propósito. No hay que hacer nada.' },
