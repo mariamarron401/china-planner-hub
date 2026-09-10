@@ -402,8 +402,19 @@ function answerBudget(data: TripData): string {
     const h = selectedHotelFor(data, c.id);
     return sum + (h?.totalPrice ?? 0);
   }, 0);
-  const actTotal = data.activities.reduce((sum, a) => sum + (a.price ?? 0) * 2, 0); // precio suele ser por persona
+  // El precio de cada actividad es POR PERSONA: se multiplica por los viajeros una sola vez.
+  const actPerPerson = data.activities.reduce((sum, a) => sum + (a.price ?? 0), 0);
+  const actTotal = actPerPerson * data.trip.travelers;
   const flights = data.budgetExtras.flightsInsurance;
+  const trainsPaid = data.transportLegs.reduce((sum, t) => sum + (t.paidEur ?? 0), 0);
+  const spainPaid = (data.airportTransfers ?? []).reduce((sum, t) => sum + (t.paidEur ?? 0), 0);
+  const onSite = [...data.transportLegs, ...data.localTransports].reduce((sum, t) => {
+    if ('paidEur' in t && t.paidEur != null) return sum;
+    return sum + (t.price ?? 0);
+  }, 0) + (data.airportTransfers ?? []).reduce((sum, t) => {
+    const chosen = t.options.find((o) => o.recommended) ?? t.options[0];
+    return sum + (chosen?.priceEur ?? 0) - (t.paidEur ?? 0);
+  }, 0);
   const deposits = data.cities.reduce(
     (acc, c) => {
       const h = selectedHotelFor(data, c.id);
@@ -418,7 +429,10 @@ function answerBudget(data: TripData): string {
     '',
     `🏨 Hoteles (10 ciudades, ya reservados): **${Math.round(hotelTotal)}€**`,
     `✈️ Vuelos + seguro (ya pagados): **${flights}€**`,
-    `🎫 Actividades/entradas (estimado, aún por comprar): **~${Math.round(actTotal * data.trip.travelers)}€** los dos`,
+    `🚄 Trenes internos (7, ya comprados y pagados): **${trainsPaid.toFixed(2).replace('.', ',')}€**`,
+    `🎫 Tren y bus Zaragoza ↔ Madrid (ya pagados): **${spainPaid.toFixed(2).replace('.', ',')}€**`,
+    `🚕 Transporte que se paga allí (Didi, taxis, coche de Furong): **~${Math.round(onSite)}€**`,
+    `🎟️ Actividades/entradas (${actPerPerson}€ por persona, aún por comprar): **~${Math.round(actTotal)}€** los dos`,
   ];
   if (deposits.count > 0) {
     lines.push(
@@ -427,7 +441,7 @@ function answerBudget(data: TripData): string {
   }
   lines.push(
     '',
-    `➡️ Falta sumar: trenes internos (aún sin precio), traslados locales (Didi), comidas y compras.`,
+    `➡️ Falta sumar solo comidas y compras: todo el transporte ya está comprado o estimado.`,
     '',
     'Puedes ver el desglose completo en **Por hacer → Dinero**.'
   );

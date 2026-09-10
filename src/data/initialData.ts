@@ -174,8 +174,8 @@ export const initialTripData: TripData = {
     { id: 'lt-2b', cityId: 'wulingyuan', fromText: 'Wulingyuan (hotel)', toText: 'Zhangjiajie West (estación)', mode: 'Didi', durationMinutes: 35, price: 13, currency: 'EUR', notes: '~28 km · ~100 CNY (~13€) en Didi. ⚠️ Con maletas y de madrugada: es el traslado más crítico del viaje. Dejadlo programado la noche antes y pedid el check-out anticipado; el de fábrica es a las 15:00', date: '26 oct 2026 (lunes)', suggestedTime: 'Salir a las 05:48 para llegar con una hora de margen al G1367 de las 07:28' },
     { id: 'lt-5', cityId: 'zhangjiajie', fromText: 'Hotel Zhangjiajie (Thousand Hotel)', toText: 'Teleférico de Tianmen (estación baja, Guanliping)', mode: 'A pie / Didi', durationMinutes: 10, price: 2, currency: 'EUR', notes: '~1 km. La estación baja del teleférico está junto a la estación de tren de Zhangjiajie (cruce de Dayong Rd con Yingbin Rd), en el mismo barrio que el hotel: se puede ir andando en 12-15 min o en Didi por ~10-15 CNY. Ida por la tarde y vuelta de noche después del espectáculo de luces: para la vuelta, Didi', date: '23 oct 2026 (viernes)', suggestedTime: 'Sobre las 13:15-13:30, tras dejar las maletas en el hotel, para la franja de entrada de las 14:00' },
     { id: 'lt-6', cityId: 'wulingyuan', fromText: 'Hotel Wulingyuan (Tianchong Yunhai)', toText: 'Puerta de Wulingyuan / East Gate del parque', mode: 'A pie / Didi', durationMinutes: 15, price: 2, currency: 'EUR', notes: 'El hotel está en Wuling Avenue, la avenida que lleva a la puerta de Wulingyuan (East / Sign Gate), la mejor puerta para el ascensor Bailong y el teleférico de Tianzi. Confirmad en recepción la noche antes si se va andando o conviene Didi (~10-15 CNY)', date: '25 oct 2026 (domingo)', suggestedTime: 'Salir 06:40-07:00 para entrar en la primera franja (07:00-07:30) y llegar al Bailong antes de que la cola pase de 1h' },
-    { id: 'lt-3', cityId: 'chengdu', fromText: 'Hotel Chengdu', toText: 'Base de Pandas', mode: 'Didi', durationMinutes: null, price: null, currency: 'EUR', notes: 'Franja de mañana 7:30-12:00, más actividad de los pandas entre las 8:00 y las 10:00', date: '17 oct 2026 (sábado)', suggestedTime: 'Salir del hotel sobre las 07:00-07:15 para llegar a la apertura (07:30)' },
-    { id: 'lt-4', cityId: 'chengdu', fromText: 'Estación Leshan', toText: 'Recinto Buda Gigante', mode: 'Didi', durationMinutes: null, price: null, currency: 'EUR', notes: 'Excursión de un día desde Chengdu. Horario de invierno desde el 8 oct: apertura 8:00, cierre 17:30. Mejor ir en el crucero en barco (sin colas) que bajar por la escalera (hasta 2-4h de cola en temporada alta)', date: '18 oct 2026 (domingo)', suggestedTime: 'A media mañana, en cuanto lleguéis a Leshan desde Chengdu — cuanto antes, mejor, para evitar colas' },
+    { id: 'lt-3', cityId: 'chengdu', fromText: 'Hotel Chengdu', toText: 'Base de Pandas', mode: 'Didi', durationMinutes: 35, price: 7, currency: 'EUR', notes: '~15-20 km desde el centro · ~45-55 CNY (~7 €) en Didi, 30-40 min a esa hora. Franja de mañana 7:30-12:00, más actividad de los pandas entre las 8:00 y las 10:00', date: '17 oct 2026 (sábado)', suggestedTime: 'Salir del hotel sobre las 07:00-07:15 para llegar a la apertura (07:30)' },
+    { id: 'lt-4', cityId: 'chengdu', fromText: 'Estación Leshan', toText: 'Recinto Buda Gigante', mode: 'Didi', durationMinutes: 20, price: 5, currency: 'EUR', notes: '~10 km desde la estación de Leshan · ~30-35 CNY (~5 €) en Didi, 20 min. Excursión de un día desde Chengdu. Horario de invierno desde el 8 oct: apertura 8:00, cierre 17:30. Mejor ir en el crucero en barco (sin colas) que bajar por la escalera (hasta 2-4h de cola en temporada alta)', date: '18 oct 2026 (domingo)', suggestedTime: 'A media mañana, en cuanto lleguéis a Leshan desde Chengdu — cuanto antes, mejor, para evitar colas' },
   ],
   flightTimelines: [
     {
@@ -259,6 +259,7 @@ export const initialTripData: TripData = {
         '✅ En la ida NO hay cambio de terminal: el taxi os deja en el T2 y el vuelo sale del T2. (El cambio de terminal era con el bus, que llegaba al T4.)',
       ],
       hotelNote: '✅ Sin noche de hotel en Madrid: la noche del 8 al 9 se pasa en la terminal T2.',
+      paidEur: 62,
     },
     {
       id: 'at-pek-llegada',
@@ -342,6 +343,7 @@ export const initialTripData: TripData = {
         '⚠️ Al bajar del avión no corráis: hay 2 horas de margen. Pasaportes, maletas y Bus Tránsito con calma, que lleváis casi 24 horas despiertos.',
       ],
       hotelNote: '✅ Sin noche de hotel en Madrid: dormís en el bus y llegáis a Zaragoza a las 03:15.',
+      paidEur: 38.02,
     },
   ],
   activities: [

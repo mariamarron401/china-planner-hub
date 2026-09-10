@@ -289,6 +289,12 @@ export interface AirportTransfer {
   hotelNote?: string;
   /** Dirección en caracteres chinos para enseñar al taxista. */
   addressForDriver?: string;
+  /**
+   * Importe REAL ya pagado de este traslado (el billete comprado), en euros para los dos.
+   * Va incluido en el `priceEur` de la opción recomendada; se separa para que Dinero
+   * distinga lo que ya está pagado de lo que se paga allí (taxis).
+   */
+  paidEur?: number;
 }
 
 export interface Activity {

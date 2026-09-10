@@ -34,6 +34,11 @@ export default function BudgetView() {
     const chosen = t.options.find(o => o.recommended) ?? t.options[0];
     return sum + (chosen?.priceEur ?? 0);
   }, 0);
+  // Lo que de los traslados de aeropuerto ya está pagado: el tren y el bus a Madrid.
+  const spainPaid = airportTransfers.reduce((sum, t) => sum + (t.paidEur ?? 0), 0);
+  // Transporte ya pagado (trenes + billetes a Madrid) frente a lo que se paga allí
+  // sobre la marcha (Didi, taxis, el coche de Furong). Es la pregunta real de la
+  // pantalla: cuánto dinero hay que llevar aún, no cuánto costó todo.
 
   // ⚠️ El `price` de cada actividad es POR PERSONA (así lo dice su `priceText`), pero
   // aquí se sumaba tal cual y el total de entradas salía a mitad de precio. Se multiplica
@@ -54,6 +59,8 @@ export default function BudgetView() {
   const hotelsAlreadyPaid = chosenHotels.filter(h => (h.paymentNote ?? '').toLowerCase().includes('completado'));
   const hotelsAlreadyPaidTotal = hotelsAlreadyPaid.reduce((sum, h) => sum + (h.totalPrice ?? 0), 0);
   const mariaTotal = trainsPaidTotal + hotelsChargedTotal + hotelsAlreadyPaidTotal;
+  const transportPaid = trainsPaidTotal + spainPaid;
+  const transportOnSite = (transportTotal - trainsPaidTotal) + (airportTotal - spainPaid) + budgetExtras.transportExtra;
 
   /** '...se cobra el 8/10' → '8/10'. Vacío si la reserva no lleva fecha de cargo. */
   const chargeDate = (note?: string) => note?.match(/se cobra el ([\d/]+)/)?.[1] ?? '';
@@ -113,6 +120,15 @@ export default function BudgetView() {
               esta cuenta antes de abrir la conjunta.
             </p>
           </div>
+
+          {spainPaid > 0 && (
+            <div className="mt-2 rounded-lg bg-travel-confirmed-bg px-3 py-2.5 flex items-baseline justify-between gap-2">
+              <span className="text-xs font-bold text-travel-confirmed">✅ Tren y bus a Madrid, ya pagados</span>
+              <span className="text-sm font-bold text-foreground whitespace-nowrap">
+                {spainPaid.toFixed(2).replace('.', ',')}€
+              </span>
+            </div>
+          )}
 
           {hotelsCharged.length > 0 && (
             <div className="mt-2 rounded-lg bg-travel-pending-bg px-3 py-2.5">
@@ -257,6 +273,23 @@ export default function BudgetView() {
               <div className="text-xs text-travel-pending font-medium mt-1">⚠ Datos incompletos</div>
             </div>
           )}
+          {/* Lo que ya está pagado frente a lo que se paga allí. */}
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <div className="rounded-lg bg-travel-confirmed-bg px-2.5 py-2">
+              <div className="text-base font-bold text-travel-confirmed leading-tight">
+                {transportPaid.toFixed(2).replace('.', ',')}€
+              </div>
+              <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">
+                ✅ ya pagado · {trainsBought.length} trenes + tren y bus a Madrid
+              </div>
+            </div>
+            <div className="rounded-lg bg-muted/50 px-2.5 py-2">
+              <div className="text-base font-bold text-foreground leading-tight">~{Math.round(transportOnSite)}€</div>
+              <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">
+                se paga allí · Didi, taxis y el coche de Furong
+              </div>
+            </div>
+          </div>
           {/* Trenes: cuánto es ya dinero real y cuánto sigue siendo estimación. */}
           {trainLegs.length > 0 && (
             <div className="mt-2 pt-2 border-t border-border">
@@ -318,7 +351,8 @@ export default function BudgetView() {
               <Plane className="h-3.5 w-3.5 text-primary mt-px flex-shrink-0" />
               <div className="text-xs text-muted-foreground">
                 Incluye <span className="font-semibold text-foreground">{Math.round(airportTotal)}€</span> de los {airportTransfers.length} traslados
-                de aeropuerto (opción recomendada de cada uno). Detalle en Moverse → Traslados.
+                de aeropuerto: <span className="font-semibold text-travel-confirmed">{spainPaid.toFixed(2).replace('.', ',')}€ ya pagados</span>{' '}
+                (tren a Madrid y bus ALSA) y ~{Math.round(airportTotal - spainPaid)}€ de taxis que se pagan allí. Detalle en Moverse → Traslados.
               </div>
             </div>
           )}
