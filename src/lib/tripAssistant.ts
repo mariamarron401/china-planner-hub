@@ -115,19 +115,18 @@ Coberturas clave: asistencia médica hasta 500.000 €, repatriación ilimitada,
 
 ⚠️ Ojo: el seguro NO cubre "deportes de aventura" ni trekking/rescate en montaña. Las visitas a Zhangjiajie, Wulingyuan y Tianmen son turismo normal por senderos y teleférico, no las trates como trekking extremo.
 
+📋 Todas las coberturas, de un vistazo, están en **Por hacer → Seguro** (/gestiones/seguro).
+
 Los números de póliza y certificado no están en la app por seguridad — los tienes en el correo de la agencia (Zafiro Tours Zaragoza, 976 302 157).`;
 
-const SPAIN_INFO = `🚌 **Zaragoza ↔ Madrid en bus nocturno** (decidido el 31/07/2026, en vez de AVE + hotel):
+const SPAIN_INFO = `🎫 **Zaragoza ↔ Madrid: los dos billetes ya están COMPRADOS** (septiembre de 2026).
 
-**IDA — noche del jueves 8 al viernes 9 oct.** Bus nocturno de ALSA desde Zaragoza-Delicias. El vuelo sale a las **06:20 del T2** y el mostrador cierra a las **05:35**, así que hay que coger un bus que llegue a Madrid **antes de las 03:00** y esperar dentro de la terminal. ⚠️ El bus directo al aeropuerto llega al **T4**, no al T2: el cambio se hace con el **Bus Tránsito** (gratis, 24 h, cada 20 min de noche, 15-20 min).
+**IDA — jueves 8 oct, en TREN.** Zaragoza-Delicias **21:59** → Madrid **23:48** (62 € los dos). Es el último tren del día: estad en Delicias a las 21:30. De la estación, taxi al **T2** (tarifa fija 33 €). El vuelo sale a las **06:20 del T2** y el mostrador abre a las 04:20: la noche se pasa dentro de la terminal, abierta 24 h. En la ida no hay cambio de terminal.
 
-**VUELTA — noche del domingo 1 al lunes 2 nov.** Aterrizáis a las 20:10 en el **T1** y salís sobre las 21:00. Bus Tránsito al **T4** y de ahí un ALSA nocturno de las **23:00-23:30** (no el de las 22:30: si el vuelo de Pekín se retrasa, lo perdéis). Llegada a Zaragoza sobre las 02:30-03:00 del lunes.
+**VUELTA — domingo 1 nov, en bus ALSA.** Aterrizáis a las 20:10 en el **T1** y salís sobre las 21:00. Bus Tránsito (gratis, autobús verde "T1-T2-T3-T4") al **T4** y de ahí el ALSA de las **23:45** → Zaragoza-Delicias **03:15** del lunes 2 (19,01 €/persona, 38,02 € los dos). Hay 2 horas de margen por si el vuelo se retrasa.
 
-✅ **No hace falta hotel en Madrid** ninguna de las dos noches: se duerme en el bus.
-✅ El **lunes 2 de noviembre es festivo en Aragón**, así que tenéis el día para recuperar.
-🔴 El billete de vuelta es el más urgente de comprar: el domingo 1 nov es final de puente largo y la noche del domingo es la de más demanda.
-
-👉 El detalle completo, con horarios y alternativas, está en **Moverse → Traslados**.`;
+✅ **No hace falta hotel en Madrid** ninguna de las dos noches.
+✅ El **lunes 2 de noviembre es festivo en Aragón**, así que tenéis el día para recuperar.`;
 
 const GENERAL_TIPS = `💡 **Consejos generales para China:**
 

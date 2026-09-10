@@ -3,6 +3,7 @@ import PageShell, { ShellSection } from '@/components/PageShell';
 import PendingView from '@/views/PendingView';
 import AppsView from '@/views/AppsView';
 import BudgetView from '@/views/BudgetView';
+import InsuranceView from '@/views/InsuranceView';
 import { useTrip } from '@/context/TripContext';
 import { usePendingItems } from '@/hooks/usePendingItems';
 import { isAppTaskComplete } from '@/lib/calculations';
@@ -11,9 +12,10 @@ const SUBTITLES: Record<string, string> = {
   pendientes: 'Lo que queda por decidir o reservar',
   apps: 'Todo se configura desde España',
   dinero: 'Presupuesto y saldo que hay que llevar',
+  seguro: 'ARAG · qué cubre y a quién llamar',
 };
 
-/** Los deberes: pendientes, apps del móvil y dinero. */
+/** Los deberes: pendientes, apps del móvil, dinero y el seguro (solo lectura). */
 export default function Gestiones() {
   const { section } = useParams<{ section?: string }>();
   const { data } = useTrip();
@@ -27,6 +29,7 @@ export default function Gestiones() {
     { key: 'pendientes', label: 'Pendientes', badge: openPending },
     { key: 'apps', label: 'Apps del móvil', badge: appsPending },
     { key: 'dinero', label: 'Dinero' },
+    { key: 'seguro', label: 'Seguro' },
   ];
 
   if (!section || !sections.some(s => s.key === section)) {
@@ -44,6 +47,7 @@ export default function Gestiones() {
       {section === 'pendientes' && <PendingView />}
       {section === 'apps' && <AppsView />}
       {section === 'dinero' && <BudgetView />}
+      {section === 'seguro' && <InsuranceView />}
     </PageShell>
   );
 }
