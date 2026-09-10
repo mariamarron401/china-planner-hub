@@ -62,6 +62,16 @@ export default function BudgetView() {
   const transportPaid = trainsPaidTotal + spainPaid;
   const transportOnSite = (transportTotal - trainsPaidTotal) + (airportTotal - spainPaid) + budgetExtras.transportExtra;
 
+  // Estado de los pagos (dato de María, 10/09/2026): lo pagado está al 100 % (vuelos, 7 trenes,
+  // tren y bus a Madrid y los hoteles de pago completado); lo que queda son los cargos automáticos
+  // de los hoteles en su Revolut y las entradas, que aún no se han comprado.
+  const paidTotal = budgetExtras.flightsInsurance + trainsPaidTotal + spainPaid + hotelsAlreadyPaidTotal;
+  const pendingBuy = activitiesTotal + budgetExtras.activitiesExtra + transportOnSite + budgetExtras.insurance + budgetExtras.others;
+  const statusTotal = paidTotal + hotelsChargedTotal + pendingBuy;
+  const pctPaid = statusTotal > 0 ? Math.round((paidTotal / statusTotal) * 100) : 0;
+  const pctAuto = statusTotal > 0 ? Math.round((hotelsChargedTotal / statusTotal) * 100) : 0;
+  const eur = (n: number) => `${n.toFixed(2).replace('.', ',')}€`;
+
   /** '...se cobra el 8/10' → '8/10'. Vacío si la reserva no lleva fecha de cargo. */
   const chargeDate = (note?: string) => note?.match(/se cobra el ([\d/]+)/)?.[1] ?? '';
   const totalKnown = budgetExtras.flightsInsurance + hotelTotal + transportTotal + activitiesTotal + airportTotal
@@ -97,6 +107,47 @@ export default function BudgetView() {
           )}
         </div>
 
+        {/* Estado de los pagos: qué está pagado al 100 %, qué se cobra solo y qué queda por comprar. */}
+        <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            <CreditCard className="h-3.5 w-3.5" /> Estado de los pagos
+          </div>
+          <div className="h-2.5 w-full rounded-full bg-muted overflow-hidden flex">
+            <div className="h-full bg-travel-confirmed" style={{ width: `${pctPaid}%` }} />
+            <div className="h-full bg-travel-pending" style={{ width: `${pctAuto}%` }} />
+          </div>
+          <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+            <span className="text-travel-confirmed font-semibold">{pctPaid}% pagado</span>
+            <span className="text-travel-pending font-semibold">{pctAuto}% se cobra solo</span>
+            <span>{Math.max(0, 100 - pctPaid - pctAuto)}% por comprar</span>
+          </div>
+          <div className="mt-3 space-y-2">
+            <StatusRow
+              tone="confirmed"
+              title="✅ Pagado al 100 %"
+              amount={eur(paidTotal)}
+              items={[
+                `Vuelos + seguro ${budgetExtras.flightsInsurance}€`,
+                `${trainsBought.length} trenes ${eur(trainsPaidTotal)}`,
+                `Tren y bus a Madrid ${eur(spainPaid)}`,
+                `${hotelsAlreadyPaid.length} hoteles ya pagados ${eur(hotelsAlreadyPaidTotal)}`,
+              ]}
+            />
+            <StatusRow
+              tone="pending"
+              title="⏳ Se cobra solo en la Revolut de María"
+              amount={eur(hotelsChargedTotal)}
+              items={[`${hotelsCharged.length} hoteles de "pago más tarde", del 8 al 25 de octubre (fechas abajo)`]}
+            />
+            <StatusRow
+              tone="muted"
+              title="🛒 Por comprar o pagar allí"
+              amount={`~${Math.round(pendingBuy)}€`}
+              items={[`Entradas ~${Math.round(activitiesTotal + budgetExtras.activitiesExtra)}€`, `Didi, taxis y coche de Furong ~${Math.round(transportOnSite)}€`]}
+            />
+          </div>
+        </div>
+
         {/* Con qué cuenta se paga cada cosa. Abrieron una cuenta conjunta para el viaje, pero
             trenes y hoteles ya estaban reservados con la de María — y 8 hoteles se cobran
             solos en octubre de esa misma cuenta, que es lo que hay que tener presente. */}
@@ -107,7 +158,7 @@ export default function BudgetView() {
 
           <div className="rounded-lg bg-muted/50 px-3 py-2.5">
             <div className="flex items-baseline justify-between gap-2">
-              <span className="text-xs font-bold text-foreground">Cuenta de María</span>
+              <span className="text-xs font-bold text-foreground">Revolut de María</span>
               <span className="text-sm font-bold text-foreground whitespace-nowrap">
                 {mariaTotal.toFixed(2).replace('.', ',')}€
               </span>
@@ -138,7 +189,7 @@ export default function BudgetView() {
               <p className="text-[11px] text-travel-pending leading-snug mt-1">
                 Son <span className="font-semibold">{hotelsChargedTotal.toFixed(2).replace('.', ',')}€</span> de
                 reservas con "pago más tarde": Trip.com los carga automáticamente en{' '}
-                <span className="font-semibold">la cuenta de María</span>, no en la conjunta. Tiene que haber saldo
+                <span className="font-semibold">la Revolut de María</span>, no en la conjunta. Tiene que haber saldo
                 ahí esos días.
               </p>
               <div className="mt-2 space-y-1">
@@ -314,7 +365,7 @@ export default function BudgetView() {
                     {trainsPaidTotal.toFixed(2).replace('.', ',')}€ pagados
                   </div>
                   <div className="text-[10px] text-muted-foreground leading-tight">
-                    cifra cerrada, no estimación · cuenta de María
+                    cifra cerrada, no estimación · Revolut de María
                   </div>
                 </div>
               ) : (
@@ -388,6 +439,24 @@ export default function BudgetView() {
           <EditableAmount label="Otros" value={budgetExtras.others} onChange={v => updateBudgetExtras({ others: v })} />
         </BudgetCard>
 
+    </div>
+  );
+}
+
+/** Una fila del estado de pagos: franja de color, título, importe a la derecha y el detalle en pequeño. */
+function StatusRow({ tone, title, amount, items }: { tone: 'confirmed' | 'pending' | 'muted'; title: string; amount: string; items: string[] }) {
+  const bar = tone === 'confirmed' ? 'bg-travel-confirmed' : tone === 'pending' ? 'bg-travel-pending' : 'bg-muted-foreground/40';
+  const bg = tone === 'confirmed' ? 'bg-travel-confirmed-bg' : tone === 'pending' ? 'bg-travel-pending-bg' : 'bg-muted/50';
+  return (
+    <div className={`flex gap-2.5 rounded-lg ${bg} px-3 py-2.5`}>
+      <div className={`w-1 rounded-full ${bar} flex-shrink-0`} />
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="text-xs font-bold text-foreground">{title}</span>
+          <span className="text-sm font-bold text-foreground whitespace-nowrap">{amount}</span>
+        </div>
+        <div className="text-[10px] text-muted-foreground leading-snug mt-0.5">{items.join(' · ')}</div>
+      </div>
     </div>
   );
 }

@@ -407,6 +407,10 @@ function answerBudget(data: TripData): string {
   const actTotal = actPerPerson * data.trip.travelers;
   const flights = data.budgetExtras.flightsInsurance;
   const trainsPaid = data.transportLegs.reduce((sum, t) => sum + (t.paidEur ?? 0), 0);
+  const hotelsAuto = data.cities.reduce((sum, c) => {
+    const h = selectedHotelFor(data, c.id);
+    return (h?.paymentNote ?? '').toLowerCase().includes('más tarde') ? sum + (h?.totalPrice ?? 0) : sum;
+  }, 0);
   const spainPaid = (data.airportTransfers ?? []).reduce((sum, t) => sum + (t.paidEur ?? 0), 0);
   const onSite = [...data.transportLegs, ...data.localTransports].reduce((sum, t) => {
     if ('paidEur' in t && t.paidEur != null) return sum;
@@ -427,7 +431,7 @@ function answerBudget(data: TripData): string {
   const lines = [
     `💶 **Presupuesto aproximado del viaje** (2 personas):`,
     '',
-    `🏨 Hoteles (10 ciudades, ya reservados): **${Math.round(hotelTotal)}€**`,
+    `🏨 Hoteles (10 ciudades, ya reservados): **${Math.round(hotelTotal)}€** — de ellos ${hotelsAuto.toFixed(2).replace('.', ',')}€ se cobran solos en la Revolut de María entre el 8 y el 25 de octubre`,
     `✈️ Vuelos + seguro (ya pagados): **${flights}€**`,
     `🚄 Trenes internos (7, ya comprados y pagados): **${trainsPaid.toFixed(2).replace('.', ',')}€**`,
     `🎫 Tren y bus Zaragoza ↔ Madrid (ya pagados): **${spainPaid.toFixed(2).replace('.', ',')}€**`,
@@ -441,7 +445,7 @@ function answerBudget(data: TripData): string {
   }
   lines.push(
     '',
-    `➡️ Falta sumar solo comidas y compras: todo el transporte ya está comprado o estimado.`,
+    `✅ Pagado al 100 %: vuelos, los 7 trenes, el tren y el bus a Madrid y los hoteles de pago completado. ⏳ Pendiente de cobro: los hoteles de "pago más tarde" y las entradas. Falta sumar comidas y compras.`,
     '',
     'Puedes ver el desglose completo en **Por hacer → Dinero**.'
   );
