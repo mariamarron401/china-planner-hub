@@ -1,0 +1,36 @@
+name: Avisos push del viaje
+
+# Cada hora en punto. El cron de GitHub Actions no es puntual (puede retrasarse
+# bastante), así que `send-push.mjs` acepta una ventana de 75 min hacia atrás y
+# lleva un registro de lo ya enviado para no duplicar.
+on:
+  schedule:
+    - cron: '0 * * * *'
+  # Para poder probarlo a mano desde la pestaña Actions.
+  workflow_dispatch:
+
+# Solo una ejecución a la vez: dos en paralelo podrían mandar el mismo aviso dos veces.
+concurrency:
+  group: push-reminders
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # web-push solo hace falta aquí, no en la app: se instala sin tocar el package.json.
+      - run: npm install --no-save web-push@3
+      # Regenera el calendario de avisos desde los trenes reales, para que no pueda
+      # quedarse desfasado respecto a initialData.ts.
+      - run: node scripts/generate-push-schedule.mjs
+      - run: node scripts/send-push.mjs
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
