@@ -18,7 +18,7 @@ const tabs = [
 /** Las pantallas de detalle marcan la pestaña de la que cuelgan. */
 const OWNED_BY: { prefix: string; tab: string }[] = [
   { prefix: '/actividades', tab: '/descubrir' },
-  { prefix: '/que-hacer', tab: '/descubrir' },
+  { prefix: '/planning', tab: '/descubrir' },
 ];
 
 export default function BottomNav() {
