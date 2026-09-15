@@ -632,10 +632,10 @@ export const initialTripData: TripData = {
       duration: 'Día completo', price: 20, currency: 'EUR', status: 'Por reservar',
       recommendedDate: 'Domingo 18 oct (día completo)',
       whenToBuy: 'Seguimiento desde mediados de sept; comprar al liberarse el cupo del 18 oct',
-      platform: 'Trip.com (barco aparte en el muelle)',
-      priceText: '~20 €/persona (entrada 10 € + barco 9 €)',
+      platform: 'Trip.com (entrada) · miniprograma 大佛旅游 en WeChat o Alipay (barco)',
+      priceText: '~20 €/persona (entrada terrestre 80 CNY + crucero 70 CNY). Los trenes van aparte y están sin comprar',
       bookingUrl: 'https://www.trip.com/travel-guide/attraction/leshan/leshan-giant-buddha-76386/',
-      notes: 'Por qué el 18: es el 2.º día completo en Chengdu, excursión de día entero. La ENTRADA se compra online (~10 €); el CRUCERO EN BARCO NO se vende online, se paga en el muelle (~9 €, efectivo CNY/Alipay/WeChat). El barco es lo recomendado: 30 min, vista frontal, sin las colas de 2-4h de la escalera. Reserva con franja horaria obligatoria.',
+      notes: '🆕 CORREGIDO EL 15/09/2026 con el planning de Chengdu: el CRUCERO YA SE COMPRA ONLINE, por el miniprograma 大佛旅游 de WeChat o Alipay y otros canales autorizados, 70 CNY. Hasta ahora teníamos apuntado que solo se pagaba en el muelle y ha dejado de ser cierto. 🛳️ MUELLE NUEVO: desde julio de 2026 vuelve a funcionar 嘉州渡码头 (Jiazhoudu), con salida hacia el Buda y desembarque en 八仙渡码头 (Baxian-du). No pidáis el Didi a \'Leshan Giant Buddha\' sin más: comprobad qué muelle figura en vuestra reserva. ⚠️ Reconfirmad el muelle operativo 48-24 h antes — el propio operador avisa de que los barcos pueden cambiar o suspenderse por nivel del agua, meteorología o condiciones de navegación. 🕗 HORARIO DE INVIERNO (ya aplica el 18 oct): barco 08:00-17:00 y visita terrestre 08:00-17:30. 🚄 OJO, FALTAN LOS TRENES: los dos trayectos Chengdu East ↔ Leshan de ese día NO están entre los 7 tramos comprados. Se venden 15 días antes, o sea sobre el 3-4 de octubre. Al elegir el de vuelta, coged uno que os deje en Chengdu entre las 18:00 y las 20:00, no pegado al cierre. 🚢 POR QUÉ EL BARCO: el Buda mide 71 m y desde tierra es casi imposible verlo entero de una vez; el barco da la vista frontal completa en ~30 min y sin las colas de 2-4 h de la escalera de bajada, que un domingo son muy probables. La alternativa terrestre son 80 CNY. 🍜 Leshan es además destino gastronómico: no os vayáis justo después del Buda. Buscad 跷脚牛肉 (qiaojiao niurou), el plato emblemático, y también 甜皮鸭, 钵钵鸡 y 冰粉.',
     },
     {
       id: 'act-6',
