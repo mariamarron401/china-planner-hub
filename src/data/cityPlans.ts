@@ -2175,6 +2175,207 @@ const fenghuang: CityPlan = {
   },
 };
 
+const furong: CityPlan = {
+  cityId: 'furong',
+  headline: 'Quince horas, y están bien planteadas: llegar cuando empieza a oscurecer, vivir el pueblo iluminado y repetir el paseo por la mañana casi vacío. Aquí más no significa mejor.',
+  keyNotes: [
+    '🎟️ RESUELTO el aviso de la reserva: el hotel está DENTRO del recinto de pago, así que SÍ hace falta entrada. Presupuestad ~108 CNY por persona (~14 €), válida 3 días y con la iluminación nocturna incluida. Algunas webs aún ponen 100: confirmad el precio unos días antes.',
+    '🏨 El hotel anuncia recogida gratuita en la estación de Furongzhen. Escribidles antes y sustituid el taxi por eso.',
+    'No penséis en Furong como una ciudad por zonas: es un circuito peatonal de 2-3 h alrededor del hotel, con escaleras y bastante desnivel.',
+    '🚗 Confirmad el coche a Zhangjiajie al hacer el check-in, y preguntad DÓNDE os recoge exactamente: el hotel está en zona peatonal y "la puerta del hotel" puede ser un punto accesible cercano.',
+  ],
+  base: [
+    'La gran cascada, a menos de 100 m',
+    'El hotel está EN la Wuli Stone Street',
+    'Tuwang Bridge y Tusi Palace a ~5 min',
+    'Wangcun Wharf a 10-15 min bajando',
+    'La entrada del recinto, a ~4 min andando',
+  ],
+
+  days: [
+    {
+      id: 'fr-d1',
+      dateText: 'Jueves 22 de octubre',
+      title: 'Llegada y Furong iluminado',
+      zone: 'Todo el pueblo, a pie',
+      blocks: [
+        {
+          time: '18:09',
+          title: 'Llegada a 芙蓉镇站',
+          detail: 'Si el hotel confirma la recogida gratuita, mejor que taxi. 10-15 min.',
+          kind: 'move',
+          more: 'Desde la estación hay transfers oficiales hacia el recinto, pero la recogida del hotel os deja la llegada resuelta y llegáis de noche.',
+        },
+        {
+          time: '18:30-18:45',
+          title: 'Check-in y cinco preguntas',
+          detail: 'Dejad equipaje y resolved todo de golpe en recepción.',
+          kind: 'rest',
+          alert: true,
+          more: 'Preguntad: 1) hasta qué hora sirven cena; 2) qué actuaciones hay esta noche; 3) confirmad el coche a Zhangjiajie de mañana a las 09:30; 4) dónde os recoge exactamente ese coche; 5) si os han gestionado la entrada al recinto. No dejéis la salida de mañana dependiendo de encontrar un Didi a las 09:20.',
+        },
+        {
+          time: '~19:00',
+          title: 'Primer paseo, sin cenar todavía',
+          detail: 'Wuli Stone Street → Tuwang Bridge → Tusi Palace → miradores de arriba.',
+          kind: 'visit',
+          more: 'Así pilláis la transición de las últimas luces a la noche. La iluminación suele arrancar sobre las 19:30, aunque la hora varía según temporada.',
+        },
+        {
+          time: '19:30-21:00',
+          title: 'La cascada y el pueblo iluminado',
+          detail: 'Esto es Furong. No importa tardar hora y media o dos horas.',
+          kind: 'visit',
+          alert: true,
+          more: 'Orden: Tuwang Bridge → mirador panorámico → exterior del Tusi Palace → bajada a la gran cascada → base de la cascada → pasarela DETRÁS del agua → Wangcun Wharf y miradores de abajo → subida otra vez por la Wuli Stone Street. La pasarela de detrás de la cortina de agua es la experiencia más característica del pueblo: no os quedéis viéndola solo desde arriba, junto al hotel.',
+        },
+        {
+          time: 'Cena',
+          title: 'En el propio hotel, tarde',
+          detail: 'Tiene restaurante y zona panorámica. 湘西腊肉 + verduras + pescado o un plato Tujia.',
+          kind: 'food',
+          more: 'Es la decisión más inteligente: llegáis cansados y la prioridad es la iluminación, no sentaros pronto a cenar. No pidáis rice tofu esta noche si queréis probarlo mañana en el puesto 113.',
+        },
+        {
+          time: '21:30-22:00',
+          title: 'Segundo paseo, ya sin gente',
+          detail: 'Salid otra vez por la Wuli Stone Street: a esa hora se vacía.',
+          kind: 'visit',
+          more: 'Las excursiones de un día ya se han ido y el paseo puede ser muchísimo mejor que el primero.',
+        },
+      ],
+    },
+    {
+      id: 'fr-d2',
+      dateText: 'Viernes 23 de octubre',
+      title: 'Furong vacío, rice tofu y salida',
+      zone: 'El casco antiguo',
+      blocks: [
+        {
+          time: '07:15-07:30',
+          title: 'Paseo temprano',
+          detail: 'Hotel → Wuli Stone Street → Tuwang Bridge → la cascada de día → callejones.',
+          kind: 'visit',
+          more: 'No es por ver más cosas: es por ver el mismo pueblo prácticamente vacío. La misma calle que anoche estaba abarrotada cambia por completo. No bajaría otra vez al embarcadero salvo que os quedara una foto pendiente.',
+        },
+        {
+          time: '08:00-08:30',
+          title: 'Rice tofu en el puesto 113',
+          detail: 'Pedid 咸米豆腐 (salado). ¥5-15. Es EL alimento de Furong.',
+          kind: 'food',
+          more: 'Buscad el 正宗113号米豆腐店: hay muchísimas imitaciones que usan el nombre "Liu Xiaoqing". Si queréis compartir algo más, 蒿子粑粑 o 冰米酒. Sin convertirlo en un desayuno enorme.',
+        },
+        {
+          time: '08:30-09:00',
+          title: 'Vuelta al hotel y maletas',
+          detail: 'Comprobad que el conductor está en camino.',
+          kind: 'rest',
+        },
+        {
+          time: '09:30',
+          title: 'Coche a Zhangjiajie',
+          detail: '~1h30. Llegada al hotel de Zhangjiajie sobre las 11:00.',
+          kind: 'move',
+          alert: true,
+          more: 'Reservado la noche anterior en recepción, con el precio cerrado: ~250-300 CNY. No lo busquéis en Didi esa mañana, en el Xiangxi rural la cobertura es mala.',
+        },
+      ],
+    },
+  ],
+
+  highlights: [
+    { name: 'Cascada de Furong', nameZh: '芙蓉镇大瀑布', what: 'Unos 60 m de caída atravesando el pueblo. El icono absoluto.', zone: 'A menos de 100 m', time: '30-45 min', ticket: 'Dentro del recinto', priority: 'must' },
+    { name: 'Pasarela detrás de la cascada', nameZh: '水帘洞', what: 'El camino que pasa prácticamente por detrás de la cortina de agua.', zone: '3-8 min', time: '15-25 min', ticket: 'Incluida', priority: 'must', more: 'Es probablemente la experiencia más característica de Furong. De noche, el POV más distinto que os vais a traer.' },
+    { name: 'Wuli Stone Street', nameZh: '五里石板街', what: 'La antigua calle empedrada, con casas de madera, tiendas y puestos. El hotel está en ella.', zone: 'En la puerta', time: '30-45 min', ticket: 'Incluida', priority: 'must' },
+    { name: 'Tuwang Bridge', nameZh: '土王桥', what: 'Puente tradicional de madera y uno de los mejores puntos panorámicos.', zone: '~5 min', time: '10-20 min', ticket: 'Incluida', priority: 'must' },
+    { name: 'Tusi Palace', nameZh: '土王行宫 / 酉阳宫', what: 'Arquitectura Tujia sobre el acantilado, justo enfrente del hotel.', zone: '~5 min', time: '15-30 min', ticket: 'Incluida', priority: 'nice' },
+    { name: 'Wangcun Wharf', nameZh: '王村码头', what: 'La parte baja junto al río: desde ahí se ve que todo el pueblo trepa por el acantilado.', zone: '10-15 min bajando', time: '15-20 min', ticket: 'Incluida', priority: 'nice' },
+    { name: 'Xizhou Copper Pillar', nameZh: '溪州铜柱', what: 'Elemento histórico ligado al pasado Tusi.', zone: '~10 min', time: '5-10 min', ticket: 'Incluida', priority: 'optional' },
+    { name: 'Tusi Square', nameZh: '土司广场', what: 'La plaza donde se hacen algunas actuaciones.', zone: '~10 min', time: 'Según espectáculo', ticket: 'Incluida', priority: 'optional' },
+    { name: 'Excursiones de alrededor', what: 'Red Stone Forest, Mengdong River y demás.', zone: 'Fuera', time: 'Medio día', ticket: 'Aparte', priority: 'skip', more: 'Tenéis 15 horas entre llegada y salida, y buena parte son noche y sueño. Furong es de esos sitios donde más no significa mejor.' },
+  ],
+
+  restaurants: [
+    { name: 'Restaurante del propio hotel', what: 'Comida local y zona panorámica, sin moverse. La opción más lógica para la noche.', when: 'Cena tardía del 22, después del paseo', priority: 'must', more: 'Preguntad al llegar hasta qué hora sirven. Así no perdéis la mejor parte de la noche sentados en un restaurante.' },
+    { name: 'Puesto 113 de rice tofu', nameZh: '正宗113号米豆腐店', what: 'El famoso 米豆腐 de Furong, ligado a la película que dio nombre al pueblo.', price: '¥5-15', when: 'Desayuno del 23', priority: 'must', more: 'Ojo con las imitaciones que usan el nombre "Liu Xiaoqing": buscad el número 113.' },
+    { name: 'Tuwang Yuchu', nameZh: '土王御厨湘菜馆', what: 'Cocina de Hunan dentro del recinto: pescado Tujia y pato xueba.', price: '~¥57 por persona', priority: 'nice' },
+    { name: 'Xiangla Gancai', nameZh: '湘腊干菜馆', what: 'Especializado en carnes curadas de Xiangxi.', price: '~¥57 por persona', priority: 'nice' },
+  ],
+
+  markets: [
+    { name: 'Wuli Stone Street', nameZh: '五里石板街', what: 'Aquí no hay night market: la propia calle hace de comida callejera, comercio y souvenirs.', priority: 'must', more: 'Rice tofu, carnes ahumadas, encurtidos, salchichas, dulces, té, plata Miao, bordados Tujia y artesanía.' },
+  ],
+
+  food: [
+    { name: '米豆腐', pinyin: 'Mǐdòufu — rice tofu', what: 'EL alimento de Furong: arroz convertido en una especie de tofu muy blando. Salado, ácido-picante o con arroz dulce fermentado.', kind: 'salado' },
+    { name: '湘西腊肉', pinyin: 'Xiāngxī làròu', what: 'Cerdo ahumado y curado de Xiangxi.', kind: 'salado' },
+    { name: '土家腊肠', pinyin: 'Tǔjiā làcháng', what: 'Salchicha curada Tujia.', kind: 'salado' },
+    { name: '血粑鸭', pinyin: 'Xuèbā yā', what: 'Pato con torta de arroz glutinoso y sangre, típico del oeste de Hunan.', kind: 'salado' },
+    { name: '干锅腊味', pinyin: 'Gānguō làwèi', what: 'Olla seca con embutidos y carnes curadas.', kind: 'salado' },
+    { name: '苗鱼 / 河鱼', pinyin: 'Miáo yú', what: 'Pescado local de río.', kind: 'salado' },
+    { name: '酸萝卜', pinyin: 'Suān luóbo', what: 'Rábano encurtido, ácido y picante.', kind: 'salado' },
+    { name: '蒿子粑粑', pinyin: 'Hāozi bābā', what: 'Tortita de arroz glutinoso con hierbas.', kind: 'dulce' },
+    { name: '冰米酒', pinyin: 'Bīng mǐjiǔ', what: 'Arroz fermentado dulce y frío.', kind: 'dulce' },
+    { name: '葛根粉', pinyin: 'Gěgēn fěn', what: 'Preparación de raíz de kudzu.', kind: 'dulce' },
+  ],
+
+  photoSpots: [
+    { name: 'La postal clásica', how: 'Desde el mirador de enfrente de la cascada, en la orilla opuesta al conjunto de casas: cascada + casas Tujia sobre pilotes. De noche es muchísimo mejor que de día.', when: 'Noche del 22' },
+    { name: 'Tuwang Bridge', nameZh: '土王桥', how: 'Desde el puente o justo al lado: composición más elevada con cascada, río y casas escalonadas.', when: 'Por la mañana hay mucha menos gente' },
+    { name: 'Detrás de la cascada', how: 'Dentro de la pasarela, disparando hacia FUERA: la cortina de agua hace de marco y al otro lado quedan las luces del pueblo.', when: 'De noche' },
+    { name: 'La base de la cascada', how: 'Funciona mejor con una persona delante y la cascada iluminada enorme detrás.' },
+    { name: 'Wangcun Wharf', nameZh: '王村码头', how: 'Desde abajo se aprecia que el pueblo entero está construido verticalmente sobre el acantilado.' },
+    { name: 'Wuli Stone Street vacía', how: 'La misma calle que de noche está abarrotada, a primera hora. Es otra foto y otro pueblo.', when: '07:15-07:30 del 23' },
+    { name: 'Desde vuestra propia habitación', how: 'El hotel anuncia vistas panorámicas sobre el pueblo y zonas orientadas a la cascada. Antes de salir, mirad qué vista tenéis.' },
+  ],
+
+  shopping: [
+    { name: 'Brocado Tujia', nameZh: '土家织锦', what: 'Si encontráis una pieza auténtica que os guste, es el mejor recuerdo de aquí.', priority: 'nice' },
+    { name: 'Productos locales envasados', what: 'Carnes curadas, encurtidos, té. Fáciles de traer.', priority: 'nice' },
+    { name: 'Plata Miao', nameZh: '苗银', what: 'Bonita como recuerdo, pero no compraría una pieza cara sin garantías.', priority: 'optional', more: 'Abundan artículos industriales vendidos como artesanía tradicional. Aquí no hay centros comerciales ni tecnología: eso, para Shanghái.' },
+  ],
+
+  trends: [
+    { name: 'Furong iluminado', verdict: 'si', why: 'Sigue siendo la razón principal para dormir aquí. La iluminación arranca sobre las 19:30.' },
+    { name: 'Pasar detrás de la cascada de noche', verdict: 'si', why: 'La experiencia más característica del pueblo.' },
+    { name: 'El pueblo desde la orilla contraria', verdict: 'si', why: 'La postal clásica, y de noche es otra cosa.' },
+    { name: 'Verlo vacío a primera hora', verdict: 'si', why: 'No es espectacular en TikTok, pero para vosotros puede ser de lo mejor de la parada.' },
+    { name: 'Trajes tradicionales Tujia o Miao', verdict: 'quizas', why: 'Hay alquileres desde unos ¥50/h, pero con maquillaje y sesión la tarifa sube bastante. Con una noche, yo priorizaría la cascada.' },
+    { name: 'Cafés con "mesa con vistas" a precio premium', verdict: 'no', why: 'Vuestro hotel ya está mejor colocado que muchos de ellos. Explorad primero los miradores públicos.' },
+  ],
+
+  bookings: [
+    {
+      title: '🏨 Escribir al hotel una semana antes',
+      when: '~15 de octubre',
+      price: 'La recogida, gratuita',
+      how: 'Preguntad de una vez: recogida en 芙蓉镇站 con el tren G5666 y la hora 18:09; si gestionan ellos la entrada al recinto; cómo se accede al hotel con equipaje; precio del coche a Zhangjiajie del día 23; y qué actuaciones hay la noche del 22.',
+      alert: 'Frase lista para mandar: 我们10月22日18:09到芙蓉镇站。请问可以安排免费接站吗？入住酒店需要提前购买芙蓉镇景区门票吗？酒店可以帮我们购买吗？',
+    },
+    {
+      title: '🎟️ Entrada al recinto de Furong',
+      when: 'No hace falta con meses. Sí dejar claro cómo entráis al llegar',
+      price: '~108 CNY por persona (~14 €), válida 3 días',
+      how: 'El hotel está dentro de la zona de pago, así que la entrada es obligatoria para llegar a él. La iluminación nocturna va incluida.',
+      alert: 'Esto resuelve el aviso que traía la reserva del hotel. Algunas webs aún ponen 100 CNY: confirmad el precio unos días antes.',
+    },
+    {
+      title: '🚗 Coche a Zhangjiajie',
+      when: 'Al hacer el check-in, la noche del 22',
+      price: '~250-300 CNY (32-38 €), se paga allí',
+      how: 'En recepción, con el precio cerrado antes de subir a la habitación.',
+      alert: 'Preguntad dónde os recoge exactamente: el hotel está en zona peatonal.',
+    },
+  ],
+
+  ranking: {
+    must: ['Furong iluminado', 'La cascada desde enfrente', 'Caminar detrás de la cascada', 'Tuwang Bridge', 'Wuli Stone Street de noche y de día', 'Rice tofu'],
+    nice: ['Tusi Palace', 'Wangcun Wharf', 'Segundo paseo nocturno sin gente'],
+    optional: ['Copper Pillar', 'Tusi Square', 'Traje tradicional para fotos'],
+    skip: ['Red Stone Forest', 'Mengdong River', 'Cualquier excursión de los alrededores'],
+  },
+};
+
 /** Planning por ciudad. Se va llenando a medida que se cierra cada una. */
 export const cityPlans: Record<string, CityPlan> = {
   beijing,
@@ -2182,6 +2383,7 @@ export const cityPlans: Record<string, CityPlan> = {
   chengdu,
   chongqing,
   fenghuang,
+  furong,
 };
 
 export function getCityPlan(cityId?: string): CityPlan | undefined {

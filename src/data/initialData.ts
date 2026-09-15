@@ -660,6 +660,16 @@ export const initialTripData: TripData = {
       notes: '🆕 ENTRADA NUEVA, no estaba en el plan hasta el planning de Xi\'an (15/09/2026). 🎟️ Es GRATIS pero con reserva obligatoria: cupo de 12.000 plazas al día, entrada vinculada al documento con el que se reserva y ventana de solo 5 días. Las franjas se liberan a las 17:00 hora china = 11:00 en España, así que para el jueves 15 toca el sábado 10 de octubre. ⏰ Poned alarma: es de las que se agotan. 🏛️ POR QUÉ MERECE LA PENA: es una de las grandes colecciones históricas de China y complementa muchísimo a los Guerreros de Terracota — ellos son el periodo Qin y aquí recorréis Zhou → Qin → Han → Tang. 🕗 HORARIO AMPLIADO en vuestras fechas: de 8:30 a 19:00 hasta el 14 de noviembre de 2026. Coged una de las primeras franjas y calculad 2,5-3 h sin intentar verlo todo. 📍 Está en la zona sur, así que el día 15 encadena perfecto con la Gran Pagoda y Grand Tang Ever-Bright City por la noche — todo en la misma zona, sin cruzar la ciudad.',
     },
     {
+      id: 'act-12',
+      cityId: 'furong', title: 'Entrada al recinto de Furong', type: 'Entrada obligatoria',
+      duration: 'Válida 3 días', price: 14, currency: 'EUR', status: 'Por reservar',
+      recommendedDate: 'Jueves 22 oct · al llegar, sobre las 18:20',
+      whenToBuy: 'No hace falta con antelación. Sí dejar resuelto CÓMO entráis: preguntad al hotel una semana antes si os la gestionan ellos',
+      platform: 'Taquilla del recinto o el propio hotel (pertenece al operador turístico)',
+      priceText: '~14 €/persona (108 CNY), válida 3 días y con la iluminación nocturna incluida',
+      notes: '🆕 GASTO NUEVO detectado el 15/09/2026 con el planning de Furong. ⚠️ ESTO RESUELVE EL AVISO QUE TRAÍA LA RESERVA DEL HOTEL: el Wangcun Caotang Inn está DENTRO de la zona turística de pago, no fuera, así que la entrada no es opcional — es la única forma de llegar al alojamiento. 💰 La referencia de 2026 es 108 CNY por adulto (algunas webs aún muestran 100): presupuestad 108 y confirmad el precio unos días antes. Válida 3 días y con reentrada, así que cubre la noche del 22 y la mañana del 23. La iluminación nocturna forma parte de la visita. 🏨 El propio hotel indica que, al pertenecer al operador turístico del recinto, puede ofrecer entradas a huéspedes en condiciones especiales: preguntádselo cuando les escribáis por la recogida en la estación. 📝 Frase para mandarles: 入住酒店需要提前购买芙蓉镇景区门票吗？酒店可以帮我们购买吗？',
+    },
+    {
       id: 'act-10',
       buyOpensIso: '2026-10-17', cityId: 'wulingyuan', title: 'Gran Cañón de Zhangjiajie + Puente de Cristal', type: 'Medio día',
       duration: 'Medio día (2-4 h dentro del cañón)', price: 23, currency: 'EUR', status: 'Por reservar',
