@@ -2376,6 +2376,837 @@ const furong: CityPlan = {
   },
 };
 
+const zhangjiajie: CityPlan = {
+  cityId: 'zhangjiajie',
+  headline: 'No es una ciudad que visitar: es la base de Tianmen. Hotel → comida local → la montaña → atardecer → la Puerta del Cielo iluminada → hotel. Nada más.',
+  keyNotes: [
+    '⚠️ OJO con el tour nocturno: existen productos de día + noche en 2026, pero NO hay una norma oficial publicada que diga que con la entrada diurna os podáis quedar por vuestra cuenta hasta las 21:00. Hay que contratar el producto nocturno concreto. Es el único punto logístico que queda por cerrar de esta parada.',
+    '🗣️ Al preguntar en el hotel, no confundáis dos cosas distintas: 天门山夜游 / 天门洞夜景 es visitar la montaña iluminada; 天门狐仙 es un espectáculo teatral en el teatro del cañón, que empieza sobre las 20:20. Vosotros preguntáis por lo primero.',
+    '🚡 Las rutas A/B/C están alteradas por las obras del tramo superior: NO las elijáis con guías antiguas. Cuando abráis la reserva el 23 de septiembre, mirad el esquema operativo que aparezca ese día.',
+    '🌉 La pasarela de cristal de la East Line cerró por mantenimiento en mayo de 2026; Panlong (Coiling Dragon) y la West Line seguían abiertas. Reconfirmadlo justo antes de ir.',
+  ],
+  base: [
+    'Estación baja del teleférico a ~1 km, 10-15 min andando',
+    'Restaurantes Tujia justo enfrente del teleférico',
+    '72 Qilou a 15-20 min en Didi',
+    'El centro (Jiefang Road) no os hace falta',
+    'Wulingyuan y el Gran Cañón son la base siguiente: aquí no se mezclan',
+  ],
+
+  days: [
+    {
+      id: 'zj-d1',
+      dateText: 'Viernes 23 de octubre',
+      title: 'Tianmen Mountain, de día y de noche',
+      zone: 'Todo alrededor del teleférico',
+      blocks: [
+        {
+          time: '~11:00',
+          title: 'Llegada al Thousand Hotel',
+          detail: 'En coche desde Furong. Maletas dentro y check-in si ya se puede.',
+          kind: 'move',
+        },
+        {
+          time: '11:45-12:45',
+          title: 'Comer antes de subir',
+          detail: 'En la zona del teleférico, sin coger Didi ni bajar al centro.',
+          kind: 'food',
+          more: 'La opción más cómoda es Gongpopo (龚婆婆土厨), prácticamente enfrente de la estación del teleférico, a unos 50 m. 40-60 CNY por persona. Pedid 土家三下锅 (Tujia Sanxiaguo). Y comed bien ahora: arriba no contéis con sentaros 45-60 min a comer, la montaña se disfruta mejor sin eso.',
+        },
+        {
+          time: '13:15-13:30',
+          title: 'Andando al teleférico',
+          detail: '~1 km. En la estación sobre las 13:30-13:40 para la franja de las 14:00.',
+          kind: 'move',
+          more: 'No merece la pena pedir Didi salvo lluvia fuerte.',
+        },
+        {
+          time: '14:00',
+          title: 'Subida a Tianmen',
+          detail: 'Franja reservada. Teleférico hasta la estación intermedia, bus por las 99 curvas y escaleras mecánicas.',
+          kind: 'ticket',
+          alert: true,
+          more: 'El tramo superior del teleférico principal sigue en reconstrucción en 2026 y la operativa está adaptada. Por eso no sirven las guías anteriores a 2026 para decidir la ruta: comprobad el esquema del día al reservar.',
+        },
+        {
+          time: 'Tarde',
+          title: 'Arriba: la Puerta del Cielo y las pasarelas',
+          detail: '99 curvas → Tianmen Cave → cumbre → West Cliff y Valle de los Fantasmas → una pasarela de cristal.',
+          kind: 'visit',
+          more: 'No intentéis completar todos los caminos del borde. Con una entrada a las 14:00, elegid: los 999 escalones y la cueva de frente, el sector del Guigu Zhandao (鬼谷栈道), UNA pasarela de cristal buena —Panlong si sigue abierta— y el templo si sobra tiempo. Las pasarelas pueden cerrarse por mal tiempo, y el enemigo real no es la lluvia sino la niebla: si está cubierto, algunas vistas desaparecen del todo.',
+        },
+        {
+          time: '~18:00',
+          title: 'Atardecer',
+          detail: 'El sol se pone sobre las 18:00 ese día. Buscad un punto despejado del sector oeste.',
+          kind: 'visit',
+        },
+        {
+          time: '19:30-20:30',
+          title: 'Tianmen Cave iluminada (si hay tour)',
+          detail: 'Solo con un producto nocturno contratado. No contéis con quedaros por vuestra cuenta.',
+          kind: 'ticket',
+          alert: true,
+          more: 'La secuencia que merece la pena es luz de tarde → blue hour → iluminación. Si el tour no se confirma o sale muy caro, el plan B es bajar, cenar y hacer 72 Qilou.',
+        },
+        {
+          time: 'Plan B',
+          title: '72 Qilou 七十二奇楼',
+          detail: 'Complejo nocturno iluminado de estilo Tujia. 1,5-2 h, en Didi.',
+          kind: 'visit',
+          more: '~48 CNY antes de las 16:30 y ~88 CNY después; la iluminación arranca sobre las 19:30. No es un casco histórico: abrió en 2022 y es una experiencia visual nocturna, no patrimonio. ⛔ Lo que NO haría es Tianmen de día + Tianmen de noche + 72 Qilou: eso convierte un día espectacular en una carrera.',
+        },
+      ],
+    },
+    {
+      id: 'zj-d2',
+      dateText: 'Sábado 24 de octubre',
+      title: 'Salida hacia Wulingyuan',
+      zone: 'Sin añadir nada',
+      blocks: [
+        {
+          time: '08:00',
+          title: 'Despertar y desayunar',
+          detail: 'El desayuno cierra a las 09:00, así que despertador.',
+          kind: 'rest',
+        },
+        {
+          time: '09:00',
+          title: 'Didi a Wulingyuan',
+          detail: '~33 km. Contad hasta 1 h, no 45 min, para no condicionar el Gran Cañón.',
+          kind: 'move',
+          alert: true,
+          more: 'Aquí no añadiría absolutamente nada: nada de "ver algo rápido" en Yongding antes de salir. Y confirmad el 23 en recepción a qué hora es exactamente vuestro check-out, que es un rango de 12:00 a 14:00 según habitación.',
+        },
+      ],
+    },
+  ],
+
+  highlights: [
+    { name: 'Tianmen Mountain', nameZh: '天门山国家森林公园', what: 'El motivo entero de dormir aquí. Montaña independiente del parque de Wulingyuan, con la Puerta del Cielo, las 99 curvas y las pasarelas sobre el acantilado.', zone: '1 km andando', time: '4-6 h', ticket: '~288 CNY, reserva con franja', priority: 'must' },
+    { name: 'Tianmen Cave', nameZh: '天门洞', what: 'La Puerta del Cielo. La foto clásica es desde la base de los 999 escalones, de frente.', zone: 'Dentro', time: '45-60 min', ticket: 'Incluida', priority: 'must' },
+    { name: 'Carretera de las 99 curvas', nameZh: '通天大道', what: 'Buscad durante el recorrido alto la vista con la carretera serpenteando debajo.', zone: 'Dentro', time: 'En el trayecto', ticket: 'Incluida', priority: 'must' },
+    { name: 'Guigu Zhandao', nameZh: '鬼谷栈道', what: 'El sector de pasarela del West Cliff y el Valle de los Fantasmas. De lo mejor de la montaña.', zone: 'Dentro', time: '1-1,5 h', ticket: 'Incluida', priority: 'must' },
+    { name: 'Pasarela de cristal de Panlong', nameZh: '盘龙崖玻璃栈道', what: 'Cristal, vacío y las curvas de la carretera debajo. No hace falta hacerlas todas: con una buena basta.', zone: 'Dentro', time: '20-30 min', ticket: 'Incluida', priority: 'nice', more: '⚠️ No es lo mismo que el puente de cristal del Gran Cañón, que veréis el día 24: son atracciones completamente distintas. Y la East Line cerró por mantenimiento en mayo de 2026.' },
+    { name: 'Templo de Tianmen', nameZh: '天门山寺', what: 'Interesante si vais bien de tiempo.', zone: 'Dentro', time: '30 min', ticket: 'Incluida', priority: 'nice' },
+    { name: '72 Qilou', nameZh: '七十二奇楼', what: 'Complejo nocturno iluminado inspirado en las casas sobre pilotes Tujia. Espectáculos y puestos de comida.', zone: '15-20 min en Didi', time: '1,5-2 h', ticket: '48-88 CNY', priority: 'nice', more: 'Muy recomendable SOLO si no hacéis Tianmen nocturno. Abrió en 2022: es experiencia visual, no patrimonio.' },
+    { name: 'Centro de Yongding', nameZh: '解放路', what: 'La zona urbana de restaurantes y comercios. Más cotidiana que Wulingyuan.', zone: 'Centro', time: '1 h', ticket: 'Gratis', priority: 'optional', more: 'No hay ningún monumento que justifique sacrificar Tianmen por esto. Solo para cenar si acabáis pronto.' },
+    { name: 'El parque de Wulingyuan', what: 'Yuanjiajie, Tianzi, Golden Whip Stream, Baofeng Lake, el Gran Cañón.', zone: 'Otra base', time: 'Días', ticket: 'Aparte', priority: 'skip', more: 'Es otro bloque geográfico, el de los días 24 y 25. Mezclarlo con Tianmen sería perder muchísimo tiempo.' },
+  ],
+
+  restaurants: [
+    { name: 'Gongpopo Tujia Kitchen', nameZh: '龚婆婆土厨', what: 'Cocina Hunan y Tujia a unos 50 m de la estación del teleférico. Abre de 10:00 a 23:00.', price: '40-60 CNY por persona', when: 'Comida del 23, antes de subir', priority: 'must', more: 'Es la opción número uno porque no exige ningún desplazamiento. Pedid 土家三下锅 y el pastel Tujia de artemisa.' },
+    { name: 'Zhaisao Dangjia', nameZh: '寨嫂当家', what: 'Sanxiaguo, cerdo de granja y pollo en cazuela. Cocina Tujia local.', price: '~49 CNY por persona', priority: 'nice' },
+    { name: 'Fuzhengyi Sanxiaguo', nameZh: '富正毅三下锅', what: 'Cadena local conocida, práctica porque trabaja con carta visual. Sucursal en Dayong Road.', price: '40-70 CNY por persona', priority: 'nice', more: 'Su especialidad es el 干锅三下锅, el sanxiaguo seco, eligiendo ingredientes.' },
+  ],
+
+  markets: [
+    { name: 'Yanhuo Old Street', nameZh: '烟火老街', what: 'La calle de street food dentro de 72 Qilou: snacks de Hunan, carnes, arroz glutinoso y especialidades Tujia.', priority: 'nice', more: 'Merece la pena si vais a 72 Qilou. Ir expresamente solo por el "mercado", no: es muy turístico y forma parte de la atracción.' },
+    { name: 'Jiefang Road', nameZh: '解放路步行街', what: 'Mucho más local: pequeños restaurantes y puestos.', priority: 'optional', more: 'Mejor si buscáis ambiente urbano real, pero por sí solo no es una visita imprescindible.' },
+  ],
+
+  food: [
+    { name: '土家三下锅', pinyin: 'Tujia Sanxiaguo', what: 'El plato obligatorio: cazuela con tres ingredientes principales (panceta, cerdo, callos, tofu, ternera). Pedid 微辣 si no queréis nivel Hunan.', kind: 'salado' },
+    { name: '腊肉', pinyin: 'Làròu', what: 'Cerdo ahumado y curado de las montañas de Xiangxi, salteado con chile y verduras.', kind: 'salado' },
+    { name: '岩耳炖土鸡', pinyin: 'Yan’er dun tuji', what: 'Pollo guisado con un hongo que crece en las paredes rocosas. Buena opción si queréis algo más suave.', kind: 'salado' },
+    { name: '合渣', pinyin: 'Hézhā', what: 'Preparación Tujia de soja molida y verduras. Comida de casa, poco conocida fuera de la región.', kind: 'salado' },
+    { name: '葛根粉', pinyin: 'Gěgēn fěn', what: 'Raíz de kudzu: en fideos, en preparados calientes o como postre espeso y translúcido.', kind: 'dulce' },
+    { name: '糍粑', pinyin: 'Cíbā', what: 'Pastel de arroz glutinoso machacado, tostado o frito y con azúcar. El snack dulce local.', kind: 'dulce' },
+    { name: '甜米酒', pinyin: 'Tián mǐjiǔ', what: 'Arroz fermentado dulce, muy habitual acompañando la cocina regional.', kind: 'dulce' },
+  ],
+
+  photoSpots: [
+    { name: 'Tianmen Cave de frente', nameZh: '天门洞', how: 'Desde la base de los 999 escalones, mirando frontalmente al arco. La gente subiendo da la escala y hace que parezca todavía más enorme.' },
+    { name: 'Las 99 curvas', nameZh: '通天大道', how: 'Desde el recorrido alto, buscando el ángulo donde se ve la carretera serpenteando por debajo. Es uno de los planos más reconocibles.' },
+    { name: 'Pasarela de Panlong', nameZh: '盘龙崖玻璃栈道', how: 'Cristal, vacío y las curvas de la carretera al fondo. La más interesante de las de cristal.' },
+    { name: 'La Puerta del Cielo al anochecer', how: 'La secuencia buena es luz de tarde → blue hour → iluminación. El sol se pone sobre las 18:00 el 23 de octubre.' },
+    { name: '72 Qilou', how: 'Si vais, NO hagáis la foto pegados al edificio: cruzad Wulingshan Avenue y alejaos unos 100 m para que entre toda la estructura vertical.' },
+  ],
+
+  shopping: [
+    { name: 'Nada específico', what: 'Aquí no dedicaría tiempo a comprar: no hay nada comparable a lo que vais a encontrar en Shanghái.', priority: 'optional', more: 'Si aparece durante la ruta: productos de kudzu (葛根), té, snacks Tujia y el brocado 西兰卡普 si encontráis una pieza que os guste de verdad. 72 Qilou tiene zona de artesanía, pero planteada para visitantes.' },
+  ],
+
+  trends: [
+    { name: '72 Qilou de noche', verdict: 'si', why: 'Sigue muy popular en 2026 y merece la pena visualmente, pero nunca por encima de Tianmen nocturno.' },
+    { name: 'Tianmen Cave iluminada', verdict: 'si', why: 'Muy interesante justamente porque ya vais a estar ahí. Pero necesita producto nocturno contratado.' },
+    { name: 'La foto en los 999 escalones', verdict: 'si', why: 'Viral, sí, pero forma parte natural de la visita.' },
+    { name: 'Hacer varias pasarelas de cristal', verdict: 'quizas', why: 'Muy virales, pero no dedicaría una hora de cola a repetir. Elegid una buena.' },
+  ],
+
+  bookings: [
+    {
+      activityId: 'act-6',
+      title: 'Entrada de Tianmen Mountain',
+      when: 'Desde el 23 de septiembre (ventana de 30 días)',
+      price: '~288 CNY, con los transportes principales incluidos',
+      how: 'Trip.com o Klook, con pasaporte. Franja horaria: reservad la vuestra en cuanto se abra.',
+      alert: 'La venta regular termina a las 16:00 y el parque abre a las 08:00. Al reservar, comprobad el esquema de rutas del día: están alteradas por las obras.',
+    },
+    {
+      title: '🔲 Tour nocturno de Tianmen — lo único por cerrar',
+      when: 'Cuanto antes',
+      price: 'Producto organizado, la entrada va aparte',
+      how: 'Preguntad en el Thousand Hotel por 天门山夜游 o 天门洞夜景. Y aclarad que NO preguntáis por 天门狐仙.',
+      alert: 'No hay norma oficial publicada que permita a un visitante con entrada diurna quedarse hasta las 21:00 por su cuenta: lo que existe son productos nocturnos organizados. No contéis con quedaros arriba sin contratarlo.',
+    },
+  ],
+
+  ranking: {
+    must: ['Tianmen de día', 'La Puerta del Cielo y los 999 escalones', 'Las 99 curvas', 'Una buena pasarela de cristal', 'Tianmen nocturno si se confirma'],
+    nice: ['72 Qilou como plan B', 'Sanxiaguo', 'Templo de Tianmen'],
+    optional: ['Centro y Jiefang Road'],
+    skip: ['El parque de Wulingyuan ese mismo día', 'Tianmen nocturno Y 72 Qilou a la vez', 'Dedicar tiempo a compras'],
+  },
+};
+
+const wulingyuan: CityPlan = {
+  cityId: 'wulingyuan',
+  headline: 'Dos noches y dos excursiones grandes. El mejor Wulingyuan no es el que acumula puntos, sino el que os deja hacer bien el Gran Cañón y el Parque Avatar sin llegar destrozados al tren del 26.',
+  keyNotes: [
+    '🆕 ESPECTÁCULO DE DRONES: en 2026 hay exhibiciones habituales de 1.500 drones sobre el río Suoxi, y el periodo previsto cubre vuestras fechas. Está en Wulingyuan, así que no quita tiempo de montaña. NO fijéis hora todavía: en agosto pasó de las 20:30 a las 19:50 y hubo cancelaciones por viento. Comprobadlo 2-3 días antes en WeChat, buscando 武陵源发布.',
+    '🔄 MEMORIZAD EL PLAN B del domingo: si al llegar el Bailong tiene más de 60 min de cola, NO esperéis. Subid por el teleférico de Tianzi, haced Tianzi primero, luego Yuanjiajie, y bajad por el Bailong. Es el mismo recorrido al revés y os puede salvar el día.',
+    '🎟️ En el Gran Cañón, coged la LÍNEA B completa (puente + descenso + cañón + barco), no la B1, que se salta buena parte del recorrido inferior.',
+    '⚠️ Xibu Street: sigue muy promocionada, pero hay reseñas de julio-agosto de 2026 que dicen que la parte histórica principal está cerrada. Como está a 1,3 km, si está abierta bien y si no, no habéis perdido nada.',
+  ],
+  base: [
+    'East Gate del parque a ~1 km',
+    'Estación de autobuses a 680 m',
+    'Teatro de Charming Xiangxi a 620 m',
+    'Xibu Street a 1,3 km',
+    'Gran Cañón a ~30 km (35-45 min)',
+    'Zhangjiajie West a 26-28 km',
+  ],
+
+  days: [
+    {
+      id: 'wl-d1',
+      dateText: 'Sábado 24 de octubre',
+      title: 'Gran Cañón y Puente de Cristal',
+      zone: 'Cañón por el día, Wulingyuan por la noche',
+      blocks: [
+        {
+          time: '~09:45',
+          title: 'Llegada al hotel',
+          detail: 'Maletas o early check-in (abre a las 10:00) y pedid el Didi inmediatamente.',
+          kind: 'move',
+          alert: true,
+          more: 'No os entretengáis desayunando ni buscando transporte público: hoy la hora manda.',
+        },
+        {
+          time: '~10:05',
+          title: 'Didi al Gran Cañón',
+          detail: 'Pedidlo a 张家界大峡谷景区 o 张家界大峡谷游客中心. ~30 km, 35-45 min, ~55-70 CNY.',
+          kind: 'move',
+          more: 'La alternativa es andar 680 m a la estación de autobuses y coger el bus (¥12, ~30 min), pero sale cada 40 min y perder una salida os destroza el margen.',
+        },
+        {
+          time: '~11:00',
+          title: 'Entrada al cañón, línea B',
+          detail: 'Puente de Cristal → pasarela → descenso → Rainbow Square → sendero → Touch Cave → lago → barco.',
+          kind: 'ticket',
+          alert: true,
+          more: 'Son 3-4 h dentro. Coged la línea B completa, no la B1. El recinto abre de 08:00 a 16:00. Llevad el pasaporte original: la entrada es nominal. Nada de mochilas grandes, trípodes, drones ni palo selfie — hay restricciones y taquillas. El puente puede cerrarse por viento o tormenta, y en octubre el fondo del cañón se siente bastante más fresco: llevad una capa fina.',
+        },
+        {
+          time: 'Comida',
+          title: 'No perdáis una hora comiendo',
+          detail: 'Llevad agua, fruta y algo de picar. Ya comeréis bien en Wulingyuan al volver.',
+          kind: 'food',
+        },
+        {
+          time: 'Tarde',
+          title: 'Vuelta al hotel y descanso',
+          detail: 'Didi de vuelta, ducha y parar. Mañana es el día grande.',
+          kind: 'rest',
+          more: 'Este descanso es importante de verdad: el domingo son 8-9 horas de parque.',
+        },
+        {
+          time: 'Noche',
+          title: 'Elegid UNA cosa, no tres',
+          detail: 'Cena local + drones si los hay, o Charming Xiangxi, o Xibu Street y night market.',
+          kind: 'food',
+          more: 'Mi favorita: cena local, comprobar si hay show de drones y paseo tranquilo. Charming Xiangxi (魅力湘西) está a 620 m del hotel, con sesiones sobre las 18:00, 19:20 y 20:40 y desde ~168 CNY — buena opción solo si volvéis del cañón con ganas. Lo que NO haría es encadenar Charming Xiangxi + drones + Xibu + mercado.',
+        },
+      ],
+    },
+    {
+      id: 'wl-d2',
+      dateText: 'Domingo 25 de octubre',
+      title: 'Parque Avatar: la jornada a proteger',
+      zone: 'Zhangjiajie National Forest Park',
+      blocks: [
+        {
+          time: '06:40-06:50',
+          title: 'Salir del hotel',
+          detail: 'East Gate (武陵源标志门) está a 1 km: Didi de 3-5 min o 10-15 andando.',
+          kind: 'move',
+          alert: true,
+          more: 'A esa hora yo cogería Didi para empezar descansados. Objetivo: estar en la entrada sobre las 06:45-06:55. El desayuno del hotel abre a las 06:30, así que entra justo.',
+        },
+        {
+          time: 'Primera franja',
+          title: 'Eco-bus y ascensor Bailong',
+          detail: '15-20 min de bus y subida en el Bailong (~65 CNY).',
+          kind: 'ticket',
+          alert: true,
+          more: '🔄 Si os dicen que el Bailong tiene más de 60 min de cola, aplicad el plan B: bus al teleférico de Tianzi, subís por ahí, hacéis Tianzi, luego Yuanjiajie y bajáis en Bailong. El domingo es justo el peor día para el Bailong en sentido ascendente.',
+        },
+        {
+          time: '~2 h',
+          title: 'Yuanjiajie 袁家界',
+          detail: 'Mihun Terrace → Back Garden → Qiankun Pillar (la montaña Avatar) → Primer Puente bajo el Cielo.',
+          kind: 'visit',
+          more: 'Es el núcleo imprescindible. Mihun Terrace (迷魂台) es probablemente vuestro mejor mirador de todo Zhangjiajie.',
+        },
+        {
+          time: 'Mediodía',
+          title: 'Bus a Tianzi y comer algo rápido',
+          detail: '20-30 min de bus. No busquéis "el mejor restaurante" ahí arriba.',
+          kind: 'food',
+          more: 'Las zonas de restauración de dentro son caras y funcionales. La comida Tujia de verdad, para la cena en Wulingyuan.',
+        },
+        {
+          time: '1-1,5 h',
+          title: 'Tianzi Mountain 天子山',
+          detail: 'He Long Park → Yubi Peak (御笔峰) → Fairy Scattering Flowers → miradores.',
+          kind: 'visit',
+        },
+        {
+          time: 'Bajada',
+          title: 'Teleférico de Tianzi (~72 CNY)',
+          detail: 'Precioso. Intentad sitio con ventana o delante.',
+          kind: 'move',
+        },
+        {
+          time: 'Noche',
+          title: 'Cena de Sanxiaguo y a dormir pronto',
+          detail: 'Esa noche no añadiría espectáculo: mañana os levantáis antes de las 05:30.',
+          kind: 'food',
+          alert: true,
+          more: 'Dejad preparadas las dos gestiones: coche o Didi programado para las 05:35-05:45 y el check-out anticipado avisado en recepción. Y pedid el desayuno para llevar: 可以帮我们准备打包早餐吗？',
+        },
+      ],
+    },
+    {
+      id: 'wl-d3',
+      dateText: 'Lunes 26 de octubre',
+      title: 'El traslado más frágil del viaje',
+      zone: 'Zhangjiajie West',
+      blocks: [
+        {
+          time: '05:35-05:45',
+          title: 'Salir del hotel',
+          detail: '10 minutos antes de lo previsto. 26-28 km, 25-40 min según tráfico, ~55-100 CNY.',
+          kind: 'move',
+          alert: true,
+          more: 'Teníamos apuntado salir a las 05:48 y es viable, pero aquí prefiero regalarle 10 minutos al viaje. No confiéis en encontrar un Didi espontáneo a las 05:40 como único plan: dejadlo programado y pedid ayuda en recepción la noche antes.',
+        },
+        {
+          time: '07:28',
+          title: 'Tren G1367 a Shangrao',
+          detail: 'Llegada a las 13:39.',
+          kind: 'move',
+          alert: true,
+        },
+      ],
+    },
+  ],
+
+  highlights: [
+    { name: 'Parque Nacional de Zhangjiajie', nameZh: '张家界国家森林公园', what: 'El imprescindible absoluto. Vuestra puerta es la East Gate, justo al lado del hotel.', zone: '~1 km', time: '8-9 h', ticket: '~236 CNY, 4 días, nominal', priority: 'must', more: 'Los buses internos van incluidos; el Bailong y los teleféricos se pagan aparte.' },
+    { name: 'Yuanjiajie', nameZh: '袁家界', what: 'Las montañas flotantes: Mihun Terrace, Qiankun Pillar y el Primer Puente bajo el Cielo.', zone: 'Dentro del parque', time: '~2 h', ticket: 'Incluida', priority: 'must' },
+    { name: 'Tianzi Mountain', nameZh: '天子山', what: 'He Long Park, Yubi Peak y Fairy Scattering Flowers. Las agujas verticales de piedra.', zone: 'Dentro del parque', time: '1-1,5 h', ticket: 'Incluida', priority: 'must' },
+    { name: 'Ascensor Bailong', nameZh: '百龙天梯', what: '88 segundos y sale de dentro de la montaña al vacío. Es una atracción en sí.', zone: 'Dentro del parque', time: '15 min + cola', ticket: '~65 CNY', priority: 'must' },
+    { name: 'Gran Cañón y Puente de Cristal', nameZh: '张家界大峡谷玻璃桥', what: 'Independiente del parque: puente, descenso al cañón, sendero y barco.', zone: '~30 km', time: '3-4 h', ticket: 'Nominal, con franja', priority: 'must' },
+    { name: 'Charming Xiangxi', nameZh: '魅力湘西', what: 'Espectáculo de cultura de las minorías: danzas, boda Tujia, percusión Miao y acrobacias.', zone: '620 m', time: '1,5 h', ticket: 'Desde ~168 CNY', priority: 'nice', more: 'Sesiones sobre las 18:00, 19:20 y 20:40 en temporada alta; confirmad las de octubre. Plan opcional del sábado, solo si volvéis con ganas.' },
+    { name: 'Espectáculo de drones', what: '1.500 drones sobre el río Suoxi formando Tianzi Mountain, diseños Tujia y águilas.', zone: 'En Wulingyuan', time: '20-30 min', ticket: 'Gratis', priority: 'nice', more: 'Novedad de 2026 y con mucha repercusión. No exige sacrificar tiempo de montaña. Comprobad horario y cancelaciones 2-3 días antes en WeChat: 武陵源发布.' },
+    { name: 'Baofeng Lake', nameZh: '宝峰湖', what: 'Lago encajado entre montañas con paseo en barco. ~110 CNY, incluye barco y eco-bus.', zone: '10 min en taxi', time: '2-3 h', ticket: '~110 CNY', priority: 'optional', more: 'Bonito, pero después del Parque Avatar y el Gran Cañón no sacrificaría descanso por él.' },
+    { name: 'Yellow Dragon Cave', nameZh: '黄龙洞', what: 'Gran cueva kárstica, de las más conocidas de China. ~118 CNY con barco.', zone: '9 km pasada la East Gate', time: '2 h', ticket: '~118 CNY', priority: 'optional' },
+    { name: 'Golden Whip Stream, Huangshi, Yangjiajie', what: 'Los otros grandes sectores del parque.', zone: 'Dentro', time: 'Medio día cada uno', ticket: 'Incluida', priority: 'skip', more: 'No caben en un solo día. La planificación sensata de una jornada es Yuanjiajie + Tianzi y reservar 8-9 h contando colas y transportes.' },
+  ],
+
+  restaurants: [
+    { name: 'Tangshifu', nameZh: '唐师傅湘西名菜', what: 'De los locales con más referencias, en Wuling Road. Pato aromático, ternera salteada, pescado con chile picado y fideos de kudzu.', price: '50-100 CNY por persona', when: 'Cena del 24 o del 25', priority: 'must' },
+    { name: 'Fu Zheng Yi Sanxiaguo', nameZh: '富正毅三下锅', what: 'Para el plato emblemático: la cazuela local de tres ingredientes. Sucursal junto a Charming Xiangxi.', price: '80-150 CNY los dos', when: 'Cena del domingo, tras el parque', priority: 'must', more: 'Pedid 微辣 (poco picante): en Hunan, "poco picante" sigue picando bastante.' },
+    { name: 'Zhai Zi Li De Bo Bo Cai', what: 'Cocina local bien valorada, también en Wuling Road.', when: 'Comodín si hay cola en las otras', priority: 'nice' },
+  ],
+
+  markets: [
+    { name: 'Old Place Night Market', what: 'Street food de verdad en Jundi Road: parrillas, brochetas, tofu y noodles. Suele funcionar de 17:00 a 23:00.', priority: 'nice', more: 'Mejor entenderlo como cena informal que como atracción. Los puestos aceptan Alipay y WeChat.' },
+    { name: 'Xibu Street', nameZh: '溪布街', what: 'Restaurantes, tiendas y ambiente nocturno a 1,3 km.', priority: 'optional', more: '⚠️ Muy promocionada todavía, pero reseñas de julio-agosto de 2026 dicen que la parte histórica principal está cerrada y solo funcionan los alrededores. Como está cerquísima: si abre, paseo de 30-45 min; si no, no habéis perdido nada.' },
+  ],
+
+  food: [
+    { name: '三下锅', pinyin: 'Sānxiàguō', what: 'El plato número uno de Zhangjiajie: cazuela seca o semiseca de varios ingredientes, bastante picante.', kind: 'salado' },
+    { name: '土家腊肉', pinyin: 'Tǔjiā làròu', what: 'Cerdo curado y ahumado Tujia. Probadlo salteado con bambú (腊肉炒笋).', kind: 'salado' },
+    { name: '岩耳炖土鸡', pinyin: 'Yan’er dun tuji', what: 'Pollo guisado con un hongo de montaña. Más suave y reconfortante.', kind: 'salado' },
+    { name: '酸汤鱼', pinyin: 'Suāntāng yú', what: 'Pescado en caldo ácido y ligeramente picante, con verduras fermentadas.', kind: 'salado' },
+    { name: '臭豆腐', pinyin: 'Chòu dòufu', what: 'Tofu fermentado y frito, muy fácil de encontrar en los puestos nocturnos.', kind: 'salado' },
+    { name: '烤豆腐', pinyin: 'Kǎo dòufu', what: 'Tofu a la brasa con chile, comino y pimienta. ¥3-5 la brocheta.', kind: 'salado' },
+    { name: '葛根粉', pinyin: 'Gégēnfěn', what: 'Kudzu, muy típico de estas montañas. Lo veréis dulce y salado.', kind: 'dulce' },
+    { name: '糍粑', pinyin: 'Cíbā', what: 'Pastelito de arroz glutinoso, a veces asado y con azúcar o sésamo.', kind: 'dulce' },
+    { name: '糯米粑粑', pinyin: 'Nuòmǐ bābā', what: 'Pastelitos de arroz glutinoso. Aquí hay mucha menos tradición de postres que en el resto del viaje.', kind: 'dulce' },
+  ],
+
+  photoSpots: [
+    { name: 'Mihun Terrace', nameZh: '迷魂台', how: 'Vuestro POV número uno. Poneos hacia el lateral derecho del mirador, con una persona en primer plano y la masa de pilares detrás. Con bruma parecen montañas flotantes.' },
+    { name: 'Qiankun Pillar', nameZh: '乾坤柱', how: 'No fotografiéis solo "la roca Avatar": buscad capas sucesivas de pilares y dejad el pilar ligeramente descentrado.' },
+    { name: 'Primer Puente bajo el Cielo', nameZh: '天下第一桥', how: 'Primero el puente natural desde el mirador, después una foto del vacío entre los dos macizos.' },
+    { name: 'Ascensor Bailong', nameZh: '百龙天梯', how: 'Grabad VÍDEO vertical justo cuando sale de la montaña y aparece el valle de golpe: la transición vale más que una foto fija. Dura unos 88 segundos.' },
+    { name: 'Yubi Peak', nameZh: '御笔峰', how: 'Las agujas de piedra ocupando los dos tercios inferiores y cielo o bruma en el tercio de arriba. Con nubes bajas es espectacular.' },
+    { name: 'Puente de Cristal', how: 'Dos fotos: una persona caminando de espaldas por el centro del puente, y otra desde el sendero del fondo del cañón incluyendo el puente arriba — así se entiende la escala real.' },
+  ],
+
+  shopping: [
+    { name: 'Nada importante', what: 'Wulingyuan no es una parada de compras. No más de 30-45 min.', priority: 'optional', more: 'Si os apetece algo local: productos de kudzu (葛根), té y snacks de Hunan, bordados y tejidos Tujia, y carne curada envasada solo si sabéis que podéis llevarla al resto del viaje. Lo demás, para Shanghái.' },
+  ],
+
+  trends: [
+    { name: 'El espectáculo de 1.500 drones', verdict: 'si', why: 'La novedad de 2026 y con mucha repercusión en redes chinas. Y lo mejor: está en Wulingyuan, así que no quita tiempo de montaña.' },
+    { name: 'Fotos estilo "inmortal" en Mihun Terrace', verdict: 'si', why: 'Merece la pena por el punto fotográfico. Pero no alquilaría hanfu ni montaría una sesión con el tiempo que tenéis.' },
+    { name: 'Xibu Street', verdict: 'quizas', why: 'Muy promocionada, pero con cierres recientes en la parte histórica. Está al lado: id si os apetece, sin contar con ella.' },
+  ],
+
+  bookings: [
+    {
+      activityId: 'act-10',
+      title: 'Gran Cañón y Puente de Cristal',
+      when: 'Reservar con 3-5 días, nunca el mismo día',
+      price: '~178 CNY como cifra de trabajo',
+      how: 'Entrada nominal con pasaporte y franja horaria. Pedid la LÍNEA B completa y una franja sobre las 11:00.',
+      alert: 'Los precios no son consistentes entre canales: comprobad el importe final en el canal de compra al reservar. El recinto abre de 08:00 a 16:00.',
+    },
+    {
+      activityId: 'act-7',
+      title: 'Parque Avatar / Forest Park',
+      when: 'Entre el 26 de septiembre y el 18 de octubre',
+      price: '~236 CNY la entrada de 4 días + 65 del Bailong + 72 del teleférico de Tianzi',
+      how: 'Entrada nominal vinculada al pasaporte, por puerta y franja. La vuestra es East Gate (武陵源标志门), primera franja disponible.',
+      alert: 'Pedid la franja de 06:30-07:00 o la de 07:00-07:30.',
+    },
+    {
+      title: 'Charming Xiangxi y el show de drones',
+      when: 'Cerca del viaje',
+      price: 'Charming Xiangxi desde ~168 CNY · drones, gratis',
+      how: 'El teatro se puede decidir al llegar. Los drones NO se reservan.',
+      alert: 'Comprobad los drones 24-48 h antes por meteorología, en WeChat: 武陵源发布.',
+    },
+  ],
+
+  ranking: {
+    must: ['Parque Avatar (Yuanjiajie y Tianzi)', 'Gran Cañón y Puente de Cristal', 'Ascensor Bailong', 'Mihun Terrace'],
+    nice: ['Espectáculo de drones', 'Charming Xiangxi', 'Sanxiaguo', 'Night market de Jundi Road'],
+    optional: ['Baofeng Lake', 'Yellow Dragon Cave', 'Xibu Street'],
+    skip: ['Golden Whip Stream completo', 'Huangshi Village', 'Yangjiajie a fondo', 'Encadenar teatro + drones + Xibu la misma noche'],
+  },
+};
+
+const shangrao: CityPlan = {
+  cityId: 'shangrao',
+  headline: 'Dormir dentro del valle os da justo los dos mejores momentos: la iluminación de la tarde y la mañana temprana con las calles vacías. Aquí no hay que rellenar huecos.',
+  keyNotes: [
+    '🌅 El 26 el sol se pone a las 17:36. Ese es el momento que manda: hay que estar en Baiheya o Baige Bridge desde las 17:00, y NO cenando. La secuencia día → hora dorada → hora azul → encendido es lo que habéis venido a ver.',
+    '🌄 El 27 amanece a las 06:21. De 07:00 a 08:30 el valle está prácticamente vacío: es la ventaja real de dormir dentro y probablemente la experiencia más especial de la parada.',
+    '❌ No salgáis a Shangrao a cenar ni a comprar. Tenéis unas 20 horas y todo lo bueno está dentro del recinto, que abre hasta las 23:00.',
+    '🎭 Los horarios de espectáculos de octubre no están publicados y han ido cambiando. Fotografiad el tablón del Visitor Center al llegar. Si un espectáculo os obliga a dejar el mejor punto del atardecer, quedaos con el atardecer.',
+  ],
+  base: [
+    'El hotel está dentro del Visitor Service Center',
+    'Baiheya a 15-25 min de paseo',
+    'Todo el valle se recorre andando',
+    'Estación de Shangrao a ~40 km, 1 hora',
+  ],
+
+  days: [
+    {
+      id: 'sr-d1',
+      dateText: 'Lunes 26 de octubre',
+      title: 'Llegada, el valle de día y el encendido',
+      zone: 'Wangxian Valley entero',
+      blocks: [
+        {
+          time: '13:39',
+          title: 'Llegada a Shangrao',
+          detail: 'Didi directo al Visitor Service Center: ~1 h, 150-200 CNY el coche.',
+          kind: 'move',
+          more: 'Hay bus directo desde la estación, pero el horario publicado es de verano y puede cambiar. Con dos personas y maletas, el Didi os quita incertidumbre.',
+        },
+        {
+          time: '~15:00',
+          title: 'Llegada al hotel',
+          detail: 'El check-in es a las 17:00: dejad maletas y empezad el recorrido ya.',
+          kind: 'rest',
+          more: 'Confirmad el procedimiento de acceso como huéspedes y fotografiad el horario de espectáculos del día.',
+        },
+        {
+          time: '15:15-17:00',
+          title: 'El valle con luz',
+          detail: 'Qingyun Bridge → cascadas 三叠水 → pasarela del acantilado → mirador de cristal → Baiheya.',
+          kind: 'visit',
+          more: 'Sin correr. La idea es acabar arriba, en la parte panorámica, justo antes del atardecer.',
+        },
+        {
+          time: '17:00-18:00',
+          title: 'El momento importante',
+          detail: 'Baiheya y Baige Bridge. Puesta de sol a las 17:36.',
+          kind: 'visit',
+          alert: true,
+          more: 'No cenéis ahora. Haced la foto con algo de luz y repetidla 20-30 min después, con las casas ya encendidas. El encendido de Lanyue Bridge suele ser sobre las 18:00.',
+        },
+        {
+          time: '18:00-20:00',
+          title: 'El valle iluminado',
+          detail: 'Baige Bridge → Lanyue Bridge → Zuixian Street → Baiwei Street, picoteando.',
+          kind: 'food',
+          more: 'Aquí es cuando aparece el sitio que habéis visto en redes. Para cenar, picoteo de 3-4 especialidades mientras paseáis (30-50 CNY por persona) me parece mejor que sentaros. Si preferís mesa, Baiweixian está frente a Lanyue Bridge, ~60 CNY por persona: comed pronto o tarde, nunca en el atardecer.',
+        },
+        {
+          time: 'Desde las 20:00',
+          title: 'Espectáculo y segundo paseo',
+          detail: 'Si hay 望仙燃梦 o 仙火惊焰, uno de los dos. Luego volved a los puentes sin prisa.',
+          kind: 'visit',
+          more: 'Dormís dentro: no tenéis que salir con la masa de visitantes hacia Shangrao. Esa es toda la ventaja.',
+        },
+      ],
+    },
+    {
+      id: 'sr-d2',
+      dateText: 'Martes 27 de octubre',
+      title: 'El valle vacío y salida',
+      zone: 'Wangxian Valley',
+      blocks: [
+        {
+          time: '07:00-08:30',
+          title: 'El valle para vosotros solos',
+          detail: 'Calles antiguas → Qingyun Bridge → cascadas → orilla del río.',
+          kind: 'visit',
+          more: 'Volved a los puntos que ayer estaban abarrotados. Si hay niebla sobre el valle, mejor todavía. No hace falta levantarse a las 6:00, pero esta franja es oro.',
+        },
+        {
+          time: '08:30-10:00',
+          title: 'Desayuno y segunda vuelta',
+          detail: 'Sin intentar cubrirlo todo sistemáticamente.',
+          kind: 'food',
+        },
+        {
+          time: '10:00-11:15',
+          title: 'Último paseo',
+          detail: 'Repetid Baiheya o Lanyue si os encantaron, o entrad en los talleres.',
+          kind: 'shop',
+        },
+        {
+          time: '11:30-11:40',
+          title: 'Salir hacia Shangrao',
+          detail: '~40 km, 1 hora. En la estación sobre las 12:35-12:45.',
+          kind: 'move',
+          alert: true,
+          more: 'Teníamos apuntado salir a las 11:45; yo saldría 5-15 min antes. Pedid en recepción la noche anterior que os dejen el coche preparado. Destino para copiar: 上饶站.',
+        },
+        {
+          time: '13:48',
+          title: 'Tren G1370 a Shanghái',
+          detail: 'Llegada a Hongqiao a las 16:25.',
+          kind: 'move',
+          alert: true,
+        },
+      ],
+    },
+  ],
+
+  highlights: [
+    { name: 'Baiheya', nameZh: '白鹤崖', what: 'La imagen del valle: los edificios escalonados colgados del acantilado. Imprescindible de día y encendido.', zone: '15-25 min de paseo', time: '30-45 min', ticket: 'Incluida en el hotel', priority: 'must' },
+    { name: 'Baige Bridge', nameZh: '百舸桥', what: 'Más interesante fotográficamente que Lanyue: entra puente, valle, río, casas y acantilado iluminado.', zone: 'Dentro', time: '15-20 min', ticket: 'Incluida', priority: 'must' },
+    { name: 'Lanyue Bridge', nameZh: '揽月桥', what: 'De los puntos más reconocibles, sobre todo cuando se enciende y aparecen las luces del acantilado detrás.', zone: 'Dentro', time: '15-30 min', ticket: 'Incluida', priority: 'must' },
+    { name: 'Qingyun Bridge y las cascadas', nameZh: '青云桥 · 三叠水', what: 'Puente, agua y cascadas. Funciona mucho mejor de día o a primera hora.', zone: 'Dentro', time: '30-45 min', ticket: 'Incluida', priority: 'must', more: 'Imprescindible, pero no sacrifiquéis el atardecer del lunes por verlo: dejadlo para la mañana del martes.' },
+    { name: 'Pasarela del acantilado y mirador de cristal', nameZh: '悬崖栈道 · 玻璃眺台', what: 'Perspectivas altas y distintas del valle y los edificios.', zone: 'Dentro', time: '30-40 min', ticket: 'Incluida', priority: 'nice' },
+    { name: 'Las calles del pueblo', nameZh: '百味街 · 醉仙街 · 岩铺街', what: 'La parte más animada: comida, talleres, farolillos y ambiente de fantasía china.', zone: 'Dentro', time: 'De paso', ticket: 'Incluida', priority: 'nice', more: 'No son tres visitas: las vais a atravesar mientras recorréis el valle.' },
+    { name: 'Yangfu Square', nameZh: '杨府广场', what: 'Más interesante por los espectáculos que por la plaza en sí.', zone: 'Dentro', time: 'Según programa', ticket: 'Incluida', priority: 'nice' },
+    { name: 'Salir a Shangrao', what: 'Cenar, comprar o ver algo fuera del recinto.', zone: 'Fuera', time: 'Horas', ticket: '—', priority: 'skip', more: 'Con 20 horas, cada salida son 20-40 minutos de gestión y desplazamiento para algo que resolvéis dentro.' },
+  ],
+
+  restaurants: [
+    { name: 'Picoteo por las calles', nameZh: '百味街 · 醉仙街', what: 'Tres o cuatro especialidades pequeñas mientras seguís paseando. Es lo que menos interfiere con el encendido.', price: '30-50 CNY por persona', when: 'Cena del 26', priority: 'must', more: 'Dentro del recinto hay unos 13 establecimientos y alrededor de 80 tipos de snacks.' },
+    { name: 'Baiweixian', nameZh: '百味鲜', what: 'Si preferís sentaros. Está frente a Lanyue Bridge, así que encaja con la ruta. Pollo tres tazas, pescado al vino y tortilla de boniato.', price: '~60 CNY por persona', priority: 'nice', more: 'Sin reserva. Comed pronto o tarde, evitando el momento del atardecer.' },
+  ],
+
+  markets: [
+    { name: 'Las calles de snacks y talleres', nameZh: '百味街 · 醉仙街 · 作坊街', what: 'Street food, puestos pequeños, artesanía, talleres y farolillos. Lo más animado al caer la tarde.', priority: 'must', more: 'Merece la pena porque forma parte de vuestra ruta, no como visita aparte. No hay ningún mercado fuera por el que valga la pena abandonar el valle.' },
+  ],
+
+  food: [
+    { name: '灯盏粿', pinyin: 'Dēngzhǎn guǒ', what: 'Masa de arroz típica del noreste de Jiangxi, rellena de verduras, bambú seco o carne. De lo que sí probaría.', kind: 'salado' },
+    { name: '铅山烫粉', pinyin: 'Yanshan tangfen', what: 'Fideos de arroz calientes típicos del área de Shangrao. Muy local.', kind: 'salado' },
+    { name: '江西炒粉', pinyin: 'Jiangxi chaofen', what: 'Fideos de arroz salteados. Sencillo pero muy de Jiangxi.', kind: 'salado' },
+    { name: '芋饺', pinyin: 'Yùjiǎo', what: 'Dumplings cuya envoltura lleva taro.', kind: 'salado' },
+    { name: '酒糟鱼', pinyin: 'Jiǔzāo yú', what: 'Pescado preparado con arroz fermentado. Sabor particular.', kind: 'salado' },
+    { name: '三杯鸡', pinyin: 'Sānbēi jī', what: 'Pollo "tres tazas", un clásico del repertorio de Jiangxi.', kind: 'salado' },
+    { name: '麻糍', pinyin: 'Mácí', what: 'Masa de arroz glutinoso, parecida a un mochi.', kind: 'dulce' },
+    { name: '桂花凉粉', pinyin: 'Guìhuā liángfěn', what: 'Gelatina fría aromatizada con osmanthus.', kind: 'dulce' },
+    { name: '冬瓜茶', pinyin: 'Dōngguā chá', what: 'Bebida dulce de calabaza de invierno. Hay un local acristalado que circula mucho en redes.', kind: 'dulce' },
+  ],
+
+  photoSpots: [
+    { name: 'Baige Bridge hacia Baiheya', nameZh: '百舸桥', how: 'Vuestro POV prioritario. Desde el puente, mirando hacia Baiheya y la parte escalonada. Hacedla con algo de luz y repetidla 20-30 min después, ya encendida.' },
+    { name: 'Mirador de Baiheya', nameZh: '白鹤崖观景台', how: 'Vista elevada hacia el fondo del valle: tejados, puentes y luces acumulados.' },
+    { name: 'Lanyue Bridge', nameZh: '揽月桥', how: 'Alejaos un poco en vez de disparar desde encima: así entra el puente iluminado, el reflejo y los edificios del acantilado.' },
+    { name: 'La orilla del arroyo', nameZh: '溪流浅滩', how: 'Bajad el móvil casi al nivel del agua para coger el reflejo completo de las casas iluminadas. Funciona especialmente bien con móvil.' },
+    { name: 'Ventana de Fujia Courtyard', nameZh: '福家小院', how: 'Desde la ventana del segundo piso, enmarcando el acantilado. Muy compartido en redes: merece la pena si no hay cola absurda.' },
+    { name: 'Pared de farolillos de Zuixian', nameZh: '醉仙街灯笼墙', how: 'Más para retrato que para paisaje. Bonito, pero prescindible si hay cola: aquí hay rincones parecidos por todas partes.' },
+  ],
+
+  shopping: [
+    { name: 'Artesanía y productos de Jiangxi', what: 'Talleres tradicionales, accesorios hanfu, snacks y productos tematizados del valle.', priority: 'optional', more: 'No es destino de compras: mirar, quizá un recuerdo, y seguir disfrutando. Lo serio, en Shanghái.' },
+  ],
+
+  trends: [
+    { name: 'Baiheya iluminado', verdict: 'si', why: 'Es el gran motivo visual para venir.' },
+    { name: 'Baige Bridge en hora azul', verdict: 'si', why: 'Probablemente vuestra mejor panorámica del viaje.' },
+    { name: 'La mañana con las calles vacías', verdict: 'si', why: 'Paradójicamente, lo más especial de dormir dentro. Y no sale en ningún vídeo.' },
+    { name: 'La ventana de Fujia Courtyard', verdict: 'quizas', why: 'Muy de Xiaohongshu, pero tiene sentido si no hay cola.' },
+    { name: 'Alquilar hanfu para las fotos', verdict: 'quizas', why: 'Queda espectacular, pero entre elección, maquillaje y devolución se os va media estancia.' },
+    { name: 'Esperar mucho por recrear una foto exacta', verdict: 'no', why: 'El valle tiene tantos encuadres que no hace ninguna falta.' },
+  ],
+
+  bookings: [
+    {
+      title: 'Nada que reservar',
+      when: 'La entrada ya va incluida en el hotel',
+      price: 'La entrada normal ronda los 140 CNY',
+      how: 'Vuestra estancia la incorpora, que era justo lo que buscabais al elegir dormir dentro.',
+      alert: 'No hace falta reservar restaurantes.',
+    },
+    {
+      title: 'Lo que sí comprobaría 7-10 días antes',
+      when: '~17-20 de octubre',
+      price: '—',
+      how: 'Horario de espectáculos de octubre, horario exacto de acceso para huéspedes, si hay acceso especial matinal o nocturno para los que dormís dentro, y hora de la iluminación.',
+      alert: 'Mirad también los buses Shangrao ↔ Wangxian, pero solo como plan B: el horario publicado es de verano.',
+    },
+  ],
+
+  ranking: {
+    must: ['Baiheya de día y de noche', 'La hora azul y el encendido', 'Baige Bridge', 'Lanyue Bridge iluminado', 'Pasear de noche sin volver a Shangrao', 'La mañana temprano'],
+    nice: ['Qingyun Bridge y cascadas', 'Pasarela del acantilado', 'Street food de las calles', 'Un espectáculo nocturno'],
+    optional: ['Hanfu', 'Spots virales con cola', 'Compras'],
+    skip: ['Salir a Shangrao durante la estancia', 'Añadir cualquier otra excursión'],
+  },
+};
+
+const shanghai: CityPlan = {
+  cityId: 'shanghai',
+  headline: 'Cinco noches y cada día con identidad propia: el Shanghái histórico, Disney, el futurista, y el creativo y de diseño. Sin cruzar la ciudad continuamente.',
+  keyNotes: [
+    '❤️ El mercado de las bodas de People’s Park es en sábado, y vosotros tenéis el sábado 31 con el hotel a 10 minutos andando. La franja activa es de 11:00 a 16:00. Es una actividad social real, no una atracción: fotos de ambiente, nada de primeros planos de la gente ni de las fichas.',
+    '🥟 Qiao Ai Lai Lai Xiao Long (Tianjin Road, Huangpu) está en la guía Michelin y cae de camino entre Yuyuan y el Bund. Vais en temporada de cangrejo peludo: pedid el xiaolongbao de huevas de cangrejo. Michelin avisa de más afluencia justo por eso, así que id pronto y asumid cola.',
+    '🌿 Novedad de septiembre de 2026: ya existe un paseo ribereño continuo por Suzhou Creek que conecta M50 con 1000 Trees. Ese bloque del sábado tiene ahora más sentido que nunca: se llega andando viendo cómo el paisaje industrial se convierte en el edificio de Heatherwick.',
+    '🎟️ Disney es de nombre real: pasaporte FÍSICO original, con nombre y número idénticos a la compra. No valen fotos ni copias. Y comprad por canales oficiales o partners autorizados, comparando siempre con el precio de Disney.',
+  ],
+  base: [
+    'People’s Park y el mercado de bodas, a 10 min andando',
+    'Nanjing East Road empieza al lado',
+    'Huanghe Road, la calle gastronómica, en la puerta',
+    'El Bund a ~2 km',
+    'Yuyuan a ~2,5 km',
+    'Wukang y la concesión francesa a ~5 km',
+  ],
+
+  days: [
+    {
+      id: 'sh-d1',
+      dateText: 'Martes 27 de octubre',
+      title: 'Llegada y primer contacto',
+      zone: 'People’s Square y Nanjing Road',
+      blocks: [
+        { time: '16:25', title: 'Llegada a Hongqiao', detail: 'Didi al hotel: 30-45 min según tráfico. En el hotel sobre las 18:00.', kind: 'move' },
+        { time: 'Tarde', title: 'Andad, sin checklist', detail: 'Hotel → People’s Square → Nanjing East Road. Hoy toca aterrizar en Shanghái.', kind: 'visit', more: 'Si tenéis energía, seguid por Nanjing hasta el Bund y ved el primer skyline nocturno. Si estáis cansados, dad media vuelta: el Bund lo veréis bien mañana.' },
+        { time: 'Cena', title: 'Shengjianbao o Huanghe Road', detail: 'Yang’s Fried Dumpling (178 Ningbo Rd) o cualquier sitio de la calle gastronómica de al lado.', kind: 'food', more: 'No gastaría hoy el Michelin: mejor que sea una comida con margen y no dependiendo de la hora a la que lleguéis.' },
+      ],
+    },
+    {
+      id: 'sh-d2',
+      dateText: 'Miércoles 28 de octubre',
+      title: 'El Shanghái histórico y el Bund',
+      zone: 'Huangpu',
+      blocks: [
+        { time: '09:00-09:30', title: 'Yu Garden 豫园', detail: 'Jardín Ming. 1-1,5 h. ¥40 en temporada alta.', kind: 'ticket', alert: true, more: 'Abre de 09:00 a 16:30, última entrada a las 16:00, y CIERRA LOS LUNES — por eso va hoy. Ojo con la distinción: el jardín histórico es de pago; el bazar exterior es gratis.' },
+        { time: 'Mañana', title: 'Puente de los Nueve Recodos y bazar', detail: 'Otra hora y media. Turístico, sí, pero aquí turístico no significa prescindible.', kind: 'visit' },
+        { time: 'Mediodía', title: 'Qiao Ai Lai Lai Xiao Long', detail: 'Tianjin Road, Huangpu. Xiaolongbao de cerdo y, sobre todo, de huevas de cangrejo.', kind: 'food', alert: true, more: '~30-70 CNY por persona. Está en la guía Michelin (no es estrella: es selección y Bib Gourmand). En los mapas aparece en el 504 y Michelin da el 506 de Tianjin Road: buscadlo por el nombre en Amap, no por el número.' },
+        { time: 'Tarde', title: 'Nanjing Road hacia el río', detail: 'Desde Tianjin Road estáis perfectamente colocados. No volvemos al hotel.', kind: 'shop' },
+        { time: 'Atardecer', title: 'El Bund', detail: 'Estad antes de la puesta de sol: Pudong con luz → hora azul → skyline encendido.', kind: 'visit', alert: true, more: 'Encuadrad la Perla de Oriente, la Jin Mao, la SWFC y la Shanghai Tower juntas. No miréis mucho el reloj.' },
+        { time: 'Noche', title: 'Vuelta natural', detail: 'Bund → Nanjing East Road → People’s Square → hotel.', kind: 'move' },
+      ],
+    },
+    {
+      id: 'sh-d3',
+      dateText: 'Jueves 29 de octubre',
+      title: 'Shanghai Disneyland',
+      zone: 'Día completo, nada más',
+      blocks: [
+        { time: '06:30-07:00', title: 'Didi al parque', detail: '40-55 min. Objetivo: estar antes de la apertura.', kind: 'move', alert: true, more: 'Ajustad la hora exacta cuando Disney publique el horario del 29. La alternativa es metro: línea 2 hasta Jiangsu Road y línea 11 hasta Disney Resort, 55-70 min puerta a puerta, pero para la ida prefiero Didi.' },
+        { time: 'Día', title: 'Las cuatro que priorizaría', detail: 'Zootopia: Hot Pursuit · TRON · Piratas del Caribe · Soaring Over the Horizon.', kind: 'visit', more: 'Recorred también el área de Zootopia entera, no solo la atracción. Y no penséis "Piratas ya lo conocemos": esta versión es distinta tecnológica y narrativamente. El Mine Train queda por debajo de esas cuatro si hay que elegir.' },
+        { time: 'Colas', title: 'La regla del Premier Access', detail: 'Si TRON está en 45 min y Zootopia en 55, esperad. Si están en 100 y 120 y se mantiene, comprad uno o dos sueltos.', kind: 'ticket', more: 'Nada de paquete grande por adelantado. Se vincula al billete y se compra desde los canales oficiales.' },
+        { time: 'Comida', title: 'Una comida sentados a mediodía', detail: 'Y luego snacks. No crucéis el parque por un restaurante concreto.', kind: 'food', more: 'La gastronomía china ya la tenéis fuera: aquí lo que importa es no perder tiempo ni piernas.' },
+        { time: 'Noche', title: 'Quedaos al espectáculo final', detail: 'No me iría antes salvo agotamiento real. Es el año del 10º aniversario.', kind: 'visit', more: 'TRON y Zootopia ganan muchísimo de noche. Para la foto del castillo, retroceded lo suficiente para que entre el castillo entero con las proyecciones.' },
+      ],
+    },
+    {
+      id: 'sh-d4',
+      dateText: 'Viernes 30 de octubre',
+      title: 'El Shanghái futurista y las compras curiosas',
+      zone: 'Pudong, todo al este del río',
+      blocks: [
+        { time: 'Mañana', title: 'AP Plaza 亚太盛汇', detail: 'Línea 2 hasta 上海科技馆站. El mercado de imitaciones, bajo el metro. ~2 h.', kind: 'shop', more: 'Bolsos, zapatillas, ropa, gafas, maletas, relojes y confección a medida. Nunca aceptéis el primer precio y comparad puestos. Antes de pagar, mirad costuras, cremalleras, talla y defectos. Y evitaría cantidades múltiples de imitaciones: al volver a la UE, el volumen importa.' },
+        { time: 'Comida', title: 'Comer ya en Lujiazui', detail: 'Línea 2 y coméis en el distrito financiero.', kind: 'food' },
+        { time: 'Tarde', title: 'Lujiazui', detail: 'La Perla de Oriente POR FUERA, paseo entre rascacielos y ribera.', kind: 'visit', more: 'No subiría a la Perla: si solo pagáis un mirador, que sea la Shanghai Tower.' },
+        { time: 'Final de tarde', title: 'Shanghai Tower', detail: 'Entrad 45-60 min antes de la puesta de sol: día → crepúsculo → noche desde 546 m.', kind: 'ticket', alert: true, more: 'Intentad no comprar la entrada demasiado pronto si el tipo de billete permite esperar: subir a 500 m sin visibilidad no tiene ningún sentido. Mirad nubes y niebla antes.' },
+        { time: 'Noche', title: 'Cena en Pudong y vuelta', detail: 'Día bastante completo: mercado, Pudong, torre y vistas.', kind: 'food' },
+      ],
+    },
+    {
+      id: 'sh-d5',
+      dateText: 'Sábado 31 de octubre',
+      title: 'El Shanghái más particular y creativo',
+      zone: 'Centro, Xuhui y Putuo',
+      blocks: [
+        { time: '11:00-11:30', title: 'Mercado de las bodas', detail: 'People’s Park, a 10 min andando. 45-60 min, no hacen falta tres horas.', kind: 'visit', alert: true, more: 'Los padres ponen fichas de sus hijos —edad, estudios, profesión, altura, vivienda, ingresos— en tablones, cuerdas y sobre paraguas abiertos. La zona habitual es la parte norte y noreste del parque. ⚠️ Discreción: foto de ambiente general, nunca primeros planos de personas o fichas sin permiso.' },
+        { time: 'Mediodía', title: 'Wukang Mansion y Wukang Road', detail: 'Didi 15-20 min. La foto clásica es desde el lado contrario del cruce con Huaihai, apuntando a la punta del edificio.', kind: 'visit', more: 'Después de la foto famosa, SEGUID ANDANDO: ahí está lo bueno. Fachadas art déco, plátanos, portales, villas pequeñas y cafeterías.' },
+        { time: 'Comida', title: 'En la propia zona', detail: 'Old Jesse (41 Tianping Rd) para cocina shanghainesa, o lo que os apetezca del paseo.', kind: 'food', more: 'En Old Jesse pedid hongshao rou, pescado, gambas y verduras de temporada: ~150-250 CNY por persona. Hoy no quiero que vayáis detrás de reservas.' },
+        { time: 'Primera tarde', title: 'Anfu Road', detail: 'Tiendas conceptuales, diseño, moda y marcas chinas.', kind: 'shop', more: 'Regla para los cafés virales de Anfu: si hay poca cola, entrad; si hay 45 minutos, seguid andando.' },
+        { time: '15:00-15:30', title: 'M50 Creative Park', detail: 'Didi 20-30 min. Antigua fábrica textil: galerías, murales y arte contemporáneo. 45-75 min.', kind: 'visit' },
+        { time: 'Final de tarde', title: '1000 Trees, andando por Suzhou Creek', detail: 'El nuevo paseo ribereño conecta M50 con el edificio. Quedaos hasta las primeras luces.', kind: 'visit', alert: true, more: 'No lo fotografiéis de frente como un centro comercial: desde el paseo, con el río en primer plano y la masa escalonada con sus columnas vegetales detrás. No vais por las tiendas, vais por la arquitectura.' },
+        { time: 'Noche', title: 'Última cena', detail: 'Cerca de People’s Square si queréis tranquilidad, o Xintiandi si aún hay ganas.', kind: 'food', more: '🎃 Es Halloween y habrá ambiente en Xintiandi, Huaihai y la concesión francesa, pero no montaría el día alrededor de una fiesta concreta: la programación y los controles cambian. Miradlo esa semana.' },
+      ],
+    },
+    {
+      id: 'sh-d6',
+      dateText: 'Domingo 1 de noviembre',
+      title: 'Vuelta a casa',
+      zone: 'Hongqiao T2',
+      blocks: [
+        { time: '06:00-06:15', title: 'Didi al aeropuerto', detail: 'Destino: 上海虹桥国际机场2号航站楼. En el T2 sobre las 06:55.', kind: 'move', alert: true, more: '🔴 HONGQIAO (SHA), NO Pudong (PVG): hay 60 km entre los dos. Avisad en recepción el 31 y dejad la cuenta pagada: el check-out es a las 14:00 y vosotros salís a las 06:00.' },
+        { time: '08:55', title: 'Vuelo CA1590 a Pekín', detail: 'Y enlace CA897 a Madrid. Nada de "nos da tiempo a".', kind: 'move', alert: true },
+      ],
+    },
+  ],
+
+  highlights: [
+    { name: 'The Bund', nameZh: '外滩', what: 'Arquitectura europea, el río y el skyline de Pudong enfrente. El contraste que define la ciudad.', zone: '~2 km', time: '1-2 h', ticket: 'Gratis', priority: 'must' },
+    { name: 'Yu Garden', nameZh: '豫园', what: 'Jardín clásico Ming. Cierra los lunes, ¥40 en temporada alta.', zone: '~2,5 km', time: '1-1,5 h', ticket: '¥40, mejor online', priority: 'must' },
+    { name: 'Bazar de Yuyuan y Puente de los Nueve Recodos', nameZh: '九曲桥', what: 'Linternas, tiendas y arquitectura tradicional. Turístico, pero no prescindible.', zone: 'Junto al jardín', time: '1-1,5 h', ticket: 'Gratis', priority: 'must' },
+    { name: 'Mercado de las bodas', nameZh: '人民公园相亲角', what: 'Padres buscando pareja para sus hijos con fichas sobre paraguas. Sábados, 11:00-16:00.', zone: '10 min andando', time: '30-60 min', ticket: 'Gratis', priority: 'must' },
+    { name: 'Wukang Road y Wukang Mansion', nameZh: '武康路 · 武康大楼', what: 'Art déco, mansiones, plátanos, cafeterías y diseño. El gran paseo urbano.', zone: '~5 km', time: '2,5-3 h', ticket: 'Gratis', priority: 'must' },
+    { name: 'Nanjing East Road', nameZh: '南京东路', what: 'El gran eje comercial, que empieza al lado del hotel.', zone: 'En la puerta', time: 'De paso', ticket: 'Gratis', priority: 'must' },
+    { name: 'Shanghai Disneyland', what: 'Día completo el 29. Entrada nominal de fecha fija.', zone: 'Sureste', time: 'Día completo', ticket: 'Reserva obligatoria', priority: 'must' },
+    { name: 'Shanghai Tower', nameZh: '上海中心大厦', what: 'El mirador que elegiría si solo pagáis uno: 632 m de edificio y plataforma a 546.', zone: 'Lujiazui', time: '1,5-2 h', ticket: 'Con entrada', priority: 'nice' },
+    { name: 'AP Plaza', nameZh: '亚太盛汇', what: 'El mercado de imitaciones, bajo la estación del Museo de Ciencia y Tecnología. Cientos de puestos.', zone: 'Pudong', time: '1,5-2,5 h', ticket: 'Gratis', priority: 'nice' },
+    { name: 'M50', nameZh: '莫干山路50号', what: 'Fábrica textil convertida en galerías, talleres y arte contemporáneo.', zone: 'Putuo', time: '1-1,5 h', ticket: 'Gratis', priority: 'nice' },
+    { name: '1000 Trees', nameZh: '天安千树', what: 'El edificio-montaña de Heatherwick: columnas rematadas con jardineras sobre Suzhou Creek.', zone: 'Putuo', time: '1-1,5 h', ticket: 'Gratis', priority: 'nice' },
+    { name: 'Xintiandi', nameZh: '新天地', what: 'Shikumen rehabilitado, con restauración y ambiente. Agradable de noche.', zone: '~2 km', time: '1-2 h', ticket: 'Gratis', priority: 'nice' },
+    { name: 'Tianzifang', nameZh: '田子坊', what: 'Callejuelas shikumen con tiendas y talleres.', zone: 'Xuhui', time: '1-1,5 h', ticket: 'Gratis', priority: 'optional', more: 'Baja de prioridad: prefiero conservar Wukang, Anfu, el mercado de bodas, M50 y 1000 Trees antes que correr para poder decir que también visteis Tianzifang.' },
+    { name: 'Zhujiajiao', what: 'El pueblo de agua de los alrededores.', zone: 'Fuera', time: 'Medio día', ticket: 'Con entrada', priority: 'skip', more: 'Después de Fenghuang, Furong y Wangxian, quitarle medio día a Shanghái por otra localidad histórica os aporta muchísimo menos.' },
+  ],
+
+  restaurants: [
+    { name: 'Qiao Ai Lai Lai Xiao Long', what: 'Xiaolongbao de cerdo y de huevas de cangrejo. En la guía Michelin.', address: 'Tianjin Rd, Huangpu (504 en mapas, 506 según Michelin)', price: '¥30-70 por persona', when: 'Comida del 28, entre Yuyuan y el Bund', priority: 'must', more: 'Buscadlo por nombre en Amap, no por el número. Vais en temporada de cangrejo peludo, que es justo cuando Michelin avisa de más afluencia: id pronto.' },
+    { name: 'Yang’s Fried Dumpling', nameZh: '小杨生煎', what: 'Shengjianbao: dumpling relleno de carne y caldo, frito por la base. Crujiente abajo, jugoso dentro.', address: '178 Ningbo Rd, Huangpu', price: '¥20-40 por persona', when: 'La noche de llegada', priority: 'must' },
+    { name: 'Jia Jia Tang Bao', nameZh: '佳家汤包', what: 'Otro clásico del xiaolongbao, en Huanghe Road, al lado del hotel.', address: '90 Huanghe Rd, People’s Square', price: 'Económico', when: 'Como segunda cata, para comparar', priority: 'nice' },
+    { name: 'Old Jesse', nameZh: '老吉士酒家', what: 'Referencia de cocina benbang tradicional shanghainesa. Hongshao rou, pescado y gambas.', address: '41 Tianping Rd, Xuhui', price: '¥150-250 por persona', when: 'El sábado, en la zona de Wukang', priority: 'nice' },
+    { name: 'Nanxiang Steamed Bun', nameZh: '南翔馒头店', what: 'La institución histórica del xiaolongbao, en Yuyuan.', price: 'Medio', priority: 'optional', more: 'No diría que son los mejores dumplings de la ciudad, pero estáis delante de una institución. Para una ración pequeña, no para la comida principal.' },
+  ],
+
+  markets: [
+    { name: 'Huanghe Road', nameZh: '黄河路', what: 'Calle gastronómica histórica al lado del hotel. Dumplings y establecimientos pequeños.', priority: 'must', more: 'No es un mercado nocturno: es una food street tradicional.' },
+    { name: 'Bazar de Yuyuan', what: 'Té, snacks, dulces, souvenirs y artesanía. Turístico pero visualmente espectacular.', priority: 'must' },
+    { name: 'AP Plaza', what: 'Ropa, complementos, imitaciones y regalos. El sitio para regatear.', priority: 'nice' },
+    { name: 'South Bund Fabric Market', nameZh: '南外滩轻纺面料市场', what: 'Telas, camisas, trajes, abrigos y qipao a medida.', priority: 'optional', more: 'Solo si queréis encargar algo de verdad: la confección puede exigir prueba y recogida posterior, y no os sobra tiempo.' },
+    { name: 'Dongtai Road', what: 'El viejo mercado de antigüedades por el que era famosa.', priority: 'skip', more: 'Cuidado con las guías antiguas: ya no sirve como referencia de mercado activo.' },
+  ],
+
+  food: [
+    { name: '小笼包', pinyin: 'Xiaolongbao', what: 'Dumpling al vapor con relleno y caldo dentro. El de Shanghái.', kind: 'salado' },
+    { name: '生煎包', pinyin: 'Shengjianbao', what: 'Más grueso, con la base frita y crujiente y el interior con carne y caldo.', kind: 'salado' },
+    { name: '大闸蟹', pinyin: 'Dàzháxiè — cangrejo peludo', what: 'El producto estrella del otoño, y vais justo en temporada.', kind: 'salado' },
+    { name: '蟹粉', pinyin: 'Xièfěn', what: 'Carne y huevas de cangrejo desmenuzadas: en fideos, arroz, dumplings o wontons. Muy recomendable por vuestra fecha.', kind: 'salado' },
+    { name: '葱油拌面', pinyin: 'Congyou banmian', what: 'Fideos con aceite aromatizado de cebolleta. Simple y muy shanghainés.', kind: 'salado' },
+    { name: '葱油饼', pinyin: 'Congyou bing', what: 'Torta de cebolleta a la plancha. Street food.', kind: 'salado' },
+    { name: '红烧肉', pinyin: 'Hongshao rou', what: 'Panceta cocinada lentamente con soja, vino y azúcar. Dulce-salado, el plato más reconocible de aquí.', kind: 'salado' },
+    { name: '排骨年糕', pinyin: 'Paigu niangao', what: 'Costilla de cerdo con pastel de arroz. Muy asociado a la ciudad.', kind: 'salado' },
+    { name: '粢饭团', pinyin: 'Cifantuan', what: 'Rollo de arroz glutinoso relleno, a veces con youtiao dentro. Buen desayuno.', kind: 'salado' },
+    { name: '蝴蝶酥', pinyin: 'Húdiésū', what: 'Palmera de hojaldre. Las del histórico Park Hotel (国际饭店) son famosas y os quedan al lado.', kind: 'dulce' },
+    { name: '条头糕', pinyin: 'Tiaotou gao', what: 'Pastelito de arroz glutinoso con pasta de judía roja.', kind: 'dulce' },
+    { name: '八宝饭', pinyin: 'Eight Treasure Rice', what: 'Arroz glutinoso dulce con frutos, semillas y judía roja.', kind: 'dulce' },
+    { name: '青团', pinyin: 'Qingtuan', what: 'Bola verde de arroz glutinoso rellena. Lo encontraréis, aunque su temporada es primavera.', kind: 'dulce' },
+  ],
+
+  photoSpots: [
+    { name: 'El skyline desde el Bund', how: 'Desde el paseo mirando al este: Perla de Oriente, Jin Mao, SWFC y Shanghai Tower en el mismo encuadre.', when: 'Desde las 17:00 hasta que se encienden' },
+    { name: 'Wukang Mansion', nameZh: '武康大楼', how: 'Desde el lado contrario del cruce de Wukang con Huaihai, apuntando a la punta estrecha. Es el efecto Flatiron.' },
+    { name: 'Wukang Road', how: 'Después de la foto famosa, seguid andando: fachadas art déco, vegetación, bicicletas, portales y villas.' },
+    { name: 'Puente de los Nueve Recodos', how: 'Agua, pabellones, tejados y linternas. Y repetidlo iluminado por la tarde-noche.' },
+    { name: '1000 Trees', how: 'Desde el paseo de Suzhou Creek, con el río en primer plano y la masa escalonada detrás. Acercaos al extremo que cae hacia M50: ahí se entiende lo de la montaña.', when: 'Antes de ponerse el sol y con las primeras luces' },
+    { name: 'M50', how: 'No hay una foto concreta: es sitio para callejear entre ladrillo, estructuras industriales y murales.' },
+    { name: 'El Bund desde Pudong', how: 'El 30, la foto inversa: desde Lujiazui mirando al oeste, al skyline histórico. Así tenéis las dos caras.' },
+    { name: 'Mercado de las bodas', how: 'Filas de paraguas, fichas y padres conversando. ⚠️ Ambiente general, sin meter la cámara en la cara de nadie.' },
+  ],
+
+  shopping: [
+    { name: 'Huaihai Middle Road', nameZh: '淮海中路', what: 'Ahora mismo más interesante que Nanjing para moda y diseño, sobre todo marcas chinas.', priority: 'must', more: 'En 2026 tienen mucho tirón entre visitantes extranjeros marcas como Pane, Mason Prince y Songmont. Calzado, bolsos, moda, belleza y lifestyle.' },
+    { name: 'Wukang y Anfu', what: 'Probablemente vuestra zona favorita: tiendas conceptuales, flagships pequeños, pop-ups, librerías y cosmética.', priority: 'must' },
+    { name: 'Nanjing East Road', what: 'Grandes tiendas, flagships, marcas internacionales y souvenirs. Vivís al lado.', priority: 'must' },
+    { name: 'AP Plaza', what: 'El extremo opuesto: regateo, gangas, copias y caos. Merece la pena justo por ser otra cosa.', priority: 'nice' },
+  ],
+
+  trends: [
+    { name: 'Wukang Mansion', verdict: 'si', why: 'Viral y bueno. De las pocas veces que coinciden.' },
+    { name: 'El citywalk de Wukang y Anfu', verdict: 'si', why: 'Si mañana desaparecieran las redes sociales, os lo seguiría recomendando igual.' },
+    { name: 'El mercado de las bodas', verdict: 'si', why: 'Muy reconocible en vídeos, pero no es una experiencia montada: es una práctica social activa. Con respeto.' },
+    { name: '1000 Trees', verdict: 'si', why: 'Arquitectura genuinamente singular, no "un centro comercial viral".' },
+    { name: 'AP Plaza', verdict: 'si', why: 'No es bonito, es viral por ser el mercado de falsificaciones bajo el metro. A vosotros os interesa este tipo de sitio; a otra persona con tres días le diría que lo saltara.' },
+    { name: 'Fideos y dumplings de huevas de cangrejo', verdict: 'si', why: 'Viral, sí, pero además es producto estacional real y vais en su momento.' },
+    { name: 'Los cafés de Anfu Road', verdict: 'quizas', why: 'Si hay poca cola, entrad. Si hay 45 minutos, seguid andando.' },
+    { name: 'El mirador de la Perla de Oriente', verdict: 'no', why: 'Si solo pagáis un mirador, que sea la Shanghai Tower. La Perla, por fuera.' },
+  ],
+
+  bookings: [
+    {
+      activityId: 'act-4',
+      title: 'Shanghai Disneyland',
+      when: 'Ya, es de fecha fija',
+      price: 'Variable según el día',
+      how: 'Canales oficiales de Disney o partners autorizados. Comparad siempre el precio final con el de Disney antes de comprar.',
+      alert: '📕 Pasaporte FÍSICO original, con nombre y número idénticos a la compra. No valen fotos ni copias digitales.',
+    },
+    {
+      title: 'Yu Garden',
+      when: 'Recomendable comprarla antes',
+      price: '¥40 en temporada alta',
+      how: 'Online o en taquilla. Abre 09:00-16:30, última entrada 16:00.',
+      alert: 'Cierra los lunes: por eso va el miércoles 28.',
+    },
+    {
+      title: 'Shanghai Tower',
+      when: 'Sí, pero sin comprarla demasiado pronto',
+      price: 'Con entrada',
+      how: 'Si el tipo de billete lo permite, esperad a tener una idea de la visibilidad.',
+      alert: 'Subir a más de 500 m con niebla o nubes bajas no tiene ningún sentido.',
+    },
+    {
+      title: 'Sin reserva',
+      when: '—',
+      price: 'Gratis',
+      how: 'Mercado de las bodas, Bund, Nanjing Road, Wukang, Anfu, M50, 1000 Trees, AP Plaza, Tianzifang y Xintiandi.',
+    },
+  ],
+
+  ranking: {
+    must: ['Yu Garden y Yuyuan', 'El Bund de noche', 'Nanjing Road', 'Qiao Ai Lai Lai', 'Disneyland', 'Wukang y Anfu', 'Mercado de las bodas', 'Lujiazui'],
+    nice: ['AP Plaza', 'Shanghai Tower', 'M50', '1000 Trees', 'Xintiandi', 'Huanghe Road'],
+    optional: ['Tianzifang', 'South Bund Fabric Market', 'Mercados de antigüedades', 'North Bund'],
+    skip: ['Zhujiajiao', 'El mirador de la Perla de Oriente', 'Dongtai Road'],
+  },
+};
+
 /** Planning por ciudad. Se va llenando a medida que se cierra cada una. */
 export const cityPlans: Record<string, CityPlan> = {
   beijing,
@@ -2384,6 +3215,10 @@ export const cityPlans: Record<string, CityPlan> = {
   chongqing,
   fenghuang,
   furong,
+  zhangjiajie,
+  wulingyuan,
+  shangrao,
+  shanghai,
 };
 
 export function getCityPlan(cityId?: string): CityPlan | undefined {
