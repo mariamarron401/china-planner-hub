@@ -116,7 +116,7 @@ export default function CityPlanDetail() {
       {/* Cabecera */}
       <div className="gradient-hero px-5 pt-11 pb-5 rounded-b-3xl">
         <button
-          onClick={() => navigate('/descubrir/planning')}
+          onClick={() => navigate('/plan/planning')}
           className="flex items-center gap-1 text-primary-foreground/80 text-sm mb-2 active:opacity-70"
         >
           <ArrowLeft className="h-4 w-4" /> Planning

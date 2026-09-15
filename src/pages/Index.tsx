@@ -100,7 +100,7 @@ export default function Dashboard() {
         )}
 
         {/* Ruta, de un vistazo */}
-        <Link to="/plan/ciudades" className="block bg-card rounded-xl border border-border p-4 shadow-sm">
+        <Link to="/plan/planning" className="block bg-card rounded-xl border border-border p-4 shadow-sm">
           <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">
             <Route className="h-3.5 w-3.5" /> La ruta
           </div>
@@ -117,10 +117,10 @@ export default function Dashboard() {
         {/* Las 4 secciones, con lo que queda por hacer en cada una */}
         <div className="grid grid-cols-2 gap-3">
           <BigLink
-            to="/plan/dias"
+            to="/plan/planning"
             icon={<CalendarRange className="h-5 w-5" />}
             label="Plan"
-            hint="Día a día, ciudades y hoteles"
+            hint="El plan de cada ciudad y los hoteles"
           />
           <BigLink
             to="/moverse/trayectos"

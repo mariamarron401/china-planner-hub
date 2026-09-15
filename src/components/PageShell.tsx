@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 export interface ShellSection {
-  /** Trozo de URL: /plan/dias → 'dias' */
+  /** Trozo de URL: /plan/hoteles → 'hoteles' */
   key: string;
   label: string;
   /** Número en rojo (cosas por hacer). 0 o undefined = no se pinta. */

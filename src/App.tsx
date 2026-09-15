@@ -13,6 +13,7 @@ import Descubrir from "./pages/Descubrir";
 import Gestiones from "./pages/Gestiones";
 import ActivityDetail from "./pages/ActivityDetail";
 import CityPlanDetail from "./pages/CityPlanDetail";
+import Calendario from "./pages/Calendario";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,18 +42,21 @@ const App = () => (
               {/* Pantallas de detalle, a pantalla completa */}
               <Route path="/actividades/:activityId" element={<ActivityDetail />} />
               <Route path="/planning/:cityId" element={<CityPlanDetail />} />
+              <Route path="/calendario" element={<Calendario />} />
 
               {/* Direcciones antiguas: se mantienen para no romper enlaces guardados */}
-              <Route path="/calendario" element={<Navigate to="/plan/dias" replace />} />
-              <Route path="/itinerario" element={<Navigate to="/plan/ciudades" replace />} />
+              <Route path="/itinerario" element={<Navigate to="/plan/planning" replace />} />
+              <Route path="/plan/dias" element={<Navigate to="/calendario" replace />} />
+              <Route path="/plan/ciudades" element={<Navigate to="/plan/planning" replace />} />
               <Route path="/hoteles" element={<Navigate to="/plan/hoteles" replace />} />
               <Route path="/trayectos" element={<Navigate to="/moverse/trayectos" replace />} />
               <Route path="/transportes" element={<Navigate to="/moverse/trenes" replace />} />
               <Route path="/vuelos" element={<Navigate to="/moverse/vuelos" replace />} />
               <Route path="/actividades" element={<Navigate to="/descubrir/actividades" replace />} />
-              <Route path="/que-hacer" element={<Navigate to="/descubrir/planning" replace />} />
-              <Route path="/que-hacer/:cityId" element={<Navigate to="/descubrir/planning" replace />} />
-              <Route path="/descubrir/sitios" element={<Navigate to="/descubrir/planning" replace />} />
+              <Route path="/que-hacer" element={<Navigate to="/plan/planning" replace />} />
+              <Route path="/que-hacer/:cityId" element={<Navigate to="/plan/planning" replace />} />
+              <Route path="/descubrir/sitios" element={<Navigate to="/plan/planning" replace />} />
+              <Route path="/descubrir/planning" element={<Navigate to="/plan/planning" replace />} />
               <Route path="/tips-videos" element={<Navigate to="/descubrir/videos" replace />} />
               <Route path="/pendientes" element={<Navigate to="/gestiones/pendientes" replace />} />
               <Route path="/apps" element={<Navigate to="/gestiones/apps" replace />} />
