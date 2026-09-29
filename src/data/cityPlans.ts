@@ -125,8 +125,8 @@ const beijing: CityPlan = {
   headline: 'Tres días con personalidad propia: ritual el sábado, corazón histórico el domingo y Gran Muralla el lunes.',
   keyNotes: [
     'Ciudad Prohibida: la venta abre el 4 de octubre a las 14:00 hora española (7 días antes, 20:00 en Pekín). ¥60, nominal y con el pasaporte original.',
-    'Tiananmen: ventana de 1 a 7 días, así que el 4 de octubre es también el primer día. Es otro sistema: no des por hecho que abre a la misma hora que la Ciudad Prohibida.',
-    'Mutianyu: se puede reservar hasta 30 días antes, o sea que ya está dentro de ventana desde el 12 de septiembre. Resérvala ya y olvídate.',
+    'Tiananmen: ventana de 1 a 7 días confirmada por el aviso oficial del 24/09/2026, así que el 4 de octubre es también el primer día. Es otro sistema: no des por hecho que abre a la misma hora que la Ciudad Prohibida. Pedid la franja 降旗及夜间 (bajada de bandera + noche); la de mañana no hace falta, porque entráis al palacio por Donghuamen.',
+    'Mutianyu: ✅ entradas ya compradas el 16/09/2026 (90 CNY las dos). El bus y el combo telesilla+tobogán se pagan en la taquilla el mismo día 12.',
     'La bajada de bandera del 11 de octubre debería rondar las 17:41, algo antes de lo que teníamos calculado. Reconfirmar el horario oficial 24-48 h antes.',
   ],
   base: [
@@ -243,7 +243,7 @@ const beijing: CityPlan = {
         {
           time: '~17:41',
           title: 'Bajada de bandera',
-          detail: 'Reserva obligatoria en la franja 降旗. Plaza, Tiananmen Gate y Monumento a los Héroes.',
+          detail: 'Reserva obligatoria en la franja 降旗及夜间. Plaza, Tiananmen Gate y Monumento a los Héroes.',
           kind: 'ticket',
           alert: true,
         },

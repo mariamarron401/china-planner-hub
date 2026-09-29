@@ -3,7 +3,7 @@ import { useTrip } from '@/context/TripContext';
 import { useVideoTips } from '@/hooks/useVideoTips';
 import {
   ArrowLeft, MapPin, Calendar, Clock, ShoppingCart, ExternalLink,
-  Info, Compass, Video, Ticket,
+  Info, Compass, Video, Ticket, MessageSquare,
 } from 'lucide-react';
 
 /**
@@ -108,6 +108,15 @@ export default function ActivityDetail() {
             <div className="text-sm font-semibold text-foreground mt-0.5">
               {act.priceText || (act.price != null ? `~${act.price} €/persona` : '—')}
             </div>
+            {/* Lo ya pagado se separa del precio total: en Mutianyu solo las entradas se compran
+                online y el resto se paga en la taquilla, así que las dos cifras conviven. */}
+            {act.paidEur != null && (
+              <div className="mt-1 text-[10px] font-semibold text-travel-confirmed leading-snug">
+                ✅ {act.paidEur.toFixed(2).replace('.', ',')}€ ya pagados
+                {act.paidOn ? ` el ${act.paidOn}` : ''}
+                {act.paidWith === 'conjunta' ? ' · cuenta conjunta' : act.paidWith === 'maria' ? ' · cuenta de María' : ''}
+              </div>
+            )}
           </div>
           <div className="rounded-2xl bg-travel-pending-bg px-3 py-2.5">
             <div className="text-[10px] font-semibold uppercase tracking-wide text-travel-pending">Cuándo comprar</div>
@@ -142,6 +151,43 @@ export default function ActivityDetail() {
               </a>
             )}
           </div>
+        )}
+
+        {/* Frases para la taquilla — lo único que se usa tal cual en el mostrador, así que va
+            antes de la guía y con el chino en grande, para enseñar el móvil sin ampliar nada. */}
+        {act.counterPhrases && act.counterPhrases.length > 0 && (
+          <section>
+            <div className="flex items-center gap-1.5 px-1">
+              <MessageSquare className="h-4 w-4 text-primary" />
+              <h2 className="text-sm font-bold text-foreground">Frases para enseñar en la taquilla</h2>
+            </div>
+            <p className="mt-1 px-1 text-[11px] text-muted-foreground leading-snug">
+              Enseña el móvil con la frase que toque. No hace falta pronunciar nada.
+            </p>
+
+            <div className="mt-2 space-y-2">
+              {act.counterPhrases.map((phrase, i) => (
+                <div key={i} className="rounded-2xl border border-primary/30 bg-card overflow-hidden">
+                  <div className="flex items-baseline gap-2 bg-primary/10 px-4 py-2">
+                    <span className="text-[11px] font-bold text-primary">{i + 1}</span>
+                    <span className="text-[11px] font-semibold text-foreground leading-snug">{phrase.purpose}</span>
+                  </div>
+                  <div className="px-4 py-3">
+                    <p lang="zh-CN" className="text-2xl font-bold leading-snug text-foreground break-words">
+                      {phrase.zh}
+                    </p>
+                    <p className="mt-1.5 text-[11px] italic text-muted-foreground">{phrase.pinyin}</p>
+                    <p className="mt-1 text-xs text-foreground/80 leading-relaxed">{phrase.es}</p>
+                    {phrase.warning && (
+                      <p className="mt-2 rounded-lg bg-travel-pending-bg px-2.5 py-1.5 text-[11px] font-medium text-foreground leading-snug">
+                        ⚠️ {phrase.warning}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
         )}
 
         {/* Guía sobre el terreno — aquí se ve entera, sin desplegar nada */}

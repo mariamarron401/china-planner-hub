@@ -46,6 +46,12 @@ export default function BudgetView() {
   const activitiesPerPerson = activities.reduce((sum, a) => (a.price != null ? sum + a.price : sum), 0);
   const activitiesTotal = activitiesPerPerson * trip.travelers;
   const activitiesComplete = activities.every(a => a.price != null);
+  // Las entradas se van comprando por partes (en Mutianyu, las del recinto online y el resto
+  // en taquilla), así que Dinero separa lo ya pagado de lo que queda por pagar.
+  const activitiesPaid = activities.reduce((sum, a) => sum + (a.paidEur ?? 0), 0);
+  // Qué entradas concretas están ya pagadas. Antes iba escrito a mano ("entradas de la Gran
+  // Muralla") y se quedaba viejo en cuanto se compraba otra.
+  const activitiesPaidNames = activities.filter(a => a.paidEur != null).map(a => a.title);
 
   const hotelTotal = budget.allSelected ? budget.selectedTotal : budget.avgTotal;
 
@@ -58,7 +64,15 @@ export default function BudgetView() {
   const hotelsChargedTotal = hotelsCharged.reduce((sum, h) => sum + (h.totalPrice ?? 0), 0);
   const hotelsAlreadyPaid = chosenHotels.filter(h => (h.paymentNote ?? '').toLowerCase().includes('completado'));
   const hotelsAlreadyPaidTotal = hotelsAlreadyPaid.reduce((sum, h) => sum + (h.totalPrice ?? 0), 0);
-  const mariaTotal = trainsPaidTotal + hotelsChargedTotal + hotelsAlreadyPaidTotal;
+  // Los ajustes que Trip.com cobra al emitir el billete pueden caer en otra cuenta que la de
+  // la pre-reserva: el tramo 1 se pre-reservó con la de María y los 2,44 € del ajuste se
+  // cargaron en la conjunta. Sin esto, la Revolut de María saldría inflada por ese importe.
+  const trainsExtraOnConjunta = trainLegs.reduce(
+    (sum, t) => (t.issueExtraPaidWith === 'conjunta' ? sum + (t.issueExtraEur ?? 0) : sum),
+    0,
+  );
+  const trainsOnMaria = trainsPaidTotal - trainsExtraOnConjunta;
+  const mariaTotal = trainsOnMaria + hotelsChargedTotal + hotelsAlreadyPaidTotal;
   const transportPaid = trainsPaidTotal + spainPaid;
   const transportOnSite = (transportTotal - trainsPaidTotal) + (airportTotal - spainPaid) + budgetExtras.transportExtra;
 
@@ -165,11 +179,21 @@ export default function BudgetView() {
             </div>
             <p className="text-[11px] text-muted-foreground leading-snug mt-1">
               Los <span className="font-medium text-foreground">7 trenes</span> (
-              {trainsPaidTotal.toFixed(2).replace('.', ',')}€, ya cobrados) y los{' '}
+              {trainsOnMaria.toFixed(2).replace('.', ',')}€, ya cobrados) y los{' '}
               <span className="font-medium text-foreground">{chosenHotels.length} hoteles</span> (
               {(hotelsChargedTotal + hotelsAlreadyPaidTotal).toFixed(2).replace('.', ',')}€). Se reservó todo con
               esta cuenta antes de abrir la conjunta.
             </p>
+            {trainsExtraOnConjunta > 0 && (
+              <p className="text-[11px] text-muted-foreground leading-snug mt-1.5">
+                Los trenes han costado {trainsPaidTotal.toFixed(2).replace('.', ',')}€ en total, pero{' '}
+                <span className="font-medium text-foreground">
+                  {trainsExtraOnConjunta.toFixed(2).replace('.', ',')}€
+                </span>{' '}
+                son ajustes de precio cobrados al emitir los billetes y fueron a la{' '}
+                <span className="font-medium text-foreground">cuenta conjunta</span>, no a esta.
+              </p>
+            )}
           </div>
 
           {spainPaid > 0 && (
@@ -219,9 +243,17 @@ export default function BudgetView() {
           <div className="mt-2 rounded-lg bg-muted/50 px-3 py-2.5">
             <div className="text-xs font-bold text-foreground">Cuenta conjunta</div>
             <p className="text-[11px] text-muted-foreground leading-snug mt-1">
-              Todo el gasto de allí: comidas, Didi y taxis, entradas que se compren sobre la marcha, el coche de
-              Furong a Zhangjiajie y las compras. Es la cuenta que se vincula a{' '}
+              <span className="font-medium text-foreground">Todas las entradas</span>, se compren desde España o
+              allí, y todo el gasto del día a día: comidas, Didi y taxis, el coche de Furong a Zhangjiajie y las
+              compras. Es la cuenta que se vincula a{' '}
               <span className="font-medium text-foreground">Alipay y WeChat Pay</span> al llegar.
+              {trainsExtraOnConjunta > 0 && (
+                <>
+                  {' '}
+                  También caen aquí los ajustes de precio de los billetes de tren al emitirse (
+                  {trainsExtraOnConjunta.toFixed(2).replace('.', ',')}€ hasta ahora).
+                </>
+              )}
             </p>
           </div>
 
@@ -419,6 +451,15 @@ export default function BudgetView() {
                 {activities.length} entradas · {activitiesPerPerson}€ por persona × {trip.travelers} · se pagan con la
                 cuenta conjunta
               </div>
+              {activitiesPaid > 0 && (
+                <div className="text-[11px] text-muted-foreground mt-1 leading-snug">
+                  <span className="font-semibold text-travel-confirmed">
+                    {activitiesPaid.toFixed(2).replace('.', ',')}€ ya pagados
+                  </span>{' '}
+                  ({activitiesPaidNames.length} de {activities.length}: {activitiesPaidNames.join(' · ')}) · el resto
+                  se compra sobre la marcha
+                </div>
+              )}
             </div>
           ) : (
             <div>

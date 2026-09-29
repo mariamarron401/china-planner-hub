@@ -395,10 +395,19 @@ export default function TrainsView() {
                 <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
                 <div className="text-xs leading-tight">
                   <div className="text-sm font-bold">
-                    Comprado · {leg.paidEur.toFixed(2).replace('.', ',')} €
+                    {leg.ticketIssuedOn ? 'Billete emitido' : 'Comprado'} ·{' '}
+                    {leg.paidEur.toFixed(2).replace('.', ',')} €
                   </div>
                   <div className="opacity-80">
-                    el {leg.paidOn} · cuenta de María · los dos billetes, 2ª clase
+                    {leg.ticketIssuedOn
+                      ? `emitido el ${leg.ticketIssuedOn} · ya no hay nada que comprobar${
+                          leg.issueExtraEur != null
+                            ? ` · +${leg.issueExtraEur.toFixed(2).replace('.', ',')} € de ajuste${
+                                leg.issueExtraPaidWith === 'conjunta' ? ', a la cuenta conjunta' : ''
+                              }`
+                            : ''
+                        }`
+                      : `el ${leg.paidOn} · cuenta de María · los dos billetes, 2ª clase`}
                   </div>
                 </div>
               </div>
@@ -565,6 +574,8 @@ interface WatchDate {
   daysLeft: number;
   /** true en los tramos con riesgo alto (pocos trenes o Golden Week). */
   critical: boolean;
+  /** true cuando el billete real ya se emitió y la comprobación de ese día está hecha. */
+  issued?: boolean;
 }
 
 const DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
@@ -586,7 +597,7 @@ function formatDateLabel(iso: string): string {
 }
 
 export function buildWatchDates(
-  legs: { id: string; fromCityId: string; toCityId: string; saleOpensIso?: string; travelDate?: string; alertNote?: string }[],
+  legs: { id: string; fromCityId: string; toCityId: string; saleOpensIso?: string; travelDate?: string; alertNote?: string; ticketIssuedOn?: string }[],
   getCityName: (id: string) => string,
 ): WatchDate[] {
   const out: WatchDate[] = [];
@@ -595,7 +606,7 @@ export function buildWatchDates(
     const travelLabel = leg.travelDate?.split(' (')[0] ?? '';
     const critical = (leg.alertNote ?? '').includes('🔴🔴') || (leg.alertNote ?? '').includes('MÁS CRÍTICO');
     if (leg.saleOpensIso) {
-      out.push({ id: leg.id, kind: 'sale', iso: leg.saleOpensIso, dateLabel: formatDateLabel(leg.saleOpensIso), label, travelLabel, daysLeft: daysUntil(leg.saleOpensIso), critical });
+      out.push({ id: leg.id, kind: 'sale', iso: leg.saleOpensIso, dateLabel: formatDateLabel(leg.saleOpensIso), label, travelLabel, daysLeft: daysUntil(leg.saleOpensIso), critical, issued: leg.ticketIssuedOn != null });
     }
   }
   return out.sort((a, b) => a.iso.localeCompare(b.iso));
@@ -604,6 +615,20 @@ export function buildWatchDates(
 function WatchRow({ w }: { w: WatchDate }) {
   const past = w.daysLeft < 0;
   const today = w.daysLeft === 0;
+  // Un billete ya emitido no se apaga como los días que simplemente pasaron: es una
+  // comprobación hecha, y eso hay que poder verlo de un vistazo.
+  if (w.issued) {
+    return (
+      <div className="flex items-center gap-2 text-xs">
+        <span className="font-mono font-bold w-[74px] flex-shrink-0 whitespace-nowrap text-travel-confirmed">
+          {w.dateLabel}
+        </span>
+        <span className="text-muted-foreground">→</span>
+        <span className="text-foreground truncate">{w.label}</span>
+        <span className="text-[10px] ml-auto flex-shrink-0 font-bold text-travel-confirmed">✅ emitido</span>
+      </div>
+    );
+  }
   return (
     <div className={`flex items-center gap-2 text-xs ${past ? 'opacity-45' : ''}`}>
       <span className={`font-mono font-bold w-[74px] flex-shrink-0 whitespace-nowrap ${today ? 'text-travel-pending' : 'text-primary'}`}>

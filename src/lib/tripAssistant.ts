@@ -136,7 +136,7 @@ const GENERAL_TIPS = `💡 **Consejos generales para China:**
 - Descarga mapas y traductor **offline** por si falla la VPN.
 - **Power bank: máximo 20.000 mAh.** Por encima de eso lo confiscan en el control del tren. Y siempre en el equipaje de mano, nunca en la maleta facturada.
 - **Lleva papel higiénico en la mochila**: los baños públicos en China normalmente no lo tienen.
-- Los 7 trenes internos **ya están comprados y pagados** (652,88 € los dos, cuenta de María). Lo único que queda es comprobar en Trip.com que cada billete se emite 15 días antes de su viaje (pregúntame "¿cuándo compruebo los billetes?").`;
+- Los 7 trenes internos **ya están comprados y pagados** (655,32 € los dos; las pre-reservas salieron de la cuenta de María). Lo único que queda es comprobar en Trip.com que cada billete se emite 15 días antes de su viaje (pregúntame "¿cuándo compruebo los billetes?"). Al emitirse, el precio puede subir un par de euros sobre la pre-reserva: el de Pekín → Xi'an subió 2,44 €, y ese ajuste se cobró en la **cuenta conjunta**, no en la de María. Es normal.`;
 
 // ---------- generadores de respuesta por tema ----------
 
@@ -322,15 +322,24 @@ function answerActivities(data: TripData, q: string, cities: string[]): string {
 }
 
 function answerWhenToBuy(data: TripData): string {
-  const trains = data.transportLegs
-    .filter((t) => t.saleOpensOn)
+  // Lo ya resuelto se separa de lo pendiente: la pregunta es "qué me queda", no "qué hubo".
+  const trainsPending = data.transportLegs.filter((t) => t.saleOpensOn && !t.ticketIssuedOn);
+  const trainsDone = data.transportLegs.filter((t) => t.ticketIssuedOn);
+  const trains = (trainsPending.length > 0 ? trainsPending : data.transportLegs.filter((t) => t.saleOpensOn))
     .map((t) => `- 🚄 ${shortCity(cityName(data, t.fromCityId))} → ${shortCity(cityName(data, t.toCityId))} (${t.trainNumber}): ${t.saleOpensOn}`)
     .join('\n');
-  const acts = data.activities
-    .filter((a) => a.whenToBuy)
+  const trainsDoneLine = trainsDone.length > 0
+    ? `\n\n✅ Ya emitidos (${trainsDone.length} de ${data.transportLegs.filter((t) => t.saleOpensOn).length}): ${trainsDone.map((t) => `${shortCity(cityName(data, t.fromCityId))} → ${shortCity(cityName(data, t.toCityId))}`).join(', ')}.`
+    : '';
+  const actsPending = data.activities.filter((a) => a.whenToBuy && a.paidEur == null);
+  const actsDone = data.activities.filter((a) => a.paidEur != null);
+  const acts = (actsPending.length > 0 ? actsPending : data.activities.filter((a) => a.whenToBuy))
     .map((a) => `- 🎫 ${a.title}: ${a.whenToBuy}`)
     .join('\n');
-  return `⏰ **Qué queda por hacer y cuándo:**\n\n**Trenes bala — ya están comprados los 7.** Lo único pendiente es entrar en Trip.com estos días y ver que el billete se ha emitido (China lo emite 15 días antes de cada viaje):\n${trains}\n\n**Entradas de actividades:**\n${acts}\n\n👉 De los 7, el que más importa es el del 6 de octubre (Chongqing → Fenghuang): es el tramo con solo 3 trenes al día, así que si esa pre-reserva hubiera fallado hay que comprarlo a mano ese mismo día.`;
+  const actsDoneLine = actsDone.length > 0
+    ? `\n\n✅ Entradas ya compradas: ${actsDone.map((a) => `${a.title} (${(a.paidEur ?? 0).toFixed(2).replace('.', ',')} €)`).join(', ')}.`
+    : '';
+  return `⏰ **Qué queda por hacer y cuándo:**\n\n**Trenes bala — ya están comprados los 7.** Lo único pendiente es entrar en Trip.com estos días y ver que el billete se ha emitido (China lo emite 15 días antes de cada viaje):\n${trains}${trainsDoneLine}\n\n**Entradas de actividades:**\n${acts}${actsDoneLine}\n\n👉 De los 7, el que más importa es el del 6 de octubre (Chongqing → Fenghuang): es el tramo con solo 3 trenes al día, así que si esa pre-reserva hubiera fallado hay que comprarlo a mano ese mismo día.`;
 }
 
 function answerAirportTransfers(data: TripData, q: string): string {
@@ -407,6 +416,7 @@ function answerBudget(data: TripData): string {
   const actTotal = actPerPerson * data.trip.travelers;
   const flights = data.budgetExtras.flightsInsurance;
   const trainsPaid = data.transportLegs.reduce((sum, t) => sum + (t.paidEur ?? 0), 0);
+  const actsPaid = data.activities.reduce((sum, a) => sum + (a.paidEur ?? 0), 0);
   const hotelsAuto = data.cities.reduce((sum, c) => {
     const h = selectedHotelFor(data, c.id);
     return (h?.paymentNote ?? '').toLowerCase().includes('más tarde') ? sum + (h?.totalPrice ?? 0) : sum;
@@ -436,7 +446,9 @@ function answerBudget(data: TripData): string {
     `🚄 Trenes internos (7, ya comprados y pagados): **${trainsPaid.toFixed(2).replace('.', ',')}€**`,
     `🎫 Tren y bus Zaragoza ↔ Madrid (ya pagados): **${spainPaid.toFixed(2).replace('.', ',')}€**`,
     `🚕 Transporte que se paga allí (Didi, taxis, coche de Furong): **~${Math.round(onSite)}€**`,
-    `🎟️ Actividades/entradas (${actPerPerson}€ por persona, aún por comprar): **~${Math.round(actTotal)}€** los dos`,
+    `🎟️ Actividades/entradas (${actPerPerson}€ por persona): **~${Math.round(actTotal)}€** los dos${
+      actsPaid > 0 ? ` — de ellos ${actsPaid.toFixed(2).replace('.', ',')}€ ya pagados` : ', aún por comprar'
+    }`,
   ];
   if (deposits.count > 0) {
     lines.push(

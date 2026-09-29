@@ -53,7 +53,8 @@ export function buildNextActions(data: TripData, pendingItems: PendingItem[] = [
 
   for (const leg of data.transportLegs) {
     const route = `${cityName(leg.fromCityId)} → ${cityName(leg.toCityId)}`;
-    if (leg.saleOpensIso) {
+    // Si el billete ya se emitió, la comprobación está hecha y no vuelve a Inicio.
+    if (leg.saleOpensIso && !leg.ticketIssuedOn) {
       out.push({
         id: `${leg.id}-sale`,
         iso: leg.saleOpensIso,

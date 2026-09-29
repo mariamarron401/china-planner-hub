@@ -150,6 +150,23 @@ export interface TransportLeg {
   /** Fecha legible en que se compró/pre-reservó este tramo, ej. '15 ago 2026'. */
   paidOn?: string;
   /**
+   * Fecha legible en que Trip.com EMITIÓ el billete real, ej. '29 sept 2026'. Los 7 tramos se
+   * pagaron como pre-reserva y China no emite el billete hasta 15 días antes del viaje, así que
+   * hasta que esto no tiene valor el tramo sigue "por comprobar". Cuando lo tiene, la pantalla
+   * Trenes deja de pedir la comprobación y `paidEur` pasa a ser el importe definitivo (que puede
+   * diferir unos euros del de la pre-reserva).
+   */
+  ticketIssuedOn?: string;
+  /**
+   * Diferencia que Trip.com cobró al EMITIR el billete, por encima del importe de la
+   * pre-reserva. Va incluida en `paidEur` (que es siempre el total real del tramo), pero se
+   * guarda aparte porque puede cargarse en una cuenta distinta a la de la pre-reserva: el
+   * tramo 1 se pre-reservó con la de María y la diferencia se cobró en la conjunta.
+   */
+  issueExtraEur?: number;
+  /** Cuenta en la que cayó `issueExtraEur`. Solo hace falta si NO es la misma de `paidWith`. */
+  issueExtraPaidWith?: 'maria' | 'conjunta';
+  /**
    * Con qué cuenta se pagó. Los 7 trenes y los 10 hoteles van con la cuenta de MARÍA;
    * la cuenta conjunta que abrieron es para los gastos del día a día allí (comidas,
    * Didi, entradas, compras). Se guarda por tramo para que la pantalla Dinero pueda
@@ -327,6 +344,42 @@ export interface Activity {
   bookingUrl?: string;
   /** Guía práctica sobre el terreno (consejos de guías locales). Informativa y de solo lectura. */
   fieldGuide?: FieldGuide;
+  /**
+   * Importe REAL ya pagado de esta actividad, en euros y para los dos. Se rellena solo cuando
+   * la compra está hecha. Puede ser una parte del total (en Mutianyu se compran online las
+   * entradas y el resto se paga en la taquilla), así que convive con `price`/`priceText`.
+   */
+  paidEur?: number;
+  /** Fecha legible en que se pagó, ej. '16 sept 2026'. */
+  paidOn?: string;
+  /**
+   * Con qué cuenta se pagó. Las entradas van con la cuenta CONJUNTA (los trenes y los
+   * hoteles, con la de María). Se guarda por actividad para que Dinero no tenga que suponerlo.
+   */
+  paidWith?: 'maria' | 'conjunta';
+  /**
+   * Frases en chino listas para ENSEÑAR en el móvil en la taquilla. Se pintan con el chino
+   * en grande, arriba del todo de la ficha, porque son lo único que hay que usar tal cual
+   * en el mostrador. Informativas y de solo lectura (viven en `initialData.ts`).
+   */
+  counterPhrases?: CounterPhrase[];
+}
+
+/**
+ * Una frase para enseñar en una taquilla o mostrador chino.
+ * El orden de los campos es el orden en que se leen: para qué es, qué se enseña, cómo suena.
+ */
+export interface CounterPhrase {
+  /** Para qué sirve esta frase, ej. "Para el bus lanzadera" */
+  purpose: string;
+  /** La frase en chino — es lo que se enseña, y va en grande */
+  zh: string;
+  /** Pronunciación aproximada en pinyin, por si hay que decirla */
+  pinyin: string;
+  /** Qué significa exactamente, para saber qué se está pidiendo */
+  es: string;
+  /** Aviso corto opcional, ej. "Esta es la que evita el error de los 140 CNY" */
+  warning?: string;
 }
 
 /**
