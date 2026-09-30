@@ -3172,9 +3172,9 @@ const shanghai: CityPlan = {
     {
       activityId: 'act-4',
       title: 'Shanghai Disneyland',
-      when: 'Ya, es de fecha fija',
-      price: 'Variable según el día',
-      how: 'Canales oficiales de Disney o partners autorizados. Comparad siempre el precio final con el de Disney antes de comprar.',
+      when: '✅ Compradas el 30 sept 2026',
+      price: '150,55 € los dos (75,28 €/persona), cuenta conjunta',
+      how: 'Ya está hecho. Lo único que queda para ese día es decidir dentro del parque si compráis 1-2 pases sueltos para saltar cola, y solo si TRON o Zootopia pasan de 80-90 min de espera.',
       alert: '📕 Pasaporte FÍSICO original, con nombre y número idénticos a la compra. No valen fotos ni copias digitales.',
     },
     {
