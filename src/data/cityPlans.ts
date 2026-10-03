@@ -874,9 +874,9 @@ const xian: CityPlan = {
           more: 'Plan B si esa mañana hay tráfico: la línea 2 del metro conecta Zhonglou (钟楼, justo en el hotel) directamente con Xi’an North y se salta cualquier atasco. Con las maletas el Didi es más cómodo, pero el metro es una red de seguridad real.',
         },
         {
-          time: '09:36',
-          title: 'Tren G2201 a Chengdu',
-          detail: 'Llegada a Chengdu East a las 13:12.',
+          time: '09:48',
+          title: 'Tren D1921 a Chengdu',
+          detail: 'Llegada a Chengdu East a las 13:32.',
           kind: 'move',
           alert: true,
         },
@@ -1209,9 +1209,9 @@ const chengdu: CityPlan = {
       zone: 'Taikoo Li, Chunxi y Jinjiang',
       blocks: [
         {
-          time: '13:12',
+          time: '13:32',
           title: 'Llegada a Chengdu East',
-          detail: 'Didi al hotel, ~13:45. Check-in a las 14:00.',
+          detail: 'Didi al hotel, ~14:00. Justo a la hora del check-in.',
           kind: 'move',
         },
         {

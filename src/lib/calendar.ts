@@ -173,12 +173,12 @@ export const DAY_TIMELINE: Record<string, TimelineEntry[]> = {
     { time: '', what: 'Día libre en Xi\'an. Sin nada reservado: pagoda del Ganso Salvaje, murallas en bici o Museo de Historia.', kind: 'libre' },
   ],
   '2026-10-16': [
-    { time: '07:00', what: 'Desayuno (07:00-10:00). Tenéis una hora justa.', kind: 'comida' },
-    { time: '08:00', what: '🚕 Salir del hotel hacia Xi\'anbei.' },
-    { time: '08:36', what: 'En la estación.' },
-    { time: '09:36', what: '🚄 Tren G2201 → ChengduDong. 3h36.', kind: 'clave' },
-    { time: '13:12', what: 'Llegada a Chengdu East. Didi al hotel (Chunxi Road), 20-30 min.' },
-    { time: '13:42', what: 'En el hotel — el mejor encaje del viaje: check-in a las 14:00, casi sin espera.' },
+    { time: '07:00', what: 'Desayuno (07:00-10:00). Tenéis 1h10.', kind: 'comida' },
+    { time: '08:10', what: '🚕 Salir del hotel hacia Xi\'anbei.' },
+    { time: '08:48', what: 'En la estación.' },
+    { time: '09:48', what: '🚄 Tren D1921 → ChengduDong. 3h44.', kind: 'clave' },
+    { time: '13:32', what: 'Llegada a Chengdu East. Didi al hotel (Chunxi Road), 20-30 min.' },
+    { time: '14:00', what: 'En el hotel justo a la hora del check-in: entráis directos, sin dejar maletas ni esperar.' },
     { time: '', what: '⚠️ Pedid en recepción el desayuno para llevar de MAÑANA (Pandas) y valorad pedirlo también para el 18 y el 19: este hotel abre a las 07:30 y os fastidia tres días seguidos.', kind: 'clave' },
   ],
   '2026-10-17': [
