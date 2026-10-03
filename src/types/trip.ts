@@ -94,6 +94,25 @@ export interface HotelOption {
   breakfastType?: string;
   /** Aviso cuando algún día de la estancia hay que salir antes de que abra el desayuno. */
   breakfastAlert?: string;
+  /**
+   * Gimnasio del hotel. Verificado hotel por hotel el 03/10/2026 en la ficha de
+   * Trip.com y en la de Ctrip en chino (la china marca explícitamente 免费 = gratis
+   * o 收费 = de pago; la inglesa a menudo se lo calla).
+   * 'gratis' = incluido en la estancia · 'pago' = hay pero se cobra · 'no' = no hay.
+   */
+  gym?: 'gratis' | 'pago' | 'no';
+  /** Detalle del gimnasio: tamaño, horario, piscina, lo que diga alguna reseña. */
+  gymNote?: string;
+  /**
+   * Lavandería. 'gratis' = lavandería de autoservicio gratis · 'pago' = se cobra ·
+   * 'preguntar' = el hotel la lista pero no publica si cobra · 'no' = no hay nada.
+   * Nota transversal: ningún hotel de los 10 publica tarifa. En China, cuando el
+   * autoservicio no es gratis suele costar ¥10-20 el lavado y otro tanto el secado,
+   * y se paga escaneando un QR con WeChat o Alipay en la propia máquina.
+   */
+  laundry?: 'gratis' | 'pago' | 'preguntar' | 'no';
+  /** Detalle de la lavandería: autoservicio vs servicio del hotel, precio si se sabe, avisos de reseñas. */
+  laundryNote?: string;
 }
 
 /**

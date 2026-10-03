@@ -406,6 +406,73 @@ function answerDeposits(data: TripData): string {
     .join('\n');
 }
 
+/**
+ * Gimnasio y lavandería hotel por hotel. Verificado el 03/10/2026 en Trip.com y
+ * en Ctrip (la ficha china marca 免费/收费; la inglesa a menudo no).
+ */
+function answerGymLaundry(data: TripData, q: string): string {
+  const items = data.cities
+    .map((c) => ({ c, h: selectedHotelFor(data, c.id) }))
+    .filter(({ h }) => h?.gym != null || h?.laundry != null);
+
+  if (items.length === 0) {
+    return '🏋️ Todavía no tengo anotado el gimnasio ni la lavandería de los hoteles.';
+  }
+
+  const soloGym = has(q, ['gimnasio', 'gym', 'entrenar', 'pesas', 'fitness', 'correr', 'piscina']);
+  const soloLav = has(q, ['lavar', 'lavanderia', 'lavandería', 'colada', 'ropa', 'lavadora', 'secadora', 'lavaderia']);
+
+  const out: string[] = [];
+
+  if (soloGym || !soloLav) {
+    const conGym = items.filter(({ h }) => h!.gym === 'gratis' || h!.gym === 'pago');
+    out.push(`🏋️ **Gimnasio: lo tienen ${conGym.length} de los ${items.length} hoteles, y todos gratis.**`);
+    out.push('');
+    out.push(
+      conGym
+        .map(({ c, h }) => `- **${shortCity(c.cityName)}** (${h!.checkInText}): gimnasio ${h!.gym === 'gratis' ? 'gratis' : 'de pago'}${h!.gymNote ? ` — ${h!.gymNote}` : ''}`)
+        .join('\n'),
+    );
+    const sinGym = items.filter(({ h }) => h!.gym === 'no').map(({ c }) => shortCity(c.cityName));
+    if (sinGym.length > 0) {
+      out.push('');
+      out.push(`Sin gimnasio: ${sinGym.join(', ')}.`);
+    }
+  }
+
+  if (soloLav || !soloGym) {
+    if (out.length > 0) out.push('');
+    const gratis = items.filter(({ h }) => h!.laundry === 'gratis');
+    out.push(`🧺 **Lavandería: gratis en ${gratis.length} de los ${items.length} hoteles.**`);
+    out.push('');
+    out.push(
+      items
+        .map(({ c, h }) => {
+          const etiqueta =
+            h!.laundry === 'gratis'
+              ? 'gratis'
+              : h!.laundry === 'pago'
+                ? 'de pago'
+                : h!.laundry === 'preguntar'
+                  ? 'hay, pero no publican si cobran'
+                  : 'no hay';
+          return `- **${shortCity(c.cityName)}** (${h!.checkInText}): ${etiqueta}${h!.laundryNote ? ` — ${h!.laundryNote}` : ''}`;
+        })
+        .join('\n'),
+    );
+    out.push('');
+    out.push(
+      '⚠️ **Ningún hotel publica tarifa de lavandería**, y no hay ni una reseña de los 10 que diga un precio. La referencia en China: cuando el autoservicio no es gratis suele costar ¥10-20 el lavado y otros ¥10-20 el secado, y se paga escaneando un QR en la propia máquina con WeChat o Alipay.',
+    );
+    out.push('');
+    out.push(
+      '👉 **Plan de colada:** una lavadora en **Chengdu** (16-19 oct, autoservicio gratis 24 h con detergente incluido) y otra en **Shanghái** (27 oct-1 nov, gratis y además os la lavan ellos), para volver a España con todo limpio.',
+    );
+  }
+
+  return out.filter(Boolean).join('\n');
+}
+
 function answerBudget(data: TripData): string {
   const hotelTotal = data.cities.reduce((sum, c) => {
     const h = selectedHotelFor(data, c.id);
@@ -560,6 +627,12 @@ export function answerQuestion(rawQuestion: string, data: TripData): string {
     if (has(q, ['hotel', 'check in', 'checkin', 'check-in', 'check out', 'checkout', 'check-out']) || cities.length > 0) {
       return answerCheckTimes(data, cities);
     }
+  }
+
+  // gimnasio y lavandería de los hoteles — va ANTES de "hoteles" porque la
+  // pregunta suele llevar la palabra "hotel" dentro y si no se la comería.
+  if (has(q, ['gimnasio', 'gym', 'fitness', 'pesas', 'entrenar', 'lavanderia', 'lavandería', 'lavaderia', 'lavar la ropa', 'lavar ropa', 'lavadora', 'secadora', 'colada', 'hacer la colada'])) {
+    return answerGymLaundry(data, q);
   }
 
   // depósitos / fianzas de hotel

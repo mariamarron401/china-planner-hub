@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
 import { getHotelCalcs, getCityHotelStats, getHotelDeposits } from '@/lib/calculations';
-import { Check, ExternalLink, Coffee, Wallet, AlarmClock } from 'lucide-react';
+import { Check, ExternalLink, Coffee, Wallet, AlarmClock, Dumbbell, Shirt } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import MoreInfo from '@/components/MoreInfo';
@@ -37,6 +37,57 @@ export default function HotelsView() {
 
   return (
     <>
+      {/* Resumen de gimnasio y lavandería — pedido por María el 03/10/2026.
+          Los 5 gimnasios del viaje son gratis, así que el único dato que hay que
+          mirar es en qué hotel se puede lavar la ropa sin pagar. */}
+      <div className="px-4 mb-3">
+        <div className="bg-card rounded-xl border border-border p-3 shadow-sm">
+          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+            <Dumbbell className="h-3.5 w-3.5" /> Gimnasio y lavandería
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="rounded-lg bg-travel-confirmed-bg/60 px-2.5 py-2">
+              <p className="text-[10px] font-semibold text-travel-confirmed uppercase tracking-wide">Gimnasio</p>
+              <p className="text-lg font-bold text-foreground leading-tight">5 de 10</p>
+              <p className="text-[10px] text-muted-foreground leading-snug">
+                y los 5 son <span className="font-semibold text-foreground">gratis</span>: Pekín, Chongqing,
+                Zhangjiajie, Wangxian y Shanghái.
+              </p>
+            </div>
+            <div className="rounded-lg bg-travel-confirmed-bg/60 px-2.5 py-2">
+              <p className="text-[10px] font-semibold text-travel-confirmed uppercase tracking-wide">Lavar gratis</p>
+              <p className="text-lg font-bold text-foreground leading-tight">5 de 10</p>
+              <p className="text-[10px] text-muted-foreground leading-snug">
+                Xi'an, Chengdu, Chongqing, Zhangjiajie y{' '}
+                <span className="font-semibold text-foreground">Shanghái</span>.
+              </p>
+            </div>
+          </div>
+          <p className="text-[11px] text-foreground mt-2 leading-snug">
+            Plan de colada del viaje: una en <span className="font-semibold">Chengdu</span> (16-19 oct, autoservicio
+            gratis 24 h) y otra en <span className="font-semibold">Shanghái</span> (27 oct-1 nov, gratis y además os la
+            lavan ellos) para volver con todo limpio.
+          </p>
+          <MoreInfo label="De dónde salen estos datos y qué falta por confirmar">
+            <p>
+              Verificado hotel por hotel el 3 oct 2026 en las 10 fichas de Trip.com y, además, en las fichas chinas de
+              Ctrip. Se consultan las dos porque la ficha china marca explícitamente 免费 (gratis) o 收费 (de pago) en
+              cada servicio, y la inglesa muchas veces se lo calla.
+            </p>
+            <p>
+              <span className="font-semibold text-foreground">Ningún hotel de los 10 publica tarifa de lavandería.</span>{' '}
+              Donde pone «preguntar precio» es porque el hotel lista el servicio pero no dice si cobra. La referencia en
+              China: cuando el autoservicio no es gratis, suele costar ¥10-20 el lavado y otros ¥10-20 el secado, y se
+              paga escaneando un QR en la propia máquina con WeChat o Alipay. Tampoco hay ninguna reseña, en ninguno de
+              los 10, que mencione un precio concreto — y sí se buscaron.
+            </p>
+            <p>
+              Los gimnasios no tienen ese problema: los 5 están marcados como gratis y ninguno cobra entrada aparte.
+            </p>
+          </MoreInfo>
+        </div>
+      </div>
+
       {/* Resumen de depósitos al check-in */}
       {deposits.items.length > 0 && (
         <div className="px-4 mb-3">
@@ -280,6 +331,53 @@ export default function HotelsView() {
                             }`}>
                               {hotel.breakfastAlert}
                             </p>
+                          )}
+                          {(hotel.gym || hotel.laundry) && (
+                            <div className="mt-1.5 flex flex-wrap gap-1.5">
+                              {hotel.gym && (
+                                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                                  hotel.gym === 'gratis'
+                                    ? 'bg-travel-confirmed-bg text-travel-confirmed'
+                                    : hotel.gym === 'pago'
+                                      ? 'bg-travel-pending-bg text-travel-pending'
+                                      : 'bg-muted text-muted-foreground'
+                                }`}>
+                                  <Dumbbell className="h-3 w-3" />
+                                  {hotel.gym === 'gratis' ? 'Gimnasio gratis' : hotel.gym === 'pago' ? 'Gimnasio de pago' : 'Sin gimnasio'}
+                                </span>
+                              )}
+                              {hotel.laundry && (
+                                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                                  hotel.laundry === 'gratis'
+                                    ? 'bg-travel-confirmed-bg text-travel-confirmed'
+                                    : hotel.laundry === 'no'
+                                      ? 'bg-muted text-muted-foreground'
+                                      : 'bg-travel-pending-bg text-travel-pending'
+                                }`}>
+                                  <Shirt className="h-3 w-3" />
+                                  {hotel.laundry === 'gratis'
+                                    ? 'Lavandería gratis'
+                                    : hotel.laundry === 'pago'
+                                      ? 'Lavandería de pago'
+                                      : hotel.laundry === 'preguntar'
+                                        ? 'Lavandería: preguntar precio'
+                                        : 'Sin lavandería'}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          {(hotel.gymNote || hotel.laundryNote) && (
+                            <MoreInfo label="Gimnasio y lavandería: el detalle">
+                              {hotel.gymNote && (
+                                <p><span className="font-semibold text-foreground">Gimnasio.</span> {hotel.gymNote}</p>
+                              )}
+                              {hotel.gym === 'no' && !hotel.gymNote && (
+                                <p><span className="font-semibold text-foreground">Gimnasio.</span> No figura ninguno en la ficha del hotel, ni en Trip.com ni en Ctrip.</p>
+                              )}
+                              {hotel.laundryNote && (
+                                <p><span className="font-semibold text-foreground">Lavandería.</span> {hotel.laundryNote}</p>
+                              )}
+                            </MoreInfo>
                           )}
                           {hotel.depositCny != null && (
                             <div className="mt-2 rounded-lg bg-travel-pending-bg/60 border border-travel-pending/30 px-2.5 py-1.5">
