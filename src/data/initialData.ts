@@ -65,7 +65,7 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-2', fromCityId: 'xian', toCityId: 'chengdu', mode: 'Tren bala', durationMinutes: 224, price: 86, currency: 'EUR', status: 'known',
-      notes: '🔄 CAMBIADO el 03/10/2026: se canceló el G2201 de las 09:36 y se cogió el D1921 de las 09:48. Confirmado, 85,56 € los dos en 2ª clase (2,56 € MENOS que el anterior). Directo, 3h44. Ojo: es un tren D (动车), no un G — mismo tipo de asiento pero algo más lento, 8 min más de trayecto.',
+      notes: '🔄 CAMBIADO el 03/10/2026: se canceló el G2201 de las 09:36 y se cogió el D1921 de las 09:48. Confirmado, 85,56 € los dos en 2ª clase (2,56 € MENOS que el anterior). Directo, 3h44. Ojo: es un tren D (动车), no un G — mismo tipo de asiento pero algo más lento, 8 min más de trayecto. 💳 Los 88,12 € del G2201 cancelado SE REEMBOLSARON (confirmado por María el 03/10/2026), así que el coste real del tramo son los 85,56 € y no hay gasto doble: si veis los dos apuntes en la Revolut, el primero está devuelto.',
       fromStation: "Xi'an North (西安北站) · en Trip.com \"Xi'anbei\"", toStation: 'Chengdu East (成都东站) · en Trip.com "ChengduDong"',
       paidEur: 85.56, paidOn: '3 oct 2026', paidWith: 'maria',
       saleOpensOn: '✅ HECHO: billete confirmado el 03/10/2026. Se canceló el G2201 de las 09:36 y se cogió el D1921 de las 09:48 por 85,56 € los dos. Nada que vigilar en este tramo.', saleOpensIso: '2026-10-03', saleCheckTime: '09:00',
