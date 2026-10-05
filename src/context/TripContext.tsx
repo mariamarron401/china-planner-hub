@@ -126,7 +126,8 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         );
         parsed.faresVerifiedOn = FARES_VERIFIED_ON;
         parsed.localTransports = reconcileById(initialTripData.localTransports, parsed.localTransports, ['price', 'durationMinutes']);
-        parsed.activities = reconcileById(initialTripData.activities, parsed.activities, ['price', 'duration', 'status']);
+        // `duration` no se conserva: no se edita desde la app y así llegan las correcciones (Tianmen, 05/10/2026).
+        parsed.activities = reconcileById(initialTripData.activities, parsed.activities, ['price', 'status']);
         // Los traslados de aeropuerto son puramente informativos (no se editan desde la app),
         // así que se toman siempre frescos del código: así una sesión antigua guardada en
         // localStorage nunca deja la colección a undefined ni se queda con horarios viejos.
