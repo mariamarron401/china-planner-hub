@@ -1187,9 +1187,9 @@ const chengdu: CityPlan = {
   cityId: 'chengdu',
   headline: 'Pandas, vida local, gastronomía y Leshan. No es una ciudad de encadenar monumentos: aquí se viene a estar.',
   keyNotes: [
-    '🆕 El crucero de Leshan YA se compra online (miniprograma 大佛旅游 en WeChat o Alipay), 70 CNY. Teníamos apuntado que solo se pagaba en el muelle y ha dejado de ser cierto.',
+    '✅ La entrada del recinto de Leshan ya está comprada (10,62 € las dos, al 50%). 🗓️ El crucero (70 CNY/persona) se reserva el DOMINGO 11 DE OCTUBRE: el miniprograma 大佛旅游 solo abre con 7 días y no va por Trip.com.',
     '🆕 Muelle nuevo desde julio de 2026: se sale de 嘉州渡码头 (Jiazhoudu) y se desembarca en 八仙渡码头 (Baxian-du). Reconfirmad el muelle operativo 48-24 h antes: los barcos se suspenden por nivel del agua o meteorología.',
-    '🔲 Los trenes Chengdu ↔ Leshan del 18 NO están comprados. Son aparte de los 7 tramos entre ciudades. Se venden con 15 días, o sea sobre el 3-4 de octubre.',
+    '🔴 Los trenes Chengdu ↔ Leshan del 18 siguen SIN comprar y la venta ya está abierta desde el 3 de octubre. Chengdu East en los dos sentidos: ida 07:00-07:30, vuelta saliendo de Leshan entre 16:30 y 18:45.',
     'Pandas: salid del hotel a las 06:50-07:00, no a las 07:15. La puerta abre a las 07:30 y las primeras horas son las buenas.',
   ],
   base: [
@@ -1323,10 +1323,10 @@ const chengdu: CityPlan = {
         {
           time: '~1 h de tren',
           title: 'Chengdu East → Leshan',
-          detail: 'Tren rápido, 50-70 min según el servicio. 🔲 Todavía por comprar.',
+          detail: 'Tren rápido de 50-70 min. 🔴 Todavía por comprar, y la venta ya está abierta.',
           kind: 'move',
           alert: true,
-          more: 'Estos dos trenes (ida y vuelta) no están entre los 7 comprados: son aparte. La venta de 12306 abre 15 días antes, o sea sobre el 3-4 de octubre. Al elegir el de vuelta, coged uno que os deje en Chengdu entre las 18:00 y las 20:00, no uno pegado al cierre.',
+          more: 'Salid de Chengdu East (成都东站) entre las 07:00 y las 07:30 para llegar a Leshan sobre las 08:20-08:40: así el Didi al muelle sale a las 09:00-09:30 y llegáis al barco de las 10:00. En el horario de ahora esa franja son el C6257 (07:07) y el C6259 (07:21), pero cogedlos del listado real de Trip.com para el 18/10, que los números cambian. El de las 06:18 no hace falta. Y ojo: desde Chengdu South, que os pilla más cerca del hotel, el primer tren no sale hasta las 09:05 — por eso la ida es desde East.',
         },
         {
           time: '~09:00-09:30',
@@ -1338,10 +1338,10 @@ const chengdu: CityPlan = {
         {
           time: '10:00-11:30',
           title: 'Crucero frente al Buda',
-          detail: '70 CNY. Es la opción recomendada: vista frontal completa y sin escaleras.',
+          detail: '70 CNY. 🔲 Es lo único de la visita que falta por comprar.',
           kind: 'ticket',
           alert: true,
-          more: 'El Buda mide 71 metros y desde tierra es prácticamente imposible verlo entero de una vez: por eso el barco gana. Buscad sitio en la parte exterior, con visión frontal o lateral. La alternativa terrestre son 80 CNY, permite ver la cabeza desde arriba y los templos, pero la escalera de bajada puede tener 2-4 h de cola un domingo. Horario de invierno: barco 08:00-17:00, recinto 08:00-17:30.',
+          more: 'La entrada del recinto ya la tenéis, así que el barco no es una alternativa: es un añadido de ~18 € los dos. Se reserva el 11 de octubre en el miniprograma 大佛旅游 (ventana de 7 días, no va por Trip.com). Merece la pena porque el Buda mide 71 metros y desde tierra es casi imposible verlo entero de una vez. Orden del día: barco primero para la vista frontal y recinto a partir del mediodía — el sistema pide 2 h entre franjas, y así podéis saltaros la escalera de bajada si tiene la cola de 2-4 h que es normal un domingo. Los barcos salen cuando se llenan, no a horas fijas; en octubre se embarca en 嘉州渡. Buscad sitio en la parte exterior. Horario de invierno: barco 08:00-17:00, recinto 08:00-17:30.',
         },
         {
           time: 'Comida',
@@ -1353,8 +1353,9 @@ const chengdu: CityPlan = {
         {
           time: '18:00-20:00',
           title: 'Vuelta a Chengdu',
-          detail: 'Didi a la estación de Leshan, tren y Didi al hotel.',
+          detail: 'Didi a la estación de Leshan (乐山站), tren y Didi al hotel.',
           kind: 'move',
+          more: 'Salid de Leshan entre las 16:30 y las 18:45 para estar en Chengdu entre las 17:15 y las 19:40. Al comprarlo, mirad a qué estación de Chengdu llega: no todos los de vuelta entran por East.',
         },
         {
           time: 'Noche',
@@ -1654,18 +1655,19 @@ const chengdu: CityPlan = {
       url: 'https://www.panda.org.cn/en/service/ticket/',
     },
     {
-      title: '🔲 Trenes Chengdu ↔ Leshan del 18',
-      when: '3-4 de octubre (la venta abre 15 días antes)',
-      price: 'Por confirmar, trayecto de 50-70 min',
-      how: 'Trip.com. Son dos billetes aparte de los 7 tramos entre ciudades ya comprados.',
-      alert: 'Esto no estaba comprado ni apuntado. Al elegir el de vuelta, que os deje en Chengdu entre las 18:00 y las 20:00.',
+      title: '🔴 Trenes Chengdu ↔ Leshan del 18 — LA VENTA YA ESTÁ ABIERTA',
+      when: 'Ya. Se abrió el 3 de octubre y es domingo: no lo dejéis',
+      price: '~54 CNY (7 €) por persona y trayecto · unos 28 € los cuatro billetes',
+      how: 'Trip.com, ruta Chengdu East → Leshan, fecha 18/10/2026. Ida: salir de Chengdu East entre 07:00 y 07:30 (ahora mismo son el C6257 de 07:07 y el C6259 de 07:21), llegada a Leshan 08:20-08:40. Vuelta: salir de Leshan entre 16:30 y 18:45.',
+      alert: 'Estación: Chengdu East (成都东站) en los dos sentidos. Chengdu South pilla más cerca del hotel, pero su primer tren sale a las 09:05 y os come la mañana. No compréis por el número que pone aquí: cogedlo del listado real de Trip.com para esa fecha, y mirad a qué estación de Chengdu llega el de vuelta.',
     },
     {
       activityId: 'act-3',
-      title: 'Buda de Leshan: entrada y crucero',
-      when: 'Seguimiento desde mediados de septiembre',
-      price: '70 CNY el barco · 80 CNY la entrada terrestre',
-      how: '🆕 El crucero YA se vende online, por el miniprograma 大佛旅游 en WeChat o Alipay. Ya no hay que pagarlo solo en el muelle.',
+      title: 'Buda de Leshan: ✅ entrada comprada · 🗓️ el crucero, el 11 de octubre',
+      when: 'Domingo 11 de octubre, ventana de 7 días. Antes no se puede',
+      price: '✅ Entrada del recinto: 10,62 € las dos, al 50% · 🔲 Crucero: 70 CNY/persona, ~18 € los dos',
+      how: 'El crucero NO va por Trip.com: miniprograma 大佛旅游 en WeChat o Alipay → 门票预约 → 游船. Libera plazas a las 07:00 hora de Pekín con 7 días de antelación, así que para el 18 toca el 11 — y ese día ya estaréis en Pekín, en hora local.',
+      alert: 'Se pueden tener las dos cosas el mismo día, reservadas por separado y dejando al menos 2 h entre franjas. Pedid el barco por la mañana (~10:00) y el recinto a partir del mediodía. No contéis con comprarlo allí: en 2026 ya no hay taquillas físicas en el recinto.',
       alert: 'Comprobad el muelle operativo 48-24 h antes: desde julio se sale de Jiazhoudu (嘉州渡码头) y los barcos se suspenden por nivel del agua o mal tiempo.',
     },
   ],
