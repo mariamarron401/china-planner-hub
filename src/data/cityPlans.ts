@@ -2179,10 +2179,10 @@ const fenghuang: CityPlan = {
   bookings: [
     {
       title: '🏨 Recogida gratuita en la estación',
-      when: 'Escribir al hotel antes del viaje',
+      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
       price: 'Gratis, según anuncia el alojamiento',
-      how: 'Mandadles: 21/10/2026, tren G2321, llegada 16:46, dos personas.',
-      alert: 'Es lo único que gestionaría con antelación en Fenghuang. Si lo confirman, os ahorra buscar taxi al llegar de noche.',
+      how: 'Copiad el texto en chino y mandadlo tal cual. Dice: «Llegamos el 21/10 en el G2321 a la estación Fenghuang Gucheng a las 16:46, somos 2 con 4 maletas: ¿nos recogéis? El casco antiguo es peatonal: ¿cómo llegamos al hotel con las maletas? El 22 salimos a las 16:00 hacia la estación: ¿podemos dejar las maletas en recepción después del check-out?»',
+      alert: '您好！我们两位10月21日入住一晚。1）我们坐G2321次列车，16:46到凤凰古城站，两个人带4件行李，可以麻烦你们免费接站吗？2）古城里不能开车，带行李怎么到客栈？3）10月22日下午16:00我们去火车站，退房后可以把行李寄存在前台吗？谢谢！',
     },
     {
       title: 'Paseo en barco por el Tuojiang',
