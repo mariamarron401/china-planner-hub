@@ -124,8 +124,8 @@ const beijing: CityPlan = {
   cityId: 'beijing',
   headline: 'Tres días con personalidad propia: ritual el sábado, corazón histórico el domingo y Gran Muralla el lunes.',
   keyNotes: [
-    'Ciudad Prohibida: la venta abre el 4 de octubre a las 14:00 hora española (7 días antes, 20:00 en Pekín). ¥60, nominal y con el pasaporte original.',
-    'Tiananmen: ventana de 1 a 7 días confirmada por el aviso oficial del 24/09/2026, así que el 4 de octubre es también el primer día. Es otro sistema: no des por hecho que abre a la misma hora que la Ciudad Prohibida. Pedid la franja 降旗及夜间 (bajada de bandera + noche); la de mañana no hace falta, porque entráis al palacio por Donghuamen.',
+    '✅ Ciudad Prohibida: comprada el 4/10 (18,89 € las dos, con la Galería de los Tesoros). Nominal: llevad el pasaporte original.',
+    '✅ Tiananmen: reservada el 4/10, franja 降旗及夜间 (bajada de bandera + noche). Guardad el mensaje de confirmación: se enseña en el control. La de mañana no hace falta, porque entráis al palacio por Donghuamen.',
     'Mutianyu: ✅ entradas ya compradas el 16/09/2026 (90 CNY las dos). El bus y el combo telesilla+tobogán se pagan en la taquilla el mismo día 12.',
     'La bajada de bandera del 11 de octubre debería rondar las 17:41, algo antes de lo que teníamos calculado. Reconfirmar el horario oficial 24-48 h antes.',
   ],
@@ -178,6 +178,14 @@ const beijing: CityPlan = {
           more: 'Este hueco es deliberado. Cargar demasiado el primer día probablemente os pase factura el domingo, que es el día que más precisión necesita.',
         },
         {
+          time: '17:00',
+          title: '📲 Reservar el Museo de Shaanxi',
+          detail: 'Franjas para el jueves 15: se liberan a las 17:00 de Pekín (11:00 en España). Se agotan.',
+          kind: 'ticket',
+          alert: true,
+          more: 'Web oficial en.sxhm.com, gratis y nominal. Coged una de las primeras franjas de la mañana.',
+        },
+        {
           time: 'Final de tarde',
           title: 'Sanlitun y Taikoo Li',
           detail: 'Tiendas, paseo y ambiente. Está cerca del hotel.',
@@ -204,6 +212,14 @@ const beijing: CityPlan = {
       zone: 'Centro histórico',
       blocks: [
         {
+          time: '07:00',
+          title: '📲 Reservar el crucero de Leshan',
+          detail: 'Miniprograma 大佛旅游 (WeChat o Alipay) → 门票预约 → 游船, para el domingo 18. Abre a las 07:00 de Pekín.',
+          kind: 'ticket',
+          alert: true,
+          more: 'Dejad al menos 2 h con la franja de vuestra entrada del recinto, que ya está comprada.',
+        },
+        {
           time: '07:30-07:40',
           title: 'Salir del hotel',
           detail: 'Didi a la zona de Donghuamen (东华门) y andar por el foso hasta la Puerta del Mediodía.',
@@ -216,7 +232,7 @@ const beijing: CityPlan = {
           detail: 'Entrada única por Meridian Gate / 午门. Unas 4 horas.',
           kind: 'visit',
           alert: true,
-          more: 'Ruta: Meridian Gate → eje imperial central → Taihe Hall y grandes salas ceremoniales → palacios interiores → Imperial Garden → salida por Shenwumen (神武门). Y solo UNA zona lateral, la que más os llame. No intentéis ver cada pabellón. Aviso 2026: hay trabajos en la zona de Taihemen (Gate of Supreme Harmony); comprobad los avisos oficiales unos días antes por si hay desvío.',
+          more: 'Ruta: Meridian Gate → eje imperial central → Taihe Hall y grandes salas ceremoniales → palacios interiores → Imperial Garden → salida por Shenwumen (神武门). La zona lateral es la Galería de los Tesoros (宁寿宫, al noreste, con el Muro de los Nueve Dragones): está pagada y os pilla de camino a la salida norte. No intentéis ver cada pabellón. Aviso 2026: hay trabajos en la zona de Taihemen (Gate of Supreme Harmony); comprobad los avisos oficiales unos días antes por si hay desvío.',
         },
         {
           time: 'Mediodía',
@@ -276,10 +292,10 @@ const beijing: CityPlan = {
         },
         {
           time: 'Mañana',
-          title: 'Telesilla a Torre 6 y paseo a Torre 4',
-          detail: 'Ida y vuelta tranquila, 2½-3 h de muralla. Sin objetivo competitivo.',
+          title: 'Telesilla a Torre 6 y paseo a Torre 12',
+          detail: 'Torre 6 → Torre 12 → vuelta a la 6 (~1 h por sentido) y bajada en tobogán.',
           kind: 'visit',
-          more: 'La Torre 4 (Zhengguantai 正关台) es especialmente característica por sus tres torres conectadas. No diseñaría la ruta para llegar a la Torre 20: durante 2026 ha habido cierres parciales en tramos altos (16-17 y 19-20). Revisad el aviso oficial justo antes del día 12.',
+          more: 'Si vais cansados, la alternativa corta es Torre 6 → Torre 4 (Zhengguantai 正关台, tres torres conectadas). El tobogán sale de la Torre 6: volved siempre a ella. No diseñaría la ruta para llegar a la Torre 20: durante 2026 ha habido cierres parciales en tramos altos (16-17 y 19-20). Revisad el aviso oficial justo antes del día 12.',
         },
         {
           time: '~12:30-13:30',
@@ -324,7 +340,7 @@ const beijing: CityPlan = {
         {
           time: '06:10-06:15',
           title: 'Didi a Beijing West',
-          detail: '10-12 km. En la estación sobre las 06:50.',
+          detail: '10-12 km. En la estación sobre las 06:55.',
           kind: 'move',
           alert: true,
         },
@@ -356,7 +372,7 @@ const beijing: CityPlan = {
       what: 'Gran Muralla restaurada y bastante más agradable que Badaling.',
       zone: '~60 km al noreste',
       time: 'Prácticamente el día',
-      ticket: 'Reserva recomendable',
+      ticket: '✅ Entrada comprada · bus y combo, en taquilla',
       priority: 'must',
     },
     {
@@ -384,7 +400,7 @@ const beijing: CityPlan = {
       what: 'Interesa por simbolismo, escala y ceremonia más que por cosas que ver.',
       zone: 'Centro, ~4 km',
       time: '1-2 h más controles',
-      ticket: 'Reserva obligatoria',
+      ticket: '✅ Reservada (franja 降旗及夜间)',
       priority: 'must',
     },
     {
@@ -591,7 +607,7 @@ const beijing: CityPlan = {
     },
     {
       name: 'Mutianyu',
-      how: 'Torre 6 y el tramo hacia la Torre 4. Desde las zonas elevadas, mirad al oeste y noroeste: la muralla serpenteando por las crestas.',
+      how: 'Torre 6 y el tramo hacia la Torre 12. Desde las zonas elevadas, mirad al oeste y noroeste: la muralla serpenteando por las crestas.',
     },
   ],
 
@@ -640,27 +656,27 @@ const beijing: CityPlan = {
   bookings: [
     {
       activityId: 'act-8',
-      title: 'Ciudad Prohibida',
-      when: '4 de octubre, 14:00 hora española (20:00 en Pekín)',
-      price: '¥60 en temporada alta, más galerías opcionales de ~¥10',
-      how: 'Web o mini-programa oficial del Museo del Palacio. Nominal y con pasaporte original; cupo diario limitado y sin venta presencial garantizada.',
-      alert: 'Poned alarma: se agota el mismo día que se libera.',
+      title: 'Ciudad Prohibida: ✅ comprada',
+      when: 'Comprada el 4 de octubre',
+      price: '✅ 18,89 € las dos, con la Galería de los Tesoros',
+      how: 'Entrada nominal: el pasaporte original de cada uno.',
+      alert: 'Entrad por Donghuamen y el foso este, sin pasar por la plaza.',
       url: 'https://intl.dpm.org.cn/ticket_details.html',
     },
     {
       activityId: 'act-9',
-      title: 'Tiananmen y bajada de bandera',
-      when: 'Desde el 4 de octubre (ventana de 1 a 7 días)',
-      price: 'Gratis, pero obligatoria',
-      how: 'Mini-programa de WeChat 天安门广场预约参观, eligiendo la franja 降旗. Nominal, con pasaporte admitido para extranjeros.',
-      alert: 'Es otro sistema que el del palacio: no asumáis la misma hora de apertura. Y aunque tengáis reserva, los flujos de acceso pueden cambiar por seguridad o actos oficiales.',
+      title: 'Tiananmen y bajada de bandera: ✅ reservada',
+      when: 'Reservada el 4 de octubre',
+      price: 'Gratis',
+      how: 'Franja 降旗及夜间 (bajada de bandera + noche). Guardad el mensaje de confirmación del mini-programa.',
+      alert: 'Los accesos pueden cambiar por seguridad o actos oficiales. Entrad por Qianmen (sur), el control más rápido.',
     },
     {
       activityId: 'act-1',
-      title: 'Gran Muralla de Mutianyu',
-      when: 'Ya se puede: la ventana es de 30 días y se abrió el 12 de septiembre',
-      price: '~¥40 entrada + ~¥15 shuttle + ~¥140 telesilla y tobogán',
-      how: 'Sistema oficial de Mutianyu o Trip.com, con pasaporte.',
+      title: 'Gran Muralla de Mutianyu: ✅ entrada comprada',
+      when: 'Comprada el 16 de septiembre',
+      price: '✅ 11,72 € las dos · en taquilla, 310 CNY los dos (bus 15 + combo telesilla y tobogán 140, por persona)',
+      how: 'El combo es el de la TELESILLA (Torre 6, con tobogán), no el teleférico de cabina (Torre 14, sin tobogán).',
       alert: 'Tratad los precios como aproximados: los remontes los opera otra empresa y las combinaciones cambian.',
       url: 'https://en.mutianyugreatwall.com/',
     },
@@ -680,7 +696,7 @@ const xian: CityPlan = {
   keyNotes: [
     'Xi’an no se organiza por monumentos, sino por tres zonas: casco histórico intramuros, Lintong (Guerreros) y la zona sur Tang-Pagoda-Museo. Así se evitan casi todos los desplazamientos absurdos.',
     'Museo de Historia de Shaanxi: entrada gratis pero con cupo de 12.000 plazas y ventana de 5 días. Para el jueves 15, alarma el 10 de octubre — las franjas se liberan a las 17:00 en China, o sea las 11:00 en España.',
-    'Guerreros de Terracota: ventana de 7 días, o sea el 7 de octubre. Reserva nominal y con el pasaporte físico encima.',
+    '✅ Guerreros de Terracota: comprados el 29/09 (31,46 € las dos). El día 14, el pasaporte físico de cada uno: es lo que se escanea.',
     'Grand Tang Ever-Bright City no es un parque con entrada: es una avenida peatonal gratis. De día no tiene gracia — hay que ir entre las 19:00 y las 22:30.',
   ],
   base: [
@@ -766,7 +782,7 @@ const xian: CityPlan = {
           title: 'Didi a los Guerreros',
           detail: 'Pedirlo a 秦始皇帝陵博物院（兵马俑）. 40-60 min, ~100-150 CNY el coche.',
           kind: 'move',
-          more: 'Para dos personas y yendo por la tarde, el Didi compensa de largo. La alternativa barata es metro línea 9 hasta Huaqingchi (salida C) y bus 602 o 613, pero es ~1h30 desde el centro; y los buses turísticos desde Bell Tower concentran las salidas por la mañana, hasta las 14:00.',
+          more: 'Para dos personas y yendo por la tarde, el Didi compensa de largo: ~1 h desde el centro.',
         },
         {
           time: '~13:30',
@@ -779,7 +795,7 @@ const xian: CityPlan = {
         {
           time: 'Si da tiempo',
           title: 'Lishan Garden 丽山园',
-          detail: 'Va incluido en la entrada. Se coge el shuttle.',
+          detail: 'Va incluido en la entrada. El carrito (15 CNY/persona) se paga dentro.',
           kind: 'visit',
           more: 'Es la zona del mausoleo y otras excavaciones. El túmulo del emperador no está excavado ni se puede entrar. Si vais justos de tiempo, prioridad absoluta a los tres fosos.',
         },
@@ -846,10 +862,10 @@ const xian: CityPlan = {
         },
         {
           time: 'Vuelta',
-          title: 'Metro desde Dayanta 大雁塔',
-          detail: 'Mejor metro que Didi: después de las 22:00 la zona se colapsa.',
+          title: 'Didi de vuelta, alejándoos de la avenida',
+          detail: 'Después de las 22:00 la zona se colapsa: andad 5-10 min antes de pedir el Didi.',
           kind: 'move',
-          more: 'Las líneas 3 y 4 conectan la zona y el metro funciona hasta las 23:00-23:30 según línea. Alrededor de 大唐不夜城 las colas de taxi a esa hora se ponen feas.',
+          more: 'Alrededor de 大唐不夜城 las colas de coches a esa hora se ponen feas. Pedidlo desde una calle lateral, lejos de la entrada principal.',
         },
       ],
     },
@@ -862,16 +878,16 @@ const xian: CityPlan = {
         {
           time: 'Desayuno',
           title: 'Sin prisa',
-          detail: 'El desayuno abre a las 07:00 y salís a las 08:00: cabe justo.',
+          detail: 'El desayuno abre a las 07:00 y salís a las 08:10: hay 1h10.',
           kind: 'rest',
         },
         {
-          time: '08:00',
+          time: '08:10',
           title: 'Didi a Xi’an North',
           detail: 'No programaría nada más esta mañana.',
           kind: 'move',
           alert: true,
-          more: 'Plan B si esa mañana hay tráfico: la línea 2 del metro conecta Zhonglou (钟楼, justo en el hotel) directamente con Xi’an North y se salta cualquier atasco. Con las maletas el Didi es más cómodo, pero el metro es una red de seguridad real.',
+          more: 'Salid a la hora: es tramo de hora punta. Con 1 h de margen en la estación, un atasco normal no os afecta.',
         },
         {
           time: '09:48',
@@ -1152,11 +1168,11 @@ const xian: CityPlan = {
   bookings: [
     {
       activityId: 'act-5',
-      title: 'Guerreros de Terracota',
-      when: '7 de octubre (ventana de 7 días)',
-      price: '120 CNY por persona (~16 €)',
-      how: 'Trip.com, que no exige teléfono chino. Reserva nominal con el documento de la compra.',
-      alert: 'Pasaporte físico encima: se entra escaneándolo y no hay taquilla desde 2023.',
+      title: 'Guerreros de Terracota: ✅ comprada',
+      when: 'Comprada el 29 de septiembre',
+      price: '✅ 31,46 € las dos · dentro, el carrito de Lishan: 15 CNY/persona',
+      how: 'Entrada nominal: el pasaporte físico de cada uno, que es lo que se escanea.',
+      alert: 'Id por la tarde (llegada ~13:30): por la mañana coincidís con todos los tours.',
     },
     {
       activityId: 'act-11',
@@ -1314,9 +1330,10 @@ const chengdu: CityPlan = {
       zone: 'Leshan, día completo',
       blocks: [
         {
-          time: 'Mañana',
+          time: '~06:00',
           title: 'Didi a Chengdu East',
-          detail: '20-30 min, más el margen de acceso a la estación.',
+          detail: '20-30 min. Salid 1 h y media antes del tren: la hora exacta, cuando lo compréis.',
+          alert: true,
           kind: 'move',
           more: 'No me complicaría con metro a primera hora. En la estación hay control con pasaporte, seguridad y buscar la sala de embarque.',
         },
@@ -1341,7 +1358,7 @@ const chengdu: CityPlan = {
           detail: '70 CNY. 🔲 Es lo único de la visita que falta por comprar.',
           kind: 'ticket',
           alert: true,
-          more: 'La entrada del recinto ya la tenéis, así que el barco no es una alternativa: es un añadido de ~18 € los dos. Se reserva el 11 de octubre en el miniprograma 大佛旅游 (ventana de 7 días, no va por Trip.com). Merece la pena porque el Buda mide 71 metros y desde tierra es casi imposible verlo entero de una vez. Orden del día: barco primero para la vista frontal y recinto a partir del mediodía — el sistema pide 2 h entre franjas, y así podéis saltaros la escalera de bajada si tiene la cola de 2-4 h que es normal un domingo. Los barcos salen cuando se llenan, no a horas fijas; en octubre se embarca en 嘉州渡. Buscad sitio en la parte exterior. Horario de invierno: barco 08:00-17:00, recinto 08:00-17:30.',
+          more: 'La entrada del recinto ya la tenéis, así que el barco no es una alternativa: es un añadido de ~18 € los dos. Se reserva el 11 de octubre en el miniprograma 大佛旅游 (ventana de 7 días, no va por Trip.com). Merece la pena porque el Buda mide 71 metros y desde tierra es casi imposible verlo entero de una vez. Orden del día: barco y recinto, dejando al menos 2 h entre las dos franjas. Mirad la franja de vuestra entrada del recinto antes de reservar el barco el día 11.',
         },
         {
           time: 'Comida',
@@ -1351,7 +1368,7 @@ const chengdu: CityPlan = {
           more: 'Lo que buscaría: 跷脚牛肉 (qiaojiao niurou), carne y vísceras de ternera en caldo aromático, que es el plato emblemático de la ciudad. Y además 甜皮鸭 (pato de piel dulce), 钵钵鸡, el 豆腐脑 de Leshan y 冰粉 de postre.',
         },
         {
-          time: '18:00-20:00',
+          time: 'Tarde',
           title: 'Vuelta a Chengdu',
           detail: 'Didi a la estación de Leshan (乐山站), tren y Didi al hotel.',
           kind: 'move',
@@ -1647,11 +1664,11 @@ const chengdu: CityPlan = {
   bookings: [
     {
       activityId: 'act-2',
-      title: 'Base de Pandas',
-      when: '3 de octubre (ventana de 14 días)',
-      price: '55 CNY la entrada + 30 CNY el bus interno',
-      how: 'Web oficial o Trip.com, que la propia Panda Base reconoce como canal autorizado para extranjeros.',
-      alert: 'Reservad la franja de mañana (07:30-12:00) y llevad el pasaporte de la compra.',
+      title: 'Base de Pandas: ✅ comprada',
+      when: 'Comprada el 29 de septiembre',
+      price: '✅ 14,42 € las dos · dentro, el bus interno: 30 CNY/persona',
+      how: 'Franja de mañana (07:30-12:00) confirmada. El pasaporte de la compra.',
+      alert: 'Salid del hotel a las 06:50-07:00: los pandas están activos de 8 a 10.',
       url: 'https://www.panda.org.cn/en/service/ticket/',
     },
     {
@@ -1667,7 +1684,7 @@ const chengdu: CityPlan = {
       when: 'Domingo 11 de octubre, ventana de 7 días. Antes no se puede',
       price: '✅ Entrada del recinto: 10,62 € las dos, al 50% · 🔲 Crucero: 70 CNY/persona, ~18 € los dos',
       how: 'El crucero NO va por Trip.com: miniprograma 大佛旅游 en WeChat o Alipay → 门票预约 → 游船. Libera plazas a las 07:00 hora de Pekín con 7 días de antelación, así que para el 18 toca el 11 — y ese día ya estaréis en Pekín, en hora local.',
-      alert: 'Se pueden tener las dos cosas el mismo día, reservadas por separado y dejando al menos 2 h entre franjas. Pedid el barco por la mañana (~10:00) y el recinto a partir del mediodía. No contéis con comprarlo allí: en 2026 ya no hay taquillas físicas en el recinto. Y comprobad el muelle operativo 48-24 h antes: desde julio se sale de Jiazhoudu (嘉州渡码头) y los barcos se suspenden por nivel del agua o mal tiempo.',
+      alert: 'Se pueden tener las dos cosas el mismo día, reservadas por separado y dejando al menos 2 h entre franjas. Mirad qué franja tiene vuestra entrada del recinto y pedid el barco dejando al menos 2 h con ella. No contéis con comprarlo allí: en 2026 ya no hay taquillas físicas en el recinto. Y comprobad el muelle operativo 48-24 h antes: desde julio se sale de Jiazhoudu (嘉州渡码头) y los barcos se suspenden por nivel del agua o mal tiempo.',
     },
   ],
 
@@ -1707,7 +1724,7 @@ const chongqing: CityPlan = {
         {
           time: '10:59',
           title: 'Llegada a Chongqing North',
-          detail: 'Salís por el North Square (北广场). Didi al hotel: en la puerta sobre las 12:00-12:15.',
+          detail: 'Salís por el North Square (北广场). Didi al hotel: en la puerta sobre las 11:30.',
           kind: 'move',
           more: 'El check-in es a las 15:00, así que dejad maletas y a la calle. En transporte público serían L10 + L6 hasta Xiaoshizi más caminata: con equipaje, Didi.',
         },
@@ -2061,7 +2078,7 @@ const fenghuang: CityPlan = {
         {
           time: '14:30-15:30',
           title: 'Compras volviendo al hotel',
-          detail: 'Ginger candy, batik, bordados Miao y té de Xiangxi.',
+          detail: 'Ginger candy, batik, bordados Miao y té de Xiangxi. Las maletas, en recepción desde el check-out de las 14:00.',
           kind: 'shop',
         },
         {
@@ -2206,6 +2223,14 @@ const furong: CityPlan = {
           detail: 'Si el hotel confirma la recogida gratuita, mejor que taxi. 10-15 min.',
           kind: 'move',
           more: 'Desde la estación hay transfers oficiales hacia el recinto, pero la recogida del hotel os deja la llegada resuelta y llegáis de noche.',
+        },
+        {
+          time: '~18:20',
+          title: 'Entrada al recinto',
+          detail: 'El hotel está DENTRO de la zona de pago: ~108 CNY/persona, válida 3 días.',
+          kind: 'ticket',
+          alert: true,
+          more: 'Si el hotel os recoge, preguntadles antes si la traen ellos (a veces en condiciones especiales). Si no, en la taquilla de la entrada, con el pasaporte.',
         },
         {
           time: '18:30-18:45',
@@ -2388,7 +2413,7 @@ const zhangjiajie: CityPlan = {
   ],
   base: [
     '山门 (entrada a Tianmen) a ~8-10 km: 20 min en Didi, o lanzadera gratis desde la estación vieja del teleférico',
-    'Restaurantes Tujia justo enfrente del teleférico',
+    'Restaurantes Tujia junto a la estación vieja del teleférico (cerrada), a ~1 km del hotel',
     '72 Qilou a 15-20 min en Didi',
     'El centro (Jiefang Road) no os hace falta',
     'Wulingyuan y el Gran Cañón son la base siguiente: aquí no se mezclan',
@@ -2399,7 +2424,7 @@ const zhangjiajie: CityPlan = {
       id: 'zj-d1',
       dateText: 'Viernes 23 de octubre',
       title: 'Tianmen Mountain, hasta el anochecer',
-      zone: 'Todo alrededor del teleférico',
+      zone: 'Hotel → 山门 → Tianmen',
       blocks: [
         {
           time: '~11:00',
@@ -2410,7 +2435,7 @@ const zhangjiajie: CityPlan = {
         {
           time: '11:30-12:30',
           title: 'Comer antes de subir',
-          detail: 'En la zona del teleférico, sin coger Didi ni bajar al centro.',
+          detail: 'Cerca del hotel, junto a la estación vieja del teleférico (cerrada). Sin bajar al centro.',
           kind: 'food',
           more: 'La opción más cómoda es Gongpopo (龚婆婆土厨), prácticamente enfrente de la estación del teleférico, a unos 50 m. 40-60 CNY por persona. Pedid 土家三下锅 (Tujia Sanxiaguo). Y comed bien ahora: arriba no contéis con sentaros 45-60 min a comer, la montaña se disfruta mejor sin eso.',
         },
@@ -2476,10 +2501,10 @@ const zhangjiajie: CityPlan = {
         {
           time: '09:00',
           title: 'Didi a Wulingyuan',
-          detail: '~33 km. Contad hasta 1 h, no 45 min, para no condicionar el Gran Cañón.',
+          detail: '~33 km, ~45 min. Llegada sobre las 09:45.',
           kind: 'move',
           alert: true,
-          more: 'Aquí no añadiría absolutamente nada: nada de "ver algo rápido" en Yongding antes de salir. Y confirmad el 23 en recepción a qué hora es exactamente vuestro check-out, que es un rango de 12:00 a 14:00 según habitación.',
+          more: 'Aquí no añadiría absolutamente nada: nada de "ver algo rápido" en Yongding antes de salir. Salís a las 09:00, antes de cualquier hora de check-out: dejadlo pagado y avisado la noche del 23.',
         },
       ],
     },
@@ -2492,7 +2517,7 @@ const zhangjiajie: CityPlan = {
     { name: 'Guigu Zhandao', nameZh: '鬼谷栈道', what: 'El sector de pasarela del West Cliff y el Valle de los Fantasmas. De lo mejor de la montaña.', zone: 'Dentro', time: '1-1,5 h', ticket: 'Incluida', priority: 'must' },
     { name: 'Pasarela de cristal de Panlong', nameZh: '盘龙崖玻璃栈道', what: 'Cristal, vacío y las curvas de la carretera debajo. No hace falta hacerlas todas: con una buena basta.', zone: 'Dentro', time: '20-30 min', ticket: 'Incluida', priority: 'nice', more: '⚠️ No es lo mismo que el puente de cristal del Gran Cañón, que veréis el día 24: son atracciones completamente distintas. Y la East Line cerró por mantenimiento en mayo de 2026.' },
     { name: 'Templo de Tianmen', nameZh: '天门山寺', what: 'Interesante si vais bien de tiempo.', zone: 'Dentro', time: '30 min', ticket: 'Incluida', priority: 'nice' },
-    { name: '72 Qilou', nameZh: '七十二奇楼', what: 'Complejo nocturno iluminado inspirado en las casas sobre pilotes Tujia. Espectáculos y puestos de comida.', zone: '15-20 min en Didi', time: '1,5-2 h', ticket: '48-88 CNY', priority: 'nice', more: 'Muy recomendable SOLO si no hacéis Tianmen nocturno. Abrió en 2022: es experiencia visual, no patrimonio.' },
+    { name: '72 Qilou', nameZh: '七十二奇楼', what: 'Complejo nocturno iluminado inspirado en las casas sobre pilotes Tujia. Espectáculos y puestos de comida.', zone: '15-20 min en Didi', time: '1,5-2 h', ticket: '48-88 CNY', priority: 'nice', more: 'Solo como plan B, si os bajan de Tianmen antes de que se encienda la cueva. Abrió en 2022: es experiencia visual, no patrimonio.' },
     { name: 'Centro de Yongding', nameZh: '解放路', what: 'La zona urbana de restaurantes y comercios. Más cotidiana que Wulingyuan.', zone: 'Centro', time: '1 h', ticket: 'Gratis', priority: 'optional', more: 'No hay ningún monumento que justifique sacrificar Tianmen por esto. Solo para cenar si acabáis pronto.' },
     { name: 'El parque de Wulingyuan', what: 'Yuanjiajie, Tianzi, Golden Whip Stream, Baofeng Lake, el Gran Cañón.', zone: 'Otra base', time: 'Días', ticket: 'Aparte', priority: 'skip', more: 'Es otro bloque geográfico, el de los días 24 y 25. Mezclarlo con Tianmen sería perder muchísimo tiempo.' },
   ],
@@ -2531,7 +2556,7 @@ const zhangjiajie: CityPlan = {
   ],
 
   trends: [
-    { name: '72 Qilou de noche', verdict: 'si', why: 'Sigue muy popular en 2026 y merece la pena visualmente, pero nunca por encima de Tianmen nocturno.' },
+    { name: '72 Qilou de noche', verdict: 'si', why: 'Sigue muy popular en 2026 y merece la pena visualmente, pero solo como plan B de la cueva al anochecer.' },
     { name: 'Tianmen Cave iluminada', verdict: 'si', why: 'Sin tour: con la entrada normal, acabando la visita en la explanada al anochecer. La hora de encendido no está garantizada.' },
     { name: 'La foto en los 999 escalones', verdict: 'si', why: 'Viral, sí, pero forma parte natural de la visita.' },
     { name: 'Hacer varias pasarelas de cristal', verdict: 'quizas', why: 'Muy virales, pero no dedicaría una hora de cola a repetir. Elegid una buena.' },
@@ -2635,7 +2660,7 @@ const wulingyuan: CityPlan = {
         {
           time: '06:30',
           title: 'Desayuno fuerte',
-          detail: 'El bufé abre a las 06:30. Comed bien: la comida de verdad no llega hasta las 12:30.',
+          detail: 'El bufé abre a las 06:30. Comed bien: la comida de verdad no llega hasta las 12:00.',
           kind: 'food',
           more: 'Llevaos de aquí fruta o algo para media mañana. En la mochila: agua, frutos secos, chubasquero y una capa de abrigo (arriba hace bastante más fresco), los dos pasaportes y el móvil cargado.',
         },
@@ -2730,7 +2755,7 @@ const wulingyuan: CityPlan = {
       zone: 'Zhangjiajie West',
       blocks: [
         {
-          time: '05:35-05:45',
+          time: '05:35',
           title: 'Salir del hotel',
           detail: '10 minutos antes de lo previsto. 26-28 km, 25-40 min según tráfico, ~55-100 CNY.',
           kind: 'move',
@@ -2749,11 +2774,11 @@ const wulingyuan: CityPlan = {
   ],
 
   highlights: [
-    { name: 'Parque Nacional de Zhangjiajie', nameZh: '张家界国家森林公园', what: 'El imprescindible absoluto. Vuestra puerta es la East Gate, justo al lado del hotel.', zone: '~1 km', time: '8-9 h', ticket: '~236 CNY, 4 días, nominal', priority: 'must', more: 'Los buses internos van incluidos; el Bailong y los teleféricos se pagan aparte.' },
+    { name: 'Parque Nacional de Zhangjiajie', nameZh: '张家界国家森林公园', what: 'El imprescindible absoluto. Vuestra puerta es la East Gate, justo al lado del hotel.', zone: '~1 km', time: '8-9 h', ticket: '✅ Comprada · 4 días con eco-bus', priority: 'must', more: 'Los buses internos van incluidos; el Bailong y los teleféricos se pagan aparte.' },
     { name: 'Yuanjiajie', nameZh: '袁家界', what: 'Las montañas flotantes: Mihun Terrace, Qiankun Pillar y el Primer Puente bajo el Cielo.', zone: 'Dentro del parque', time: '~2 h', ticket: 'Incluida', priority: 'must' },
-    { name: 'Tianzi Mountain', nameZh: '天子山', what: 'He Long Park, Yubi Peak y Fairy Scattering Flowers. Las agujas verticales de piedra.', zone: 'Dentro del parque', time: '1-1,5 h', ticket: 'Incluida', priority: 'must' },
+    { name: 'Tianzi Mountain', nameZh: '天子山', what: 'He Long Park, Yubi Peak y Fairy Scattering Flowers. Las agujas verticales de piedra.', zone: 'Dentro del parque', time: '2,5-3 h', ticket: 'Incluida', priority: 'must' },
     { name: 'Ascensor Bailong', nameZh: '百龙天梯', what: '88 segundos y sale de dentro de la montaña al vacío. Es una atracción en sí.', zone: 'Dentro del parque', time: '15 min + cola', ticket: '~65 CNY', priority: 'must' },
-    { name: 'Gran Cañón y Puente de Cristal', nameZh: '张家界大峡谷玻璃桥', what: 'Independiente del parque: puente, descenso al cañón, sendero y barco.', zone: '~30 km', time: '3-4 h', ticket: 'Nominal, con franja', priority: 'must' },
+    { name: 'Gran Cañón y Puente de Cristal', nameZh: '张家界大峡谷玻璃桥', what: 'Independiente del parque: puente, descenso al cañón, sendero y barco.', zone: '~30 km', time: '3-4 h', ticket: '✅ Comprada · franja única 08:00-16:00', priority: 'must' },
     { name: 'Charming Xiangxi', nameZh: '魅力湘西', what: 'Espectáculo de cultura de las minorías: danzas, boda Tujia, percusión Miao y acrobacias.', zone: '620 m', time: '1,5 h', ticket: 'Desde ~168 CNY', priority: 'nice', more: 'Sesiones sobre las 18:00, 19:20 y 20:40 en temporada alta; confirmad las de octubre. Plan opcional del sábado, solo si volvéis con ganas.' },
     { name: 'Espectáculo de drones', what: '1.500 drones sobre el río Suoxi formando Tianzi Mountain, diseños Tujia y águilas.', zone: 'En Wulingyuan', time: '20-30 min', ticket: 'Gratis', priority: 'nice', more: 'Novedad de 2026 y con mucha repercusión. No exige sacrificar tiempo de montaña. Comprobad horario y cancelaciones 2-3 días antes en WeChat: 武陵源发布.' },
     { name: 'Baofeng Lake', nameZh: '宝峰湖', what: 'Lago encajado entre montañas con paseo en barco. ~110 CNY, incluye barco y eco-bus.', zone: '10 min en taxi', time: '2-3 h', ticket: '~110 CNY', priority: 'optional', more: 'Bonito, pero después del Parque Avatar y el Gran Cañón no sacrificaría descanso por él.' },
@@ -2868,9 +2893,9 @@ const shangrao: CityPlan = {
           more: 'Hay bus directo desde la estación, pero el horario publicado es de verano y puede cambiar. Con dos personas y maletas, el Didi os quita incertidumbre.',
         },
         {
-          time: '~15:00',
+          time: '~14:40',
           title: 'Llegada al hotel',
-          detail: 'El check-in es a las 17:00: dejad maletas y empezad el recorrido ya.',
+          detail: 'Dejad maletas y empezad el recorrido ya. El check-in es a las 17:00: hacedlo al volver, con la fianza de 300 CNY.',
           kind: 'rest',
           more: 'Confirmad el procedimiento de acceso como huéspedes y fotografiad el horario de espectáculos del día.',
         },
@@ -2921,7 +2946,7 @@ const shangrao: CityPlan = {
         {
           time: '08:30-10:00',
           title: 'Desayuno y segunda vuelta',
-          detail: 'Sin intentar cubrirlo todo sistemáticamente.',
+          detail: '⚠️ El desayuno cierra a las 09:30. Después, sin intentar cubrirlo todo.',
           kind: 'food',
         },
         {
@@ -2931,7 +2956,7 @@ const shangrao: CityPlan = {
           kind: 'shop',
         },
         {
-          time: '11:30-11:40',
+          time: '11:30',
           title: 'Salir hacia Shangrao',
           detail: '~40 km, 1 hora. En la estación sobre las 12:35-12:45.',
           kind: 'move',
@@ -3035,7 +3060,7 @@ const shanghai: CityPlan = {
     '❤️ El mercado de las bodas de People’s Park es en sábado, y vosotros tenéis el sábado 31 con el hotel a 10 minutos andando. La franja activa es de 11:00 a 16:00. Es una actividad social real, no una atracción: fotos de ambiente, nada de primeros planos de la gente ni de las fichas.',
     '🥟 Qiao Ai Lai Lai Xiao Long (Tianjin Road, Huangpu) está en la guía Michelin y cae de camino entre Yuyuan y el Bund. Vais en temporada de cangrejo peludo: pedid el xiaolongbao de huevas de cangrejo. Michelin avisa de más afluencia justo por eso, así que id pronto y asumid cola.',
     '🌿 Novedad de septiembre de 2026: ya existe un paseo ribereño continuo por Suzhou Creek que conecta M50 con 1000 Trees. Ese bloque del sábado tiene ahora más sentido que nunca: se llega andando viendo cómo el paisaje industrial se convierte en el edificio de Heatherwick.',
-    '🎟️ Disney es de nombre real: pasaporte FÍSICO original, con nombre y número idénticos a la compra. No valen fotos ni copias. Y comprad por canales oficiales o partners autorizados, comparando siempre con el precio de Disney.',
+    '🎟️ Disney es de nombre real: pasaporte FÍSICO original, con nombre y número idénticos a la compra. No valen fotos ni copias. ✅ Entradas ya compradas.',
   ],
   base: [
     'People’s Park y el mercado de bodas, a 10 min andando',
@@ -3053,7 +3078,7 @@ const shanghai: CityPlan = {
       title: 'Llegada y primer contacto',
       zone: 'People’s Square y Nanjing Road',
       blocks: [
-        { time: '16:25', title: 'Llegada a Hongqiao', detail: 'Didi al hotel: 30-45 min según tráfico. En el hotel sobre las 18:00.', kind: 'move' },
+        { time: '16:25', title: 'Llegada a Hongqiao', detail: 'Didi al hotel: 30-45 min según tráfico. En el hotel sobre las 17:15-17:30.', kind: 'move' },
         { time: 'Tarde', title: 'Andad, sin checklist', detail: 'Hotel → People’s Square → Nanjing East Road. Hoy toca aterrizar en Shanghái.', kind: 'visit', more: 'Si tenéis energía, seguid por Nanjing hasta el Bund y ved el primer skyline nocturno. Si estáis cansados, dad media vuelta: el Bund lo veréis bien mañana.' },
         { time: 'Cena', title: 'Shengjianbao o Huanghe Road', detail: 'Yang’s Fried Dumpling (178 Ningbo Rd) o cualquier sitio de la calle gastronómica de al lado.', kind: 'food', more: 'No gastaría hoy el Michelin: mejor que sea una comida con margen y no dependiendo de la hora a la que lleguéis.' },
       ],
@@ -3078,9 +3103,9 @@ const shanghai: CityPlan = {
       title: 'Shanghai Disneyland',
       zone: 'Día completo, nada más',
       blocks: [
-        { time: '06:30-07:00', title: 'Didi al parque', detail: '40-55 min. Objetivo: estar antes de la apertura.', kind: 'move', alert: true, more: 'Ajustad la hora exacta cuando Disney publique el horario del 29. La alternativa es metro: línea 2 hasta Jiangsu Road y línea 11 hasta Disney Resort, 55-70 min puerta a puerta, pero para la ida prefiero Didi.' },
+        { time: '06:30-07:00', title: 'Didi al parque', detail: '40-55 min. Objetivo: estar antes de la apertura.', kind: 'move', alert: true, more: 'Ajustad la hora exacta cuando Disney publique el horario del 29. Programadlo la noche antes.' },
         { time: 'Día', title: 'Las cuatro que priorizaría', detail: 'Zootopia: Hot Pursuit · TRON · Piratas del Caribe · Soaring Over the Horizon.', kind: 'visit', more: 'Recorred también el área de Zootopia entera, no solo la atracción. Y no penséis "Piratas ya lo conocemos": esta versión es distinta tecnológica y narrativamente. El Mine Train queda por debajo de esas cuatro si hay que elegir.' },
-        { time: 'Colas', title: 'La regla del Premier Access', detail: 'Si TRON está en 45 min y Zootopia en 55, esperad. Si están en 100 y 120 y se mantiene, comprad uno o dos sueltos.', kind: 'ticket', more: 'Nada de paquete grande por adelantado. Se vincula al billete y se compra desde los canales oficiales.' },
+        { time: 'Colas', title: 'La regla del Premier Access', detail: 'Si TRON y Zootopia están por debajo de 80-90 min, esperad. Si pasan de ahí y se mantiene, comprad uno o dos sueltos.', kind: 'ticket', more: 'Nada de paquete grande por adelantado. Se vincula al billete y se compra desde los canales oficiales.' },
         { time: 'Comida', title: 'Una comida sentados a mediodía', detail: 'Y luego snacks. No crucéis el parque por un restaurante concreto.', kind: 'food', more: 'La gastronomía china ya la tenéis fuera: aquí lo que importa es no perder tiempo ni piernas.' },
         { time: 'Noche', title: 'Quedaos al espectáculo final', detail: 'No me iría antes salvo agotamiento real. Es el año del 10º aniversario.', kind: 'visit', more: 'TRON y Zootopia ganan muchísimo de noche. Para la foto del castillo, retroceded lo suficiente para que entre el castillo entero con las proyecciones.' },
       ],
@@ -3091,8 +3116,8 @@ const shanghai: CityPlan = {
       title: 'El Shanghái futurista y las compras curiosas',
       zone: 'Pudong, todo al este del río',
       blocks: [
-        { time: 'Mañana', title: 'AP Plaza 亚太盛汇', detail: 'Línea 2 hasta 上海科技馆站. El mercado de imitaciones, bajo el metro. ~2 h.', kind: 'shop', more: 'Bolsos, zapatillas, ropa, gafas, maletas, relojes y confección a medida. Nunca aceptéis el primer precio y comparad puestos. Antes de pagar, mirad costuras, cremalleras, talla y defectos. Y evitaría cantidades múltiples de imitaciones: al volver a la UE, el volumen importa.' },
-        { time: 'Comida', title: 'Comer ya en Lujiazui', detail: 'Línea 2 y coméis en el distrito financiero.', kind: 'food' },
+        { time: 'Mañana', title: 'AP Plaza 亚太盛汇', detail: 'Didi a 上海科技馆站. El mercado de imitaciones, bajo la estación. ~2 h.', kind: 'shop', more: 'Bolsos, zapatillas, ropa, gafas, maletas, relojes y confección a medida. Nunca aceptéis el primer precio y comparad puestos. Antes de pagar, mirad costuras, cremalleras, talla y defectos. Y evitaría cantidades múltiples de imitaciones: al volver a la UE, el volumen importa.' },
+        { time: 'Comida', title: 'Comer ya en Lujiazui', detail: 'Didi y coméis en el distrito financiero.', kind: 'food' },
         { time: 'Tarde', title: 'Lujiazui', detail: 'La Perla de Oriente POR FUERA, paseo entre rascacielos y ribera.', kind: 'visit', more: 'No subiría a la Perla: si solo pagáis un mirador, que sea la Shanghai Tower.' },
         { time: 'Final de tarde', title: 'Shanghai Tower', detail: 'Entrad 45-60 min antes de la puesta de sol: día → crepúsculo → noche desde 546 m.', kind: 'ticket', alert: true, more: 'Intentad no comprar la entrada demasiado pronto si el tipo de billete permite esperar: subir a 500 m sin visibilidad no tiene ningún sentido. Mirad nubes y niebla antes.' },
         { time: 'Noche', title: 'Cena en Pudong y vuelta', detail: 'Día bastante completo: mercado, Pudong, torre y vistas.', kind: 'food' },
@@ -3132,7 +3157,7 @@ const shanghai: CityPlan = {
     { name: 'Mercado de las bodas', nameZh: '人民公园相亲角', what: 'Padres buscando pareja para sus hijos con fichas sobre paraguas. Sábados, 11:00-16:00.', zone: '10 min andando', time: '30-60 min', ticket: 'Gratis', priority: 'must' },
     { name: 'Wukang Road y Wukang Mansion', nameZh: '武康路 · 武康大楼', what: 'Art déco, mansiones, plátanos, cafeterías y diseño. El gran paseo urbano.', zone: '~5 km', time: '2,5-3 h', ticket: 'Gratis', priority: 'must' },
     { name: 'Nanjing East Road', nameZh: '南京东路', what: 'El gran eje comercial, que empieza al lado del hotel.', zone: 'En la puerta', time: 'De paso', ticket: 'Gratis', priority: 'must' },
-    { name: 'Shanghai Disneyland', what: 'Día completo el 29. Entrada nominal de fecha fija.', zone: 'Sureste', time: 'Día completo', ticket: 'Reserva obligatoria', priority: 'must' },
+    { name: 'Shanghai Disneyland', what: 'Día completo el 29. Entrada nominal de fecha fija.', zone: 'Sureste', time: 'Día completo', ticket: '✅ Comprada', priority: 'must' },
     { name: 'Shanghai Tower', nameZh: '上海中心大厦', what: 'El mirador que elegiría si solo pagáis uno: 632 m de edificio y plataforma a 546.', zone: 'Lujiazui', time: '1,5-2 h', ticket: 'Con entrada', priority: 'nice' },
     { name: 'AP Plaza', nameZh: '亚太盛汇', what: 'El mercado de imitaciones, bajo la estación del Museo de Ciencia y Tecnología. Cientos de puestos.', zone: 'Pudong', time: '1,5-2,5 h', ticket: 'Gratis', priority: 'nice' },
     { name: 'M50', nameZh: '莫干山路50号', what: 'Fábrica textil convertida en galerías, talleres y arte contemporáneo.', zone: 'Putuo', time: '1-1,5 h', ticket: 'Gratis', priority: 'nice' },

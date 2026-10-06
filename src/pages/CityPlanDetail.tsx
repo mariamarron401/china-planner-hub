@@ -219,7 +219,7 @@ export default function CityPlanDetail() {
             {/* ---------------- QUÉ VER ---------------- */}
             {section === 'ver' && (
               <>
-                {(['must', 'nice', 'skip'] as PlanPriority[]).map(prio => {
+                {(['must', 'nice', 'optional', 'skip'] as PlanPriority[]).map(prio => {
                   const items = plan.highlights.filter(h => h.priority === prio);
                   if (!items.length) return null;
                   return (
