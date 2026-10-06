@@ -232,7 +232,7 @@ export const DAY_TIMELINE: Record<string, TimelineEntry[]> = {
     { time: '16:25', what: 'En FenghuangGucheng.' },
     { time: '17:35', what: '🚄 Tren G5666 → Furongzhen. 34 min. Es el PRIMERO del día: esta línea no tiene servicio por la mañana en octubre.', kind: 'clave' },
     { time: '18:09', what: 'Llegada. Taxi al pueblo (~15 min).' },
-    { time: '18:20', what: '🎟️ Entrada al recinto de Furong (~108 CNY/persona, 3 días): el hotel está dentro. Si os recoge el hotel, preguntadles si la traen ellos.', kind: 'clave' },
+    { time: '18:20', what: '🎟️ Entrada al recinto de Furong (108 CNY/persona): el personal del hotel os ayuda a comprarla al llegar. La recogida en la estación es gratis.', kind: 'clave' },
     { time: '18:30', what: 'En Furong. Llegáis de noche, que es cuando la cascada está iluminada y el pueblo luce.' },
     { time: '', what: '⚠️ ENCARGAR EN RECEPCIÓN EL COCHE DE MAÑANA a las 09:30 hasta Zhangjiajie, con precio cerrado (~250-300 CNY).', kind: 'clave' },
   ],

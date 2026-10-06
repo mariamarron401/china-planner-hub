@@ -2233,17 +2233,17 @@ const furong: CityPlan = {
         {
           time: '18:09',
           title: 'Llegada a 芙蓉镇站',
-          detail: 'Si el hotel confirma la recogida gratuita, mejor que taxi. 10-15 min.',
+          detail: '✅ Os recoge el hotel, gratis (confirmado el 6/10). 10-15 min.',
           kind: 'move',
           more: 'Desde la estación hay transfers oficiales hacia el recinto, pero la recogida del hotel os deja la llegada resuelta y llegáis de noche.',
         },
         {
           time: '~18:20',
           title: 'Entrada al recinto',
-          detail: 'El hotel está DENTRO de la zona de pago: ~108 CNY/persona, válida 3 días.',
+          detail: 'El hotel está DENTRO de la zona de pago: 108 CNY/persona. Se compra al llegar.',
           kind: 'ticket',
           alert: true,
-          more: 'Si el hotel os recoge, preguntadles antes si la traen ellos (a veces en condiciones especiales). Si no, en la taquilla de la entrada, con el pasaporte.',
+          more: 'El hotel lo confirmó el 6/10: el personal os ayuda a comprarla cuando lleguéis. Llevad el pasaporte a mano.',
         },
         {
           time: '18:30-18:45',
@@ -2385,9 +2385,9 @@ const furong: CityPlan = {
 
   bookings: [
     {
-      title: '🏨 Escribir al hotel: un solo mensaje y queda todo resuelto',
-      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
-      price: 'Recogida gratis · entrada ~100-108 CNY/persona · coche ~250-300 CNY',
+      title: '🏨 Hotel: ✅ recogida gratis y entrada al llegar · 🔲 falta el coche',
+      when: 'Respondido el 6/10 por el chat de Trip.com. Falta que confirmen el coche del 23',
+      price: 'Recogida gratis · entrada 108 CNY/persona · coche ~250-300 CNY',
       how: 'Copiad el texto en chino y mandadlo tal cual. Dice: «Llegamos el 22/10 en el G5666 a la estación de Furong a las 18:09, somos 2 con 4 maletas: ¿nos recogéis? ¿Hay que comprar la entrada al recinto para llegar al hotel, nos la podéis comprar vosotros y cuánto cuesta? El 23 a las 9:30 queremos un coche al Thousand Hotel de Zhangjiajie: ¿nos lo organizáis, cuánto cuesta y dónde nos recoge? ¿Cómo se llega al hotel con maletas?»',
       alert: '您好！我们两位10月22日入住一晚。1）我们坐G5666次列车，18:09到芙蓉镇站，两个人带4件行李，可以麻烦你们免费接站吗？2）酒店在景区里面，我们需要买芙蓉镇景区门票吗？酒店可以帮我们买吗？多少钱一张？3）10月23日早上9:30我们想包车去张家界市区的天门山仟酒店，可以帮我们安排吗？多少钱？在哪里上车？4）带行李怎么到酒店？谢谢！',
     },

@@ -749,12 +749,12 @@ export const initialTripData: TripData = {
     {
       id: 'act-12',
       cityId: 'furong', title: 'Entrada al recinto de Furong', type: 'Entrada obligatoria',
-      duration: 'Válida 3 días', price: 14, currency: 'EUR', status: 'Por reservar',
+      duration: 'Válida 3 días', price: 14, currency: 'EUR', status: 'Planificada',
       recommendedDate: 'Jueves 22 oct · al llegar, sobre las 18:20',
-      whenToBuy: 'No hace falta con antelación. Sí dejar resuelto CÓMO entráis: preguntad al hotel una semana antes si os la gestionan ellos',
-      platform: 'Taquilla del recinto o el propio hotel (pertenece al operador turístico)',
-      priceText: '~14 €/persona (108 CNY), válida 3 días y con la iluminación nocturna incluida',
-      notes: '🆕 GASTO NUEVO detectado el 15/09/2026 con el planning de Furong. ⚠️ ESTO RESUELVE EL AVISO QUE TRAÍA LA RESERVA DEL HOTEL: el Wangcun Caotang Inn está DENTRO de la zona turística de pago, no fuera, así que la entrada no es opcional — es la única forma de llegar al alojamiento. 💰 La referencia de 2026 es 108 CNY por adulto (algunas webs aún muestran 100): presupuestad 108 y confirmad el precio unos días antes. Válida 3 días y con reentrada, así que cubre la noche del 22 y la mañana del 23. La iluminación nocturna forma parte de la visita. 🏨 El propio hotel indica que, al pertenecer al operador turístico del recinto, puede ofrecer entradas a huéspedes en condiciones especiales: preguntádselo cuando les escribáis por la recogida en la estación. 📝 Frase para mandarles: 入住酒店需要提前购买芙蓉镇景区门票吗？酒店可以帮我们购买吗？',
+      whenToBuy: '✅ Resuelto con el hotel (06/10): se compra al llegar el 22 y el personal os ayuda. Nada que hacer antes',
+      platform: 'Al llegar, con ayuda del personal del hotel',
+      priceText: '108 CNY/persona (~14 €, ~28 € los dos), confirmado por el hotel. Se paga allí',
+      notes: '✅ RESPUESTA DEL HOTEL (06/10/2026, chat de Trip.com): la recogida en la estación es GRATIS, la entrada al recinto hay que comprarla (108 CNY por persona) y el personal os ayuda a comprarla al llegar. Pendiente que contesten lo del coche del 23 a Zhangjiajie. 🆕 GASTO NUEVO detectado el 15/09/2026 con el planning de Furong. ⚠️ ESTO RESUELVE EL AVISO QUE TRAÍA LA RESERVA DEL HOTEL: el Wangcun Caotang Inn está DENTRO de la zona turística de pago, no fuera, así que la entrada no es opcional — es la única forma de llegar al alojamiento. 💰 La referencia de 2026 es 108 CNY por adulto (algunas webs aún muestran 100): presupuestad 108 y confirmad el precio unos días antes. Válida 3 días y con reentrada, así que cubre la noche del 22 y la mañana del 23. La iluminación nocturna forma parte de la visita. 🏨 El propio hotel indica que, al pertenecer al operador turístico del recinto, puede ofrecer entradas a huéspedes en condiciones especiales: preguntádselo cuando les escribáis por la recogida en la estación. 📝 Frase para mandarles: 入住酒店需要提前购买芙蓉镇景区门票吗？酒店可以帮我们购买吗？',
     },
     {
       id: 'act-13',
