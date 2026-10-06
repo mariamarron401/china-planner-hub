@@ -70,6 +70,14 @@ function transferShort(text?: string): string {
  * Solo los avisos marcados con 🔴 (no equivocarse) o 🔲 (queda algo por hacer) salen en
  * la tarjeta. Los demás repetían datos que ya están arriba, como la hora de salir.
  */
+/** Traslado del hotel: en verde, debajo del Didi al que sustituye. */
+function HotelTransfer({ text }: { text?: string }) {
+  if (!text) return null;
+  return (
+    <p className="mt-1 rounded-md bg-travel-confirmed-bg px-2 py-1 text-[11px] leading-snug text-travel-confirmed">{text}</p>
+  );
+}
+
 function esAvisoCritico(text?: string): boolean {
   return Boolean(text && (text.startsWith('🔴') || text.startsWith('🔲')));
 }
@@ -147,6 +155,7 @@ export default function RouteSchemeView() {
                       <Clock className="h-3 w-3" /> Salir a las {leg.leaveHotelTime}
                     </p>
                   )}
+                  {!isTrain && <HotelTransfer text={leg.hotelTransferBefore} />}
                 </Step>
 
                 {/* Coche hasta la estación. En los tramos sin tren no se pinta: el coche
@@ -154,6 +163,7 @@ export default function RouteSchemeView() {
                 {isTrain && leg.transferBefore && (
                   <Step icon={Car} iconColor="text-amber-600">
                     <p className="text-[11px] text-foreground leading-snug">{transferShort(leg.transferBefore)}</p>
+                    <HotelTransfer text={leg.hotelTransferBefore} />
                   </Step>
                 )}
 
@@ -201,6 +211,7 @@ export default function RouteSchemeView() {
                 {isTrain && leg.transferAfter && (
                   <Step icon={Car} iconColor="text-amber-600">
                     <p className="text-[11px] text-foreground leading-snug">{transferShort(leg.transferAfter)}</p>
+                    <HotelTransfer text={leg.hotelTransferAfter} />
                   </Step>
                 )}
 

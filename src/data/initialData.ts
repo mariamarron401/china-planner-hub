@@ -95,6 +95,7 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-4', fromCityId: 'chongqing', toCityId: 'fenghuang', mode: 'Tren bala', durationMinutes: 231, price: 96, currency: 'EUR', status: 'known',
+      hotelTransferAfter: '🚐 El hotel de Fenghuang anuncia recogida GRATIS en la estación. 🔲 Pedidla con el mensaje del plan de Fenghuang.',
       notes: 'Comprado el 22/08/2026: 95,58 € los dos en 2ª clase. G2321 directo, 3h51, y es el primer tren del día en esa fecha.',
       fromStation: 'Chongqing East (重庆东站) · en Trip.com "ChongqingDong" — 🔴 NO es la estación por la que llegáis el 19 oct (esa es Chongqing North). Está en Chayuan (Nan\'an), a 21 km del hotel de Jiefangbei', toStation: 'Fenghuang Gucheng (凤凰古城站) · no es "Fenghuang" a secas',
       paidEur: 95.58, paidOn: '22 ago 2026', paidWith: 'maria',
@@ -110,6 +111,8 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-5', fromCityId: 'fenghuang', toCityId: 'furong', mode: 'Tren bala', durationMinutes: 34, price: 18, currency: 'EUR', status: 'known',
+      hotelTransferBefore: '🚐 Preguntado al hotel de Fenghuang si os lleva a la estación a las 16:00 (puede ser de pago). Mensaje en el plan de Fenghuang.',
+      hotelTransferAfter: '🚐 ✅ Os recoge el hotel de Furong, GRATIS (confirmado el 6/10). La entrada al recinto, 108 CNY/persona, la compráis al llegar con su ayuda.',
       notes: 'Comprado el 24/08/2026: 17,50 € los dos. G5666, 34 min. Es el primer tren del día: en octubre esta línea no tiene servicio por la mañana.',
       fromStation: 'Fenghuang Gucheng (凤凰古城站) · en Trip.com "FenghuangGucheng"', toStation: 'Furongzhen (芙蓉镇站) · todo junto; no es "Furong", ni Yongshun, ni Guzhang',
       paidEur: 17.50, paidOn: '24 ago 2026', paidWith: 'maria',
@@ -124,6 +127,7 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-6', fromCityId: 'furong', toCityId: 'zhangjiajie', mode: 'Coche con chófer', durationMinutes: 90, price: 36, currency: 'EUR', status: 'known',
+      hotelTransferBefore: '🚗 Coche del hotel de Furong: 280 CNY (~36 €), se paga allí. Confirmad la recogida la noche del 22.',
       notes: '✅ 06/10/2026: el hotel de Furong lo organiza por 280 CNY (~36 €) el coche, se paga allí. Este tramo no es tren: en octubre el primer tren de la línea sale a las 18:10 y con él se perdería Tianmen Mountain entero. Se hace por carretera: ~90-110 km, 1h15-1h30, ~250-300 CNY (32-38 €) el coche completo. 🔲 HAY QUE ENCARGARLO en recepción del Wangcun Caotang Inn la noche del 22, al llegar, con el precio cerrado antes de subir: es un servicio habitual allí. No lo busquéis en Didi esa mañana — en el Xiangxi rural la cobertura es mala y Furong es un pueblo pequeño.',
       travelDateIso: '2026-10-23', departTime: '09:30', arriveTime: '11:00', leaveHotelTime: '09:30', travelDate: '23 oct 2026 (viernes)',
       breakfastNote: '✅ Encaja: el desayuno de Furong es de 07:00 a 09:00 y el coche sale a las 09:30. Bajad antes de las 09:00.',
@@ -134,6 +138,7 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-6b', fromCityId: 'zhangjiajie', toCityId: 'wulingyuan', mode: 'Didi / taxi', durationMinutes: 45, price: 14, currency: 'EUR', status: 'known',
+      hotelTransferBefore: '🚐 El hotel de Zhangjiajie anuncia traslado GRATIS (estación y aeropuerto). 🔲 Preguntado si os lleva a Wulingyuan y cuánto: mensaje en el plan de Zhangjiajie.',
       notes: 'No es tren: es el cambio de hotel dentro de la misma zona, ~33 km de Zhangjiajie ciudad al pueblo de Wulingyuan, que es la entrada del parque Avatar. ~100-120 CNY (~14 €) el coche, los dos con maletas. No hay que reservar nada: se pide el Didi en el momento. 🌉 OJO, ESTE DÍA YA NO ES TRANQUILO: por la mañana vais al Gran Cañón y al puente de cristal, que está a 30 km al otro lado de Wulingyuan y cierra sobre las 15:30. Por eso hay que desayunar (07:00-09:00, cierra a las 09:00) y salir a las 09:00, dejar las maletas en el hotel de Wulingyuan sobre las 09:45 y seguir en taxi al cañón. El Golden Whip Stream que estaba de propina esa tarde se cae por falta de hueco.',
       travelDateIso: '2026-10-24', leaveHotelTime: '09:00', travelDate: '24 oct 2026 (sábado)',
       suggestedDeparture: '09:00 · Didi, después de desayunar y hacer el check-out anticipado',
@@ -142,6 +147,8 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-7', fromCityId: 'wulingyuan', toCityId: 'shangrao', mode: 'Tren bala', durationMinutes: 371, price: 159, currency: 'EUR', status: 'known',
+      hotelTransferBefore: '🚐 El hotel de Wulingyuan anuncia lanzadera GRATIS. 🔲 Pedidle el coche a Zhangjiajie West a las 05:35 (a esa hora, quizá de pago): mensaje en el plan de Wulingyuan.',
+      hotelTransferAfter: '🚐 El hotel de Wangxian anuncia traslado. 🔲 Pedidle la recogida en Shangrao a las 13:39: mensaje en el plan de Wangxian.',
       notes: 'Comprado el 25/08/2026: 159,08 € los dos en 2ª clase. G1367 directo vía Changsha South, 6h11. Es el tramo más caro del viaje y el que menos alternativas tiene: 4 directos al día.',
       fromStation: 'Zhangjiajie West (张家界西站) · en Trip.com a veces "Zhangjiajiexi"', toStation: 'Shangrao (上饶站) · sin sufijo, es la única estación de la ciudad',
       paidEur: 159.08, paidOn: '25 ago 2026', paidWith: 'maria',
@@ -158,6 +165,7 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-8', fromCityId: 'shangrao', toCityId: 'shanghai', mode: 'Tren bala', durationMinutes: 157, price: 80, currency: 'EUR', status: 'known',
+      hotelTransferBefore: '🚐 🔲 Pedid al hotel de Wangxian que os lleve a la estación a las 11:30: mensaje en el plan de Wangxian.',
       notes: 'Comprado el 25/08/2026: 80,20 € los dos en 2ª clase. G1370 directo, 2h37.',
       fromStation: 'Shangrao (上饶站) · en Trip.com "Shangrao", sin sufijo', toStation: 'Shanghai Hongqiao (上海虹桥站) · en Trip.com "ShanghaiHongqiao". No es "Shanghai" a secas, ni South, ni West',
       paidEur: 80.20, paidOn: '25 ago 2026', paidWith: 'maria',
@@ -175,8 +183,8 @@ export const initialTripData: TripData = {
     { id: 'lt-1', cityId: 'shangrao', fromText: 'Estación Shangrao', toText: 'Wangxian Valley', mode: 'Didi', durationMinutes: 60, price: 20, currency: 'EUR', notes: '~40 km · ~150 CNY (~20€) en Didi (el bus lanzadera es más barato). Llegada del tren G1367 desde Zhangjiajie West (sale 07:28 → llega a Shangrao 13:39)', date: '26 oct 2026 (lunes)', suggestedTime: 'Justo al bajar del tren, sobre las 13:45-14:00, para llegar a Wangxian Valley hacia las 14:40. El check-in no abre hasta las 17:00: dejáis maletas y empezáis a recorrer el valle' },
     { id: 'lt-1b', cityId: 'shangrao', fromText: 'Wangxian Valley', toText: 'Estación Shangrao', mode: 'Didi', durationMinutes: 60, price: 20, currency: 'EUR', notes: '~40 km · ~150 CNY (~20€) en Didi (el bus lanzadera es más barato). Ida al tren Shangrao → Shanghai', date: '27 oct 2026 (martes)', suggestedTime: 'Salir a las 11:30, antes del check-out de las 12:00, para estar en la estación una hora antes del G1370 de las 13:48' },
     { id: 'lt-2b', cityId: 'wulingyuan', fromText: 'Wulingyuan (hotel)', toText: 'Zhangjiajie West (estación)', mode: 'Didi', durationMinutes: 35, price: 13, currency: 'EUR', notes: '~28 km · ~100 CNY (~13€) en Didi. ⚠️ Con maletas y de madrugada: es el traslado más crítico del viaje. Dejadlo programado la noche antes y pedid el check-out anticipado; el de fábrica es a las 15:00', date: '26 oct 2026 (lunes)', suggestedTime: 'Salir a las 05:35 (Didi programado) para llegar con una hora de margen al G1367 de las 07:28' },
-    { id: 'lt-5', cityId: 'zhangjiajie', fromText: 'Hotel Zhangjiajie (Thousand Hotel)', toText: '天门山山门 (Puerta de la Montaña, entrada de la línea C)', mode: 'Didi', durationMinutes: 20, price: 4, currency: 'EUR', notes: '~8-10 km, ~25-30 CNY. Desde el 13 de octubre el teleférico de la ciudad (junto a la estación de tren, a ~1 km del hotel) no funciona: no vayáis allí. Si no hay Didi, andad a esa estación vieja (天门山索道下站) y coged la lanzadera gratis al 山门, ~20 min. Vuelta hacia las 19:00, también en Didi o lanzadera', date: '23 oct 2026 (viernes)', suggestedTime: '12:40, tras dejar las maletas en el hotel, para la franja de entrada de 13:00-14:00' },
-    { id: 'lt-6', cityId: 'wulingyuan', fromText: 'Hotel Wulingyuan (Tianchong Yunhai)', toText: 'Puerta de Wulingyuan / East Gate del parque', mode: 'A pie / Didi', durationMinutes: 15, price: 2, currency: 'EUR', notes: 'El hotel está en Wuling Avenue, la avenida que lleva a la puerta de Wulingyuan (East / Sign Gate), la mejor puerta para el ascensor Bailong y el teleférico de Tianzi. Confirmad en recepción la noche antes si se va andando o conviene Didi (~10-15 CNY)', date: '25 oct 2026 (domingo)', suggestedTime: 'Didi a las 07:05 para la franja de 07:00-08:00 (East Gate, Línea B) y llegar al Bailong antes de que la cola pase de 1 h' },
+    { id: 'lt-5', cityId: 'zhangjiajie', fromText: 'Hotel Zhangjiajie (Thousand Hotel)', toText: '天门山山门 (Puerta de la Montaña, entrada de la línea C)', mode: 'Didi', durationMinutes: 20, price: 4, currency: 'EUR', notes: '🚐 El hotel anuncia traslado GRATIS: preguntado si os lleva al 山门 a las 12:40 (mensaje en el plan de Zhangjiajie). ~8-10 km, ~25-30 CNY. Desde el 13 de octubre el teleférico de la ciudad (junto a la estación de tren, a ~1 km del hotel) no funciona: no vayáis allí. Si no hay Didi, andad a esa estación vieja (天门山索道下站) y coged la lanzadera gratis al 山门, ~20 min. Vuelta hacia las 19:00, también en Didi o lanzadera', date: '23 oct 2026 (viernes)', suggestedTime: '12:40, tras dejar las maletas en el hotel, para la franja de entrada de 13:00-14:00' },
+    { id: 'lt-6', cityId: 'wulingyuan', fromText: 'Hotel Wulingyuan (Tianchong Yunhai)', toText: 'Puerta de Wulingyuan / East Gate del parque', mode: 'A pie / Didi', durationMinutes: 15, price: 2, currency: 'EUR', notes: '🚐 El hotel anuncia lanzadera GRATIS: preguntado si os lleva al 标志门 a las 07:05 (mensaje en el plan de Wulingyuan). El hotel está en Wuling Avenue, la avenida que lleva a la puerta de Wulingyuan (East / Sign Gate), la mejor puerta para el ascensor Bailong y el teleférico de Tianzi. Confirmad en recepción la noche antes si se va andando o conviene Didi (~10-15 CNY)', date: '25 oct 2026 (domingo)', suggestedTime: 'Didi a las 07:05 para la franja de 07:00-08:00 (East Gate, Línea B) y llegar al Bailong antes de que la cola pase de 1 h' },
     { id: 'lt-3', cityId: 'chengdu', fromText: 'Hotel Chengdu', toText: 'Base de Pandas', mode: 'Didi', durationMinutes: 35, price: 7, currency: 'EUR', notes: '~15-20 km desde el centro · ~45-55 CNY (~7 €) en Didi, 30-40 min a esa hora. Franja de mañana 7:30-12:00, más actividad de los pandas entre las 8:00 y las 10:00', date: '17 oct 2026 (sábado)', suggestedTime: 'Salir del hotel a las 06:50-07:00 para llegar a la apertura (07:30)' },
     { id: 'lt-4', cityId: 'chengdu', fromText: 'Estación Leshan', toText: 'Recinto del Buda (mañana) y muelle 嘉州渡码头 (tarde)', mode: 'Didi', durationMinutes: 20, price: 5, currency: 'EUR', notes: '~10 km desde la estación de Leshan · ~30-35 CNY (~5 €) en Didi, 20 min. Excursión de un día desde Chengdu. Horario de invierno desde el 8 oct: apertura 8:00, cierre 17:30. Mejor ir en el crucero en barco (sin colas) que bajar por la escalera (hasta 2-4h de cola en temporada alta)', date: '18 oct 2026 (domingo)', suggestedTime: 'Al llegar a Leshan (~10:30), Didi al recinto (entrada 10:30-14:30). Por la tarde, al muelle 嘉州渡码头 para el barco' },
   ],

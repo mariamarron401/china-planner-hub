@@ -224,6 +224,13 @@ export interface TransportLeg {
   estimatedArrival?: string;
   transferBefore?: string;
   transferAfter?: string;
+  /**
+   * Traslado que ofrece el propio hotel en lugar del Didi (06/10/2026: varios hoteles
+   * anuncian recogida o lanzadera gratis). Va aparte de `transferBefore`/`transferAfter`
+   * para que Puerta a puerta lo pinte como alternativa, sin pisar el dato del Didi.
+   */
+  hotelTransferBefore?: string;
+  hotelTransferAfter?: string;
   transferBeforeEur?: number;
   transferAfterEur?: number;
   stationBuffer?: string;
