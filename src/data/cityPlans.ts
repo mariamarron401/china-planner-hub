@@ -2448,7 +2448,7 @@ const zhangjiajie: CityPlan = {
         {
           time: '~19:00',
           title: 'Bajada y vuelta al hotel',
-          detail: 'Teleférico exprés al 山门 y Didi al hotel (o lanzadera gratis).',
+          detail: 'Teleférico exprés al 山门 y Didi al hotel (o lanzadera gratis). Cena cerca del hotel sobre las 19:45.',
           kind: 'move',
           more: 'Ese teleférico es ahora la única bajada de toda la montaña: a última hora puede haber cola. Y si para por viento o tormenta, no hay ruta alternativa.',
         },
@@ -2613,7 +2613,7 @@ const wulingyuan: CityPlan = {
         {
           time: 'Tarde',
           title: 'Vuelta al hotel y descanso',
-          detail: 'Didi de vuelta desde 张家界大峡谷游客集散中心（双坪）, la salida de abajo. Ducha y parar.',
+          detail: 'Didi de vuelta desde 张家界大峡谷游客集散中心（双坪）, la salida de abajo. Comida tardía en Wulingyuan (~15:30), ducha y parar.',
           kind: 'rest',
           more: 'Este descanso es importante de verdad: el domingo son 8-9 horas de parque.',
         },
