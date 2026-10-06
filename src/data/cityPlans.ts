@@ -2425,7 +2425,7 @@ const zhangjiajie: CityPlan = {
         {
           time: '13:00-14:00',
           title: 'Entrada a Tianmen, línea C',
-          detail: 'Franja reservada. Pasaporte en el control del 山门 y teleférico exprés hasta la explanada de la cueva.',
+          detail: '✅ Entrada comprada. Pasaporte en el control del 山门 y teleférico exprés hasta la explanada de la cueva.',
           kind: 'ticket',
           alert: true,
           more: 'La franja es estricta: llegad dentro de ella. En la explanada, si no queréis gastar piernas, la escalera mecánica de pago (32 CNY) os sube a la cueva; los 999 escalones los dejáis para la bajada.',
@@ -2540,11 +2540,11 @@ const zhangjiajie: CityPlan = {
   bookings: [
     {
       activityId: 'act-6',
-      title: 'Entrada de Tianmen Mountain',
-      when: 'Ya, en cuanto veáis la línea C para el 23',
-      price: '288 CNY con seguro',
-      how: 'Trip.com, con pasaporte. LÍNEA C y franja 13:00-14:00.',
-      alert: 'Desde el 13 de octubre solo existe la línea C. Si para el 23 os salen la A o la B, no compréis. Tour nocturno: no hace falta.',
+      title: 'Entrada de Tianmen: ✅ comprada',
+      when: 'Comprada el 6 de octubre',
+      price: '✅ 76,64 € los dos',
+      how: 'Line C, viernes 23, entrada entre las 13:00 y las 14:00. Sin recoger billete: pasaporte en el control del 山门.',
+      alert: 'Cancelación gratis hasta las 17:00 del 23. Tour nocturno: no hace falta.',
     },
   ],
 
