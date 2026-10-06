@@ -123,14 +123,14 @@ export const initialTripData: TripData = {
       stationBuffer: '🕐 En la estación a las 16:25, saliendo del casco antiguo a las 16:00 (~20 min)',
     },
     {
-      id: 'tl-6', fromCityId: 'furong', toCityId: 'zhangjiajie', mode: 'Coche con chófer', durationMinutes: 90, price: 38, currency: 'EUR', status: 'known',
-      notes: 'Este tramo no es tren: en octubre el primer tren de la línea sale a las 18:10 y con él se perdería Tianmen Mountain entero. Se hace por carretera: ~90-110 km, 1h15-1h30, ~250-300 CNY (32-38 €) el coche completo. 🔲 HAY QUE ENCARGARLO en recepción del Wangcun Caotang Inn la noche del 22, al llegar, con el precio cerrado antes de subir: es un servicio habitual allí. No lo busquéis en Didi esa mañana — en el Xiangxi rural la cobertura es mala y Furong es un pueblo pequeño.',
+      id: 'tl-6', fromCityId: 'furong', toCityId: 'zhangjiajie', mode: 'Coche con chófer', durationMinutes: 90, price: 36, currency: 'EUR', status: 'known',
+      notes: '✅ 06/10/2026: el hotel de Furong lo organiza por 280 CNY (~36 €) el coche, se paga allí. Este tramo no es tren: en octubre el primer tren de la línea sale a las 18:10 y con él se perdería Tianmen Mountain entero. Se hace por carretera: ~90-110 km, 1h15-1h30, ~250-300 CNY (32-38 €) el coche completo. 🔲 HAY QUE ENCARGARLO en recepción del Wangcun Caotang Inn la noche del 22, al llegar, con el precio cerrado antes de subir: es un servicio habitual allí. No lo busquéis en Didi esa mañana — en el Xiangxi rural la cobertura es mala y Furong es un pueblo pequeño.',
       travelDateIso: '2026-10-23', departTime: '09:30', arriveTime: '11:00', leaveHotelTime: '09:30', travelDate: '23 oct 2026 (viernes)',
       breakfastNote: '✅ Encaja: el desayuno de Furong es de 07:00 a 09:00 y el coche sale a las 09:30. Bajad antes de las 09:00.',
       suggestedDeparture: '09:30 · coche con chófer, desde la puerta del hotel', estimatedArrival: '~11:00 en Zhangjiajie ciudad, directos al hotel. Dejáis maletas, coméis y a las 12:40 Didi al 山门 para la franja de 13:00-14:00 de Tianmen (línea C)',
       transferBefore: 'Sin estación y sin traslado: el coche os recoge en la puerta del hotel, en el pueblo de Furong. Pedid en recepción que llegue a las 09:15 para cargar sin prisa',
       transferAfter: 'Os deja directamente en el hotel de Zhangjiajie ciudad. No hay traslado extra que pagar',
-      alertNote: '🔲 Es el único tramo que no es tren y el único que queda por contratar: encargad el coche en recepción del hotel de Furong la noche del 22, con precio cerrado.',
+      alertNote: '🚗 Lo organiza el hotel de Furong: 280 CNY (~36 €), precio dado por el hotel el 6/10. Confirmad la noche del 22 en recepción la hora (09:30) y el punto de recogida.',
     },
     {
       id: 'tl-6b', fromCityId: 'zhangjiajie', toCityId: 'wulingyuan', mode: 'Didi / taxi', durationMinutes: 45, price: 14, currency: 'EUR', status: 'known',
