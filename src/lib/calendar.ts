@@ -193,11 +193,13 @@ export const DAY_TIMELINE: Record<string, TimelineEntry[]> = {
     { time: '', what: 'Tarde libre: Chunxi Road, People\'s Park y casa de té.', kind: 'libre' },
   ],
   '2026-10-18': [
-    { time: '~06:00', what: '🚕 Didi a Chengdu East (成都东站), 1 h y media antes del tren. ⚠️ El desayuno abre a las 07:30: para llevar, pedido anoche.', kind: 'clave' },
-    { time: '', what: '🚄 Tren Chengdu East → Leshan, saliendo entre 07:00 y 07:30. 🔴 Hay que comprarlo: la venta está abierta desde el 3 de octubre.', kind: 'clave' },
-    { time: '', what: '🚢 Didi al muelle 嘉州渡码头 (no a «Leshan Giant Buddha») para el crucero reservado el día 11.', kind: 'clave' },
-    { time: '', what: '🗿 Recinto del Buda ✅ comprado, en su franja (al menos 2 h después del barco). Horario de invierno: 08:00-17:30.' },
-    { time: '', what: '🚄 Vuelta saliendo de Leshan entre 16:30 y 18:45. Mirad a qué estación de Chengdu llega.', kind: 'clave' },
+    { time: '07:30', what: 'Desayuno rápido: abre a las 07:30.', kind: 'comida' },
+    { time: '07:45', what: '🚕 Didi a la estación de Chengdu (East o South, la del billete), 1 h y media antes del tren.', kind: 'clave' },
+    { time: '09:00', what: '🚄 Tren a Leshan, saliendo entre 09:00 y 09:30. 🔴 Hay que comprarlo: la venta está abierta desde el 3 de octubre.', kind: 'clave' },
+    { time: '10:45', what: '🗿 Recinto del Buda ✅ comprado: entrada de 10:30 a 14:30. Cabeza del Buda y templo Lingyun.', kind: 'clave' },
+    { time: '13:30', what: 'Comer cerca del muelle 嘉州渡码头: 跷脚牛肉.', kind: 'comida' },
+    { time: '', what: '🚢 Barco en la franja reservada el día 11 (primera a partir de las 14:00), desde 嘉州渡码头. ~30 min.', kind: 'clave' },
+    { time: '17:30', what: '🚄 Vuelta saliendo de Leshan entre 17:30 y 18:30. Mirad a qué estación de Chengdu llega.', kind: 'clave' },
   ],
   '2026-10-19': [
     { time: '07:30', what: 'Desayuno en cuanto abra: solo tenéis 15 min.', kind: 'comida' },
