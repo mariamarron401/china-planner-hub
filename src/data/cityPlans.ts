@@ -2599,7 +2599,7 @@ const wulingyuan: CityPlan = {
         {
           time: '~11:00',
           title: 'Entrada al cañón, línea B',
-          detail: 'Puente de Cristal → pasarela → bajada al cañón → Rainbow Square → Touch Cave → barca → salida abajo.',
+          detail: '✅ Entrada comprada. Puente de Cristal → pasarela → bajada al cañón → Rainbow Square → Touch Cave → barca → salida abajo.',
           kind: 'ticket',
           alert: true,
           more: 'Unas 3-3,5 h. Con pasaporte puede que os toque validar en la taquilla del 游客中心: contad 10-15 min. Para bajar al cañón: sendero muy empinado (gratis) o ascensores de pago por QR. Nada de mochilas grandes, trípodes, palo selfie ni objetos metálicos: hay consigna gratis. El puente puede cerrarse por viento o tormenta, y en octubre el fondo del cañón se siente bastante más fresco: llevad una capa fina.',
@@ -2767,11 +2767,11 @@ const wulingyuan: CityPlan = {
   bookings: [
     {
       activityId: 'act-10',
-      title: 'Gran Cañón y Puente de Cristal',
-      when: 'En cuanto salga el 24 en Trip.com (~9 oct), como tarde el 20',
-      price: '178 CNY con seguro',
-      how: 'Trip.com, con pasaporte. LÍNEA B 大峡谷+玻璃桥. La franja es única, de todo el día.',
-      alert: 'No cojáis el pack de 298 con Experience / Via Ferrata / Climbing ni la línea A, que no tiene puente.',
+      title: 'Gran Cañón y Puente de Cristal: ✅ comprada',
+      when: 'Comprada el 6 de octubre',
+      price: '✅ 45,37 € los dos',
+      how: 'Line B + Glass Bridge, sábado 24. Franja única de todo el día; sin recoger billete, con el pasaporte.',
+      alert: 'Último control a las 16:00. Cancelable en cualquier momento.',
     },
     {
       activityId: 'act-7',
