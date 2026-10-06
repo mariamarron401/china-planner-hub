@@ -2181,8 +2181,8 @@ const fenghuang: CityPlan = {
       title: '🏨 Recogida gratuita en la estación',
       when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
       price: 'Gratis, según anuncia el alojamiento',
-      how: 'Copiad el texto en chino y mandadlo tal cual. Dice: «Llegamos el 21/10 en el G2321 a la estación Fenghuang Gucheng a las 16:46, somos 2 con 4 maletas: ¿nos recogéis? El casco antiguo es peatonal: ¿cómo llegamos al hotel con las maletas? El 22 salimos a las 16:00 hacia la estación: ¿podemos dejar las maletas en recepción después del check-out?»',
-      alert: '您好！我们两位10月21日入住一晚。1）我们坐G2321次列车，16:46到凤凰古城站，两个人带4件行李，可以麻烦你们免费接站吗？2）古城里不能开车，带行李怎么到客栈？3）10月22日下午16:00我们去火车站，退房后可以把行李寄存在前台吗？谢谢！',
+      how: 'Copiad el texto en chino y mandadlo tal cual. Dice: «Llegamos el 21/10 en el G2321 a la estación Fenghuang Gucheng a las 16:46, somos 2 con 4 maletas: ¿nos recogéis? El casco antiguo es peatonal: ¿cómo llegamos al hotel con las maletas? El 22 salimos a las 16:00 hacia la estación: ¿podemos dejar las maletas en recepción después del check-out, y nos podéis llevar a la estación a esa hora (y cuánto cuesta)?»',
+      alert: '您好！我们两位10月21日入住一晚。1）我们坐G2321次列车，16:46到凤凰古城站，两个人带4件行李，可以麻烦你们免费接站吗？2）古城里不能开车，带行李怎么到客栈？3）10月22日退房后可以把行李寄存在前台吗？下午16:00可以送我们去凤凰古城站吗？多少钱？谢谢！',
     },
     {
       title: 'Paseo en barco por el Tuojiang',
@@ -2577,6 +2577,13 @@ const zhangjiajie: CityPlan = {
 
   bookings: [
     {
+      title: '🚐 Pedir al hotel el traslado gratis al 山门',
+      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
+      price: 'El hotel anuncia traslado gratis a estación y aeropuerto',
+      how: 'Copiad el texto en chino. Dice: «Llegamos el 23 sobre las 11:00 en coche desde Furong. Vemos que tenéis traslado gratis: ¿nos podéis llevar el 23 a las 12:40 al 山门 de Tianmen (línea C)? El 24 a las 09:00 vamos al hotel Tianchong Yunhai de Wulingyuan: ¿nos podéis llevar, y si se paga, cuánto?»',
+      alert: '您好！我们两位10月23日入住一晚，23日上午11:00左右从芙蓉镇包车到酒店。看到酒店有免费接送服务：1）23日中午12:40可以送我们去天门山山门（坐C线快线索道）吗？2）10月24日早上9:00我们去武陵源的天崇云海度假酒店，酒店可以送吗？如果收费，多少钱？谢谢！',
+    },
+    {
       activityId: 'act-6',
       title: 'Entrada de Tianmen: ✅ comprada',
       when: 'Comprada el 6 de octubre',
@@ -2843,6 +2850,13 @@ const wulingyuan: CityPlan = {
 
   bookings: [
     {
+      title: '🚐 Pedir al hotel la lanzadera gratis y el coche del 26',
+      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
+      price: 'El hotel anuncia lanzadera gratis (免费班车)',
+      how: 'Copiad el texto en chino. Dice: «Llegamos el 24 sobre las 09:45: ¿podemos dejar las maletas? Vemos que tenéis lanzadera gratis: ¿nos lleváis el 25 a las 07:05 al 标志门 (Puerta Este)? El 26 cogemos el tren de las 07:28 en Zhangjiajie West y salimos a las 05:35: ¿nos podéis llevar y cuánto cuesta? ¿Nos preparáis desayuno para llevar y el check-out a esa hora?»',
+      alert: '您好！我们两位10月24日至26日入住两晚。1）24日上午9:45左右到酒店，可以先寄存行李吗？2）看到酒店有免费班车：10月25日早上7:05可以送我们去武陵源标志门（森林公园东门）吗？3）10月26日我们坐07:28从张家界西站出发的高铁，需要早上5:35出发。酒店可以安排车送我们去张家界西站吗？多少钱？4）26日早上5:35退房，可以帮我们准备打包早餐吗？谢谢！',
+    },
+    {
       activityId: 'act-10',
       title: 'Gran Cañón y Puente de Cristal: ✅ comprada',
       when: 'Comprada el 6 de octubre',
@@ -3042,6 +3056,13 @@ const shangrao: CityPlan = {
   ],
 
   bookings: [
+    {
+      title: '🚐 Pedir al hotel la recogida en la estación de Shangrao',
+      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
+      price: 'La reserva dice «Servicio de traslado disponible»: preguntad si es gratis',
+      how: 'Copiad el texto en chino. Dice: «Llegamos el 26 en el G1367 a la estación de Shangrao a las 13:39, 2 personas con 4 maletas: ¿nos recogéis, gratis o cuánto cuesta? El 27 cogemos el G1370 de las 13:48 y salimos a las 11:30: ¿nos lleváis a la estación y cuánto cuesta? Llegamos sobre las 14:40 y el check-in es a las 17:00: ¿podemos dejar las maletas antes?»',
+      alert: '您好！我们两位10月26日入住仰仙村一晚。1）我们坐G1367次列车，13:39到上饶站，两个人带4件行李，酒店可以安排接站吗？免费还是收费？2）10月27日我们坐13:48从上饶站出发的G1370次列车，需要11:30从酒店出发，可以送我们去上饶站吗？多少钱？3）我们大约14:40到，入住时间是17:00，可以先寄存行李吗？谢谢！',
+    },
     {
       title: 'Nada que reservar',
       when: 'La entrada ya va incluida en el hotel',
