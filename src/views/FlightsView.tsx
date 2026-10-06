@@ -32,6 +32,8 @@ export default function FlightsView() {
           <DstCard />
         </div>
       </div>
+
+      <JetLagSection />
     </div>
   );
 }
@@ -202,6 +204,158 @@ function FlightSection({ title, legs }: { title: string; legs: any[] }) {
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/* ───────────────────────── Plan antijet lag ─────────────────────────
+ * Contenido estático (como DstCard): no es un dato del viaje que cambie,
+ * es el procedimiento de adaptación horaria calculado sobre ESTOS vuelos.
+ * La lógica de fondo: hacia el este (ida) hay que ADELANTAR el reloj del
+ * cuerpo, y para eso la luz de primera hora juega en contra hasta que el
+ * cuerpo se recoloca; hacia el oeste (vuelta) hay que ATRASARLO, y la que
+ * ayuda es la luz de la tarde.
+ */
+
+interface JetStep {
+  icon: string;
+  when: string;
+  what: string;
+  key?: boolean;
+}
+
+const IDA_STEPS: JetStep[] = [
+  { icon: '🛏️', when: 'Hoy y mañana', what: 'A la cama y al despertador 1 h antes cada día. Cada hora que ganéis ahora es una hora menos de jet lag allí.' },
+  { icon: '💊', when: 'Antes del día 8', what: 'Farmacia: melatonina de 1 mg (liberación inmediata), antifaz y tapones. Y las gafas de sol a mano, no en la maleta facturada.', key: true },
+  { icon: '😴', when: 'Jue 8 · tarde', what: 'Siesta larga de verdad, 2-3 h, antes de coger el tren. La noche del 8 es una noche perdida.' },
+  { icon: '🌙', when: 'Jue 8 · 00:30-04:20 en la T2', what: 'Dormid por turnos, uno vigilando los bultos. Lo que durmáis ahí cuenta.' },
+  { icon: '🕐', when: 'Vie 9 · Bruselas', what: 'Reloj y móvil en hora china ya. Siesta de 1 h como mucho y el último café a las 10:00 (las 16:00 en China).' },
+  { icon: '✈️', when: 'Vie 9 · 13:00 · vuelo a Pekín', what: 'Este vuelo ES la noche: despega a las 19:00 chinas y aterriza a las 04:45. Objetivo, 5-6 h de sueño.', key: true },
+  { icon: '🕶️', when: 'Sáb 10 · hasta las 10:30', what: 'Gafas de sol en la calle, también en el Templo del Cielo. A las 10:30 os las quitáis y al sol todo lo que podáis.', key: true },
+  { icon: '⏰', when: 'Sáb 10 · 14:00', what: 'La siesta del check-in, con alarma: 90 minutos y ni uno más. Nunca después de las 16:30.' },
+  { icon: '🌜', when: 'Sáb 10 · 21:30', what: 'Melatonina de 1 mg y a la cama a las 22:00. Aunque os caigáis, no antes de las 21:30.' },
+  { icon: '☀️', when: 'Dom 11 y lun 12', what: 'Despertador a las 06:45 pase lo que pase. El domingo, gafas de sol hasta las 09:00; el lunes ya no hacen falta.' },
+  { icon: '✅', when: 'Mar 13', what: 'Reloj del cuerpo en hora china. Los madrugones de estos días juegan a vuestro favor.' },
+];
+
+const VUELTA_STEPS: JetStep[] = [
+  { icon: '🛏️', when: 'Sáb 31 · 22:30', what: 'A la cama pronto. Halloween sin alargarlo: el domingo os levantáis a las 05:30.' },
+  { icon: '🚶', when: 'Dom 1 · escala en Pekín', what: 'No durmáis las 4 h de escala. Comed sobre las 12:00 y andad por la terminal.' },
+  { icon: '✈️', when: 'Dom 1 · 15:00 · vuelo a Madrid', what: 'Aquí sí: dormid todo lo que podáis. Para vuestro cuerpo son las horas de la noche del domingo.', key: true },
+  { icon: '🚫', when: 'Dom 1 · 20:10 en Madrid', what: 'Nada de café en el aeropuerto. Lo que toca ahora es dormir en el bus.' },
+  { icon: '🚌', when: 'Dom 1 · 23:45', what: 'Antifaz y tapones: el ALSA hasta las 03:15 es vuestra cama.' },
+  { icon: '⏰', when: 'Lun 2', what: 'Llegáis a casa sobre las 04:00: dormid, pero con despertador a las 11:00 como muy tarde.', key: true },
+  { icon: '☀️', when: 'Lun 2 · 15:00-18:00', what: 'A la calle, con luz de día. A la vuelta la que ayuda es la luz de la TARDE, no la de la mañana.', key: true },
+  { icon: '🌜', when: 'Lun 2 · 23:00', what: 'A la cama a las 23:00, no a las 20:00. Si os acostáis a las 20:00 os despertaréis a las 03:00 y alargáis el jet lag una semana.' },
+  { icon: '✅', when: 'Mar 3', what: 'Día normal. La vuelta se paga en 2-3 días, bastante menos que la ida.' },
+];
+
+function JetLagSection() {
+  return (
+    <div>
+      <h2 className="text-sm font-bold text-foreground mb-3">😴 Plan antijet lag</h2>
+      <div className="space-y-4">
+        <JetLagCard
+          direction="outbound"
+          title="IDA · +6 h de golpe"
+          headline="La ida es la dura: hay que adelantar el reloj del cuerpo 6 horas. Todo el plan se juega en el vuelo de Bruselas a Pekín y en la mañana del sábado 10."
+          steps={IDA_STEPS}
+        >
+          <p>
+            <span className="font-medium text-foreground">Por qué las gafas de sol el sábado 10.</span> Cuando aterrizáis,
+            vuestro cuerpo va por las 22:45 del viernes. Su momento más bajo —cuando aún "es de noche" para él— cae sobre
+            las 10:30 hora china. La luz fuerte <span className="font-medium text-foreground">antes</span> de esa hora
+            empuja el reloj hacia atrás, justo al revés de lo que os interesa; la de después lo adelanta. Por eso: gafas
+            puestas hasta las 10:30 y luego sol a la cara. El domingo esa frontera ya está en las 09:00, y el lunes
+            desaparece.
+          </p>
+          <p>
+            <span className="font-medium text-foreground">El vuelo de Bruselas a Pekín.</span> Cenad lo que os den nada
+            más despegar, melatonina sobre las 14:30 hora española (20:30 en China) y a dormir: persiana bajada, antifaz,
+            tapones, nada de pantallas y cero alcohol. La noche en blanco de la T2 juega aquí a favor: vais a tener sueño
+            de sobra. Despertaos con el desayuno de a bordo.
+          </p>
+          <p>
+            <span className="font-medium text-foreground">Las dos cosas que lo estropean todo:</span> una siesta larga
+            por la tarde y acostarse a las 19:00. Lo demás se perdona.
+          </p>
+          <p>
+            La melatonina, las noches del 10, 11 y 12. A partir del 13 ya no hace falta. Si tomáis alguna medicación,
+            preguntad en la farmacia al comprarla.
+          </p>
+        </JetLagCard>
+
+        <JetLagCard
+          direction="return"
+          title="VUELTA · −7 h y 24 h despiertos"
+          headline="La vuelta cuesta menos al reloj, pero el día 1 es una maratón: salís del hotel a las 06:00 y llegáis a Zaragoza a las 03:15 de la madrugada."
+          steps={VUELTA_STEPS}
+        >
+          <p>
+            <span className="font-medium text-foreground">Por qué la luz de la tarde.</span> Hacia el oeste hay que
+            atrasar el reloj del cuerpo, y eso se consigue con luz al final del día y aguantando despiertos hasta una hora
+            normal. El 2 de noviembre en Zaragoza el sol se pone sobre las 18:05: la franja útil es de 15:00 a 18:00.
+          </p>
+          <p>
+            <span className="font-medium text-foreground">El lunes 2 es festivo en Aragón</span>, así que podéis dormir la
+            mañana entera. Pero con despertador: dormir hasta las 17:00 os deja sin sueño esa noche. Si necesitáis siesta,
+            30-40 minutos y antes de las 17:00.
+          </p>
+          <p>
+            Melatonina en la vuelta no hace falta: para el sentido oeste apenas aporta. Lo que funciona es la luz y la
+            hora de acostarse.
+          </p>
+        </JetLagCard>
+      </div>
+    </div>
+  );
+}
+
+function JetLagCard({
+  direction,
+  title,
+  headline,
+  steps,
+  children,
+}: {
+  direction: 'outbound' | 'return';
+  title: string;
+  headline: string;
+  steps: JetStep[];
+  children: React.ReactNode;
+}) {
+  const goingEast = direction === 'outbound';
+
+  return (
+    <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+      <div className={`px-4 py-2.5 ${goingEast ? 'bg-primary/10' : 'bg-secondary/10'}`}>
+        <div className="text-sm font-bold text-foreground">{title}</div>
+      </div>
+
+      <div className="p-4">
+        <p className="text-xs text-foreground leading-snug mb-3">{headline}</p>
+
+        <div className="rounded-lg border border-border overflow-hidden">
+          {steps.map((s, i) => (
+            <div
+              key={i}
+              className={`flex items-start gap-2.5 px-2.5 py-2 ${i > 0 ? 'border-t border-border' : ''} ${
+                s.key ? 'bg-travel-pending-bg/40' : ''
+              }`}
+            >
+              <span className="text-sm leading-none pt-0.5 flex-shrink-0">{s.icon}</span>
+              <div className="min-w-0">
+                <div className={`text-[10px] uppercase tracking-wide ${s.key ? 'font-bold text-travel-pending' : 'text-muted-foreground'}`}>
+                  {s.when}
+                </div>
+                <div className="text-[11px] text-foreground leading-snug">{s.what}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <MoreInfo label="Por qué funciona así">{children}</MoreInfo>
       </div>
     </div>
   );
