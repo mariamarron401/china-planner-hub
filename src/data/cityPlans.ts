@@ -2648,7 +2648,7 @@ const wulingyuan: CityPlan = {
         {
           time: '07:15',
           title: 'Entrada: Línea B, torno de la derecha',
-          detail: 'Franja 07:00-08:00. Pasaporte en el torno.',
+          detail: '✅ Entrada comprada. Franja 07:00-08:00. Pasaporte en el torno.',
           kind: 'ticket',
           alert: true,
           more: '🔄 Mirad la pantalla de esperas antes de pasar: si el Bailong marca más de 60 min, preguntad en ventanilla si os cambian a la Línea A y haced el día al revés (teleférico de Tianzi arriba, Bailong abajo).',
@@ -2814,11 +2814,11 @@ const wulingyuan: CityPlan = {
     },
     {
       activityId: 'act-7',
-      title: 'Parque Avatar / Forest Park',
-      when: 'Desde ~13-14 oct (venta a ~10 días vista): mirad cada día',
-      price: '239 CNY con eco-bus y seguro · Bailong 65 y Tianzi 72, allí',
-      how: 'Trip.com: 4-Day Ticket (Including Eco-bus). Puerta Este, LÍNEA B (东门B线), franja 07:00-08:00.',
-      alert: 'Las franjas de primera hora son las primeras en llenarse. Bailong y teleférico no hace falta comprarlos antes.',
+      title: 'Parque Avatar: ✅ comprada',
+      when: 'Comprada el 6 de octubre',
+      price: '✅ 63,60 € los dos · Bailong 65 y Tianzi 72 CNY, allí',
+      how: 'Domingo 25, East Gate Línea B (dirección Bailong), entrada 07:00-08:00. Sin recoger billete, con el pasaporte.',
+      alert: 'Cancelación gratis hasta las 16:55 del 28 de octubre.',
     },
     {
       title: 'Charming Xiangxi y el show de drones',

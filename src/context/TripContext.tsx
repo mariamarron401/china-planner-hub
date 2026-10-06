@@ -128,6 +128,12 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         parsed.localTransports = reconcileById(initialTripData.localTransports, parsed.localTransports, ['price', 'durationMinutes']);
         // `duration` no se conserva: no se edita desde la app y así llegan las correcciones (Tianmen, 05/10/2026).
         parsed.activities = reconcileById(initialTripData.activities, parsed.activities, ['price', 'status']);
+        // Una compra registrada en el código (status 'Hecha') manda sobre el estado guardado:
+        // si no, una entrada ya pagada seguiría saliendo "Por reservar" en el navegador.
+        parsed.activities = parsed.activities.map((a: Activity) => {
+          const fresh = initialTripData.activities.find(f => f.id === a.id);
+          return fresh?.status === 'Hecha' ? { ...a, status: fresh.status, price: fresh.price } : a;
+        });
         // Los traslados de aeropuerto son puramente informativos (no se editan desde la app),
         // así que se toman siempre frescos del código: así una sesión antigua guardada en
         // localStorage nunca deja la colección a undefined ni se queda con horarios viejos.

@@ -90,172 +90,20 @@ const MANUAL_NOTES: Record<string, string[]> = {
   ],
   '2026-10-09': ['Día entero de viaje. No dormís en cama: la noche la pasáis en el avión.'],
   '2026-10-25': [
-    'En España se atrasan los relojes (horario de invierno). Vosotros no notáis nada, pero a partir de hoy la diferencia con casa es de 7 h en vez de 6 h.',
-  ],
-  '2026-11-01': [
-    'Vuelta a casa: 18 h 15 min de viaje real, aunque el reloj solo marque 11 h 15 min. Al aterrizar, bus nocturno del T4 a Zaragoza.',
-  ],
-  '2026-11-02': [
-    'Llegáis a Zaragoza-Delicias de madrugada (sobre las 02:30-03:00). ✅ Es festivo en Aragón, así que tenéis el día para dormir.',
-  ],
-};
-
-
-/**
- * Horario definitivo de cada día: la hora y qué se hace. Construido el 24/08/2026,
- * ya con 5 de 7 trenes comprados, con la regla de 1 hora en estación, con los
- * horarios de desayuno verificados hotel por hotel y con las franjas reales de las
- * entradas. Es lo que se sigue sobre el terreno.
- *
- * Vive aquí y no en `initialData.ts` porque no es un dato editable: es la lectura
- * combinada de trenes + hoteles + actividades, que ya viven cada uno en su sitio.
- * Si cambia un tren, hay que repasar su día aquí.
- */
-export interface TimelineEntry {
-  /** Hora local de China en HH:MM, o '' si es algo sin hora fija. */
-  time: string;
-  what: string;
-  /** 'clave' = no se puede fallar (tren, franja de entrada, vuelo). */
-  kind?: 'clave' | 'comida' | 'libre';
-}
-
-export const DAY_TIMELINE: Record<string, TimelineEntry[]> = {
-  '2026-10-08': [
-    { time: '', what: 'Bus nocturno Zaragoza → Madrid Barajas. Dormís en el bus, no hay hotel.', kind: 'clave' },
-  ],
-  '2026-10-09': [
-    { time: '06:20', what: 'Vuelo SN3732 Madrid T2 → Bruselas. Mostradores Brussels Airlines 415-420, planta 2.', kind: 'clave' },
-    { time: '08:35', what: 'Llegada a Bruselas. Escala de 4h25.' },
-    { time: '13:00', what: 'Vuelo CA964 Bruselas T3 → Pekín. 9h45. Se duerme en el avión.', kind: 'clave' },
-  ],
-  '2026-10-10': [
-    { time: '04:45', what: 'Llegada a Pekín PEK T3. Aduana, equipaje y e-SIM/VPN encendidas antes de salir.', kind: 'clave' },
-    { time: '06:30', what: 'Didi al hotel (Yabaolu, Chaoyang). ~30 min a esa hora.' },
-    { time: '07:00', what: 'En el hotel. El check-in es a las 14:00 → maletas en recepción. ⚠️ El desayuno de hoy NO va incluido (¥80/persona si lo queréis).' },
-    { time: '', what: 'Día suave: es el día del jet lag y lleváis 16h25 de viaje. Barrio del hotel, primer contacto y cenar pronto.', kind: 'libre' },
-    { time: '14:00', what: 'Check-in y a la habitación.' },
-  ],
-  '2026-10-11': [
-    { time: '06:30', what: 'Desayuno (06:30-10:00).', kind: 'comida' },
-    { time: '08:00', what: 'A la Ciudad Prohibida. Se entra por la Puerta del Mediodía (sur).' },
-    { time: '', what: '⚠️ La plaza de Tiananmen NO es zona de paso: si no lleváis su reserva, hay que rodear por el Templo Ancestral (lado este).', kind: 'clave' },
-    { time: '', what: 'Ciudad Prohibida, 3-4 h. Salida por la Puerta Divina (norte) → enlazar con la colina de Jingshan para las vistas.' },
-    { time: '', what: 'Comida por la zona.', kind: 'comida' },
-    { time: '17:00', what: 'Plaza de Tiananmen. Control de seguridad ~20 min, entrad por Qianmen (sur). Sin mecheros.' },
-    { time: '17:45', what: 'Bajada de bandera (~17:45-17:55, la hora exacta la da el mini-programa). Dura ~30 min.', kind: 'clave' },
-  ],
-  '2026-10-12': [
-    { time: '06:30', what: 'Desayuno (06:30-10:00). Mirad la previsión: el tobogán no opera con lluvia.', kind: 'comida' },
-    { time: '07:30', what: 'Didi a Mutianyu. ~1h30 desde el centro.' },
-    { time: '09:00', what: 'Entrada + bus de enlace. Combo telesilla ↑ y tobogán ↓ (140 CNY).', kind: 'clave' },
-    { time: '', what: 'TELESILLA (silla abierta) hasta la Torre 6. ⚠️ El teleférico de cabina va a la Torre 14 y por ahí NO hay tobogán.', kind: 'clave' },
-    { time: '', what: 'Andar de la Torre 6 a la Torre 12 (~1h por sentido, tramo casi vacío) y volver a la 6.' },
-    { time: '', what: 'Bajada en TOBOGÁN desde la Torre 6. 🚫 No pueden usarlo mayores de 60 años.' },
-    { time: '', what: 'Vuelta a Pekín. Noche tranquila: mañana salís a las 06:15.', kind: 'libre' },
-    { time: '22:00', what: '⚠️ Maletas hechas y pedir el desayuno para llevar en recepción: 打包早餐.', kind: 'clave' },
-  ],
-  '2026-10-13': [
-    { time: '06:15', what: '🚕 Salir del hotel. El bufé abre a las 06:30 y ya no llegáis → desayuno para llevar, pedido anoche.', kind: 'clave' },
-    { time: '06:55', what: 'En Beijingxi (Beijing West). Es enorme: la hora de margen aquí se agradece.' },
-    { time: '07:55', what: '🚄 Tren G351 → Xi\'anbei. 4h10. Desayunáis en el tren.', kind: 'clave' },
-    { time: '12:05', what: 'Llegada a Xi\'an North. Didi al hotel (Bell Tower), 25-35 min.' },
-    { time: '12:45', what: 'En el hotel. Check-in a las 14:00 → maletas en recepción y a comer al Barrio Musulmán, que está al lado.', kind: 'comida' },
-    { time: '', what: 'Tarde entera en Xi\'an: es vuestro único día de ciudad. Muralla, Campanario y Barrio Musulmán de noche.', kind: 'libre' },
-  ],
-  '2026-10-14': [
-    { time: '07:00', what: 'Desayuno (07:00-10:00).', kind: 'comida' },
-    { time: '', what: 'Mañana libre en Xi\'an.', kind: 'libre' },
-    { time: '13:30', what: '🏛️ Guerreros de Terracota POR LA TARDE. Por la mañana chocáis con todos los tours.', kind: 'clave' },
-    { time: '', what: 'Se entra escaneando el pasaporte, que hay que llevar FÍSICO. Incluye Museo principal + Jardín Lishan.', kind: 'clave' },
-  ],
-  '2026-10-15': [
-    { time: '07:00', what: 'Desayuno (07:00-10:00).', kind: 'comida' },
-    { time: '', what: 'Día libre en Xi\'an. Sin nada reservado: pagoda del Ganso Salvaje, murallas en bici o Museo de Historia.', kind: 'libre' },
-  ],
-  '2026-10-16': [
-    { time: '07:00', what: 'Desayuno (07:00-10:00). Tenéis 1h10.', kind: 'comida' },
-    { time: '08:10', what: '🚕 Salir del hotel hacia Xi\'anbei.' },
-    { time: '08:48', what: 'En la estación.' },
-    { time: '09:48', what: '🚄 Tren D1921 → ChengduDong. 3h44.', kind: 'clave' },
-    { time: '13:32', what: 'Llegada a Chengdu East. Didi al hotel (Chunxi Road), 20-30 min.' },
-    { time: '14:00', what: 'En el hotel justo a la hora del check-in: entráis directos, sin dejar maletas ni esperar.' },
-    { time: '', what: '⚠️ Pedid en recepción el desayuno para llevar de MAÑANA (Pandas) y valorad pedirlo también para el 18 y el 19: este hotel abre a las 07:30 y os fastidia tres días seguidos.', kind: 'clave' },
-  ],
-  '2026-10-17': [
-    { time: '07:00', what: '🚕 Salir hacia la Base de Pandas. ⚠️ El desayuno abre a las 07:30 y no llegáis → para llevar.', kind: 'clave' },
-    { time: '07:30', what: '🐼 Base de Pandas, franja de mañana. Reservad ese slot: los pandas están activos de 08:00 a 10:00; luego duermen.', kind: 'clave' },
-    { time: '', what: 'Lanzadera interna opcional (~30 CNY). Vuelta a Chengdu a media mañana.' },
-    { time: '', what: 'Tarde libre: Chunxi Road, People\'s Park y casa de té.', kind: 'libre' },
-  ],
-  '2026-10-18': [
-    { time: '07:30', what: '🚕 Salir hacia Leshan. El desayuno abre justo ahora: o coméis a la carrera o para llevar.', kind: 'comida' },
-    { time: '', what: '🗿 Buda Gigante de Leshan, día completo. Horario de invierno desde el 8 oct: abre 08:00, cierra 17:30.', kind: 'clave' },
-    { time: '', what: '⭐ Coged el CRUCERO EN BARCO (~30 min, ~70 CNY/persona, se paga en el muelle en efectivo/Alipay). La bajada por los 278 escalones tiene 2-4 h de cola en fin de semana.', kind: 'clave' },
-    { time: '', what: 'Vuelta a Chengdu por la tarde-noche.' },
-  ],
-  '2026-10-19': [
-    { time: '07:30', what: 'Desayuno en cuanto abra: solo tenéis 15 min.', kind: 'comida' },
-    { time: '07:45', what: '🚕 Salir hacia ChengduDong.' },
-    { time: '08:18', what: 'En la estación.' },
-    { time: '09:18', what: '🚄 Tren G8685 → ChongqingBei. 1h41. ⚠️ ChongqingBei (北, norte), NO ChongqingXi ni ChongqingDong.', kind: 'clave' },
-    { time: '10:59', what: 'Llegada a Chongqing North, andén del North Square (北广场). Didi al hotel (Jiefangbei), 10-15 min.' },
-    { time: '11:15', what: 'En el hotel. ⚠️ El check-in es a las 15:00: maletas en recepción y a aprovechar el día.' },
-    { time: '', what: 'Día en Chongqing: Jiefangbei, y al anochecer Hongyadong iluminado, que es la postal de la ciudad.', kind: 'libre' },
-  ],
-  '2026-10-20': [
-    { time: '07:00', what: 'Desayuno (07:00-09:30).', kind: 'comida' },
-    { time: '', what: 'Día libre y completo en Chongqing. Ciudad de rascacielos y niebla: monorraíl de Liziba, Ciqikou y hotpot.', kind: 'libre' },
-  ],
-  '2026-10-21': [
-    { time: '07:00', what: 'Desayuno tranquilo (07:00-09:30): hoy no salís hasta las 11:10.', kind: 'comida' },
-    { time: '', what: 'Mañana libre en Chongqing.', kind: 'libre' },
-    { time: '11:10', what: '🚕 Salir del hotel (check-out 12:00). 21 km hasta ChongqingDong, ~35 min.', kind: 'clave' },
-    { time: '11:55', what: '⚠️ En ChongqingDong (东, este) — NO es ChongqingBei, por donde llegasteis el 19. Hay 21 km entre las dos.', kind: 'clave' },
-    { time: '12:55', what: '🚄 Tren G2321 → FenghuangGucheng. 3h51.', kind: 'clave' },
-    { time: '16:46', what: 'Llegada. Taxi/lanzadera al casco antiguo, ~10 km. ⚠️ Aquí Didi puede no operar: tarifa fija local, negociad antes.' },
-    { time: '17:10', what: 'En la ciudad amurallada. Check-in directo.' },
-    { time: '17:55', what: '🌅 Atardecer y luces del río Tuojiang. Es LO de Fenghuang.', kind: 'clave' },
-  ],
-  '2026-10-22': [
-    { time: '08:00', what: 'Desayuno (08:00-10:00), el hotel que abre más tarde del viaje.', kind: 'comida' },
-    { time: '', what: '☀️ DÍA ENTERO en Fenghuang: puentes, casas colgantes sobre el río, barca. Compensa que ayer llegasteis a las 17:10.', kind: 'libre' },
-    { time: '16:15', what: '🚕 Salir hacia la estación (~20 min).' },
-    { time: '16:35', what: 'En FenghuangGucheng.' },
-    { time: '17:35', what: '🚄 Tren G5666 → Furongzhen. 34 min. Es el PRIMERO del día: esta línea no tiene servicio por la mañana en octubre.', kind: 'clave' },
-    { time: '18:09', what: 'Llegada. Taxi al pueblo (~15 min).' },
-    { time: '18:25', what: 'En Furong. Llegáis de noche, que es cuando la cascada está iluminada y el pueblo luce.' },
-    { time: '', what: '⚠️ ENCARGAR EN RECEPCIÓN EL COCHE DE MAÑANA a las 09:30 hasta Zhangjiajie, con precio cerrado (~250-300 CNY).', kind: 'clave' },
-  ],
-  '2026-10-23': [
-    { time: '07:00', what: 'Desayuno (07:00-09:00) y paseo por el pueblo y la cascada de día.', kind: 'comida' },
-    { time: '09:30', what: '🚗 COCHE CON CHÓFER a Zhangjiajie. NO es tren: en octubre el primero sale a las 18:10 y perderíais Tianmen.', kind: 'clave' },
-    { time: '11:00', what: 'Llegada a Zhangjiajie ciudad. Maletas al hotel y a comer pronto (11:30).', kind: 'comida' },
-    { time: '12:40', what: '🚕 Didi al 山门 (天门山山门), ~20 min. NO al teleférico de la ciudad: desde el 13 de octubre no funciona.', kind: 'clave' },
-    { time: '13:00', what: '🚡 FRANJA DE ENTRADA A TIANMEN (13:00-14:00), LÍNEA C. Pasaporte en el control. La franja es estricta.', kind: 'clave' },
-    { time: '', what: 'Subida: teleférico exprés hasta la explanada de la cueva → escalera mecánica de pago (32 CNY) o 999 escalones → escaleras mecánicas por dentro de la montaña hasta la cima.' },
-    { time: '', what: 'Arriba: Guigu Zhandao, pasarela de cristal del oeste y Panlong (fundas 5 CNY). La del este sigue cerrada.' },
-    { time: '17:30', what: 'Escaleras mecánicas de bajada hacia la cueva.' },
-    { time: '17:45', what: '🌙 Explanada al pie de los 999 escalones: atardecer (~18:00) y, si os dejan quedaros, las primeras luces de la cueva. Sin tour: no hace falta.', kind: 'clave' },
-    { time: '', what: 'Preguntad al entrar: 今天天门洞几点亮灯？快线索道最晚几点下山？ (hora de las luces y del último teleférico).' },
-    { time: '19:00', what: 'Teleférico exprés de bajada al 山门 y Didi (o lanzadera gratis) al hotel.' },
-  ],
-  '2026-10-24': [
-    { time: '07:00', what: '⏰ Desayuno 07:00-09:00. CIERRA a las 09:00 y hoy sí hay prisa: poned despertador.', kind: 'comida' },
-    { time: '09:00', what: '🚗 Didi a Wulingyuan. ~33 km, 45 min, ~14 €. Salid a esta hora: el puente de cristal cierra a media tarde.', kind: 'clave' },
-    { time: '09:45', what: 'En el hotel de Wulingyuan. El check-in abre a las 10:00: dejad las maletas y no deshagáis nada.' },
-    { time: '10:15', what: '🚕 Taxi al Gran Cañón. ~30 km, 35-45 min, ~55 CNY (~7 €). También hay bus desde la estación de autobuses, 12 CNY.' },
-    { time: '11:00', what: '🌉 GRAN CAÑÓN + PUENTE DE CRISTAL, LÍNEA B. Entrada por arriba: 张家界大峡谷游客中心. Franja única de todo el día; último control a las 16:00.', kind: 'clave' },
-    { time: '', what: 'Pasaportes físicos: puede que toque validarlos en la taquilla del centro de visitantes (10-15 min).' },
-    { time: '', what: 'Ruta de ~3 h: puente de cristal, bajada al cañón (sendero empinado o ascensores de pago), paseo y barca hasta la salida.' },
-    { time: '', what: '🚫 Sin palo selfie, trípode ni objetos metálicos. Consigna gratis. Fundas de zapatos para el puente, gratis.' },
-    { time: '14:30', what: '🚕 Salida por ABAJO, en 双坪: Didi de vuelta desde 张家界大峡谷游客集散中心.', kind: 'clave' },
-  ],
-  '2026-10-25': [
-    { time: '06:30', what: 'Desayuno en cuanto abra (06:30-10:00). Encaja justo.', kind: 'comida' },
-    { time: '06:45', what: '🚕 Didi al 标志门 (Puerta Este), 3-5 min. Llegad sobre las 07:00: antes no os deja pasar el torno.', kind: 'clave' },
-    { time: '07:00', what: '🏔️ PARQUE AVATAR. Franja 07:00-08:00, LÍNEA B (torno de la derecha), hacia el ascensor Bailong. Pasaporte físico.', kind: 'clave' },
-    { time: '', what: 'Ascensor Bailong (65 CNY) para subir y teleférico de Tianzi (72 CNY) para bajar: se pagan allí. Estad en el teleférico antes de las 16:30.' },
+    { time: '06:30', what: 'Desayuno fuerte en cuanto abra. Coged fruta para media mañana.', kind: 'comida' },
+    { time: '07:05', what: '🚕 Didi al 标志门 (Puerta Este), 3-5 min.' },
+    { time: '07:15', what: '🏔️ PARQUE AVATAR ✅ comprada. Entrada 07:00-08:00, LÍNEA B (torno de la derecha). Pasaporte físico.', kind: 'clave' },
     { time: '', what: 'Si la pantalla de la puerta marca más de 60 min en el Bailong: plan B al revés (Tianzi primero), pedid el cambio a la Línea A en ventanilla.' },
+    { time: '07:20', what: 'Eco-bus (~18 min) y ascensor Bailong (65 CNY, QR allí).' },
+    { time: '08:15', what: 'Yuanjiajie: Mihun Terrace, Back Garden, Qiankun Pillar (la montaña Avatar) y Primer Puente bajo el Cielo. Ojo con los monos y la comida.' },
+    { time: '11:15', what: 'Eco-bus a Tianzi, parada de 贺龙公园.' },
+    { time: '12:00', what: 'Comida junto a la parada de 贺龙公园 (40-60 CNY/persona).', kind: 'comida' },
+    { time: '12:45', what: 'Tianzi: He Long Park, Yubi Peak, Fairy Scattering Flowers y miradores.' },
+    { time: '15:45', what: '🚡 Teleférico de Tianzi abajo (72 CNY). En la cola como muy tarde a las 16:30.', kind: 'clave' },
+    { time: '16:15', what: 'Eco-bus al 标志门. El Didi de vuelta se pide en 驼峰路.' },
+    { time: '17:15', what: 'Hotel: ducha y maletas cerradas ya.' },
+    { time: '18:30', what: 'Cena de Sanxiaguo, pronto.', kind: 'comida' },
+    { time: '20:00', what: '📋 RECEPCIÓN: Didi programado para mañana, check-out anticipado y desayuno para llevar (可以帮我们准备打包早餐吗？).', kind: 'clave' },
     { time: '', what: '🕐 Hoy España atrasa los relojes. Vosotros no notáis nada, pero desde hoy la diferencia con casa es de 7 h, no 6.' },
   ],
   '2026-10-26': [
