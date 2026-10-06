@@ -23,6 +23,8 @@ export default function FlightsView() {
         <ArrowRight className="h-4 w-4 flex-shrink-0" />
       </Link>
 
+      <JetLagSection />
+
       <div>
         <h2 className="text-sm font-bold text-foreground mb-3">🕐 El cambio de hora</h2>
         <div className="space-y-4">
@@ -32,8 +34,6 @@ export default function FlightsView() {
           <DstCard />
         </div>
       </div>
-
-      <JetLagSection />
     </div>
   );
 }

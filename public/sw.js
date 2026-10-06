@@ -23,7 +23,9 @@
 // el bundle publicado sí los tenía. La app instalada seguía arrancando del index.html
 // cacheado, que apunta a los JS antiguos. Ante un "no me aparece" ya descartado el deploy,
 // esta es la palanca.
-const CACHE = 'viaje-china-v3';
+// v4 (06/10/2026): mismo síntoma con el plan antijet lag — publicado y verificado en el
+// bundle, pero María no lo veía. Se sube la versión para que `activate` tire la caché entera.
+const CACHE = 'viaje-china-v4';
 const NAV_TIMEOUT_MS = 4000;
 
 // Dominios de datos en vivo: no se cachean nunca.
