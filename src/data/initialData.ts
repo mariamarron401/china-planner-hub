@@ -112,7 +112,7 @@ export const initialTripData: TripData = {
     {
       id: 'tl-5', fromCityId: 'fenghuang', toCityId: 'furong', mode: 'Tren bala', durationMinutes: 34, price: 18, currency: 'EUR', status: 'known',
       hotelTransferBefore: '🚐 Preguntado al hotel de Fenghuang si os lleva a la estación a las 16:00 (puede ser de pago). Mensaje en el plan de Fenghuang.',
-      hotelTransferAfter: '🚐 Os recoge el hotel de Furong, GRATIS (dicho el 6/10; 🔲 pendiente que confirmen la hora, 18:09). La entrada al recinto, 108 CNY/persona, la compráis al llegar con su ayuda.',
+      hotelTransferAfter: '🚐 ✅ Os recoge el hotel de Furong en la estación a las 18:09, GRATIS (confirmado el 6/10). La entrada al recinto, 108 CNY/persona, la compráis al llegar con su ayuda.',
       notes: 'Comprado el 24/08/2026: 17,50 € los dos. G5666, 34 min. Es el primer tren del día: en octubre esta línea no tiene servicio por la mañana.',
       fromStation: 'Fenghuang Gucheng (凤凰古城站) · en Trip.com "FenghuangGucheng"', toStation: 'Furongzhen (芙蓉镇站) · todo junto; no es "Furong", ni Yongshun, ni Guzhang',
       paidEur: 17.50, paidOn: '24 ago 2026', paidWith: 'maria',

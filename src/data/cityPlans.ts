@@ -2385,8 +2385,8 @@ const furong: CityPlan = {
 
   bookings: [
     {
-      title: '🏨 Hotel: ✅ coche y entrada resueltos · 🔲 confirmar la recogida del 22',
-      when: 'Respondido el 6/10 por el chat de Trip.com. Falta que confirmen la recogida a las 18:09',
+      title: '🏨 Hotel: ✅ todo resuelto',
+      when: 'Confirmado el 6/10 por el chat de Trip.com: recogida el 22 a las 18:09, entrada al llegar y coche del 23',
       price: 'Recogida gratis · entrada 108 CNY/persona · coche ~250-300 CNY',
       how: 'Copiad el texto en chino y mandadlo tal cual. Dice: «Llegamos el 22/10 en el G5666 a la estación de Furong a las 18:09, somos 2 con 4 maletas: ¿nos recogéis? ¿Hay que comprar la entrada al recinto para llegar al hotel, nos la podéis comprar vosotros y cuánto cuesta? El 23 a las 9:30 queremos un coche al Thousand Hotel de Zhangjiajie: ¿nos lo organizáis, cuánto cuesta y dónde nos recoge? ¿Cómo se llega al hotel con maletas?»',
       alert: '您好！我们两位10月22日入住一晚。1）我们坐G5666次列车，18:09到芙蓉镇站，两个人带4件行李，可以麻烦你们免费接站吗？2）酒店在景区里面，我们需要买芙蓉镇景区门票吗？酒店可以帮我们买吗？多少钱一张？3）10月23日早上9:30我们想包车去张家界市区的天门山仟酒店，可以帮我们安排吗？多少钱？在哪里上车？4）带行李怎么到酒店？谢谢！',
