@@ -76,11 +76,13 @@ export default function BudgetView() {
   const transportPaid = trainsPaidTotal + spainPaid;
   const transportOnSite = (transportTotal - trainsPaidTotal) + (airportTotal - spainPaid) + budgetExtras.transportExtra;
 
-  // Estado de los pagos (dato de María, 10/09/2026): lo pagado está al 100 % (vuelos, 7 trenes,
-  // tren y bus a Madrid y los hoteles de pago completado); lo que queda son los cargos automáticos
-  // de los hoteles en su Revolut y las entradas, que aún no se han comprado.
-  const paidTotal = budgetExtras.flightsInsurance + trainsPaidTotal + spainPaid + hotelsAlreadyPaidTotal;
-  const pendingBuy = activitiesTotal + budgetExtras.activitiesExtra + transportOnSite + budgetExtras.insurance + budgetExtras.others;
+  // Estado de los pagos: pagado = vuelos, 7 trenes, tren y bus a Madrid, hoteles de pago completado
+  // y las entradas ya compradas. Lo que queda: cargos automáticos de los hoteles y lo que se paga allí.
+  // Lo pendiente de entradas es la estimación menos lo ya pagado (Mutianyu, Leshan y Avatar tienen
+  // parte que se paga en taquilla).
+  const activitiesOnSite = Math.max(0, activitiesTotal - activitiesPaid);
+  const paidTotal = budgetExtras.flightsInsurance + trainsPaidTotal + spainPaid + hotelsAlreadyPaidTotal + activitiesPaid;
+  const pendingBuy = activitiesOnSite + budgetExtras.activitiesExtra + transportOnSite + budgetExtras.insurance + budgetExtras.others;
   const statusTotal = paidTotal + hotelsChargedTotal + pendingBuy;
   const pctPaid = statusTotal > 0 ? Math.round((paidTotal / statusTotal) * 100) : 0;
   const pctAuto = statusTotal > 0 ? Math.round((hotelsChargedTotal / statusTotal) * 100) : 0;
@@ -145,6 +147,7 @@ export default function BudgetView() {
                 `${trainsBought.length} trenes ${eur(trainsPaidTotal)}`,
                 `Tren y bus a Madrid ${eur(spainPaid)}`,
                 `${hotelsAlreadyPaid.length} hoteles ya pagados ${eur(hotelsAlreadyPaidTotal)}`,
+                `Entradas ya compradas ${eur(activitiesPaid)}`,
               ]}
             />
             <StatusRow
@@ -157,7 +160,7 @@ export default function BudgetView() {
               tone="muted"
               title="🛒 Por comprar o pagar allí"
               amount={`~${Math.round(pendingBuy)}€`}
-              items={[`Entradas ~${Math.round(activitiesTotal + budgetExtras.activitiesExtra)}€`, `Didi, taxis y coche de Furong ~${Math.round(transportOnSite)}€`]}
+              items={[`Entradas y extras allí ~${Math.round(activitiesOnSite + budgetExtras.activitiesExtra)}€`, `Didi, taxis y coche de Furong ~${Math.round(transportOnSite)}€`]}
             />
           </div>
         </div>

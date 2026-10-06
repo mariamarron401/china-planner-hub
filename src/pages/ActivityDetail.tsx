@@ -138,7 +138,7 @@ export default function ActivityDetail() {
                 </div>
               </div>
             )}
-            {act.bookingUrl && (
+            {act.bookingUrl && act.status !== 'Hecha' && (
               <a
                 href={act.bookingUrl}
                 target="_blank"

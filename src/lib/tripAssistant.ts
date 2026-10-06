@@ -86,17 +86,17 @@ const APPS_INFO = `📱 **Apps y conectividad.** Tienes la lista completa, paso 
 ⚠️ **Todo se configura ahora, desde España, con vuestro número +34.** La e-SIM de Holafly es de **solo datos**: no da número chino ni recibe SMS, así que los códigos de registro solo llegan bien ahora.
 
 **HOY, por orden:**
-- **WeChat** — lo primero y lo más urgente. Toda cuenta nueva necesita que **un usuario existente escanee tu QR** (cuenta con +6 meses, verificada, que no haya avalado a nadie en el último mes) → hacen falta **dos avalistas distintos**. Sin WeChat no se puede reservar la **plaza de Tiananmen el 4 de octubre**.
+- **WeChat** — lo primero y lo más urgente. Toda cuenta nueva necesita que **un usuario existente escanee tu QR** (cuenta con +6 meses, verificada, que no haya avalado a nadie en el último mes) → hacen falta **dos avalistas distintos**. Con WeChat se reservó la **plaza de Tiananmen** el 4 de octubre.
 - **Alipay** — registro con el móvil español + verificación con el pasaporte + Visa/Mastercard. Ojo: ~3 % de comisión en pagos de más de 200 CNY.
 - **VPN de pago de respaldo** — instalarla ya: las apps de VPN no están en la App Store china y no se pueden contratar allí.
 - **Operador español** — confirmar que hay roaming en China para SMS (los códigos del banco).
 - **Banco** — avisar del viaje y comprobar pagos online en yuanes.
 
-**Antes del 14 de agosto:** guardar los dos pasaportes en el perfil de **Trip.com**. **Esta semana:** registrar **12306** (documento "Passport", nombre igual que la zona MRZ; la verificación tarda hasta 24 h).
+Guardar los dos pasaportes en el perfil de **Trip.com** y registrar **12306** (documento "Passport", nombre igual que la zona MRZ; la verificación tarda hasta 24 h).
 
 **Septiembre:** Amap Global, mapas y traductor **offline**, Didi, Klook + app de Shanghai Disney.
 
-**e-SIM:** dos planes de **Holafly China de 30 días** (73,90 € cada uno, ~147,80 €), comprados el **5-7 de octubre** y con los perfiles instalados en casa con WiFi. Una por móvil: el hotspot está limitado a ~500 MB/día.
+**e-SIM:** dos planes de **Holafly China de 30 días** (73,90 € cada uno, ~147,80 €), a comprar el **5-7 de octubre** y con los perfiles instalados en casa con WiFi. Una por móvil: el hotspot está limitado a ~500 MB/día.
 
 **Descartadas a propósito:** Dianping, Meituan y Taobao/Duoduo (exigen número chino o dirección local).
 
@@ -136,7 +136,7 @@ const GENERAL_TIPS = `💡 **Consejos generales para China:**
 - Descarga mapas y traductor **offline** por si falla la VPN.
 - **Power bank: máximo 20.000 mAh.** Por encima de eso lo confiscan en el control del tren. Y siempre en el equipaje de mano, nunca en la maleta facturada.
 - **Lleva papel higiénico en la mochila**: los baños públicos en China normalmente no lo tienen.
-- Los 7 trenes internos **ya están comprados y pagados** (655,32 € los dos; las pre-reservas salieron de la cuenta de María). Lo único que queda es comprobar en Trip.com que cada billete se emite 15 días antes de su viaje (pregúntame "¿cuándo compruebo los billetes?"). Al emitirse, el precio puede subir un par de euros sobre la pre-reserva: el de Pekín → Xi'an subió 2,44 €, y ese ajuste se cobró en la **cuenta conjunta**, no en la de María. Es normal.`;
+- Los 7 trenes internos **ya están comprados y pagados** (652,76 € los dos; las pre-reservas salieron de la cuenta de María). Lo único que queda es comprobar en Trip.com que cada billete se emite 15 días antes de su viaje (pregúntame "¿cuándo compruebo los billetes?"). Al emitirse, el precio puede subir un par de euros sobre la pre-reserva: el de Pekín → Xi'an subió 2,44 €, y ese ajuste se cobró en la **cuenta conjunta**, no en la de María. Es normal.`;
 
 // ---------- generadores de respuesta por tema ----------
 
@@ -266,7 +266,7 @@ function answerFlights(data: TripData): string {
     '**VUELTA — 1 nov 2026** (Shanghai → Madrid):',
     ...ret.map(fmt),
     '',
-    '⚠️ La ida sale de Madrid a las 06:20 → hay que dormir en Madrid la noche del 8 oct.',
+    '⚠️ La ida sale de Madrid a las 06:20 → la noche del 8 se pasa en el T2 (tren de las 21:59 desde Zaragoza y taxi), sin hotel.',
   ].join('\n');
 }
 
@@ -331,15 +331,17 @@ function answerWhenToBuy(data: TripData): string {
   const trainsDoneLine = trainsDone.length > 0
     ? `\n\n✅ Ya emitidos (${trainsDone.length} de ${data.transportLegs.filter((t) => t.saleOpensOn).length}): ${trainsDone.map((t) => `${shortCity(cityName(data, t.fromCityId))} → ${shortCity(cityName(data, t.toCityId))}`).join(', ')}.`
     : '';
-  const actsPending = data.activities.filter((a) => a.whenToBuy && a.paidEur == null);
-  const actsDone = data.activities.filter((a) => a.paidEur != null);
+  // Manda el estado, no el importe: Leshan tiene la entrada pagada pero le falta el crucero, y
+  // Tiananmen está reservada sin coste.
+  const actsPending = data.activities.filter((a) => a.whenToBuy && a.status !== 'Hecha');
+  const actsDone = data.activities.filter((a) => a.status === 'Hecha');
   const acts = (actsPending.length > 0 ? actsPending : data.activities.filter((a) => a.whenToBuy))
     .map((a) => `- 🎫 ${a.title}: ${a.whenToBuy}`)
     .join('\n');
   const actsDoneLine = actsDone.length > 0
-    ? `\n\n✅ Entradas ya compradas: ${actsDone.map((a) => `${a.title} (${(a.paidEur ?? 0).toFixed(2).replace('.', ',')} €)`).join(', ')}.`
+    ? `\n\n✅ Entradas ya compradas: ${actsDone.map((a) => (a.paidEur ? `${a.title} (${a.paidEur.toFixed(2).replace('.', ',')} €)` : a.title)).join(', ')}.`
     : '';
-  return `⏰ **Qué queda por hacer y cuándo:**\n\n**Trenes bala — ya están comprados los 7.** Lo único pendiente es entrar en Trip.com estos días y ver que el billete se ha emitido (China lo emite 15 días antes de cada viaje):\n${trains}${trainsDoneLine}\n\n**Entradas de actividades:**\n${acts}${actsDoneLine}\n\n👉 De los 7, el que más importa es el del 6 de octubre (Chongqing → Fenghuang): es el tramo con solo 3 trenes al día, así que si esa pre-reserva hubiera fallado hay que comprarlo a mano ese mismo día.`;
+  return `⏰ **Qué queda por hacer y cuándo:**\n\n**Trenes bala — ya están comprados los 7.** Lo único pendiente es entrar en Trip.com estos días y ver que el billete se ha emitido (China lo emite unos 14-15 días antes de cada viaje):\n${trains}${trainsDoneLine}\n\n**Entradas de actividades:**\n${acts}${actsDoneLine}\n\n👉 De los 7, el que más importa es el del 7 de octubre (Chongqing → Fenghuang): es el tramo con solo 3 trenes al día, así que si esa pre-reserva hubiera fallado hay que comprarlo a mano ese mismo día.`;
 }
 
 function answerAirportTransfers(data: TripData, q: string): string {
@@ -524,7 +526,7 @@ function answerBudget(data: TripData): string {
   }
   lines.push(
     '',
-    `✅ Pagado al 100 %: vuelos, los 7 trenes, el tren y el bus a Madrid y los hoteles de pago completado. ⏳ Pendiente de cobro: los hoteles de "pago más tarde" y las entradas. Falta sumar comidas y compras.`,
+    `✅ Pagado al 100 %: vuelos, los 7 trenes, el tren y el bus a Madrid y los hoteles de pago completado. ✅ Y las entradas compradas hasta ahora. ⏳ Pendiente de cobro: los hoteles de "pago más tarde". Falta sumar comidas y compras.`,
     '',
     'Puedes ver el desglose completo en **Por hacer → Dinero**.'
   );
@@ -614,7 +616,7 @@ export function answerQuestion(rawQuestion: string, data: TripData): string {
 
   // equipaje
   if (has(q, ['maleta', 'equipaje', 'baggage', 'facturar', 'facturad'])) {
-    return `🧳 **Equipaje: 4 bultos** — 2 maletas facturadas + 2 de cabina. El seguro cubre robo/daños hasta 1.500 € y demora hasta 150 €.\n\n🚗 **Con 4 bultos el Didi normal (快车) os vale:** las dos grandes van al maletero y las de cabina dentro. Si las facturadas son de 28" y el coche asignado es pequeño, subid a 优享 o a 6 plazas (六座). Los traslados críticos, dejadlos **programados con antelación** (Didi admite reservas hasta 7 días antes y deja el precio cerrado): sobre todo el del **21/10 a Chongqing East**, que son 21 km a las 07:15.\n\n🚄 **En el tren**, las dos maletas grandes van en los **estantes de los extremos del vagón**, no en el portaequipajes de encima del asiento. Truco: al elegir asiento, coger **la fila 1 o la última del vagón**, que es donde están esos estantes — así no arrastráis las maletas por el pasillo ni las perdéis de vista.\n\n📏 **¿Influye el número de maletas? No.** En los trenes chinos no hay límite de bultos: las normas solo hablan de peso (**20 kg por adulto**) y de tamaño por pieza (**130 cm** sumando largo + ancho + alto en trenes G, 160 cm en los normales). Tampoco se factura nada, lo subís todo vosotros. Sobre el papel una maleta de avión de 23 kg y 28" se pasa en las dos cosas, pero en la práctica no pesan ni miden salvo que sea escandaloso, y 4 bultos entre dos personas es de lo más normal.\n\n👉 Además, cada tren está cuadrado con el check-out del hotel de origen y el check-in del destino para no quedaros tirados con el equipaje. Pregúntame por un tramo concreto.`;
+    return `🧳 **Equipaje: 4 bultos** — 2 maletas facturadas + 2 de cabina. El seguro cubre robo/daños hasta 1.500 € y demora hasta 150 €.\n\n🚗 **Con 4 bultos el Didi normal (快车) os vale:** las dos grandes van al maletero y las de cabina dentro. Si las facturadas son de 28" y el coche asignado es pequeño, subid a 优享 o a 6 plazas (六座). Los traslados críticos, dejadlos **programados con antelación** (Didi admite reservas hasta 7 días antes y deja el precio cerrado): sobre todo el del **26/10 a Zhangjiajie West**, a las 05:35, y el del **21/10 a Chongqing East**, que son 21 km.\n\n🚄 **En el tren**, las dos maletas grandes van en los **estantes de los extremos del vagón**, no en el portaequipajes de encima del asiento. Truco: al elegir asiento, coger **la fila 1 o la última del vagón**, que es donde están esos estantes — así no arrastráis las maletas por el pasillo ni las perdéis de vista.\n\n📏 **¿Influye el número de maletas? No.** En los trenes chinos no hay límite de bultos: las normas solo hablan de peso (**20 kg por adulto**) y de tamaño por pieza (**130 cm** sumando largo + ancho + alto en trenes G, 160 cm en los normales). Tampoco se factura nada, lo subís todo vosotros. Sobre el papel una maleta de avión de 23 kg y 28" se pasa en las dos cosas, pero en la práctica no pesan ni miden salvo que sea escandaloso, y 4 bultos entre dos personas es de lo más normal.\n\n👉 Además, cada tren está cuadrado con el check-out del hotel de origen y el check-in del destino para no quedaros tirados con el equipaje. Pregúntame por un tramo concreto.`;
   }
 
   // trenes internos

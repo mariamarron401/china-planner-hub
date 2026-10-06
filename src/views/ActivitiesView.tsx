@@ -82,7 +82,7 @@ export default function ActivitiesView() {
               })}
             </div>
             <p className="text-[10px] text-muted-foreground mt-2 leading-snug">
-              ⏰ El reloj = hora exacta, no vale mirarlo cuando puedas. Las de Pekín se agotan el mismo día.
+              ⏰ El reloj = hora exacta, y es la hora local de donde estéis ese día.
             </p>
           </div>
         )}
@@ -155,8 +155,8 @@ export default function ActivitiesView() {
                 </div>
               )}
 
-              {/* Botón comprar */}
-              {act.bookingUrl && (
+              {/* Botón comprar: no en lo ya comprado, para no invitar a una compra doble */}
+              {act.bookingUrl && act.status !== 'Hecha' && (
                 <div className="px-4 pb-3">
                   <a
                     href={act.bookingUrl}

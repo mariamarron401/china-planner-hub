@@ -10,7 +10,7 @@ export interface NextAction {
   /** Qué hay que hacer, en una línea. */
   title: string;
   /** De qué va (tren, app, pendiente…). */
-  kind: 'tren' | 'app' | 'esim' | 'pendiente';
+  kind: 'tren' | 'app' | 'esim' | 'entrada' | 'pendiente';
   /** A dónde lleva el toque. */
   to: string;
 }
@@ -72,15 +72,33 @@ export function buildNextActions(data: TripData, pendingItems: PendingItem[] = [
       id: task.id,
       iso: task.deadline,
       daysLeft: daysUntil(task.deadline),
-      // El nombre solo ("Trip.com") no dice qué hay que hacer con él.
-      title: `${task.emoji} Configurar ${task.name}`,
+      // El nombre solo ("Trip.com") no dice qué hay que hacer con él. Las de la e-SIM ya lo dicen.
+      title: task.group === 'esim' ? `${task.emoji} ${task.name}` : `${task.emoji} Configurar ${task.name}`,
       kind: 'app',
       to: '/gestiones/apps',
     });
   }
 
+  // Entradas y reservas sin hacer. Si la venta ya abrió, salen como «¡HOY!»: siguen pendientes.
+  for (const act of data.activities) {
+    if (act.status === 'Hecha' || !act.buyOpensIso) continue;
+    const days = daysUntil(act.buyOpensIso);
+    const today = new Date();
+    const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    out.push({
+      id: `${act.id}-buy`,
+      iso: days < 0 ? todayIso : act.buyOpensIso,
+      daysLeft: Math.max(0, days),
+      title: `🎟️ ${act.title}${act.buyOpensTime ? ` · ${act.buyOpensTime} h` : ''}`,
+      kind: 'entrada',
+      to: `/actividades/${act.id}`,
+    });
+  }
+
+  // La compra de la e-SIM ya sale como tarea propia (grupo 'esim'); este bloque es solo de respaldo.
   const esim = data.appSetup.esim;
-  if (esim?.buyDeadline) {
+  const esimHasTasks = data.appSetup.tasks.some(t => t.group === 'esim');
+  if (esim?.buyDeadline && !esimHasTasks) {
     out.push({
       id: 'esim',
       iso: esim.buyDeadline,

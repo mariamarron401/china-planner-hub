@@ -353,7 +353,7 @@ export interface Activity {
    * pantalla Actividades necesita cuenta atrás y orden de urgencia, como tenía Trenes.
    */
   buyOpensIso?: string;
-  /** Hora española a la que se libera, si es crítica. Ej. '14:00' en la Ciudad Prohibida. */
+  /** Hora a la que se libera, si es crítica: la LOCAL de donde estéis ese día (España hasta el 9 oct, China desde el 10). */
   buyOpensTime?: string;
   /** Plataforma recomendada para comprar, ej. "Trip.com" */
   platform?: string;

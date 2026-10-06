@@ -140,14 +140,18 @@ export default function TrainsView() {
           <div className="rounded-lg bg-travel-confirmed-bg text-travel-confirmed px-3 py-2.5">
             <div className="text-sm font-bold">✅ Los 7 trenes están comprados</div>
             <div className="text-[11px] mt-0.5">
-              {trainsPaidTotal.toFixed(2).replace('.', ',')} € los dos · pagados con la cuenta de María
+              {trainsPaidTotal.toFixed(2).replace('.', ',')} € los dos · pagados con la cuenta de María (2,44 € de ajuste, con la conjunta)
             </div>
           </div>
 
           <h2 className="text-sm font-bold text-foreground mt-4">📅 Lo que queda por hacer</h2>
           <p className="text-[11px] text-muted-foreground mt-0.5 mb-3">
-            Nada que comprar. Solo entrar en Trip.com estos 7 días y ver que el billete está emitido.
+            Solo entrar en Trip.com estos 7 días y ver que el billete está emitido.
           </p>
+          <div className="rounded-lg bg-travel-important-bg text-travel-important px-3 py-2.5 mb-3 text-[11px]">
+            <div className="text-sm font-bold">🔴 Faltan los 2 trenes de Leshan (18 oct)</div>
+            Ida desde Chengdu East entre 07:00 y 07:30 · vuelta desde Leshan entre 16:30 y 18:45. A la venta desde el 3 de octubre: está en Actividades.
+          </div>
 
           {nextWatch && (
             <div className="mb-3 rounded-lg bg-primary text-primary-foreground px-3 py-2">
@@ -186,8 +190,8 @@ export default function TrainsView() {
             </p>
             <p>
               De ahí esas 7 fechas entre el 28 de septiembre y el 12 de octubre: entrar y ver que el billete salió. Si
-              alguna pre-reserva hubiera fallado, ese día hay que comprarlo a mano — por eso el del 6 de octubre
-              (Chongqing → Fenghuang) lleva despertador: es el tramo con solo 3 trenes al día.
+              alguna pre-reserva hubiera fallado, ese día hay que comprarlo a mano. El del 7 de octubre
+              (Chongqing → Fenghuang) es el que más importa: es el tramo con solo 3 trenes al día.
             </p>
           </MoreInfo>
         </div>
@@ -256,10 +260,8 @@ export default function TrainsView() {
             <p>
               <span className="font-medium text-foreground">7 avisos entre el 28 sept y el 12 oct</span>, para
               comprobar que cada billete se emitió cuando China abre la venta real. Cada uno suena a su hora, que
-              depende de la estación de salida: los de Pekín, Xi'an y Chengdu a las 09:00 (abren de madrugada, no
-              merece la pena levantarse), el de Chongqing a las{' '}
-              <span className="font-medium text-foreground">4:50 de la madrugada</span> (es el tramo de solo 3 trenes)
-              y los de Zhangjiajie y Shangrao a media mañana.
+              depende de la estación de salida: por la mañana los que caen en España y, ya en China, el de
+              Zhangjiajie a las 16:20 y el de Shangrao a las 17:10, hora de Pekín.
             </p>
             <p>
               <span className="font-medium text-foreground">2 avisos por cada día de trayecto</span>: uno la noche
@@ -365,8 +367,8 @@ export default function TrainsView() {
             </p>
             <p>
               <span className="font-medium text-foreground">El traslado que sí necesita cuidado</span> es el del 21 de
-              octubre a Chongqing East: 21 km desde el hotel, a las 07:15 y en hora punta. Es el más largo del viaje
-              hasta una estación y solo hay 3 trenes al día si lo perdéis.
+              octubre a Chongqing East: 21 km desde el hotel, saliendo a las 11:10. Solo hay 3 trenes al día si lo
+              perdéis. Y el del 26 a Zhangjiajie West, a las 05:35: Didi programado la noche antes.
             </p>
           </MoreInfo>
         </div>
