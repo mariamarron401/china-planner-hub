@@ -267,7 +267,7 @@ export const DAY_TIMELINE: Record<string, TimelineEntry[]> = {
   ],
   '2026-10-25': [
     { time: '06:30', what: 'Desayuno fuerte en cuanto abra. Coged fruta para media mañana.', kind: 'comida' },
-    { time: '07:05', what: '🚕 Didi al 标志门 (Puerta Este), 3-5 min.' },
+    { time: '07:05', what: '🚶 Andando a la Puerta Este (标志门), 5-10 min.' },
     { time: '07:15', what: '🏔️ PARQUE AVATAR ✅ comprada. Entrada 07:00-08:00, LÍNEA B (torno de la derecha). Pasaporte físico.', kind: 'clave' },
     { time: '', what: 'Si la pantalla de la puerta marca más de 60 min en el Bailong: plan B al revés (Tianzi primero), pedid el cambio a la Línea A en ventanilla.' },
     { time: '07:20', what: 'Eco-bus (~18 min) y ascensor Bailong (65 CNY, QR allí).' },
@@ -276,7 +276,7 @@ export const DAY_TIMELINE: Record<string, TimelineEntry[]> = {
     { time: '12:00', what: 'Comida junto a la parada de 贺龙公园 (40-60 CNY/persona).', kind: 'comida' },
     { time: '12:45', what: 'Tianzi: He Long Park, Yubi Peak, Fairy Scattering Flowers y miradores.' },
     { time: '15:45', what: '🚡 Teleférico de Tianzi abajo (72 CNY). En la cola como muy tarde a las 16:30.', kind: 'clave' },
-    { time: '16:15', what: 'Eco-bus al 标志门. El Didi de vuelta se pide en 驼峰路.' },
+    { time: '16:15', what: 'Eco-bus al 标志门 y andando al hotel, 5-10 min.' },
     { time: '17:15', what: 'Hotel: ducha y maletas cerradas ya.' },
     { time: '18:30', what: 'Cena de Sanxiaguo, pronto.', kind: 'comida' },
     { time: '20:00', what: '📋 RECEPCIÓN: Didi programado a las 05:35, check-out anticipado y desayuno para llevar (可以帮我们准备打包早餐吗？).', kind: 'clave' },

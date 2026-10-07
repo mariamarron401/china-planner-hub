@@ -2577,8 +2577,8 @@ const zhangjiajie: CityPlan = {
 
   bookings: [
     {
-      title: '🚐 Pedir al hotel el traslado gratis al 山门',
-      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
+      title: '❌ Traslado del hotel: solo a Zhangjiajie West y al aeropuerto',
+      when: 'Respondido el 7/10: al 山门 y a Wulingyuan, Didi',
       price: 'El hotel anuncia traslado gratis a estación y aeropuerto',
       how: 'Copiad el texto en chino. Dice: «Llegamos el 23 sobre las 11:00 en coche desde Furong. Vemos que tenéis traslado gratis: ¿nos podéis llevar el 23 a las 12:40 al 山门 de Tianmen (línea C)? El 24 a las 09:00 vamos al hotel Tianchong Yunhai de Wulingyuan: ¿nos podéis llevar, y si se paga, cuánto?»',
       alert: '您好！我们两位10月23日入住一晚，23日上午11:00左右从芙蓉镇包车到酒店。看到酒店有免费接送服务：1）23日中午12:40可以送我们去天门山山门（坐C线快线索道）吗？2）10月24日早上9:00我们去武陵源的天崇云海度假酒店，酒店可以送吗？如果收费，多少钱？谢谢！',
@@ -2686,8 +2686,8 @@ const wulingyuan: CityPlan = {
         },
         {
           time: '07:05',
-          title: 'Didi al 标志门',
-          detail: '3-5 min. Os deja delante de la Puerta Este.',
+          title: 'Andando a la Puerta Este',
+          detail: '5-10 min desde el hotel (lo confirma el hotel). Sin Didi.',
           kind: 'move',
         },
         {
@@ -2743,7 +2743,7 @@ const wulingyuan: CityPlan = {
         {
           time: '16:15-17:00',
           title: 'Eco-bus a la Puerta Este y Didi',
-          detail: 'Bus hasta el 标志门. El Didi de vuelta se pide en 驼峰路, no en la puerta.',
+          detail: 'Bus hasta el 标志门 y andando al hotel, 5-10 min.',
           kind: 'move',
         },
         {
@@ -2850,8 +2850,8 @@ const wulingyuan: CityPlan = {
 
   bookings: [
     {
-      title: '🚐 Pedir al hotel la lanzadera gratis y el coche del 26',
-      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
+      title: '🚗 Hotel: coche del 26 a 100 CNY y desayuno para llevar · 🔲 confirmar por WeChat',
+      when: 'Respondido el 7/10: la Puerta Este está a 5-10 min andando. Os han pedido vuestro WeChat para coordinar el coche',
       price: 'El hotel anuncia lanzadera gratis (免费班车)',
       how: 'Copiad el texto en chino. Dice: «Llegamos el 24 sobre las 09:45: ¿podemos dejar las maletas? Vemos que tenéis lanzadera gratis: ¿nos lleváis el 25 a las 07:05 al 标志门 (Puerta Este)? El 26 cogemos el tren de las 07:28 en Zhangjiajie West y salimos a las 05:35: ¿nos podéis llevar y cuánto cuesta? ¿Nos preparáis desayuno para llevar y el check-out a esa hora?»',
       alert: '您好！我们两位10月24日至26日入住两晚。1）24日上午9:45左右到酒店，可以先寄存行李吗？2）看到酒店有免费班车：10月25日早上7:05可以送我们去武陵源标志门（森林公园东门）吗？3）10月26日我们坐07:28从张家界西站出发的高铁，需要早上5:35出发。酒店可以安排车送我们去张家界西站吗？多少钱？4）26日早上5:35退房，可以帮我们准备打包早餐吗？谢谢！',
@@ -3057,8 +3057,8 @@ const shangrao: CityPlan = {
 
   bookings: [
     {
-      title: '🚐 Pedir al hotel la recogida en la estación de Shangrao',
-      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
+      title: '❌ El hotel no recoge: Didi o bus (30 CNY/persona)',
+      when: 'Respondido el 7/10: no hacen traslados. Con 4 maletas, Didi (~150 CNY, ~1 h) a la ida y a la vuelta',
       price: 'La reserva dice «Servicio de traslado disponible»: preguntad si es gratis',
       how: 'Copiad el texto en chino. Dice: «Llegamos el 26 en el G1367 a la estación de Shangrao a las 13:39, 2 personas con 4 maletas: ¿nos recogéis, gratis o cuánto cuesta? El 27 cogemos el G1370 de las 13:48 y salimos a las 11:30: ¿nos lleváis a la estación y cuánto cuesta? Llegamos sobre las 14:40 y el check-in es a las 17:00: ¿podemos dejar las maletas antes?»',
       alert: '您好！我们两位10月26日入住仰仙村一晚。1）我们坐G1367次列车，13:39到上饶站，两个人带4件行李，酒店可以安排接站吗？免费还是收费？2）10月27日我们坐13:48从上饶站出发的G1370次列车，需要11:30从酒店出发，可以送我们去上饶站吗？多少钱？3）我们大约14:40到，入住时间是17:00，可以先寄存行李吗？谢谢！',
