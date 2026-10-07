@@ -95,7 +95,7 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-4', fromCityId: 'chongqing', toCityId: 'fenghuang', mode: 'Tren bala', durationMinutes: 231, price: 92, currency: 'EUR', status: 'known',
-      hotelTransferAfter: '🚐 El hotel de Fenghuang anuncia recogida GRATIS en la estación. 🔲 Pedidla con el mensaje del plan de Fenghuang.',
+      hotelTransferAfter: '🚐 ✅ Os recoge el hotel de Fenghuang en la estación, GRATIS (confirmado el 7/10). Os ayudan con las maletas y os mandan el WeChat del conductor.',
       notes: '✅ BILLETE EMITIDO EL 7/10/2026 por 92,26 € los dos: 3,32 € MENOS que la pre-reserva (95,58 €). Trip.com devuelve la diferencia: comprobad que entra en la cuenta de María. Comprado el 22/08/2026: 95,58 € los dos en 2ª clase. G2321 directo, 3h51, y es el primer tren del día en esa fecha.',
       fromStation: 'Chongqing East (重庆东站) · en Trip.com "ChongqingDong" — 🔴 NO es la estación por la que llegáis el 19 oct (esa es Chongqing North). Está en Chayuan (Nan\'an), a 21 km del hotel de Jiefangbei', toStation: 'Fenghuang Gucheng (凤凰古城站) · no es "Fenghuang" a secas',
       ticketIssuedOn: '7 oct 2026',
@@ -112,7 +112,7 @@ export const initialTripData: TripData = {
     },
     {
       id: 'tl-5', fromCityId: 'fenghuang', toCityId: 'furong', mode: 'Tren bala', durationMinutes: 34, price: 18, currency: 'EUR', status: 'known',
-      hotelTransferBefore: '🚐 Preguntado al hotel de Fenghuang si os lleva a la estación a las 16:00 (puede ser de pago). Mensaje en el plan de Fenghuang.',
+      hotelTransferBefore: '🚗 ✅ Coche del hotel de Fenghuang a la estación a las 16:00: 40 CNY (confirmado el 7/10). Las maletas, en recepción desde el check-out.',
       hotelTransferAfter: '🚐 ✅ Os recoge el hotel de Furong en la estación a las 18:09, GRATIS (confirmado el 6/10). La entrada al recinto, 108 CNY/persona, la compráis al llegar con su ayuda.',
       notes: 'Comprado el 24/08/2026: 17,50 € los dos. G5666, 34 min. Es el primer tren del día: en octubre esta línea no tiene servicio por la mañana.',
       fromStation: 'Fenghuang Gucheng (凤凰古城站) · en Trip.com "FenghuangGucheng"', toStation: 'Furongzhen (芙蓉镇站) · todo junto; no es "Furong", ni Yongshun, ni Guzhang',

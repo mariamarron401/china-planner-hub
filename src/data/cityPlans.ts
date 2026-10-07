@@ -1979,7 +1979,7 @@ const fenghuang: CityPlan = {
   cityId: 'fenghuang',
   headline: 'Nada de turismo de checklist: aquí se viene a recorrer el río, los puentes y las casas colgantes, y a ver cómo cambia todo entre el día y la noche.',
   keyNotes: [
-    '🏨 El hotel anuncia recogida gratuita en la estación. Escribidles antes con los datos: 21/10/2026, G2321, llegada 16:46, dos personas. Mejor que buscar taxi.',
+    '🏨 ✅ Resuelto con el hotel (7/10): os recogen gratis en la estación el 21, os ayudan con las maletas, las guardan el 22 tras el check-out y os llevan a la estación a las 16:00 por 40 CNY.',
     'El casco antiguo es GRATIS. Solo se pagan algunos interiores y los paseos en barco. No compraría el pase de las nueve atracciones (125-128 CNY): no da tiempo a amortizarlo sin convertir Fenghuang en una carrera.',
     'El 21 el sol se pone a las 18:04 y llegáis al hotel sobre las 17:20-17:35. Salid enseguida: pilláis justo la transición de luz de tarde a iluminación nocturna. No vayáis a cenar nada más llegar.',
     'El hotel está a 84 m del Snow Bridge y a 92 m de la casa de Xiong Xiling. Todo se hace andando.',
@@ -2002,7 +2002,7 @@ const fenghuang: CityPlan = {
         {
           time: '16:46',
           title: 'Llegada a 凤凰古城站',
-          detail: 'Si el hotel confirma la recogida gratis, mejor que taxi. Si no, Didi: 10 km, 20-30 min.',
+          detail: '✅ Os recoge el hotel, gratis (confirmado el 7/10). Os mandan el WeChat del conductor.',
           kind: 'move',
         },
         {
@@ -2097,7 +2097,7 @@ const fenghuang: CityPlan = {
         {
           time: '16:00',
           title: 'Salir hacia la estación',
-          detail: '10 km. En la estación sobre las 16:25-16:35, con una hora larga de margen.',
+          detail: '✅ Coche del hotel, 40 CNY. 10 km: en la estación sobre las 16:25, con una hora larga de margen.',
           kind: 'move',
           alert: true,
           more: 'Teníamos apuntado salir a las 16:15. Por ganar 15 minutos en Fenghuang no reduciría el margen: después de comer tenéis tiempo de sobra igualmente.',
@@ -2178,8 +2178,8 @@ const fenghuang: CityPlan = {
 
   bookings: [
     {
-      title: '🏨 Recogida gratuita en la estación',
-      when: 'Ya: Trip.com → vuestra reserva → «Enviar mensaje al alojamiento»',
+      title: '🏨 Hotel: ✅ recogida gratis, consigna y coche de vuelta (40 CNY)',
+      when: 'Confirmado el 7/10 por el chat de Trip.com',
       price: 'Gratis, según anuncia el alojamiento',
       how: 'Copiad el texto en chino y mandadlo tal cual. Dice: «Llegamos el 21/10 en el G2321 a la estación Fenghuang Gucheng a las 16:46, somos 2 con 4 maletas: ¿nos recogéis? El casco antiguo es peatonal: ¿cómo llegamos al hotel con las maletas? El 22 salimos a las 16:00 hacia la estación: ¿podemos dejar las maletas en recepción después del check-out, y nos podéis llevar a la estación a esa hora (y cuánto cuesta)?»',
       alert: '您好！我们两位10月21日入住一晚。1）我们坐G2321次列车，16:46到凤凰古城站，两个人带4件行李，可以麻烦你们免费接站吗？2）古城里不能开车，带行李怎么到客栈？3）10月22日退房后可以把行李寄存在前台吗？下午16:00可以送我们去凤凰古城站吗？多少钱？谢谢！',
