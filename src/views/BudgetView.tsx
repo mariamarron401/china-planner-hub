@@ -154,7 +154,7 @@ export default function BudgetView() {
               tone="pending"
               title="⏳ Se cobra solo en la Revolut de María"
               amount={eur(hotelsChargedTotal)}
-              items={[`${hotelsCharged.length} hoteles de "pago más tarde", del 8 al 25 de octubre (fechas abajo)`]}
+              items={[`${hotelsCharged.length} hoteles de "pago más tarde" que faltan por cobrar (fechas abajo)`]}
             />
             <StatusRow
               tone="muted"
