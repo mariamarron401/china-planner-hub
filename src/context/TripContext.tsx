@@ -138,6 +138,8 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         // así que se toman siempre frescos del código: así una sesión antigua guardada en
         // localStorage nunca deja la colección a undefined ni se queda con horarios viejos.
         parsed.airportTransfers = initialTripData.airportTransfers;
+        // Saldos de banco: solo los actualiza el código, nunca la app.
+        parsed.accounts = initialTripData.accounts;
         parsed.flightTimelines = initialTripData.flightTimelines;
         // Mismo caso: los días de salida temprana vs. horario de desayuno son informativos
         // y se recalculan al verificar datos, así que siempre se toman del código. Sin esta

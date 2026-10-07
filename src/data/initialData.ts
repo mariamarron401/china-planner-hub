@@ -940,6 +940,20 @@ export const initialTripData: TripData = {
     { id: 'cg-sh-4', cityId: 'shanghai', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/33/20264-Shanghai%2C_The_Bund.jpg', source: 'Wikimedia Commons' },
   ],
   hotelGallery: [],
+  // Saldos que pasó María el 8/10/2026. Cuenta de María: solo quedan los hoteles de «pago
+  // más tarde». Conjunta: 675 € del bingo + 1.500 € de cada uno, de los que faltan 500 €
+  // por cabeza; de ahí ya han salido las entradas y el ajuste del tramo 1.
+  accounts: {
+    asOf: '8 oct 2026',
+    mariaBalanceEur: 880,
+    mariaRefundsPendingEur: 3.32,
+    conjunta: {
+      startEur: 675,
+      contributionsTotalEur: 3000,
+      contributionsPendingEur: 1000,
+      balanceEur: 2244.13,
+    },
+  },
   budgetExtras: {
     flightsInsurance: 2022,
     transportExtra: 0,

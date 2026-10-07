@@ -6,7 +6,7 @@ import MoreInfo from '@/components/MoreInfo';
 
 export default function BudgetView() {
   const { data, updateBudgetExtras } = useTrip();
-  const { cities, hotels, selectedHotels, transportLegs, localTransports, activities, budgetExtras, trip, airportTransfers } = data;
+  const { cities, hotels, selectedHotels, transportLegs, localTransports, activities, budgetExtras, trip, airportTransfers, accounts } = data;
   const budget = getGlobalBudget(cities, hotels, selectedHotels);
   const deposits = getHotelDeposits(cities, hotels, selectedHotels);
 
@@ -87,6 +87,15 @@ export default function BudgetView() {
   const pctPaid = statusTotal > 0 ? Math.round((paidTotal / statusTotal) * 100) : 0;
   const pctAuto = statusTotal > 0 ? Math.round((hotelsChargedTotal / statusTotal) * 100) : 0;
   const eur = (n: number) => `${n.toFixed(2).replace('.', ',')}€`;
+
+  // Saldos reales de banco (los pasa María) cruzados con lo que falta por cobrar o pagar.
+  const mariaMargin = accounts ? accounts.mariaBalanceEur - hotelsChargedTotal : 0;
+  const conj = accounts?.conjunta;
+  const conjContributed = conj ? conj.startEur + conj.contributionsTotalEur - conj.contributionsPendingEur : 0;
+  const conjSpent = conj ? conjContributed - conj.balanceEur : 0;
+  const conjSpentKnown = activitiesPaid + trainsExtraOnConjunta;
+  const conjForTrip = conj ? conj.balanceEur + conj.contributionsPendingEur : 0;
+  const conjFree = conjForTrip - activitiesOnSite - budgetExtras.activitiesExtra - transportOnSite;
 
   /** '...se cobra el 8/10' → '8/10'. Vacío si la reserva no lleva fecha de cargo. */
   const chargeDate = (note?: string) => note?.match(/se cobra el ([\d/]+)/)?.[1] ?? '';
@@ -187,6 +196,28 @@ export default function BudgetView() {
               {(hotelsChargedTotal + hotelsAlreadyPaidTotal).toFixed(2).replace('.', ',')}€). Se reservó todo con
               esta cuenta antes de abrir la conjunta.
             </p>
+            {accounts && (
+              <div className="mt-2 space-y-1 text-[11px]">
+                <div className="flex justify-between gap-2">
+                  <span className="text-muted-foreground">Saldo a {accounts.asOf}</span>
+                  <span className="font-mono text-foreground">{eur(accounts.mariaBalanceEur)}</span>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <span className="text-muted-foreground">Faltan por cobrar ({hotelsCharged.length} hoteles)</span>
+                  <span className="font-mono text-foreground">−{eur(hotelsChargedTotal)}</span>
+                </div>
+                <div className={`flex justify-between gap-2 font-bold ${mariaMargin < 20 ? 'text-travel-important' : 'text-travel-confirmed'}`}>
+                  <span>Margen que queda</span>
+                  <span className="font-mono">{eur(mariaMargin)}</span>
+                </div>
+                {mariaMargin < 20 && (
+                  <p className="text-travel-important leading-snug">
+                    ⚠️ Muy justo: meted 20-30 € más por si algún cargo varía
+                    {accounts.mariaRefundsPendingEur ? ` (aún debe entrar una devolución de ${eur(accounts.mariaRefundsPendingEur)} de un tren)` : ''}.
+                  </p>
+                )}
+              </div>
+            )}
             {trainsExtraOnConjunta > 0 && (
               <p className="text-[11px] text-muted-foreground leading-snug mt-1.5">
                 Los trenes han costado {trainsPaidTotal.toFixed(2).replace('.', ',')}€ en total, pero{' '}
@@ -249,7 +280,8 @@ export default function BudgetView() {
               <span className="font-medium text-foreground">Todas las entradas</span>, se compren desde España o
               allí, y todo el gasto del día a día: comidas, Didi y taxis, el coche de Furong a Zhangjiajie y las
               compras. Es la cuenta que se vincula a{' '}
-              <span className="font-medium text-foreground">Alipay y WeChat Pay</span> al llegar.
+              <span className="font-medium text-foreground">Alipay y WeChat Pay</span> al llegar. Las fianzas de
+              los hoteles, también desde aquí (Alipay o efectivo): os las devuelven al momento.
               {trainsExtraOnConjunta > 0 && (
                 <>
                   {' '}
@@ -260,14 +292,65 @@ export default function BudgetView() {
             </p>
           </div>
 
+          {conj && (
+            <div className="mt-2 rounded-lg border border-border px-3 py-2.5 space-y-1 text-[11px]">
+              <div className="text-xs font-bold text-foreground mb-1">💶 Cuenta conjunta, a {accounts?.asOf}</div>
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground">Bingo + aportaciones ({eur(conj.startEur)} + {eur(conj.contributionsTotalEur)})</span>
+                <span className="font-mono text-foreground">{eur(conj.startEur + conj.contributionsTotalEur)}</span>
+              </div>
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground">Gastado: entradas y ajuste de tren</span>
+                <span className="font-mono text-foreground">−{eur(conjSpent)}</span>
+              </div>
+              {Math.abs(conjSpent - conjSpentKnown) >= 0.5 && (
+                <p className="text-muted-foreground leading-snug">
+                  De eso, {eur(conjSpentKnown)} son las entradas ({eur(activitiesPaid)}) y el ajuste del tren
+                  ({eur(trainsExtraOnConjunta)}). Los {eur(conjSpent - conjSpentKnown)} restantes no están apuntados:
+                  probablemente comisiones de cambio.
+                </p>
+              )}
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground">Saldo hoy</span>
+                <span className="font-mono text-foreground">{eur(conj.balanceEur)}</span>
+              </div>
+              {conj.contributionsPendingEur > 0 && (
+                <div className="flex justify-between gap-2">
+                  <span className="text-muted-foreground">Falta por ingresar</span>
+                  <span className="font-mono text-foreground">+{eur(conj.contributionsPendingEur)}</span>
+                </div>
+              )}
+              <div className="flex justify-between gap-2 font-bold text-foreground border-t border-border pt-1">
+                <span>Para gastar en el viaje</span>
+                <span className="font-mono">{eur(conjForTrip)}</span>
+              </div>
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground">Ya comprometido allí: entradas y extras</span>
+                <span className="font-mono text-foreground">~−{eur(activitiesOnSite + budgetExtras.activitiesExtra)}</span>
+              </div>
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground">Didi, taxis y coches (estimado)</span>
+                <span className="font-mono text-foreground">~−{eur(transportOnSite)}</span>
+              </div>
+              <div className="flex justify-between gap-2 font-bold text-travel-confirmed border-t border-border pt-1">
+                <span>Libre para comer, compras e imprevistos</span>
+                <span className="font-mono">~{eur(conjFree)}</span>
+              </div>
+              <p className="text-muted-foreground leading-snug">
+                Unos {Math.round(conjFree / 22)} € al día entre los dos durante los 22 días.
+              </p>
+            </div>
+          )}
+
           {deposits.items.length > 0 && (
             <div className="mt-2 rounded-lg border border-border px-3 py-2.5">
-              <div className="text-xs font-bold text-foreground">🔲 Los depósitos: decidid la tarjeta</div>
+              <div className="text-xs font-bold text-foreground">💡 Las fianzas: con Alipay o en efectivo</div>
               <p className="text-[11px] text-muted-foreground leading-snug mt-1">
-                Los {deposits.totalEur.toFixed(2).replace('.', ',')} € de fianza los retiene el hotel en la tarjeta
-                que presentéis <span className="font-medium text-foreground">al hacer el check-in</span>, no en la de
-                la reserva. Como tarda días en volver, mejor usar siempre la misma tarjeta en los 3 hoteles y saber
-                cuál es antes de entrar.
+                Los {deposits.totalEur.toFixed(2).replace('.', ',')} € de fianza se pagan allí,{' '}
+                <span className="font-medium text-foreground">al hacer el check-in</span>, con lo que presentéis: no
+                salen de la tarjeta de Trip.com. Con Alipay (cuenta conjunta) o en efectivo os los devuelven al
+                momento; con tarjeta queda retenido varios días. Nunca con la tarjeta de los hoteles: su saldo es
+                justo el de los cobros que faltan.
               </p>
             </div>
           )}

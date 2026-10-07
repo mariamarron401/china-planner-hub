@@ -556,6 +556,29 @@ export interface AppSetup {
   goldenRules: string[];
 }
 
+/**
+ * Saldo real de las dos cuentas del viaje, tal como lo pasa María. Es dato de banco, no
+ * cálculo: Dinero lo cruza con lo que falta por cobrar para decir cuánto queda de verdad.
+ */
+export interface MoneyAccounts {
+  /** Fecha del último saldo que pasó María, ej. '8 oct 2026'. */
+  asOf: string;
+  /** Saldo de la cuenta de María, donde Trip.com carga los hoteles de «pago más tarde». */
+  mariaBalanceEur: number;
+  /** Devoluciones que deben entrar en la cuenta de María (ej. tren más barato al emitirse). */
+  mariaRefundsPendingEur?: number;
+  conjunta: {
+    /** Lo que había de partida (el bingo). */
+    startEur: number;
+    /** Aportaciones de los dos, en total. */
+    contributionsTotalEur: number;
+    /** Parte de las aportaciones que aún no se ha ingresado. */
+    contributionsPendingEur: number;
+    /** Saldo del banco a fecha `asOf`. */
+    balanceEur: number;
+  };
+}
+
 export interface TripData {
   trip: Trip;
   cities: CityStop[];
@@ -575,6 +598,8 @@ export interface TripData {
   earlyStarts: EarlyStart[];
   /** Apps a configurar desde España + plan de e-SIM y configuración de los dos iPhone. */
   appSetup: AppSetup;
+  /** Saldos reales de las cuentas del viaje (ver `MoneyAccounts`). */
+  accounts?: MoneyAccounts;
   /**
    * Sello de la última re-verificación de precios y duraciones de los tramos de tren.
    * Solo se escribe en localStorage; sirve para que una corrección de cifras llegue a
