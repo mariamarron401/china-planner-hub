@@ -136,7 +136,7 @@ const GENERAL_TIPS = `💡 **Consejos generales para China:**
 - Descarga mapas y traductor **offline** por si falla la VPN.
 - **Power bank: máximo 20.000 mAh.** Por encima de eso lo confiscan en el control del tren. Y siempre en el equipaje de mano, nunca en la maleta facturada.
 - **Lleva papel higiénico en la mochila**: los baños públicos en China normalmente no lo tienen.
-- Los 7 trenes internos **ya están comprados y pagados** (652,76 € los dos; las pre-reservas salieron de la cuenta de María). Lo único que queda es comprobar en Trip.com que cada billete se emite 15 días antes de su viaje (pregúntame "¿cuándo compruebo los billetes?"). Al emitirse, el precio puede subir un par de euros sobre la pre-reserva: el de Pekín → Xi'an subió 2,44 €, y ese ajuste se cobró en la **cuenta conjunta**, no en la de María. Es normal.`;
+- Los 7 trenes internos **ya están comprados y pagados** (649,44 € los dos; las pre-reservas salieron de la cuenta de María). Lo único que queda es comprobar en Trip.com que cada billete se emite 15 días antes de su viaje (pregúntame "¿cuándo compruebo los billetes?"). Al emitirse, el precio puede subir un par de euros sobre la pre-reserva: el de Pekín → Xi'an subió 2,44 €, y ese ajuste se cobró en la **cuenta conjunta**, no en la de María. Es normal.`;
 
 // ---------- generadores de respuesta por tema ----------
 
