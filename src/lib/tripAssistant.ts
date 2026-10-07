@@ -341,7 +341,7 @@ function answerWhenToBuy(data: TripData): string {
   const actsDoneLine = actsDone.length > 0
     ? `\n\n✅ Entradas ya compradas: ${actsDone.map((a) => (a.paidEur ? `${a.title} (${a.paidEur.toFixed(2).replace('.', ',')} €)` : a.title)).join(', ')}.`
     : '';
-  return `⏰ **Qué queda por hacer y cuándo:**\n\n**Trenes bala — ya están comprados los 7.** Lo único pendiente es entrar en Trip.com estos días y ver que el billete se ha emitido (China lo emite unos 14-15 días antes de cada viaje):\n${trains}${trainsDoneLine}\n\n**Entradas de actividades:**\n${acts}${actsDoneLine}\n\n👉 De los 7, el que más importa es el del 7 de octubre (Chongqing → Fenghuang): es el tramo con solo 3 trenes al día, así que si esa pre-reserva hubiera fallado hay que comprarlo a mano ese mismo día.`;
+  return `⏰ **Qué queda por hacer y cuándo:**\n\n**Trenes bala — ya están comprados los 7.** Lo único pendiente es entrar en Trip.com estos días y ver que el billete se ha emitido (China lo emite unos 14-15 días antes de cada viaje):\n${trains}${trainsDoneLine}\n\n**Entradas de actividades:**\n${acts}${actsDoneLine}\n\n👉 Hasta ahora Trip.com las ha ejecutado todas solas. Si alguna fallara, ese mismo día hay que comprar el billete a mano.`;
 }
 
 function answerAirportTransfers(data: TripData, q: string): string {
