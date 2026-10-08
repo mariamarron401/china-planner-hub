@@ -953,6 +953,8 @@ export const initialTripData: TripData = {
       contributionsPendingEur: 1000,
       balanceEur: 2244.13,
     },
+    // El cambio con el que Trip.com cobró las reservas en yuanes.
+    cnyPerEur: 7.775,
   },
   budgetExtras: {
     flightsInsurance: 2022,

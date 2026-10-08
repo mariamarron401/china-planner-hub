@@ -3,6 +3,7 @@ import { getGlobalBudget, getHotelDeposits } from '@/lib/calculations';
 import { Wallet, Building2, Train, Compass, AlertTriangle, Plane, Package, CreditCard } from 'lucide-react';
 import { useState } from 'react';
 import MoreInfo from '@/components/MoreInfo';
+import ExpensesCard from '@/components/ExpensesCard';
 
 export default function BudgetView() {
   const { data, updateBudgetExtras } = useTrip();
@@ -125,6 +126,9 @@ export default function BudgetView() {
             </div>
           )}
         </div>
+
+        {/* Gastos del día a día: lo que más se usa durante el viaje, justo debajo del total. */}
+        {accounts && <ExpensesCard forTripEur={conjForTrip} cnyPerEur={accounts.cnyPerEur} />}
 
         {/* Estado de los pagos: qué está pagado al 100 %, qué se cobra solo y qué queda por comprar. */}
         <div className="bg-card rounded-xl border border-border p-4 shadow-sm">

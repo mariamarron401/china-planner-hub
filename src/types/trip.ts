@@ -577,6 +577,27 @@ export interface MoneyAccounts {
     /** Saldo del banco a fecha `asOf`. */
     balanceEur: number;
   };
+  /** Yuanes por euro para pasar a euros los gastos apuntados en yuanes. */
+  cnyPerEur: number;
+}
+
+/** Quién hizo un gasto de la conjunta. «ambos» se reparte a medias. */
+export type ExpenseWho = 'josemi' | 'maria' | 'ambos';
+
+/** Un gasto del día a día durante el viaje, apuntado desde la pantalla Dinero. */
+export interface Expense {
+  id: string;
+  /** Día del gasto, YYYY-MM-DD. */
+  date: string;
+  who: ExpenseWho;
+  concept: string;
+  amount: number;
+  currency: 'CNY' | 'EUR';
+  /** Importe en euros, fijado al apuntarlo. */
+  eur: number;
+  createdAt: string;
+  /** true mientras no se ha podido guardar en la nube (sin conexión). */
+  pendingSync?: boolean;
 }
 
 export interface TripData {
