@@ -1,6 +1,6 @@
 import { useTrip } from '@/context/TripContext';
 import { getGlobalBudget, getHotelDeposits } from '@/lib/calculations';
-import { Wallet, Building2, Train, Compass, AlertTriangle, Plane, Shield, Package, CreditCard } from 'lucide-react';
+import { Wallet, Building2, Train, Compass, AlertTriangle, Plane, Package, CreditCard } from 'lucide-react';
 import { useState } from 'react';
 import MoreInfo from '@/components/MoreInfo';
 
@@ -81,9 +81,13 @@ export default function BudgetView() {
   // Lo pendiente de entradas es la estimación menos lo ya pagado (Mutianyu, Leshan y Avatar tienen
   // parte que se paga en taquilla).
   const activitiesOnSite = Math.max(0, activitiesTotal - activitiesPaid);
+  // La e-SIM la paga cada uno con su tarjeta española: cuenta en el viaje, pero no sale
+  // ni de la cuenta de María ni de la conjunta.
+  const esim = data.appSetup.esim;
+  const esimTotal = esim ? esim.priceEachEur * esim.units : 0;
   const paidTotal = budgetExtras.flightsInsurance + trainsPaidTotal + spainPaid + hotelsAlreadyPaidTotal + activitiesPaid;
-  const pendingBuy = activitiesOnSite + budgetExtras.activitiesExtra + transportOnSite + budgetExtras.insurance + budgetExtras.others;
-  const statusTotal = paidTotal + hotelsChargedTotal + pendingBuy;
+  const pendingBuy = activitiesOnSite + budgetExtras.activitiesExtra + transportOnSite + budgetExtras.others;
+  const statusTotal = paidTotal + hotelsChargedTotal + pendingBuy + esimTotal;
   const pctPaid = statusTotal > 0 ? Math.round((paidTotal / statusTotal) * 100) : 0;
   const pctAuto = statusTotal > 0 ? Math.round((hotelsChargedTotal / statusTotal) * 100) : 0;
   const eur = (n: number) => `${n.toFixed(2).replace('.', ',')}€`;
@@ -99,8 +103,8 @@ export default function BudgetView() {
 
   /** '...se cobra el 8/10' → '8/10'. Vacío si la reserva no lleva fecha de cargo. */
   const chargeDate = (note?: string) => note?.match(/se cobra el ([\d/]+)/)?.[1] ?? '';
-  const totalKnown = budgetExtras.flightsInsurance + hotelTotal + transportTotal + activitiesTotal + airportTotal
-    + budgetExtras.transportExtra + budgetExtras.activitiesExtra + budgetExtras.insurance + budgetExtras.others;
+  const totalKnown = Math.round(budgetExtras.flightsInsurance + hotelTotal + transportTotal + activitiesTotal + airportTotal
+    + budgetExtras.transportExtra + budgetExtras.activitiesExtra + budgetExtras.others + esimTotal);
 
   return (
     <div className="px-4 space-y-4">
@@ -114,16 +118,6 @@ export default function BudgetView() {
             <div>~{Math.round(totalKnown / trip.travelers)}€ por persona</div>
             <div>~{Math.round(totalKnown / trip.totalNights)}€ por día</div>
           </div>
-          {deposits.items.length > 0 && (
-            <div className="mt-3 bg-primary-foreground/10 rounded-lg px-3 py-2">
-              <div className="text-sm font-bold text-primary-foreground">
-                Saldo a tener en la tarjeta: {Math.round(totalKnown + deposits.totalEur)}€
-              </div>
-              <div className="text-[11px] text-primary-foreground/80 mt-0.5">
-                incluye {deposits.totalEur.toFixed(2)} € de depósitos de hotel, que se devuelven
-              </div>
-            </div>
-          )}
           {!budget.allSelected && (
             <div className="flex items-center gap-1.5 mt-3 text-xs text-primary-foreground/80 bg-primary-foreground/10 rounded-lg px-3 py-2">
               <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
@@ -165,6 +159,14 @@ export default function BudgetView() {
               amount={eur(hotelsChargedTotal)}
               items={[`${hotelsCharged.length} hoteles de "pago más tarde" que faltan por cobrar (fechas abajo)`]}
             />
+            {esimTotal > 0 && (
+              <StatusRow
+                tone="muted"
+                title="🪪 e-SIM, con vuestras tarjetas personales"
+                amount={eur(esimTotal)}
+                items={[`${esim.units} × ${eur(esim.priceEachEur)} · ${esim.provider} · aún sin comprar · no sale de las cuentas del viaje`]}
+              />
+            )}
             <StatusRow
               tone="muted"
               title="🛒 Por comprar o pagar allí"
@@ -274,27 +276,24 @@ export default function BudgetView() {
             </div>
           )}
 
-          <div className="mt-2 rounded-lg bg-muted/50 px-3 py-2.5">
-            <div className="text-xs font-bold text-foreground">Cuenta conjunta</div>
-            <p className="text-[11px] text-muted-foreground leading-snug mt-1">
-              <span className="font-medium text-foreground">Todas las entradas</span>, se compren desde España o
-              allí, y todo el gasto del día a día: comidas, Didi y taxis, el coche de Furong a Zhangjiajie y las
-              compras. Es la cuenta que se vincula a{' '}
-              <span className="font-medium text-foreground">Alipay y WeChat Pay</span> al llegar. Las fianzas de
-              los hoteles, también desde aquí (Alipay o efectivo): os las devuelven al momento.
-              {trainsExtraOnConjunta > 0 && (
-                <>
-                  {' '}
-                  También caen aquí los ajustes de precio de los billetes de tren al emitirse (
-                  {trainsExtraOnConjunta.toFixed(2).replace('.', ',')}€ hasta ahora).
-                </>
-              )}
-            </p>
-          </div>
+
+          {esimTotal > 0 && (
+            <div className="mt-2 rounded-lg bg-muted/50 px-3 py-2.5 flex items-baseline justify-between gap-2">
+              <span className="text-xs text-foreground">
+                <span className="font-bold">Tarjetas personales</span>
+                <span className="text-muted-foreground"> · e-SIM de {esim.provider}, cada uno la suya</span>
+              </span>
+              <span className="text-sm font-bold text-foreground whitespace-nowrap">{eur(esimTotal)}</span>
+            </div>
+          )}
 
           {conj && (
             <div className="mt-2 rounded-lg border border-border px-3 py-2.5 space-y-1 text-[11px]">
-              <div className="text-xs font-bold text-foreground mb-1">💶 Cuenta conjunta, a {accounts?.asOf}</div>
+              <div className="text-xs font-bold text-foreground">💶 Cuenta conjunta, a {accounts?.asOf}</div>
+              <p className="text-muted-foreground leading-snug mb-1">
+                Todo lo de allí: entradas, Didi, coches de los hoteles, comidas y compras. Es la que se vincula a
+                Alipay y WeChat Pay.
+              </p>
               <div className="flex justify-between gap-2">
                 <span className="text-muted-foreground">Bingo + aportaciones ({eur(conj.startEur)} + {eur(conj.contributionsTotalEur)})</span>
                 <span className="font-mono text-foreground">{eur(conj.startEur + conj.contributionsTotalEur)}</span>
@@ -306,8 +305,8 @@ export default function BudgetView() {
               {Math.abs(conjSpent - conjSpentKnown) >= 0.5 && (
                 <p className="text-muted-foreground leading-snug">
                   De eso, {eur(conjSpentKnown)} son las entradas ({eur(activitiesPaid)}) y el ajuste del tren
-                  ({eur(trainsExtraOnConjunta)}). Los {eur(conjSpent - conjSpentKnown)} restantes no están apuntados:
-                  probablemente comisiones de cambio.
+                  ({eur(trainsExtraOnConjunta)}). Los otros {eur(conjSpent - conjSpentKnown)} son la diferencia con el
+                  banco: seguramente comisiones de cambio al pagar en yuanes.
                 </p>
               )}
               <div className="flex justify-between gap-2">
@@ -352,6 +351,14 @@ export default function BudgetView() {
                 momento; con tarjeta queda retenido varios días. Nunca con la tarjeta de los hoteles: su saldo es
                 justo el de los cobros que faltan.
               </p>
+              <div className="mt-1.5 space-y-0.5">
+                {deposits.items.map(d => (
+                  <div key={d.cityId} className="flex justify-between gap-2 text-[11px]">
+                    <span className="text-muted-foreground">{d.cityName.split(' (')[0]} · {d.checkInText}</span>
+                    <span className="font-mono text-foreground">¥{d.cny} · {eur(d.eur)}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -393,44 +400,6 @@ export default function BudgetView() {
           </div>
         </BudgetCard>
 
-        {/* Hotel deposits */}
-        {deposits.items.length > 0 && (
-          <div className="bg-card rounded-xl border-2 border-travel-pending/40 p-4 shadow-sm">
-            <div className="flex items-center gap-2 text-xs font-semibold text-travel-pending uppercase tracking-wide mb-3">
-              <CreditCard className="h-3.5 w-3.5" /> Depósitos de hotel (recámara en tarjeta)
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-foreground">¥{deposits.totalCny}</span>
-              <span className="text-sm font-semibold text-muted-foreground">≈ {deposits.totalEur.toFixed(2)} €</span>
-            </div>
-            <p className="text-xs text-foreground mt-1.5">
-              <strong>No es gasto, es saldo</strong> — hay que llevarlo además del presupuesto.
-            </p>
-            <MoreInfo label="Cuándo se cobra y cuándo vuelve">
-              <p>
-                Cada hotel lo cobra al completar el registro de entrada y lo devuelve al hacer el check-out, pero la
-                devolución puede tardar días en volver a la tarjeta. Por eso hay que llevar los{' '}
-                {deposits.totalEur.toFixed(2)} € completos disponibles además del presupuesto del viaje.
-              </p>
-            </MoreInfo>
-            <div className="mt-3 pt-3 border-t border-border space-y-1.5">
-              {deposits.items.map(d => (
-                <div key={d.cityId} className="flex items-start justify-between text-xs gap-2">
-                  <div className="min-w-0">
-                    <div className="text-foreground font-medium truncate">{d.cityName.split(' (')[0]}</div>
-                    <div className="text-[10px] text-muted-foreground">Check-in {d.checkInText}</div>
-                  </div>
-                  <span className="font-semibold text-foreground whitespace-nowrap">
-                    ¥{d.cny} · {d.eur.toFixed(2)} €
-                  </span>
-                </div>
-              ))}
-            </div>
-            <p className="text-[11px] text-travel-confirmed mt-3">
-              ✅ Cifra cerrada: los otros {deposits.hotelsWithoutDeposit} hoteles no tienen política de depósito.
-            </p>
-          </div>
-        )}
 
         {/* Transport */}
         <BudgetCard icon={<Train className="h-3.5 w-3.5" />} title="Transportes">
@@ -556,10 +525,6 @@ export default function BudgetView() {
           <EditableAmount label="Extra actividades" value={budgetExtras.activitiesExtra} onChange={v => updateBudgetExtras({ activitiesExtra: v })} />
         </BudgetCard>
 
-        {/* Insurance */}
-        <BudgetCard icon={<Shield className="h-3.5 w-3.5" />} title="Seguro (separado)">
-          <EditableAmount label="Seguro" value={budgetExtras.insurance} onChange={v => updateBudgetExtras({ insurance: v })} />
-        </BudgetCard>
 
         {/* Others */}
         <BudgetCard icon={<Package className="h-3.5 w-3.5" />} title="Otros gastos">
