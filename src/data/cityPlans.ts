@@ -2761,10 +2761,10 @@ const wulingyuan: CityPlan = {
         {
           time: '20:00',
           title: 'Las 3 gestiones en recepción',
-          detail: 'Didi programado a las 05:35 · check-out anticipado · desayuno para llevar.',
+          detail: 'Coche del hotel a las 05:35 confirmado por WeChat · check-out anticipado · desayuno para llevar.',
           kind: 'rest',
           alert: true,
-          more: 'Frase para el desayuno: 可以帮我们准备打包早餐吗？ A dormir sobre las 21:30.',
+          more: 'WeChat del hotel: yunhaihotel123. El mensaje está en las reservas de este plan. Frase para el desayuno: 可以帮我们准备打包早餐吗？ A dormir sobre las 21:30.',
         },
       ],
     },
@@ -2777,10 +2777,10 @@ const wulingyuan: CityPlan = {
         {
           time: '05:35',
           title: 'Salir del hotel',
-          detail: '10 minutos antes de lo previsto. 26-28 km, 25-40 min según tráfico, ~55-100 CNY.',
+          detail: 'Coche del hotel (100 CNY), confirmado el 25 por WeChat. 26-28 km, 25-40 min.',
           kind: 'move',
           alert: true,
-          more: 'Teníamos apuntado salir a las 05:48 y es viable, pero aquí prefiero regalarle 10 minutos al viaje. No confiéis en encontrar un Didi espontáneo a las 05:40 como único plan: dejadlo programado y pedid ayuda en recepción la noche antes.',
+          more: 'Si a las 05:40 el coche no ha aparecido, pedid en recepción que os llamen un taxi o pedid un Didi a 张家界西站. Por eso salís con tanto margen.',
         },
         {
           time: '07:28',
@@ -2850,11 +2850,11 @@ const wulingyuan: CityPlan = {
 
   bookings: [
     {
-      title: '🚗 Hotel: coche del 26 a 100 CNY y desayuno para llevar · 🔲 confirmar por WeChat',
-      when: 'Respondido el 7/10: la Puerta Este está a 5-10 min andando. Os han pedido vuestro WeChat para coordinar el coche',
-      price: 'El hotel anuncia lanzadera gratis (免费班车)',
-      how: 'Copiad el texto en chino. Dice: «Llegamos el 24 sobre las 09:45: ¿podemos dejar las maletas? Vemos que tenéis lanzadera gratis: ¿nos lleváis el 25 a las 07:05 al 标志门 (Puerta Este)? El 26 cogemos el tren de las 07:28 en Zhangjiajie West y salimos a las 05:35: ¿nos podéis llevar y cuánto cuesta? ¿Nos preparáis desayuno para llevar y el check-out a esa hora?»',
-      alert: '您好！我们两位10月24日至26日入住两晚。1）24日上午9:45左右到酒店，可以先寄存行李吗？2）看到酒店有免费班车：10月25日早上7:05可以送我们去武陵源标志门（森林公园东门）吗？3）10月26日我们坐07:28从张家界西站出发的高铁，需要早上5:35出发。酒店可以安排车送我们去张家界西站吗？多少钱？4）26日早上5:35退房，可以帮我们准备打包早餐吗？谢谢！',
+      title: '🚗 Coche del 26 (100 CNY) y desayuno para llevar: confirmadlo por WeChat el 25',
+      when: 'Domingo 25 por la tarde, por WeChat al hotel: yunhaihotel123',
+      price: '100 CNY el coche · la Puerta Este está a 5-10 min andando',
+      how: 'El hotel lo cierra con un día de antelación. Mandadles este texto por WeChat. Dice: «Somos los huéspedes del 24 al 26: confirmad, por favor, el coche de mañana 26 a las 5:35 a Zhangjiajie West (100 yuanes) y los dos desayunos para llevar. ¡Gracias!»',
+      alert: '您好！我们是10月24日至26日入住的两位客人。请确认明天（10月26日）早上5:35从酒店到张家界西站的车（100元），还有两份打包早餐。谢谢！',
     },
     {
       activityId: 'act-10',
